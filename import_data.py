@@ -1,12 +1,13 @@
 ##########################################################################################
 #                               This Script
 # 1) imports the blocks based on the condition name in EEGLAB form from the BIDS directory
-# 2) removes the stimulus artifact iv: -1.5 to 1.5 ms, for ESG use -7 to 7s
+# 2) removes the stimulus artifact iv: -1.5 to 6 ms, for ESG use -7 to 7s - linear interpolation
 # 3) downsample the signal to 5000 Hz
 # 4) Append mne raws of the same condition
 # 5) Add qrs events as annotations
-# 6) saves the new raw structure and the QRS events detected
+# 6) saves the new raw structure
 # Emma Bailey, October 2022
+# .matfile with R-peak locations is at 1000Hz - will still give rough idea (annotations not used)
 ##########################################################################################
 
 # Import necessary packages
@@ -76,14 +77,6 @@ def import_data(subject, condition, srmr_nr, sampling_rate):
             # Only interpolate tibial, medial and alternating (conditions 2, 3, 4 ; stimulation 1, 2, 3)
             if stimulation != 0:
 
-                if not esg_flag:
-                    # Read in the array of electrodes from file
-                    montage = mne.channels.read_custom_montage(montage_path + montage_name)
-
-                    # fits channel locations to data
-                    raw.set_montage(montage, on_missing="ignore")
-                    # Have to use ignore as the montage only includes EEG head channels (can't work with esg)
-
                 # events contains timestamps with corresponding event_id
                 # event_dict returns the event/trigger names with their corresponding event_id
                 events, event_dict = mne.events_from_annotations(raw)
@@ -120,7 +113,7 @@ def import_data(subject, condition, srmr_nr, sampling_rate):
 
         # Read .mat file with QRS events
         input_path_m = "/data/pt_02569/tmp_data/prepared/" + subject_id + "/esg/prepro/"
-        fname_m = f"raw_{sampling_rate}_spinal_{cond_name}"
+        fname_m = f"raw_1000_spinal_{cond_name}"
         matdata = loadmat(input_path_m + fname_m + '.mat')
         QRSevents_m = matdata['QRSevents'][0]
 

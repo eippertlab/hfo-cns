@@ -5,18 +5,23 @@
 
 import numpy as np
 from import_data import import_data
+from SSP import apply_SSP
 
 if __name__ == '__main__':
     ######## Import ############
-    import_d = False  # Prep work
-    pchip_interpolation = False  # If true import with pchip, otherwise use linear interpolation
+    import_d = True  # Prep work
+
+    ######### Want to clean the heart artefact using SSP? ########
+    SSP_flag = False  # Heart artefact removal by SSP
+    no_projections = 6
 
     n_subjects = 36  # Number of subjects
     subjects = np.arange(1, 37)  # 1 through 36 to access subject data
     # subjects = [1]
     srmr_nr = 1  # Experiment Number
     conditions = [2, 3]  # Conditions of interest
-    sampling_rate = 5000  # Interested in frequencies up to 12000Hz
+    sampling_rate = 5000  # Frequency to downsample to from original of 10kHz
+    # Interested in frequencies up to 12000Hz
 
     ############################################
     # Import Data from BIDS directory
@@ -30,3 +35,12 @@ if __name__ == '__main__':
         for subject in subjects:
             for condition in conditions:
                 import_data(subject, condition, srmr_nr, sampling_rate)
+
+    ##################################################
+    # To remove heart artifact using SSP method in MNE
+    # Also notch filters from 48Hz to 52Hz
+    ###################################################
+    if SSP_flag:
+        for subject in subjects:
+            for condition in conditions:
+                apply_SSP(subject, condition, srmr_nr, sampling_rate, no_projections)
