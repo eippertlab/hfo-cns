@@ -5,14 +5,14 @@
 import os
 import mne
 import pandas as pd
-from get_conditioninfo import *
+from Common_Functions.get_conditioninfo import *
 
 
 def apply_SSP(subject, condition, srmr_nr, sampling_rate, n_p):
     # set variables
     subject_id = f'sub-{str(subject).zfill(3)}'
-    load_path = "/data/pt_02718/imported/" + subject_id + "/"
-    save_path = "/data/pt_02718/ssp/" + subject_id + "/"
+    load_path = "/data/pt_02718/tmp_data/imported/" + subject_id + "/"
+    save_path = "/data/pt_02718/tmp_data/ssp_cleaned/" + subject_id + "/"
     os.makedirs(save_path, exist_ok=True)
 
     # get condition info
@@ -21,11 +21,6 @@ def apply_SSP(subject, condition, srmr_nr, sampling_rate, n_p):
     trigger_name = cond_info.trigger_name
     nerve = cond_info.nerve
     nblocks = cond_info.nblocks
-
-    cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
-    df = pd.read_excel(cfg_path)
-    notch_low = df.loc[df['var_name'] == 'notch_freq_low', 'var_value'].iloc[0]
-    notch_high = df.loc[df['var_name'] == 'notch_freq_high', 'var_value'].iloc[0]
 
     ###########################################################################################
     # Load
@@ -38,20 +33,12 @@ def apply_SSP(subject, condition, srmr_nr, sampling_rate, n_p):
     ##########################################################################################
     # SSP
     ##########################################################################################
-    projs, events = mne.preprocessing.compute_proj_ecg(raw, n_eeg=n_p, reject=None, n_jobs=len(raw.ch_names),
-                                                       ch_name='ECG')
+    projs, events = mne.preprocessing.compute_proj_ecg(raw, n_eeg=n_p, reject=None,
+                                                       n_jobs=len(raw.ch_names), ch_name='ECG')
 
     # Apply projections (clean data)
     clean_raw = raw.copy().add_proj(projs)
     clean_raw = clean_raw.apply_proj()
-
-    ##############################################################################################
-    # Reference and Remove Powerline Noise
-    ##############################################################################################
-    # make sure recording reference is included
-    mne.add_reference_channels(clean_raw, ref_channels=['TH6'], copy=False)  # Modifying in place
-
-    clean_raw.notch_filter(freqs=[notch_low, notch_high], n_jobs=len(raw.ch_names), method='fir', phase='zero')
 
     ##############################################################################################
     # Save
