@@ -13,17 +13,17 @@ from ESG.run_CCA_spinal import run_CCA
 
 if __name__ == '__main__':
     ######## 1. Import ############
-    import_d = True  # Prep work
+    import_d = False  # Prep work
 
     ######### 2. Clean the heart artefact using SSP ########
-    SSP_flag = True
+    SSP_flag = False
     no_projections = 6
 
     ######## 3. Bad Channel Check #######
-    check_channels = True
+    check_channels = False
 
     ######### 4. Bad trial check #############
-    check_trials = True
+    check_trials = False
 
     ######### 5. Split into frequency bands #############
     split_bands_flag = True
@@ -46,6 +46,7 @@ if __name__ == '__main__':
     # Downsample and concatenate blocks of the same conditions
     # Also notch filters powerline noise and hpf at 1Hz
     ############################################
+    subjects = [35, 36]
     if import_d:
         for subject in subjects:
             for condition in conditions:
@@ -54,6 +55,7 @@ if __name__ == '__main__':
     ##################################################
     # To remove heart artifact using SSP method in MNE
     ###################################################
+    subjects = np.arange(1, 37)
     if SSP_flag:
         for subject in subjects:
             for condition in conditions:

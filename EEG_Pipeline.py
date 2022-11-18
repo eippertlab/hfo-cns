@@ -8,23 +8,35 @@ from Common_Functions.import_data import import_data
 from Common_Functions.bad_trial_check import bad_trial_check
 from Common_Functions.bad_channel_check import bad_channel_check
 from Common_Functions.Create_Frequency_Bands import create_frequency_bands
+from EEG.run_CCA_brain import run_CCA
+from EEG.run_CSP_brain import run_CSP
+from EEG.run_bCSTP_brain import run_bCSTP
 
 
 if __name__ == '__main__':
     ######## 1. Import ############
-    import_d = True  # Prep work
+    import_d = False  # Prep work
 
     ######## 2. Bad Channel Check ###########
-    check_channels = True
+    check_channels = False
 
     ######## 3. Bad Trial Check ###########
-    check_trials = True
+    check_trials = False
 
     ######## 4. Freq band ##########
     split_bands_flag = False
 
+    ######## 5. Run CCA ########
+    CCA_flag = False
+
+    ######## 6. Run CSP ########
+    CSP_flag = False
+
+    ######## 7. Run bCSTP #######
+    bCSTP_flag = True
+
     n_subjects = 36  # Number of subjects
-    subjects = np.arange(1, 37)  # 1 through 36 to access subject data
+    subjects = np.arange(1, 7)  # 1 through 36 to access subject data
     # subjects = [1]
     srmr_nr = 1  # Experiment Number
     conditions = [2, 3]  # Conditions of interest
@@ -65,3 +77,32 @@ if __name__ == '__main__':
         for subject in subjects:
             for condition in conditions:
                 create_frequency_bands(subject, condition, srmr_nr, sampling_rate, channel_type='eeg')
+
+    ###################################################
+    # Run CCA on Freq Bands
+    ###################################################
+    if CCA_flag:
+        for subject in subjects:
+            for condition in conditions:
+                for freq_band in ['sigma', 'kappa']:
+                    run_CCA(subject, condition, srmr_nr, freq_band, sampling_rate)
+
+    ###################################################
+    # Run CSP on Freq Bands
+    ###################################################
+    if CSP_flag:
+        for subject in subjects:
+            for condition in conditions:
+                for freq_band in ['sigma', 'kappa']:
+                    run_CSP(subject, condition, srmr_nr, freq_band, sampling_rate)
+
+    ###################################################
+    # Run bCSTP on Freq Bands
+    ###################################################
+    if bCSTP_flag:
+        for subject in subjects:
+            for condition in conditions:
+                for freq_band in ['sigma', 'kappa']:
+                    run_bCSTP(subject, condition, srmr_nr, freq_band, sampling_rate)
+
+

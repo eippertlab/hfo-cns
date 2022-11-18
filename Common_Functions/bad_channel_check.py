@@ -71,7 +71,7 @@ def bad_channel_check(subject, condition, srmr_nr, sampling_rate, channel_type):
     plt.show()
 
     bad_chans = list(map(str, input("Enter bad channels (separated by a space, press enter if none): ").split()))
-    filename = figure_path + 'bad_channels.txt'
+    filename = figure_path + f'bad_channels_{cond_name}.txt'
     with open(filename, mode="w") as outfile:
         for s in bad_chans:
             outfile.write("%s\n" % s)

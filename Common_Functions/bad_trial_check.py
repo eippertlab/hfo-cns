@@ -55,9 +55,8 @@ def bad_trial_check(subject, condition, srmr_nr, sampling_rate, channel_type):
     sample_indices = np.argwhere(badPoints)
     if sample_indices.size != 0:
         sample_indices = sample_indices.reshape(-1)
-        # Add bad amplitude events as annotations
-        bad_amp_events = [x / sampling_rate for x in sample_indices]  # Divide by sampling rate to make times
-        bad_amp_events -= 0.0025
+        # Add bad amplitude events as annotations - have onset 2.5 ms before bad segment
+        bad_amp_events = [x / sampling_rate - 0.0025 for x in sample_indices]  # Divide by sampling rate to make times
         annotations = Annotations(bad_amp_events, duration=0.005, description="BAD_amp")
         # Will be 2.5ms before and 2.5ms after the detected bad amplitude
         raw.set_annotations(raw.annotations + annotations)

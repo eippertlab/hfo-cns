@@ -28,16 +28,17 @@ def create_frequency_bands(subject, condition, srmr_nr, sampling_rate, channel_t
         # set variables
         load_path = "/data/pt_02718/tmp_data/imported/" + subject_id + "/"
         save_path = "/data/pt_02718/tmp_data/freq_banded_eeg/" + subject_id + "/"
-        fname = f'cnt_clean_{cond_name}.set'
+        fname = f'noStimart_sr{sampling_rate}_{cond_name}_withqrs_eeg.fif'
 
+    os.makedirs(save_path, exist_ok=True)
     raw = mne.io.read_raw_fif(load_path + fname, preload=True)
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)
     sigma = [df.loc[df['var_name'] == 'sigma_low', 'var_value'].iloc[0],
              df.loc[df['var_name'] == 'sigma_high', 'var_value'].iloc[0]]
-    kappa = [df.loc[df['var_name'] == 'kappa_low', 'var_value'].iloc[0],
-             df.loc[df['var_name'] == 'kappa_high', 'var_value'].iloc[0]]
+    kappa = [df.loc[df['var_name'] == 'k_low', 'var_value'].iloc[0],
+             df.loc[df['var_name'] == 'k_high', 'var_value'].iloc[0]]
     # kappa1 = [df.loc[df['var_name'] == 'k1_low', 'var_value'].iloc[0],
     #           df.loc[df['var_name'] == 'k1_high', 'var_value'].iloc[0]]
     # kappa2 = [df.loc[df['var_name'] == 'k2_low', 'var_value'].iloc[0],
@@ -46,6 +47,7 @@ def create_frequency_bands(subject, condition, srmr_nr, sampling_rate, channel_t
     # band_dict = {'sigma': sigma,
     #              'kappa1': kappa1,
     #              'kappa2': kappa2}
+
     band_dict = {'sigma': sigma,
                  'kappa': kappa}
     for band_name in band_dict.keys():

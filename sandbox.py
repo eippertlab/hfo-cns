@@ -4,16 +4,17 @@ from meet.spatfilt import bCSTP
 from scipy.io import loadmat
 import pandas as pd
 from Common_Functions.get_conditioninfo import get_conditioninfo
-from Common_Functions.get_esg_channels import get_esg_channels
+from Common_Functions.get_channels import get_channels
 import os
 import numpy as np
+from meet._cSPoC import pattern_from_filter
+import scipy
 import matplotlib as mpl
 import pickle
 import matplotlib.pyplot as plt
 from Common_Functions.IsopotentialFunctions import mrmr_esg_isopotentialplot
 
 if __name__ == '__main__':
-    # For testing
     condition = 2
     srmr_nr = 1
     subject = 1
@@ -35,188 +36,168 @@ if __name__ == '__main__':
                 df.loc[df['var_name'] == 'epo_bcstp_end', 'var_value'].iloc[0]]
 
     # Select the right files based on the data_string
-    input_path = "/data/pt_02718/tmp_data/freq_banded/" + subject_id + "/"
+    input_path = "/data/pt_02718/tmp_data/freq_banded_eeg/" + subject_id + "/"
     fname = f"{freq_band}_{cond_name}.fif"
-    save_path = "/data/p_02718/tmp_data/bCSTP/" + subject_id + "/"
+    save_path = "/data/pt_02718/tmp_data/bCSTP_eeg/" + subject_id + "/"
     os.makedirs(save_path, exist_ok=True)
 
-    esg_chans = ['S35', 'S24', 'S36', 'Iz', 'S17', 'S15', 'S32', 'S22',
-                 'S19', 'S26', 'S28', 'S9', 'S13', 'S11', 'S7', 'SC1', 'S4', 'S18',
-                 'S8', 'S31', 'SC6', 'S12', 'S16', 'S5', 'S30', 'S20', 'S34', 'AC',
-                 'S21', 'S25', 'L1', 'S29', 'S14', 'S33', 'S3', 'AL', 'L4', 'S6',
-                 'S23', 'TH6']
-
-    brainstem_chans, cervical_chans, lumbar_chans, ref_chan = get_esg_channels()
+    eeg_chans, esg_chans, bipolar_chans = get_channels(subject, False, False, srmr_nr)
 
     raw = mne.io.read_raw_fif(input_path + fname, preload=True)
+
+    # Set montage
+    montage_path = '/data/pt_02718/'
+    montage_name = 'electrode_montage_eeg_10_5.elp'
+    montage = mne.channels.read_custom_montage(montage_path + montage_name)
+    raw.set_montage(montage, on_missing="ignore")
+    idx_by_type = mne.channel_indices_by_type(raw.info, picks=eeg_chans)
+    res = mne.pick_info(raw.info, sel=idx_by_type['eeg'], copy=True, verbose=None)
 
     # create c+ epochs from -40ms to 90ms
     events, event_ids = mne.events_from_annotations(raw)
     event_id_dict = {key: value for key, value in event_ids.items() if key == trigger_name}
     epochs_pos = mne.Epochs(raw, events, event_id=event_id_dict, tmin=iv_epoch[0], tmax=iv_epoch[1],
-                        baseline=tuple(iv_baseline), preload=True)
-
-    # Select only the ESG channels
-    epochs_pos = epochs_pos.pick_channels(ch_names=esg_chans)
-
-    # Change order of data
+                            baseline=tuple(iv_baseline), preload=True)
+    epochs_pos.set_eeg_reference(ref_channels=['C4'])
+    epochs_pos = epochs_pos.pick_channels(ch_names=eeg_chans)
     data_pos = np.transpose(epochs_pos.get_data(), (1, 2, 0))
-    # This is what we submitted into the bCSTP algorithm
 
-    # Load the outputs from the algorithm
-    names = ['W', 'V', 's_eigvals', 't_eigvals']
-    for name in names:
-        afile = open(f'/data/pt_02718/{name}.pkl', 'rb')
-        obj = pickle.load(afile)
-        afile.close()
-        if name == 'W':
-            W = obj
-        elif name == 'V':
-            V = obj
-        elif name == 's_eigvals':
-            s_eigvals = obj
-        elif name == 't_eigvals':
-            t_eigvals = obj
+    # Read in W, V
+    with open(f'/data/pt_02718/W_{subject_id}.pkl', 'rb') as f:
+        W = pickle.load(f)
+        # Shape (channels, channel_rank)
 
-    # Each one is a list of arrays corresponding to an iteration of the algorithm
-    # Use [-1] to access the final ones
-    SF_final = W[-1]
-    TF_final = V[-1]
-    s_eigvals_final = s_eigvals[-1]
-    t_eigvals_final = t_eigvals[-1]
+    with open(f'/data/pt_02718/V_{subject_id}.pkl', 'rb') as f:
+        V = pickle.load(f)
+        # Shape (epoch_length, epoch_rank)
 
-    # print(np.shape(SF_final))  # (40, 39) - (no_channels,  )
-    # print(np.shape(TF_final))  # (701, 694) - (no_timepoints,  )
-    # print(np.shape(data_pos))  # (40, 701, 2000) - (no_channels, no_timepoints, no_epochs)
+    with open(f'/data/pt_02718/s_eigvals_{subject_id}.pkl', 'rb') as f:
+        s_eigvals = pickle.load(f)
 
-    # Filter matrices are not square
-    CSP = np.linalg.pinv(SF_final)
-    CTP = np.linalg.pinv(TF_final)
+    with open(f'/data/pt_02718/t_eigvals_{subject_id}.pkl', 'rb') as f:
+        t_eigvals = pickle.load(f)
 
-    # print(np.shape(CSP))  # (39, 40) - (no_filters , no_channel)
-    # print(np.shape(CTP))  # (694, 701)  - (no_filters  , no_timepoints)
-    # CSP = np.linalg.inv(SF_final)
-    # CTP = np.linalg.inv(TF_final)
+    # print(s_eigvals[-1])
+    # print(t_eigvals[-1])
+    # exit()
+    keeps = 1
+    keept = 5
+    spatial_filters = W[-1][:, 0:keeps]  # Keep top spatial filters
+    temporal_filters = V[-1][:, 0:keept]  # Keep top temporal filters
+    # print(np.shape(data_pos))
+    spatially_filtered_trials = np.tensordot(spatial_filters, data_pos, axes=(0, 0))
+    # print(np.shape(spatially_filtered_trials))
+    temporally_filtered_trials = np.tensordot(temporal_filters, data_pos, axes=(0, 1))
+    # print(np.shape(temporally_filtered_trials))
+    # exit()
+    spatio_temp_filtered_trials = np.tensordot(temporal_filters, spatially_filtered_trials, axes=(0, 1))
+    # print(np.shape(spatio_temp_filtered_trials))
+    # Tells us how much activity in each trial corresponds to spatiotemporal patterns
 
-    # This loop gets the optimum spatio-temporal features for each trial
-    # Need to then prune the temporal patterns and project back to original space
-    spatio_temporal = []
-    for trial in np.arange(0, 2000):
-        trial_selected = data_pos[:, :, trial]  # will be (no_channels x no_timepoints)
-        trial_cleaned = (SF_final.T).dot(trial_selected).dot(TF_final)
-        spatio_temporal.append(trial_cleaned)
-    print(np.shape(spatio_temporal))
-    print(np.shape(spatio_temporal[0]))
-    exit()
-    test_data = data_pos.reshape(-1, data_pos.shape[0]).T
-    test_shape = (SF_final.T).dot(data_pos).dot(TF_final)
-    # test_shape = (SF_final.T.dot(test_data)).dot(TF_final)
-    print(np.shape(test_shape))
-    exit()
-    all_filters = len(s_eigvals[-1])
-    # data_pos is (no_channels, no_times, no_epochs), want (no_channels, no_times x no_epochs)
-    # test_filters is all filters (no_channels, no_filters)
-    test_data = data_pos.reshape(-1, data_pos.shape[0]).T
-    test_filters = SF_final[:, 0:all_filters]
-    cleaned_single_trials = test_data.T @ test_filters
-    no_times_long = np.shape(epochs_pos.get_data())[2]
-    no_epochs = np.shape(epochs_pos.get_data())[0]
-    bCSTP_single = np.reshape(cleaned_single_trials, (all_filters, no_times_long, no_epochs), order='F')  # Perform reshape
-    # This is finally (no_filters, no_times, no_epochs)
+    # Recover patterns
+    temporal_patterns = pattern_from_filter(temporal_filters, np.transpose(data_pos, (1, 0, 2)))
+    spatial_patterns = pattern_from_filter(spatial_filters, data_pos)
+    # print(np.shape(temporal_patterns))
+    # print(np.shape(spatial_patterns))
 
-    # Get into form to create epochs in MNE
-    bCSTP_single = np.swapaxes(bCSTP_single, 0, 2)
-    bCSTP_single = np.swapaxes(bCSTP_single, 1, 2)
+    # Reconstructed data
+    reconstructed_trials_temporal = np.tensordot(temporal_patterns, spatio_temp_filtered_trials, axes=(0, 0))
+    # print(np.shape(reconstructed_trials_temporal))
+    reconstructed_trials_spatial = np.tensordot(spatial_patterns, spatio_temp_filtered_trials, axes=(0, 1))
+    # print(np.shape(reconstructed_trials_spatial))
+    reconstructed_trials = np.tensordot(spatial_patterns, reconstructed_trials_temporal, axes=(0, 1))
+    # print(np.shape(reconstructed_trials))
+    # exit()
 
-    data = bCSTP_single[:, :, :]
+    #######################  Epoch data class to store the information ####################
     events = epochs_pos.events
     event_id = epochs_pos.event_id
     tmin = iv_epoch[0]
     sfreq = 5000
 
-    ch_names = []
-    ch_types = []
-    for i in np.arange(0, all_filters):
-        ch_names.append(f'Cor{i + 1}')
-        ch_types.append('eeg')
+    ch_names = epochs_pos.ch_names
+    ch_types = ['eeg' for i in np.arange(0, len(ch_names))]
 
     # Initialize an info structure
-    info = mne.create_info(
+    info_full_recon = mne.create_info(
         ch_names=ch_names,
         ch_types=ch_types,
         sfreq=sfreq
     )
 
     # Create and save
-    bCSTP_epochs = mne.EpochsArray(data, info, events, tmin, event_id)
-    bCSTP_epochs = bCSTP_epochs.apply_baseline(baseline=tuple(iv_baseline))
-    save_path = '/data/pt_02718/'
-    fname = 'test_epochs.fif'
-    bCSTP_epochs.save(os.path.join(save_path, fname), fmt='double', overwrite=True)
+    bcstp_epochs = mne.EpochsArray(np.transpose(reconstructed_trials, axes=(2, 0, 1)), info_full_recon, events, tmin,
+                                   event_id)
+    bcstp_epochs = bcstp_epochs.apply_baseline(baseline=tuple(iv_baseline))
+    bcstp_epochs.save(os.path.join(save_path, fname), fmt='double', overwrite=True)
 
-    ##############################################################################
-    # PLOTTING
-    ##############################################################################
-    ######################## Plot image for cca_epochs ############################
-    # cca_epochs and cca_epochs_d both already baseline corrected before this point
-    figure_path_st = f'/data/p_02718/Images/CCA/ComponentSinglePlots/{subject_id}/'
-    os.makedirs(figure_path_st, exist_ok=True)
+    ################################ Plotting Graphs #######################################
+    figure_path_spatial = f'/data/p_02718/Images/bCSTP_eeg/IsopotentialPlots/{subject_id}/'
+    os.makedirs(figure_path_spatial, exist_ok=True)
 
-    fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(nrows=2, ncols=2)
-    axes = [ax1, ax2, ax3, ax4]
-    cropped = bCSTP_epochs.copy().crop(tmin=-0.025, tmax=0.065)
-    cmap = mpl.colors.ListedColormap(["blue", "green", "red"])
-    vmin = -10000
-    vmax = 10000
+    plot_graphs = True
+    if plot_graphs:
+        ####### Topography for the best spatial pattern ########
+        # fig, axes = plt.figure()
+        from mpl_toolkits.axes_grid1 import make_axes_locatable
 
-    for icomp in np.arange(0, 4):
-        cropped.plot_image(picks=f'Cor{icomp + 1}', combine=None, cmap='jet', evoked=False, show=False,
-                           axes=axes[icomp], title=f'Component {icomp + 1}', colorbar=False, group_by=None,
-                           vmin=vmin, vmax=vmax, units=dict(eeg='V'), scalings=dict(eeg=1))
+        fig, axes = plt.subplots(1, 1)
+        # axes_unflat = axes
+        # axes = axes.flatten()
+        # for icomp in np.arange(0, 1):  # Plot for each of four components
+        mne.viz.plot_topomap(data=spatial_patterns[0, :], pos=epochs_pos.info, ch_type='eeg', sensors=True,
+                             names=epochs_pos.ch_names,
+                             contours=6, outlines='head', sphere=None, image_interp='cubic',
+                             extrapolate='head', border='mean', res=64, size=1, cmap='jet', vlim=(None, None),
+                             cnorm=None, axes=axes, show=False)
+        axes.set_title(f'Component {1}')
+        divider = make_axes_locatable(axes)
+        cax = divider.append_axes('right', size='5%', pad=0.05)
+        cb = fig.colorbar(axes.images[-1], cax=cax, shrink=0.6, orientation='vertical')
 
-    plt.tight_layout()
-    fig.subplots_adjust(right=0.85)
-    ax5 = fig.add_axes([0.9, 0.1, 0.01, 0.8])
-    norm = mpl.colors.Normalize(vmin=vmin, vmax=vmax)
-    # mpl.colorbar.ColorbarBase(ax5, cmap=cmap, norm=norm, spacing='proportional')
-    mpl.colorbar.ColorbarBase(ax5, cmap='jet', norm=norm)
-    # has to be as a list - starts with x, y coordinates for start and then width and height in % of figure width
-    # plt.savefig(figure_path_st + f'{freq_band}_{cond_name}.png')
-    # plt.close(fig)
+        ############### Time Course of best Temporal Patterns ###########################
+        fig, axes = plt.subplots(2, 2)
+        for count, ax in enumerate(axes.flatten()):
+            data = temporal_patterns[count, :]
+            times = epochs_pos.times
+            ax.plot(times, data)
+            ax.set_title(f'Temporal Pattern {count}')
+
+
+        ############### Time Course of Reconstructed in Temporal Domain #################
+        # data = np.mean(reconstructed_trials, axis=(0, 2))
+        # plt.figure()
+        # plt.plot(times, data)
+        # plt.xlim([0.01, 0.050])
+        # plt.xlabel('Time (ms)')
+        # plt.title('Temporally Reconstructed Data')
+        # plt.savefig(figure_path_spatial + f'{freq_band}_{cond_name}.png')
+        # plt.close(fig)
+
+        ############ Evoked re-construction ####################################
+        bcstp_epochs.set_montage(montage, on_missing="ignore")
+        bcstp_evoked = bcstp_epochs.average()
+        bcstp_evoked.plot()
+        bcstp_evoked.plot_topomap(times=[0.015, 0.02, 0.025], average=0.005)
+        bcstp_evoked.plot_joint()
+
+        ############ Single Trial Plot of Reconstructed data ###################
+        # for channel in bcstp_epochs.ch_names:
+        #     bcstp_epochs.crop(tmin=0.01, tmax=0.05).plot_image(picks=[channel], scalings=dict(eeg=1), title=channel)
+
+
+        ######################## Plot image for bCSTP_epochs at each channel ############################
+        # cca_epochs and cca_epochs_d both already baseline corrected before this point
+        # figure_path_st = f'/data/p_02718/Images/bCSTP_eeg/SingleTrialPlots/{subject_id}/'
+        # os.makedirs(figure_path_st, exist_ok=True)
+
+        # fig = plt.figure()
+        # channels = ['FCz']
+        # for channel in channels:
+        #     bcstp_epochs.crop(tmin=0.01, tmax=0.05).plot_image(picks=[channel], scalings=dict(eeg=1), title=channel)
+        # layout = mne.channels.find_layout(epochs_pos.info, ch_type='eeg')
+        # bcstp_epochs.plot_topo_image(layout=layout, fig_facecolor='w', font_color='k', sigma=1)
+
     plt.show()
-    exit()
 
-    ############ Time Course of average of first 5 ###############
-    fig = plt.figure()
-    data = bCSTP_epochs.get_data(picks=['Cor1', 'Cor2', 'Cor3', 'Cor4', 'Cor5'])
-    to_plot = np.mean(data[:, 0:5, :], axis=tuple([0, 1]))
-    plt.plot(bCSTP_epochs.times, to_plot)
-    plt.xlim([-0.025, 0.065])
-    plt.xlabel('Time [s]')
-    plt.ylabel('Amplitude [A.U.]')
-
-    # Plot average of first 5 temporal patterns
-    fig = plt.figure()
-    plt.plot(np.mean(CTP[0:5, :], axis=0))
-    plt.show()
-    exit()
-
-    # Plot first 4 spatial patterns
-    ####### Spinal Isopotential Plots for the first 4 components ########
-    # fig, axes = plt.figure()
-    fig, axes = plt.subplots(2, 2)
-    axes_unflat = axes
-    axes = axes.flatten()
-    for icomp in np.arange(0, 4):  # Plot for each of four components
-        if freq_band == 'sigma':
-            colorbar_axes = [-0.3, 0.3]
-        else:
-            colorbar_axes = [-0.1, 0.1]
-        chan_labels = epochs_pos.ch_names
-        colorbar = True
-        time = 0.0
-        mrmr_esg_isopotentialplot([subject], CSP[icomp, :], colorbar_axes, chan_labels,
-                                  colorbar, time, axes[icomp])
-        axes[icomp].set_title(f'Component {icomp + 1}')
-
-    plt.show()
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     

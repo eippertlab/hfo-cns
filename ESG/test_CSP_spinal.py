@@ -32,6 +32,7 @@ if __name__ == '__main__':
                    df.loc[df['var_name'] == 'baseline_end', 'var_value'].iloc[0]]
     iv_epoch = [df.loc[df['var_name'] == 'epo_cca_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
+    # Whole epoch is from -100ms to 300ms
 
     # Select the right files based on the data_string
     input_path = "/data/pt_02718/tmp_data/freq_banded_esg/" + subject_id + "/"
