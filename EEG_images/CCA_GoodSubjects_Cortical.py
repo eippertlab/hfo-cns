@@ -1,4 +1,5 @@
-# Plot grand average time courses and spatial patterns after application of CCA
+# Plot single subject time courses and spatial patterns after application of CCA
+# Just for 2 good subjects
 
 
 import os
@@ -13,10 +14,12 @@ import matplotlib as mpl
 import pandas as pd
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import pickle
+import matplotlib as mpl
+mpl.rcParams['pdf.fonttype'] = 42
 
 
 if __name__ == '__main__':
-    subjects = np.arange(1, 37)
+    subjects = [3, 10, 15, 21, 22, 32]
     conditions = [2, 3]
     freq_bands = ['sigma', 'kappa']
     srmr_nr = 1
@@ -41,19 +44,22 @@ if __name__ == '__main__':
     eeg_chans, esg_chans, bipolar_chans = get_channels(1, False, False, srmr_nr)
     idx_by_type = mne.channel_indices_by_type(raw.info, picks=eeg_chans)
     res = mne.pick_info(raw.info, sel=idx_by_type['eeg'], copy=True, verbose=None)
-    figure_path = '/data/p_02718/Images/CCA_eeg/GrandAverage/'
+    figure_path = '/data/p_02718/Images/CCA_eeg/GoodSubjects/'
     os.makedirs(figure_path, exist_ok=True)
 
     for freq_band in freq_bands:
         for condition in conditions:
-            evoked_list = []
-            spatial_pattern = []
             for subject in subjects:
                 # Set variables
                 cond_info = get_conditioninfo(condition, srmr_nr)
                 cond_name = cond_info.cond_name
                 trigger_name = cond_info.trigger_name
                 subject_id = f'sub-{str(subject).zfill(3)}'
+
+                if cond_name == 'median':
+                    sep_latency = 20  # In ms
+                elif cond_name == 'tibial':
+                    sep_latency = 40
 
                 ##########################################################
                 # Time  Course Information
@@ -73,7 +79,6 @@ if __name__ == '__main__':
                     epochs.apply_function(invert, picks=channel)
                 evoked = epochs.average()
                 data = evoked.data
-                evoked_list.append(data)
 
                 ############################################################
                 # Spatial Pattern Extraction
@@ -83,42 +88,38 @@ if __name__ == '__main__':
                     A_st = pickle.load(f)
                     # Shape (channels, channel_rank)
                 if inv == 'T':
-                    spatial_pattern.append(A_st[:, channel_no-1]*-1)
+                    spatial_pattern = (A_st[:, channel_no-1]*-1)
                 else:
-                    spatial_pattern.append(A_st[:, channel_no-1])
+                    spatial_pattern = (A_st[:, channel_no-1])
+                # Plot Time Course
+                fig, ax = plt.subplots()
+                ax.plot(epochs.times, evoked.get_data().reshape(-1))
+                ax.set_ylabel('Cleaned SEP Amplitude (AU)')
+                ax.set_xlabel('Time (s)')
+                ax.set_title(f'Time Course, {subject_id}')
+                line_label = f"{sep_latency / 1000}s"
+                plt.axvline(x=sep_latency / 1000, color='r', linewidth='0.6', label=line_label)
+                if cond_name == 'median':
+                    ax.set_xlim([0.00, 0.05])
+                else:
+                    ax.set_xlim([0.00, 0.07])
 
-            # Get grand average across chosen epochs, and spatial patterns
-            grand_average = np.mean(evoked_list, axis=0)
-            grand_average_spatial = np.mean(spatial_pattern, axis=0)
+                plt.savefig(figure_path+f'{subject_id}_Time_{freq_band}_{cond_name}')
+                plt.savefig(figure_path+f'{subject_id}_Time_{freq_band}_{cond_name}.pdf',
+                            bbox_inches='tight', format="pdf")
 
-            # Plot Time Course
-            fig, ax = plt.subplots()
-            ax.plot(epochs.times, grand_average[0, :])
-            ax.set_ylabel('Cleaned SEP Amplitude (AU)')
-            ax.set_xlabel('Time (s)')
-            ax.set_title(f'Grand Average Time Course, n={len(subjects)}')
-            if cond_name == 'median':
-                ax.set_xlim([0.01, 0.05])
-            else:
-                ax.set_xlim([0.03, 0.07])
-
-            plt.savefig(figure_path+f'GA_Time_{freq_band}_{cond_name}')
-
-            # Plot Spatial Pattern
-            fig, ax = plt.subplots(1, 1)
-            chan_labels = epochs.ch_names
-            mne.viz.plot_topomap(data=grand_average_spatial, pos=res, ch_type='eeg', sensors=True, names=None,
-                                 contours=6, outlines='head', sphere=None, image_interp='cubic',
-                                 extrapolate='head', border='mean', res=64, size=1, cmap='jet', vlim=(None, None),
-                                 cnorm=None, axes=ax, show=False)
-            ax.set_title(f'Grand Average Spatial Pattern, n={len(subjects)}')
-            divider = make_axes_locatable(ax)
-            cax = divider.append_axes('right', size='5%', pad=0.05)
-            cb = fig.colorbar(ax.images[-1], cax=cax, shrink=0.6, orientation='vertical')
-            plt.savefig(figure_path+f'GA_Spatial_{freq_band}_{cond_name}')
-
-
-
-
-
-
+                # Plot Spatial Pattern
+                fig, ax = plt.subplots(1, 1)
+                chan_labels = epochs.ch_names
+                mne.viz.plot_topomap(data=spatial_pattern*10**6, pos=res, ch_type='eeg', sensors=True, names=None,
+                                     contours=6, outlines='head', sphere=None, image_interp='cubic',
+                                     extrapolate='head', border='mean', res=64, size=1, cmap='jet', vlim=(None, None),
+                                     cnorm=None, axes=ax, show=False)
+                ax.set_title(f'Spatial Pattern, {subject_id}')
+                divider = make_axes_locatable(ax)
+                cax = divider.append_axes('right', size='5%', pad=0.05)
+                cb = fig.colorbar(ax.images[-1], cax=cax, shrink=0.6, orientation='vertical')
+                cb.set_label('Amplitude', rotation=90)
+                plt.savefig(figure_path+f'{subject_id}_Spatial_{freq_band}_{cond_name}')
+                plt.savefig(figure_path+f'{subject_id}_Spatial_{freq_band}_{cond_name}.pdf',
+                            bbox_inches='tight', format="pdf")

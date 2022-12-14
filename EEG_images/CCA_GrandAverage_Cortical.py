@@ -13,6 +13,8 @@ import matplotlib as mpl
 import pandas as pd
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import pickle
+import matplotlib as mpl
+mpl.rcParams['pdf.fonttype'] = 42
 
 
 if __name__ == '__main__':
@@ -98,16 +100,17 @@ if __name__ == '__main__':
             ax.set_xlabel('Time (s)')
             ax.set_title(f'Grand Average Time Course, n={len(subjects)}')
             if cond_name == 'median':
-                ax.set_xlim([0.01, 0.05])
+                ax.set_xlim([0.00, 0.05])
             else:
-                ax.set_xlim([0.03, 0.07])
+                ax.set_xlim([0.00, 0.07])
 
             plt.savefig(figure_path+f'GA_Time_{freq_band}_{cond_name}')
+            plt.savefig(figure_path+f'GA_Time_{freq_band}_{cond_name}.pdf', bbox_inches='tight', format="pdf")
 
             # Plot Spatial Pattern
             fig, ax = plt.subplots(1, 1)
             chan_labels = epochs.ch_names
-            mne.viz.plot_topomap(data=grand_average_spatial, pos=res, ch_type='eeg', sensors=True, names=None,
+            mne.viz.plot_topomap(data=grand_average_spatial*10**6, pos=res, ch_type='eeg', sensors=True, names=None,
                                  contours=6, outlines='head', sphere=None, image_interp='cubic',
                                  extrapolate='head', border='mean', res=64, size=1, cmap='jet', vlim=(None, None),
                                  cnorm=None, axes=ax, show=False)
@@ -115,5 +118,6 @@ if __name__ == '__main__':
             divider = make_axes_locatable(ax)
             cax = divider.append_axes('right', size='5%', pad=0.05)
             cb = fig.colorbar(ax.images[-1], cax=cax, shrink=0.6, orientation='vertical')
+            cb.set_label('Amplitude', rotation=90)
             plt.savefig(figure_path+f'GA_Spatial_{freq_band}_{cond_name}')
-
+            plt.savefig(figure_path+f'GA_Spatial_{freq_band}_{cond_name}.pdf', bbox_inches='tight', format="pdf")

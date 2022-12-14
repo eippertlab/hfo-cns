@@ -10,20 +10,24 @@ from Common_Functions.bad_channel_check import bad_channel_check
 from Common_Functions.bad_trial_check import bad_trial_check
 from Common_Functions.Create_Frequency_Bands import create_frequency_bands
 from ESG.run_CCA_spinal import run_CCA
+from ESG.rm_heart_artefact import rm_heart_artefact
 
 if __name__ == '__main__':
     ######## 1. Import ############
-    import_d = False  # Prep work
+    import_d = True  # Prep work
 
     ######### 2. Clean the heart artefact using SSP ########
-    SSP_flag = False
+    SSP_flag = True
     no_projections = 6
 
+    ######## Clean the heart artefact using SSP ###########
+    pca_removal = True
+
     ######## 3. Bad Channel Check #######
-    check_channels = False
+    check_channels = True
 
     ######### 4. Bad trial check #############
-    check_trials = False
+    check_trials = True
 
     ######### 5. Split into frequency bands #############
     split_bands_flag = True
@@ -46,7 +50,6 @@ if __name__ == '__main__':
     # Downsample and concatenate blocks of the same conditions
     # Also notch filters powerline noise and hpf at 1Hz
     ############################################
-    subjects = [35, 36]
     if import_d:
         for subject in subjects:
             for condition in conditions:
@@ -55,11 +58,19 @@ if __name__ == '__main__':
     ##################################################
     # To remove heart artifact using SSP method in MNE
     ###################################################
-    subjects = np.arange(1, 37)
     if SSP_flag:
         for subject in subjects:
             for condition in conditions:
                 apply_SSP(subject, condition, srmr_nr, sampling_rate, no_projections)
+
+    ###################################################
+    # Remove heart artefact using PCA_OBS method
+    ##################################################
+    if pca_removal:
+        for subject in subjects:
+            for condition in conditions:
+                rm_heart_artefact(subject, condition, srmr_nr, sampling_rate)
+                # If pchip is true, uses data where stim artefact was removed by pchip
 
     ###################################################
     # Bad Channel Check

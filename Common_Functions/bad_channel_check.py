@@ -47,7 +47,7 @@ def bad_channel_check(subject, condition, srmr_nr, sampling_rate, channel_type):
     fig.tight_layout(pad=3.0)
     raw.compute_psd(fmax=2000).plot(axes=axes, show=False)
     axes.set_ylim([-80, 50])
-    plt.savefig(figure_path + 'psd.png')
+    plt.savefig(figure_path + f'psd_{cond_name}.png')
 
     ###########################################################################################
     # Squared log means of each channel
@@ -67,7 +67,7 @@ def bad_channel_check(subject, condition, srmr_nr, sampling_rate, channel_type):
     plt.colorbar(ax_i, ax=axes)
     axes.set_yticks(np.arange(0, len(list(means.index))), list(means.index))  # Don't hardcode 41
     axes.tick_params(labelbottom=True)
-    plt.savefig(figure_path + 'meanlog.png')
+    plt.savefig(figure_path + f'meanlog_{cond_name}.png')
     plt.show()
 
     bad_chans = list(map(str, input("Enter bad channels (separated by a space, press enter if none): ").split()))

@@ -96,7 +96,8 @@ def plot_esg_isopotential(chanvalues, colorbar_axes, gridsize, chan_pos_grid, la
                        levels=levels, cmap='turbo', origin='upper', extend='neither')
     if colorbar:
         ticks = [colorbar_axes[0], 0, colorbar_axes[1]]
-        plt.colorbar(cf, ax=axis, label='Amplitude (\u03BCV)', ticks=ticks)
+        # plt.colorbar(cf, ax=axis, label='Amplitude (\u03BCV)', ticks=ticks)
+        plt.colorbar(cf, ax=axis, label='Amplitude', ticks=ticks)
     axis.scatter(x, y, c='k', s=12)
     # if time == 13/1000:
     #     plt.text(-5, 60, f'{time} s', fontsize=22)

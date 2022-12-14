@@ -16,7 +16,7 @@ import pickle
 
 
 if __name__ == '__main__':
-    subjects = np.arange(1, 36)
+    subjects = np.arange(1, 37)
     conditions = [2, 3]
     srmr_nr = 1
     freq_bands = ['sigma', 'kappa']
@@ -81,16 +81,16 @@ if __name__ == '__main__':
             ax.set_xlabel('Time (s)')
             ax.set_title(f'Grand Average Time Course, n={len(subjects)}')
             if cond_name == 'median':
-                ax.set_xlim([0.01, 0.05])
+                ax.set_xlim([0.00, 0.05])
             else:
-                ax.set_xlim([0.03, 0.07])
+                ax.set_xlim([0.00, 0.07])
             plt.savefig(figure_path+f'GA_Time_{freq_band}_{cond_name}')
 
             # Plot Spatial Topographies
             if cond_name == 'median':
-                times = [0.16, 0.18, 0.20, 0.22, 0.24]
+                times = [0.016, 0.018, 0.020, 0.022, 0.024]
             elif cond_name == 'tibial':
-                times = [0.36, 0.38, 0.40, 0.42, 0.44]
+                times = [0.036, 0.038, 0.040, 0.042, 0.044]
             averaged.plot_topomap(times=times, average=None, ch_type=None, scalings=None, proj=False,
                                   sensors=True, show_names=False, mask=None, mask_params=None, contours=6,
                                   outlines='head', sphere=None, image_interp='cubic', extrapolate='auto', border='mean',

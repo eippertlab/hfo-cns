@@ -9,34 +9,34 @@ from Common_Functions.bad_trial_check import bad_trial_check
 from Common_Functions.bad_channel_check import bad_channel_check
 from Common_Functions.Create_Frequency_Bands import create_frequency_bands
 from EEG.run_CCA_brain import run_CCA
-from EEG.run_CSP_brain import run_CSP
-from EEG.run_bCSTP_brain import run_bCSTP
+from Archive.run_CSP_brain import run_CSP
+from Archive.run_bCSTP_brain import run_bCSTP
 
 
 if __name__ == '__main__':
     ######## 1. Import ############
-    import_d = False  # Prep work
+    import_d = True  # Prep work
 
     ######## 2. Bad Channel Check ###########
-    check_channels = False
+    check_channels = True
 
     ######## 3. Bad Trial Check ###########
-    check_trials = False
+    check_trials = True
 
     ######## 4. Freq band ##########
-    split_bands_flag = False
+    split_bands_flag = True
 
     ######## 5. Run CCA ########
-    CCA_flag = False
+    CCA_flag = True
 
     ######## 6. Run CSP ########
     CSP_flag = False
 
     ######## 7. Run bCSTP #######
-    bCSTP_flag = True
+    bCSTP_flag = False
 
     n_subjects = 36  # Number of subjects
-    subjects = np.arange(1, 7)  # 1 through 36 to access subject data
+    subjects = np.arange(1, 2)  # 1 through 36 to access subject data
     # subjects = [1]
     srmr_nr = 1  # Experiment Number
     conditions = [2, 3]  # Conditions of interest
@@ -63,7 +63,7 @@ if __name__ == '__main__':
                 bad_channel_check(subject, condition, srmr_nr, sampling_rate, channel_type='eeg')
 
     ###################################################
-    # Bad Channel Check
+    # Bad Trial Check
     ###################################################
     if check_trials:
         for subject in subjects:

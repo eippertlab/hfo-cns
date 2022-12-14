@@ -13,6 +13,7 @@ from Common_Functions.IsopotentialFunctions import mrmr_esg_isopotentialplot
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import pandas as pd
+import pickle
 
 
 def run_CCA(subject, condition, srmr_nr, freq_band):
@@ -123,25 +124,6 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
     CCA_comps = np.swapaxes(CCA_comps, 1, 2)
     selected_components = all_components  # Just keeping all for now to avoid rerunning
 
-    ################################ Check if it needs inverting ###########################
-    # sep_latency is in ms
-    # Get the data in this time window for all components
-    # Find the peak in a 5ms window on either side
-    is_inverted = [False, False, False, False]
-    check_window = epochs.time_as_index([(sep_latency[0][0] - 5) / 1000, (sep_latency[0][0] + 5) / 1000])
-    for icomp in np.arange(0, 4):
-        check_data = CCA_comps[:, icomp, check_window[0]:check_window[1]]
-        check_average = np.mean(np.mean(check_data, axis=0), axis=0)
-        check_edges = np.mean(check_data, axis=0)
-        min = np.min(check_edges)
-        max = np.max(check_edges)
-
-        # if check_average > 0:
-        if np.abs(max) > np.abs(min):
-            is_inverted[icomp] = True
-            CCA_comps[:, icomp, :] *= -1
-            # For manual correction - noticed some that should've/shouldn't be inverted - correct here
-
     #######################  Epoch data class to store the information ####################
     data = CCA_comps[:, 0:selected_components, :]
     events = epochs.events
@@ -167,6 +149,11 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
     cca_epochs = cca_epochs.apply_baseline(baseline=tuple(iv_baseline))
     cca_epochs.save(os.path.join(save_path, fname), fmt='double', overwrite=True)
 
+    ################################ Save Spatial Pattern #################################
+    afile = open(save_path + f'A_st_{freq_band}_{cond_name}.pkl', 'wb')
+    pickle.dump(A_st, afile)
+    afile.close()
+
     ################################ Plotting Graphs #######################################
     figure_path_spatial = f'/data/p_02718/Images/CCA/ComponentIsopotentialPlots/{subject_id}/'
     os.makedirs(figure_path_spatial, exist_ok=True)
@@ -180,9 +167,9 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
         for icomp in np.arange(0, 4):  # Plot for each of four components
             # plt.subplot(2, 2, icomp + 1, title=f'Component {icomp + 1}')
             if freq_band == 'sigma':
-                colorbar_axes = [-0.3, 0.3]
+                colorbar_axes = [-0.2, 0.2]
             else:
-                colorbar_axes = [-0.1, 0.1]
+                colorbar_axes = [-0.025, 0.025]
             chan_labels = epochs.ch_names
             colorbar = True
             time = 0.0
@@ -200,10 +187,7 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
 
         fig = plt.figure()
         for icomp in np.arange(0, 4):
-            if is_inverted[icomp] is True:
-                plt.subplot(2, 2, icomp + 1, title=f'Component {icomp + 1}, inv, r={r[icomp]:.3f}')
-            else:
-                plt.subplot(2, 2, icomp + 1, title=f'Component {icomp + 1}, r={r[icomp]:.3f}')
+            plt.subplot(2, 2, icomp + 1, title=f'Component {icomp + 1}, r={r[icomp]:.3f}')
             # Want to plot Cor1 - Cor4
             # Plot for the mixed nerve data
             # get_data returns (n_epochs, n_channels, n_times)
@@ -211,6 +195,7 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
             to_plot = np.mean(data[:, 0, :], axis=0)
             plt.plot(cca_epochs.times, to_plot)
             plt.xlim([-0.025, 0.065])
+            # plt.xlim([0.0, 0.05])
             line_label = f"{sep_latency[0][0] / 1000}s"
             plt.axvline(x=sep_latency[0][0] / 1000, color='r', linewidth='0.6', label=line_label)
             plt.xlabel('Time [s]')
