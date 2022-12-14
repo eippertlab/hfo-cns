@@ -4,7 +4,7 @@
 import os
 from scipy.io import loadmat
 from scipy.signal import firls
-from PCA_OBS import *
+from ESG.PCA_OBS import *
 from Common_Functions.get_conditioninfo import *
 from Common_Functions.get_channels import *
 
