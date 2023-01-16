@@ -18,7 +18,7 @@ import pickle
 
 
 if __name__ == '__main__':
-    subjects = np.arange(1, 37)
+    subjects = np.arange(1, 3)
     conditions = [2, 3]
     freq_bands = ['sigma', 'kappa']
     srmr_nr = 1
@@ -34,11 +34,11 @@ if __name__ == '__main__':
     df = pd.read_excel(xls, 'CCA')
     df.set_index('Subject', inplace=True)
 
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility.xlsx')
-    df_vis = pd.read_excel(xls, 'CCA_Spinal')
-    df_vis.set_index('Subject', inplace=True)
+    xls = pd.ExcelFile('/data/pt_02718/BurstPeaks/Peaks_from_Envelope.xlsx')
+    df_vis = pd.read_excel(xls, 'Sheet1')
+    df_vis.set_index('Subjects', inplace=True)
 
-    figure_path = '/data/p_02718/Images/CCA/GrandAverageShift/'
+    figure_path = '/data/p_02718/Images/CCA/GrandAverageShiftByEnvelope/'
     os.makedirs(figure_path, exist_ok=True)
     brainstem_chans, cervical_chans, lumbar_chans, ref_chan = get_esg_channels()
 
@@ -54,56 +54,53 @@ if __name__ == '__main__':
                 subject_id = f'sub-{str(subject).zfill(3)}'
 
                 # Only perform if bursts marked as visible
-                # visible = df_vis.loc[subject, f"{freq_band.capitalize()}_{cond_name.capitalize()}_Visible"]
-                # if visible == 'T':
+                visible = df_vis.loc[subject, f"{freq_band}_{cond_name}_visible"]
+                double = df_vis.loc[subject, f"{freq_band}_{cond_name}_double"]
+                if visible == 'T' and double == 'F':
+                    ##########################################################
+                    # Time  Course Information
+                    ##########################################################
+                    # Select the right files
+                    fname = f"{freq_band}_{cond_name}.fif"
+                    input_path = "/data/pt_02718/tmp_data/cca/" + subject_id + "/"
 
-                ##########################################################
-                # Time  Course Information
-                ##########################################################
-                # Select the right files
-                fname = f"{freq_band}_{cond_name}.fif"
-                input_path = "/data/pt_02718/tmp_data/cca/" + subject_id + "/"
+                    epochs = mne.read_epochs(input_path + fname, preload=True)
 
-                epochs = mne.read_epochs(input_path + fname, preload=True)
+                    # Need to pick channel based on excel sheet
+                    channel_no = df.loc[subject, f"{freq_band}_{cond_name}_comp"]
+                    channel = f'Cor{channel_no}'
+                    inv = df.loc[subject, f"{freq_band}_{cond_name}_flip"]
+                    epochs = epochs.pick_channels([channel])
+                    if inv == 'T':
+                        epochs.apply_function(invert, picks=channel)
+                    evoked = epochs.copy().average()
+                    # data = evoked.data
+                    # evoked_list.append(data)
 
-                # Need to pick channel based on excel sheet
-                channel_no = df.loc[subject, f"{freq_band}_{cond_name}_comp"]
-                channel = f'Cor{channel_no}'
-                inv = df.loc[subject, f"{freq_band}_{cond_name}_flip"]
-                epochs = epochs.pick_channels([channel])
-                if inv == 'T':
-                    epochs.apply_function(invert, picks=channel)
-                evoked = epochs.copy().average()
-                # data = evoked.data
-                # evoked_list.append(data)
+                    # Apply relative time-shift depending on expected latency
+                    if cond_name == 'median':
+                        sep_latency = df_vis.loc[subject, f"{freq_band}_{cond_name}"]
+                        expected = 13 / 1000
+                    elif cond_name == 'tibial':
+                        sep_latency = df_vis.loc[subject, f"{freq_band}_{cond_name}"]
+                        expected = 22 / 1000
+                    shift = sep_latency - expected
+                    evoked.shift_time(shift, relative=True)
+                    evoked.crop(tmin=-0.06, tmax=0.20)
+                    data = evoked.data
+                    evoked_list.append(data)
 
-                # Apply relative time-shift depending on expected latency
-                potential_path = f"/data/p_02068/SRMR1_experiment/analyzed_data/esg/{subject_id}/"
-                fname_pot = 'potential_latency.mat'
-                matdata = loadmat(potential_path + fname_pot)
-                if cond_name == 'median':
-                    sep_latency = matdata['med_potlatency']
-                    expected = 13 / 1000
-                elif cond_name == 'tibial':
-                    sep_latency = matdata['tib_potlatency']
-                    expected = 22 / 1000
-                shift = sep_latency[0][0] / 1000 - expected
-                evoked.shift_time(shift, relative=True)
-                evoked.crop(tmin=-0.06, tmax=0.20)
-                data = evoked.data
-                evoked_list.append(data)
-
-                ############################################################
-                # Spatial Pattern Extraction
-                ############################################################
-                # Read in saved A_st
-                with open(f'{input_path}A_st_{freq_band}_{cond_name}.pkl', 'rb') as f:
-                    A_st = pickle.load(f)
-                    # Shape (channels, channel_rank)
-                if inv == 'T':
-                    spatial_pattern.append(A_st[:, channel_no-1]*-1)
-                else:
-                    spatial_pattern.append(A_st[:, channel_no-1])
+                    ############################################################
+                    # Spatial Pattern Extraction
+                    ############################################################
+                    # Read in saved A_st
+                    with open(f'{input_path}A_st_{freq_band}_{cond_name}.pkl', 'rb') as f:
+                        A_st = pickle.load(f)
+                        # Shape (channels, channel_rank)
+                    if inv == 'T':
+                        spatial_pattern.append(A_st[:, channel_no-1]*-1)
+                    else:
+                        spatial_pattern.append(A_st[:, channel_no-1])
 
             # Get grand average across chosen epochs, and spatial patterns
             grand_average = np.mean(evoked_list, axis=0)

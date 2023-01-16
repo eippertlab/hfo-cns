@@ -1,4 +1,5 @@
-# Script to actually run CCA on the data
+# Script to actually run CCA on the data - running intentionally on the 'wrong' patch
+# to check for spatial specificity
 # Using the meet package https://github.com/neurophysics/meet.git to run the CCA
 
 
@@ -16,7 +17,7 @@ import pandas as pd
 import pickle
 
 
-def run_CCA(subject, condition, srmr_nr, freq_band):
+def run_CCA_oppo(subject, condition, srmr_nr, freq_band):
     plot_graphs = True
 
     # Set variables
@@ -36,7 +37,7 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
     # Select the right files based on the data_string
     input_path = "/data/pt_02718/tmp_data/freq_banded_esg/" + subject_id + "/"
     fname = f"{freq_band}_{cond_name}.fif"
-    save_path = "/data/pt_02718/tmp_data/cca/" + subject_id + "/"
+    save_path = "/data/pt_02718/tmp_data/cca_opposite/" + subject_id + "/"
     os.makedirs(save_path, exist_ok=True)
 
     esg_chans = ['S35', 'S24', 'S36', 'Iz', 'S17', 'S15', 'S32', 'S22',
@@ -60,14 +61,14 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
     matdata = loadmat(potential_path + fname_pot)
 
     if cond_name == 'median':
-        epochs = epochs.pick_channels(cervical_chans, ordered=True)
-        esg_chans = cervical_chans
+        epochs = epochs.pick_channels(lumbar_chans, ordered=True)
+        esg_chans = lumbar_chans
         sep_latency = matdata['med_potlatency']
         # window_times = [7/1000, 37/1000]
         window_times = [7/1000, 22/1000]
     elif cond_name == 'tibial':
-        epochs = epochs.pick_channels(lumbar_chans, ordered=True)
-        esg_chans = lumbar_chans
+        epochs = epochs.pick_channels(cervical_chans, ordered=True)
+        esg_chans = cervical_chans
         sep_latency = matdata['tib_potlatency']
         # window_times = [7/1000, 47/1000]
         window_times = [15/1000, 30/1000]
@@ -155,7 +156,7 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
     afile.close()
 
     ################################ Plotting Graphs #######################################
-    figure_path_spatial = f'/data/p_02718/Images/CCA/ComponentIsopotentialPlots/{subject_id}/'
+    figure_path_spatial = f'/data/p_02718/Images/CCA_oppo/ComponentIsopotentialPlots/{subject_id}/'
     os.makedirs(figure_path_spatial, exist_ok=True)
 
     if plot_graphs:
@@ -186,7 +187,7 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
 
         ############ Time Course of First 4 components ###############
         # cca_epochs and cca_epochs_d both already baseline corrected before this point
-        figure_path_time = f'/data/p_02718/Images/CCA/ComponentTimePlots/{subject_id}/'
+        figure_path_time = f'/data/p_02718/Images/CCA_oppo/ComponentTimePlots/{subject_id}/'
         os.makedirs(figure_path_time, exist_ok=True)
 
         fig = plt.figure()
@@ -211,7 +212,7 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
 
         # ######################## Plot image for cca_epochs ############################
         # # cca_epochs and cca_epochs_d both already baseline corrected before this point
-        # figure_path_st = f'/data/p_02718/Images/CCA/ComponentSinglePlots/{subject_id}/'
+        # figure_path_st = f'/data/p_02718/Images/CCA_oppo/ComponentSinglePlots/{subject_id}/'
         # os.makedirs(figure_path_st, exist_ok=True)
         #
         # fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(nrows=2, ncols=2)
@@ -236,7 +237,7 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
         # # plt.show()
 
         ############################ Combine to one Image ##########################
-        figure_path = f'/data/p_02718/Images/CCA/ComponentPlots/{subject_id}/'
+        figure_path = f'/data/p_02718/Images/CCA_oppo/ComponentPlots/{subject_id}/'
         os.makedirs(figure_path, exist_ok=True)
 
         spatial = plt.imread(figure_path_spatial + f'{freq_band}_{cond_name}.png')

@@ -1,5 +1,6 @@
 # Script to actually run CCA on the data
 # Using the meet package https://github.com/neurophysics/meet.git to run the CCA
+# Using only the good trials identified
 
 
 import os
@@ -16,7 +17,7 @@ import pandas as pd
 import pickle
 
 
-def run_CCA(subject, condition, srmr_nr, freq_band):
+def run_CCA_good(subject, condition, srmr_nr, freq_band):
     plot_graphs = True
 
     # Set variables
@@ -35,8 +36,9 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
 
     # Select the right files based on the data_string
     input_path = "/data/pt_02718/tmp_data/freq_banded_esg/" + subject_id + "/"
+    input_path_good = "/data/pt_02718/tmp_data/good_trials_spinal/" + subject_id + "/"
     fname = f"{freq_band}_{cond_name}.fif"
-    save_path = "/data/pt_02718/tmp_data/cca/" + subject_id + "/"
+    save_path = "/data/pt_02718/tmp_data/cca_goodonly/" + subject_id + "/"
     os.makedirs(save_path, exist_ok=True)
 
     esg_chans = ['S35', 'S24', 'S36', 'Iz', 'S17', 'S15', 'S32', 'S22',
@@ -59,17 +61,26 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
     fname_pot = 'potential_latency.mat'
     matdata = loadmat(potential_path + fname_pot)
 
+    # Get good trials
+    # Read in saved A_st
+    with open(f'{input_path_good}good_{freq_band}_{cond_name}_strict.pkl', 'rb') as f:
+        vals = pickle.load(f)
+        drop_bad = [idx for idx, element in enumerate(vals) if element == False]
+        epochs.drop(drop_bad)
+
     if cond_name == 'median':
         epochs = epochs.pick_channels(cervical_chans, ordered=True)
         esg_chans = cervical_chans
         sep_latency = matdata['med_potlatency']
         # window_times = [7/1000, 37/1000]
+        # window_times = [(sep_latency[0][0]-8)/1000, (sep_latency[0][0]+8)/1000]
         window_times = [7/1000, 22/1000]
     elif cond_name == 'tibial':
         epochs = epochs.pick_channels(lumbar_chans, ordered=True)
         esg_chans = lumbar_chans
         sep_latency = matdata['tib_potlatency']
         # window_times = [7/1000, 47/1000]
+        # window_times = [(sep_latency[0][0]-8)/1000, (sep_latency[0][0]+8)/1000]
         window_times = [15/1000, 30/1000]
     else:
         print('Invalid condition name attempted for use')
@@ -155,7 +166,7 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
     afile.close()
 
     ################################ Plotting Graphs #######################################
-    figure_path_spatial = f'/data/p_02718/Images/CCA/ComponentIsopotentialPlots/{subject_id}/'
+    figure_path_spatial = f'/data/p_02718/Images/CCA_good/ComponentIsopotentialPlots/{subject_id}/'
     os.makedirs(figure_path_spatial, exist_ok=True)
 
     if plot_graphs:
@@ -186,7 +197,7 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
 
         ############ Time Course of First 4 components ###############
         # cca_epochs and cca_epochs_d both already baseline corrected before this point
-        figure_path_time = f'/data/p_02718/Images/CCA/ComponentTimePlots/{subject_id}/'
+        figure_path_time = f'/data/p_02718/Images/CCA_good/ComponentTimePlots/{subject_id}/'
         os.makedirs(figure_path_time, exist_ok=True)
 
         fig = plt.figure()
@@ -211,7 +222,7 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
 
         # ######################## Plot image for cca_epochs ############################
         # # cca_epochs and cca_epochs_d both already baseline corrected before this point
-        # figure_path_st = f'/data/p_02718/Images/CCA/ComponentSinglePlots/{subject_id}/'
+        # figure_path_st = f'/data/p_02718/Images/CCA_good/ComponentSinglePlots/{subject_id}/'
         # os.makedirs(figure_path_st, exist_ok=True)
         #
         # fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(nrows=2, ncols=2)
@@ -236,7 +247,7 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
         # # plt.show()
 
         ############################ Combine to one Image ##########################
-        figure_path = f'/data/p_02718/Images/CCA/ComponentPlots/{subject_id}/'
+        figure_path = f'/data/p_02718/Images/CCA_good/ComponentPlots/{subject_id}/'
         os.makedirs(figure_path, exist_ok=True)
 
         spatial = plt.imread(figure_path_spatial + f'{freq_band}_{cond_name}.png')

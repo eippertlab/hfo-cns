@@ -19,8 +19,8 @@ import pickle
 
 if __name__ == '__main__':
     subjects = np.arange(1, 37)
-    conditions = [2, 3]
-    freq_bands = ['sigma', 'kappa']
+    conditions = [3]
+    freq_bands = ['sigma']
     srmr_nr = 1
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
@@ -31,14 +31,14 @@ if __name__ == '__main__':
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
     xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components.xlsx')
-    df = pd.read_excel(xls, 'CCA')
+    df = pd.read_excel(xls, 'CCA_goodonly')
     df.set_index('Subject', inplace=True)
 
     xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility.xlsx')
     df_vis = pd.read_excel(xls, 'CCA_Spinal')
     df_vis.set_index('Subject', inplace=True)
 
-    figure_path = '/data/p_02718/Images/CCA/GrandAverageShift/'
+    figure_path = '/data/p_02718/Images/CCA_good/GrandAverageShift/'
     os.makedirs(figure_path, exist_ok=True)
     brainstem_chans, cervical_chans, lumbar_chans, ref_chan = get_esg_channels()
 
@@ -62,7 +62,7 @@ if __name__ == '__main__':
                 ##########################################################
                 # Select the right files
                 fname = f"{freq_band}_{cond_name}.fif"
-                input_path = "/data/pt_02718/tmp_data/cca/" + subject_id + "/"
+                input_path = "/data/pt_02718/tmp_data/cca_goodonly/" + subject_id + "/"
 
                 epochs = mne.read_epochs(input_path + fname, preload=True)
 

@@ -15,10 +15,10 @@ from Archive.run_bCSTP_brain import run_bCSTP
 
 if __name__ == '__main__':
     ######## 1. Import ############
-    import_d = True  # Prep work
+    import_d = False  # Prep work
 
     ######## 2. Bad Channel Check ###########
-    check_channels = True
+    check_channels = False
 
     ######## 3. Bad Trial Check ###########
     check_trials = True
@@ -36,7 +36,7 @@ if __name__ == '__main__':
     bCSTP_flag = False
 
     n_subjects = 36  # Number of subjects
-    subjects = np.arange(1, 2)  # 1 through 36 to access subject data
+    subjects = np.arange(1, 37)  # 1 through 36 to access subject data
     # subjects = [1]
     srmr_nr = 1  # Experiment Number
     conditions = [2, 3]  # Conditions of interest

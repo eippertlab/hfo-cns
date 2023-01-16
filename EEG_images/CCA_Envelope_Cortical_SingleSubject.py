@@ -31,20 +31,14 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epo_cca_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components.xlsx')
+    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG.xlsx')
     df = pd.read_excel(xls, 'CCA')
     df.set_index('Subject', inplace=True)
 
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility.xlsx')
-    df_vis = pd.read_excel(xls, 'CCA_Spinal')
-    df_vis.set_index('Subject', inplace=True)
-
-    figure_path = '/data/p_02718/Images/CCA/Envelope_SingleSubject/'
+    figure_path = '/data/p_02718/Images/CCA_eeg/Envelope_SingleSubject/'
     os.makedirs(figure_path, exist_ok=True)
-    os.makedirs('/data/pt_02718/BurstPeaks/', exist_ok=True)
-    brainstem_chans, cervical_chans, lumbar_chans, ref_chan = get_esg_channels()
 
-    single_subject_determination = False  # If we want to do subject by subject analysis of envelope
+    single_subject = False  # If we want to do subject by subject analysis of envelope
     subject_subplots = True  # If we just want to plot them all and save
 
     if subject_subplots:
@@ -66,7 +60,7 @@ if __name__ == '__main__':
 
                     # Select the right files
                     fname = f"{freq_band}_{cond_name}.fif"
-                    input_path = "/data/pt_02718/tmp_data/cca/" + subject_id + "/"
+                    input_path = "/data/pt_02718/tmp_data/cca_eeg/" + subject_id + "/"
 
                     epochs = mne.read_epochs(input_path + fname, preload=True)
 
@@ -104,19 +98,10 @@ if __name__ == '__main__':
                 fig2.tight_layout()
                 fig1.savefig(figure_path + f'1_Envelope_subplots_{freq_band}_{cond_name}')
                 fig2.savefig(figure_path + f'2_Envelope_subplots_{freq_band}_{cond_name}')
-                plt.show()
 
-    if single_subject_determination:
-        df_r = pd.DataFrame()
-        df_r['Subjects'] = subjects
-
+    if single_subject:
         for freq_band in freq_bands:
             for condition in conditions:
-
-                evoked_list = []
-                peak_times = []
-                doubles = []
-                visibles = []
 
                 for subject in subjects:
                     # Set variables
@@ -127,7 +112,7 @@ if __name__ == '__main__':
 
                     # Select the right files
                     fname = f"{freq_band}_{cond_name}.fif"
-                    input_path = "/data/pt_02718/tmp_data/cca/" + subject_id + "/"
+                    input_path = "/data/pt_02718/tmp_data/cca_eeg/" + subject_id + "/"
 
                     epochs = mne.read_epochs(input_path + fname, preload=True)
 
@@ -145,10 +130,6 @@ if __name__ == '__main__':
                     envelope = evoked.apply_hilbert(envelope=True)
                     data = envelope.get_data()
 
-                    # Get the timing of the peak, and add to list
-                    peak_idx = np.argmax(data.reshape(-1))
-                    peak_times.append(evoked.times[peak_idx])
-
                     # Plot Envelope
                     fig, ax = plt.subplots()
                     ax.plot(epochs.times, data.reshape(-1))
@@ -159,20 +140,5 @@ if __name__ == '__main__':
                         ax.set_xlim([0.0, 0.05])
                     else:
                         ax.set_xlim([0.0, 0.07])
+
                     plt.savefig(figure_path+f'{subject_id}_Envelope_{freq_band}_{cond_name}')
-                    # plt.savefig(figure_path + f'{subject_id}_Envelope_{freq_band}_{cond_name}.pdf',
-                    #             bbox_inches='tight', format="pdf")
-                    plt.show()
-                    visible = input("Enter T if there is a clear peak, F otherwise: ")
-                    double = input("Enter T if there is a double peak, F otherwise: ")
-                    visibles.append(visible)
-                    doubles.append(double)
-                    plt.close(fig)
-
-                # Create a dataframe
-                df_r[f"{freq_band}_{cond_name}"] = peak_times
-                df_r[f"{freq_band}_{cond_name}_visible"] = visibles
-                df_r[f"{freq_band}_{cond_name}_double"] = doubles
-
-        # print(df_r)
-        df_r.to_excel('/data/pt_02718/BurstPeaks/Peaks_from_Envelope.xlsx')

@@ -1,6 +1,3 @@
-# Script to actually run CCA on the data
-# Using the meet package https://github.com/neurophysics/meet.git to run the CCA
-
 
 import os
 import mne

@@ -75,8 +75,10 @@ if __name__ == '__main__':
         plt.figure()
         plt.psd(clean_data, NFFT=512, Fs=sampling_rate, label='Cleaned')
         plt.psd(unclean_data, NFFT=512, Fs=sampling_rate, label='Uncleaned')
-        plt.xlabel('Frequency [Hz]')
-        plt.ylabel('PSD [dB/Hz]')
+        plt.xlabel('Frequency (Hz)')
+        plt.ylabel('PSD (dB/Hz)')
+        plt.ylim([-240, -130])
+        plt.yticks(np.arange(-240, -130, 20.0))
         if full:
             plt.xlim([0, 2000])
             fname = f"{trigger_name}_full.png"

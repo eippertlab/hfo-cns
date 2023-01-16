@@ -10,33 +10,37 @@ from Common_Functions.bad_channel_check import bad_channel_check
 from Common_Functions.bad_trial_check import bad_trial_check
 from Common_Functions.Create_Frequency_Bands import create_frequency_bands
 from ESG.run_CCA_spinal import run_CCA
+from ESG.run_CCA_spinal_opposite import run_CCA_oppo
 from ESG.rm_heart_artefact import rm_heart_artefact
 
 if __name__ == '__main__':
     ######## 1. Import ############
-    import_d = True  # Prep work
+    import_d = False  # Prep work
 
     ######### 2. Clean the heart artefact using SSP ########
-    SSP_flag = True
+    SSP_flag = False
     no_projections = 6
 
     ######## Clean the heart artefact using SSP ###########
-    pca_removal = True
+    pca_removal = False
 
     ######## 3. Bad Channel Check #######
-    check_channels = True
+    check_channels = False
 
     ######### 4. Bad trial check #############
-    check_trials = True
+    check_trials = False
 
     ######### 5. Split into frequency bands #############
-    split_bands_flag = True
+    split_bands_flag = False
 
     ######### 6. Run CCA on each frequency band ##########
-    CCA_flag = True
+    CCA_flag = False
+
+    ######### Run CCA on both patches separately #########
+    CCA_oppo_flag = True
 
     n_subjects = 36  # Number of subjects
-    subjects = np.arange(1, 37)  # 1 through 36 to access subject data
+    subjects = np.arange(1, 7)  # 1 through 36 to access subject data
     # subjects = [1]
     srmr_nr = 1  # Experiment Number
     conditions = [2, 3]  # Conditions of interest
@@ -104,4 +108,14 @@ if __name__ == '__main__':
             for condition in conditions:
                 for freq_band in ['sigma', 'kappa']:
                     run_CCA(subject, condition, srmr_nr, freq_band)
+
+    ###################################################
+    # Run CCA on the opposite patch
+    # To check for spatial specificity
+    ###################################################
+    if CCA_oppo_flag:
+        for subject in subjects:
+            for condition in conditions:
+                for freq_band in ['sigma']:
+                    run_CCA_oppo(subject, condition, srmr_nr, freq_band)
 
