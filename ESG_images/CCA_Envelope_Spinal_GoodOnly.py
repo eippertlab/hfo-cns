@@ -37,15 +37,14 @@ if __name__ == '__main__':
     df.set_index('Subject', inplace=True)
 
     xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility.xlsx')
-    df_vis = pd.read_excel(xls, 'CCA_Spinal')
+    df_vis = pd.read_excel(xls, 'CCA_Spinal_GoodOnly')
     df_vis.set_index('Subject', inplace=True)
 
     figure_path = '/data/p_02718/Images/CCA_good/Envelope_GoodOnly/'
     os.makedirs(figure_path, exist_ok=True)
     brainstem_chans, cervical_chans, lumbar_chans, ref_chan = get_esg_channels()
 
-    use_only_good = False  # Controls whether we use all subjects, or just the ones marked with visible bursting
-    # This visibility was determined with the first ever CCA run on this data
+    use_only_good = True  # Controls whether we use all subjects, or just the ones marked with visible bursting
 
     for freq_band in freq_bands:
         for condition in conditions:

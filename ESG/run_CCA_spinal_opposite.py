@@ -76,6 +76,10 @@ def run_CCA_oppo(subject, condition, srmr_nr, freq_band):
         print('Invalid condition name attempted for use')
         exit()
 
+    # Drop bad channels
+    if raw.info['bads']:
+        epochs.drop_channels(ch_names=raw.info['bads'])
+
     # Crop the epochs
     window = epochs.time_as_index(window_times)
     epo_cca = epochs.copy().crop(tmin=window_times[0], tmax=window_times[1], include_tmax=False)

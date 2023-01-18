@@ -10,6 +10,8 @@ from Common_Functions.bad_channel_check import bad_channel_check
 from Common_Functions.bad_trial_check import bad_trial_check
 from Common_Functions.Create_Frequency_Bands import create_frequency_bands
 from ESG.run_CCA_spinal import run_CCA
+from Common_Functions.keep_good_trials import keep_good_trials
+from ESG.run_CCA_spinal_good import run_CCA_good
 from ESG.run_CCA_spinal_opposite import run_CCA_oppo
 from ESG.rm_heart_artefact import rm_heart_artefact
 
@@ -33,14 +35,20 @@ if __name__ == '__main__':
     ######### 5. Split into frequency bands #############
     split_bands_flag = False
 
-    ######### 6. Run CCA on each frequency band ##########
-    CCA_flag = False
+    ######### 6. Keep only the good trials ###########
+    keep_good = False
 
-    ######### Run CCA on both patches separately #########
+    ######## 7. Run CCA on only the good trials #########
+    CCA_good_flag = False
+
+    ######### Extra. Run CCA on opposite patch - control analyses #########
     CCA_oppo_flag = True
 
+    ######### Old. Run CCA on each frequency band ##########
+    CCA_flag = False
+
     n_subjects = 36  # Number of subjects
-    subjects = np.arange(1, 7)  # 1 through 36 to access subject data
+    subjects = np.arange(1, 37)  # 1 through 36 to access subject data
     # subjects = [1]
     srmr_nr = 1  # Experiment Number
     conditions = [2, 3]  # Conditions of interest
@@ -101,15 +109,6 @@ if __name__ == '__main__':
                 create_frequency_bands(subject, condition, srmr_nr, sampling_rate, channel_type='esg')
 
     ###################################################
-    # Run CCA on Freq Bands
-    ###################################################
-    if CCA_flag:
-        for subject in subjects:
-            for condition in conditions:
-                for freq_band in ['sigma', 'kappa']:
-                    run_CCA(subject, condition, srmr_nr, freq_band)
-
-    ###################################################
     # Run CCA on the opposite patch
     # To check for spatial specificity
     ###################################################
@@ -118,4 +117,35 @@ if __name__ == '__main__':
             for condition in conditions:
                 for freq_band in ['sigma']:
                     run_CCA_oppo(subject, condition, srmr_nr, freq_band)
+
+    ###################################################
+    # Keep Good
+    ###################################################
+    if keep_good:
+        for subject in subjects:
+            for condition in conditions:
+                for freq_band in ['sigma']:
+                    keep_good_trials(subject, condition, srmr_nr, freq_band, 'esg')
+
+    ###################################################
+    # Run CCA on Freq Bands - good trials only
+    ###################################################
+    if CCA_good_flag:
+        for subject in subjects:
+            for condition in conditions:
+                for freq_band in ['sigma']:
+                    run_CCA_good(subject, condition, srmr_nr, freq_band)
+
+    ###################################################################################################################
+    # GRAVEYARD
+    ###################################################################################################################
+
+    # ###################################################
+    # # Old: Run CCA on Freq Bands
+    # ###################################################
+    # if CCA_flag:
+    #     for subject in subjects:
+    #         for condition in conditions:
+    #             for freq_band in ['sigma', 'kappa']:
+    #                 run_CCA(subject, condition, srmr_nr, freq_band)
 

@@ -6,8 +6,7 @@
 import numpy as np
 # from Common_Functions.Create_Frequency_Bands_General import create_frequency_bands
 from Common_Functions.Create_Frequency_Bands_Ktest import create_frequency_bands
-from Archive.run_CCA_spinal_bothpatches import run_CCA_bothpatches
-from ESG.keep_good_trials import keep_good_trials
+from Common_Functions.keep_good_trials import keep_good_trials
 from ESG.run_CCA_spinal_good import run_CCA_good
 from ESG.run_CCA_spinal import run_CCA
 
