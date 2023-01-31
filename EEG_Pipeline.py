@@ -29,7 +29,7 @@ if __name__ == '__main__':
     split_bands_flag = False
 
     ####### 5. Keep Good Trials #######
-    keep_good = True
+    keep_good = False
 
     ####### 6. Keep Good Trials #######
     CCA_good_flag = True
@@ -102,7 +102,7 @@ if __name__ == '__main__':
         for subject in subjects:
             for condition in conditions:
                 for freq_band in ['sigma']:
-                    run_CCA_good(subject, condition, srmr_nr, freq_band)
+                    run_CCA_good(subject, condition, srmr_nr, freq_band, sampling_rate)
 
     ###################################################################################################################
     # GRAVEYARD

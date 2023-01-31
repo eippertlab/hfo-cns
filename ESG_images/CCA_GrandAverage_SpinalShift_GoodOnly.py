@@ -19,7 +19,7 @@ import pickle
 
 if __name__ == '__main__':
     subjects = np.arange(1, 37)
-    conditions = [3]
+    conditions = [2, 3]
     freq_bands = ['sigma']
     srmr_nr = 1
 

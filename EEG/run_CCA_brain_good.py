@@ -84,7 +84,9 @@ def run_CCA_good(subject, condition, srmr_nr, freq_band, sfreq):
 
     # Drop bad channels
     if raw.info['bads']:
-        epochs.drop_channels(ch_names=raw.info['bads'])
+        for channel in raw.info['bads']:
+            if channel in esg_chans:
+                epochs.drop_channels(ch_names=[channel])
 
     # Crop the epochs
     window = epochs.time_as_index(window_times)
