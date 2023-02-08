@@ -20,7 +20,7 @@ mpl.rcParams['pdf.fonttype'] = 42
 if __name__ == '__main__':
     subjects = np.arange(1, 37)
     conditions = [2, 3]
-    freq_bands = ['sigma', 'kappa']
+    freq_bands = ['sigma']
     srmr_nr = 1
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
@@ -36,6 +36,12 @@ if __name__ == '__main__':
 
     figure_path = '/data/p_02718/Images/CCA_eeg/Envelope/'
     os.makedirs(figure_path, exist_ok=True)
+
+    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility.xlsx')
+    df_vis = pd.read_excel(xls, 'CCA_Brain')
+    df_vis.set_index('Subject', inplace=True)
+
+    use_visible = True
 
     for freq_band in freq_bands:
         for condition in conditions:
@@ -56,6 +62,9 @@ if __name__ == '__main__':
 
                 epochs = mne.read_epochs(input_path + fname, preload=True)
 
+                # Check if bursts are marked as visible
+                visible = df_vis.loc[subject, f"{freq_band.capitalize()}_{cond_name.capitalize()}_Visible"]
+
                 # Need to pick channel based on excel sheet
                 channel_no = df.loc[subject, f"{freq_band}_{cond_name}_comp"]
                 channel = f'Cor{channel_no}'
@@ -65,8 +74,17 @@ if __name__ == '__main__':
                     epochs.apply_function(invert, picks=channel)
                 evoked = epochs.copy().average()
                 envelope = evoked.apply_hilbert(envelope=True)
-                data = envelope.get_data()
-                evoked_list.append(data)
+                # data = envelope.get_data()
+                # evoked_list.append(data)
+
+                if use_visible is True:
+                    visible = df_vis.loc[subject, f"{freq_band.capitalize()}_{cond_name.capitalize()}_Visible"]
+                    if visible == 'T':
+                        data = envelope.get_data()
+                        evoked_list.append(data)
+                else:
+                    data = envelope.get_data()
+                    evoked_list.append(data)
 
             # Get grand average across chosen epochs, and spatial patterns
             grand_average = np.mean(evoked_list, axis=0)
@@ -82,7 +100,12 @@ if __name__ == '__main__':
             else:
                 ax.set_xlim([0.0, 0.07])
 
-            plt.savefig(figure_path+f'GA_Envelope_{freq_band}_{cond_name}_n={len(evoked_list)}.png')
-            plt.savefig(figure_path+f'GA_Envelope_{freq_band}_{cond_name}_n={len(evoked_list)}.pdf',
-                        bbox_inches='tight', format="pdf")
+            if use_visible:
+                plt.savefig(figure_path + f'GA_Envelope_{freq_band}_{cond_name}_n={len(evoked_list)}_visible.png')
+                plt.savefig(figure_path + f'GA_Envelope_{freq_band}_{cond_name}_n={len(evoked_list)}_visible.pdf',
+                            bbox_inches='tight', format="pdf")
+            else:
+                plt.savefig(figure_path+f'GA_Envelope_{freq_band}_{cond_name}_n={len(evoked_list)}.png')
+                plt.savefig(figure_path+f'GA_Envelope_{freq_band}_{cond_name}_n={len(evoked_list)}.pdf',
+                            bbox_inches='tight', format="pdf")
             plt.close(fig)

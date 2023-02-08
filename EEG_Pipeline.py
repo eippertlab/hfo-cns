@@ -32,7 +32,7 @@ if __name__ == '__main__':
     keep_good = False
 
     ####### 6. Keep Good Trials #######
-    CCA_good_flag = True
+    CCA_good_flag = False
 
     ######## Old. Run CCA ########
     CCA_flag = False
@@ -104,19 +104,18 @@ if __name__ == '__main__':
                 for freq_band in ['sigma']:
                     run_CCA_good(subject, condition, srmr_nr, freq_band, sampling_rate)
 
+    ###################################################
+    # Run CCA on Freq Bands - all trials
+    ###################################################
+    if CCA_flag:
+        for subject in subjects:
+            for condition in conditions:
+                for freq_band in ['sigma']:
+                    run_CCA(subject, condition, srmr_nr, freq_band, sampling_rate)
+
     ###################################################################################################################
     # GRAVEYARD
     ###################################################################################################################
-
-    # ###################################################
-    # # Old: Run CCA on Freq Bands
-    # ###################################################
-    # if CCA_flag:
-    #     for subject in subjects:
-    #         for condition in conditions:
-    #             for freq_band in ['sigma', 'kappa']:
-    #                 run_CCA(subject, condition, srmr_nr, freq_band, sampling_rate)
-    #
     # ###################################################
     # # Old: Run CSP on Freq Bands
     # ###################################################

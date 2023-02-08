@@ -34,6 +34,10 @@ if __name__ == '__main__':
     df = pd.read_excel(xls, 'CCA')
     df.set_index('Subject', inplace=True)
 
+    xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/Cortical_Timing.xlsx')
+    df_timing = pd.read_excel(xls_timing, 'Timing')
+    df_timing.set_index('Subject', inplace=True)
+
     # Get a raw file so I can use the montage
     raw = mne.io.read_raw_fif("/data/pt_02718/tmp_data/freq_banded_eeg/sub-001/sigma_median.fif", preload=True)
     montage_path = '/data/pt_02718/'
@@ -43,7 +47,7 @@ if __name__ == '__main__':
     eeg_chans, esg_chans, bipolar_chans = get_channels(1, False, False, srmr_nr)
     idx_by_type = mne.channel_indices_by_type(raw.info, picks=eeg_chans)
     res = mne.pick_info(raw.info, sel=idx_by_type['eeg'], copy=True, verbose=None)
-    figure_path = '/data/p_02718/Images/CCA_eeg/GrandAverage/'
+    figure_path = '/data/p_02718/Images/CCA_eeg/GrandAverage_Shifted/'
     os.makedirs(figure_path, exist_ok=True)
 
     xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility.xlsx')
@@ -79,14 +83,26 @@ if __name__ == '__main__':
                 epochs = epochs.pick_channels([channel])
                 if inv == 'T':
                     epochs.apply_function(invert, picks=channel)
-                evoked = epochs.average()
-                data = evoked.data
+                evoked = epochs.copy().average()
+
+                # Apply relative time-shift depending on expected latency
+                if cond_name == 'median':
+                    sep_latency = df_timing.loc[subject, f"N20"]
+                    expected = 20 / 1000
+                elif cond_name == 'tibial':
+                    sep_latency = df_timing.loc[subject, f"P39"]
+                    expected = 39 / 1000
+                shift = sep_latency - expected
+                evoked.shift_time(shift, relative=True)
+                evoked.crop(tmin=-0.06, tmax=0.20)
 
                 if use_visible is True:
                     visible = df_vis.loc[subject, f"{freq_band.capitalize()}_{cond_name.capitalize()}_Visible"]
                     if visible == 'T':
+                        data = evoked.data
                         evoked_list.append(data)
                 else:
+                    data = evoked.data
                     evoked_list.append(data)
 
                 ############################################################
@@ -100,9 +116,9 @@ if __name__ == '__main__':
                     visible = df_vis.loc[subject, f"{freq_band.capitalize()}_{cond_name.capitalize()}_Visible"]
                     if visible == 'T':
                         if inv == 'T':
-                            spatial_pattern.append(A_st[:, channel_no-1]*-1)
+                            spatial_pattern.append(A_st[:, channel_no - 1] * -1)
                         else:
-                            spatial_pattern.append(A_st[:, channel_no-1])
+                            spatial_pattern.append(A_st[:, channel_no - 1])
                 else:
                     if inv == 'T':
                         spatial_pattern.append(A_st[:, channel_no - 1] * -1)
@@ -115,7 +131,7 @@ if __name__ == '__main__':
 
             # Plot Time Course
             fig, ax = plt.subplots()
-            ax.plot(epochs.times, grand_average[0, :])
+            ax.plot(evoked.times, grand_average[0, :])
             ax.set_ylabel('Cleaned SEP Amplitude (AU)')
             ax.set_xlabel('Time (s)')
             ax.set_title(f'Grand Average Time Course, n={len(evoked_list)}')
@@ -124,14 +140,13 @@ if __name__ == '__main__':
             else:
                 ax.set_xlim([0.00, 0.07])
 
-            if use_visible is True:
+            if use_visible:
                 plt.savefig(figure_path+f'GA_Time_{freq_band}_{cond_name}_visible')
                 plt.savefig(figure_path+f'GA_Time_{freq_band}_{cond_name}_visible.pdf', bbox_inches='tight',
                             format="pdf")
             else:
-                plt.savefig(figure_path + f'GA_Time_{freq_band}_{cond_name}')
-                plt.savefig(figure_path + f'GA_Time_{freq_band}_{cond_name}.pdf', bbox_inches='tight',
-                            format="pdf")
+                plt.savefig(figure_path+f'GA_Time_{freq_band}_{cond_name}')
+                plt.savefig(figure_path+f'GA_Time_{freq_band}_{cond_name}.pdf', bbox_inches='tight', format="pdf")
 
             # Plot Spatial Pattern
             fig, ax = plt.subplots(1, 1)
@@ -145,8 +160,7 @@ if __name__ == '__main__':
             cax = divider.append_axes('right', size='5%', pad=0.05)
             cb = fig.colorbar(ax.images[-1], cax=cax, shrink=0.6, orientation='vertical')
             cb.set_label('Amplitude', rotation=90)
-
-            if use_visible is True:
+            if use_visible:
                 plt.savefig(figure_path + f'GA_Spatial_{freq_band}_{cond_name}_visible')
                 plt.savefig(figure_path + f'GA_Spatial_{freq_band}_{cond_name}_visible.pdf', bbox_inches='tight',
                             format="pdf")

@@ -1,4 +1,4 @@
-# Plot grand average time courses and envelope of CCA on ESG data
+# Plot grand average time courses and envelope of CCA on EEG data
 # Single subject grid image
 
 
@@ -8,6 +8,7 @@ import numpy as np
 from meet import spatfilt
 from Common_Functions.get_conditioninfo import get_conditioninfo
 from Common_Functions.get_esg_channels import get_esg_channels
+from Common_Functions.get_channels import get_channels
 from Common_Functions.IsopotentialFunctions import mrmr_esg_isopotentialplot
 from Common_Functions.invert import invert
 import matplotlib.pyplot as plt
@@ -31,20 +32,23 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epo_cca_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components.xlsx')
-    df = pd.read_excel(xls, 'CCA_goodonly')
+    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG.xlsx')
+    df = pd.read_excel(xls, 'CCA')
     df.set_index('Subject', inplace=True)
 
     xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility.xlsx')
-    df_vis = pd.read_excel(xls, 'CCA_Spinal_GoodOnly')
+    df_vis = pd.read_excel(xls, 'CCA_Brain')
     df_vis.set_index('Subject', inplace=True)
 
-    figure_path = '/data/p_02718/Images/CCA_good/SingleSubject/'
-    os.makedirs(figure_path, exist_ok=True)
-    brainstem_chans, cervical_chans, lumbar_chans, ref_chan = get_esg_channels()
+    xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/Cortical_Timing.xlsx')
+    df_timing = pd.read_excel(xls_timing, 'Timing')
+    df_timing.set_index('Subject', inplace=True)
 
-    time = False  # If time is true, plot evoked & envelope
-    # Otherwise, plot the spatial patterns
+    figure_path = '/data/p_02718/Images/CCA_eeg/SingleSubject/'
+    os.makedirs(figure_path, exist_ok=True)
+
+    time = True  # If time is true, plot evoked & envelope
+    # Otherwise, plot the spatial patterns - not implemented yet for EEG
 
     for freq_band in freq_bands:
         for condition in conditions:
@@ -62,7 +66,7 @@ if __name__ == '__main__':
 
                 # Select the right files
                 fname = f"{freq_band}_{cond_name}.fif"
-                input_path = "/data/pt_02718/tmp_data/cca_goodonly/" + subject_id + "/"
+                input_path = "/data/pt_02718/tmp_data/cca_eeg/" + subject_id + "/"
 
                 # Need to pick channel based on excel sheet
                 channel_no = df.loc[subject, f"{freq_band}_{cond_name}_comp"]
@@ -96,40 +100,50 @@ if __name__ == '__main__':
                     # axes[n].set_xlabel('Time (s)')
                     axes[n].set_title(f'Subject {n + 1}')
                     axes[n].set_xlim([0.0, 0.05])
+
+                    ###############################################################
+                    # Add line for expected latency
+                    ###############################################################
+                    if cond_name == 'median':
+                        sep_latency = df_timing.loc[subject, f"N20"]
+                    elif cond_name == 'tibial':
+                        sep_latency = df_timing.loc[subject, f"P39"]
+                    axes[n].axvline(x=sep_latency, color='r', linewidth='1')
                     plt.tight_layout()
 
                 else:
-                    ############################################################
-                    # Spatial Pattern Extraction
-                    ############################################################
-                    # Read in saved A_st
-                    with open(f'{input_path}A_st_{freq_band}_{cond_name}.pkl', 'rb') as f:
-                        A_st = pickle.load(f)
-                        # Shape (channels, channel_rank)
-                    if inv == 'T':
-                        spatial_pattern = A_st[:, channel_no-1]*-1
-                    else:
-                        spatial_pattern = A_st[:, channel_no-1]
-                    if cond_name == 'median':
-                        chan_labels = cervical_chans
-                    elif cond_name == 'tibial':
-                        chan_labels = lumbar_chans
-                    if freq_band == 'sigma':
-                        colorbar_axes = [-0.2, 0.2]
-                    else:
-                        colorbar_axes = [-0.01, 0.01]
-                    subjects_4grid = np.arange(1, 37)  # subj  # Pass this instead of (1, 37) for 1 subjects
-                    # you can also base the grid on an several subjects
-                    # then the function takes the average over the channel positions of all those subjects
-                    time = 0.0
-                    colorbar = True
-                    mrmr_esg_isopotentialplot(subjects_4grid, spatial_pattern, colorbar_axes, chan_labels,
-                                              colorbar, time, axes[n])
-                    axes[n].set_yticklabels([])
-                    axes[n].set_ylabel(None)
-                    axes[n].set_xticklabels([])
-                    axes[n].set_xlabel(None)
-                    axes[n].set_title(f'Subject {n+1}')
+                    print('This is not implemented')
+                    # ############################################################
+                    # # Spatial Pattern Extraction
+                    # ############################################################
+                    # # Read in saved A_st
+                    # with open(f'{input_path}A_st_{freq_band}_{cond_name}.pkl', 'rb') as f:
+                    #     A_st = pickle.load(f)
+                    #     # Shape (channels, channel_rank)
+                    # if inv == 'T':
+                    #     spatial_pattern = A_st[:, channel_no-1]*-1
+                    # else:
+                    #     spatial_pattern = A_st[:, channel_no-1]
+                    # if cond_name == 'median':
+                    #     chan_labels = cervical_chans
+                    # elif cond_name == 'tibial':
+                    #     chan_labels = lumbar_chans
+                    # if freq_band == 'sigma':
+                    #     colorbar_axes = [-0.2, 0.2]
+                    # else:
+                    #     colorbar_axes = [-0.01, 0.01]
+                    # subjects_4grid = np.arange(1, 37)  # subj  # Pass this instead of (1, 37) for 1 subjects
+                    # # you can also base the grid on an several subjects
+                    # # then the function takes the average over the channel positions of all those subjects
+                    # time = 0.0
+                    # colorbar = True
+                    # mrmr_esg_isopotentialplot(subjects_4grid, spatial_pattern, colorbar_axes, chan_labels,
+                    #                           colorbar, time, axes[n])
+                    # axes[n].set_yticklabels([])
+                    # axes[n].set_ylabel(None)
+                    # axes[n].set_xticklabels([])
+                    # axes[n].set_xlabel(None)
+                    # axes[n].set_title(f'Subject {n+1}')
 
             if time is True:
                 plt.savefig(figure_path+f'{cond_name}.png')
