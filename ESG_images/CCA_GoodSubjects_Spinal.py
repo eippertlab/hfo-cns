@@ -19,9 +19,9 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 
 if __name__ == '__main__':
-    subjects = [6, 12, 16, 22, 31, 36]
+    subjects = [6, 12, 16, 18, 22, 31, 36]
     conditions = [2, 3]
-    freq_bands = ['sigma', 'kappa']
+    freq_bands = ['sigma']
     srmr_nr = 1
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
@@ -31,16 +31,30 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epo_cca_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components.xlsx')
-    df = pd.read_excel(xls, 'CCA')
-    df.set_index('Subject', inplace=True)
+    use_only_good = True  # From CCA when run using only the pre-screened good trials
 
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility.xlsx')
-    df_vis = pd.read_excel(xls, 'CCA_Spinal')
-    df_vis.set_index('Subject', inplace=True)
+    if use_only_good:
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components.xlsx')
+        df = pd.read_excel(xls, 'CCA_goodonly')
+        df.set_index('Subject', inplace=True)
 
-    figure_path = '/data/p_02718/Images/CCA/GoodSubjects/'
-    os.makedirs(figure_path, exist_ok=True)
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility.xlsx')
+        df_vis = pd.read_excel(xls, 'CCA_Spinal_GoodOnly')
+        df_vis.set_index('Subject', inplace=True)
+
+        figure_path = '/data/p_02718/Images/CCA_good/GoodSubjects/'
+        os.makedirs(figure_path, exist_ok=True)
+    else:
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components.xlsx')
+        df = pd.read_excel(xls, 'CCA')
+        df.set_index('Subject', inplace=True)
+
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility.xlsx')
+        df_vis = pd.read_excel(xls, 'CCA_Spinal')
+        df_vis.set_index('Subject', inplace=True)
+
+        figure_path = '/data/p_02718/Images/CCA/GoodSubjects/'
+        os.makedirs(figure_path, exist_ok=True)
     brainstem_chans, cervical_chans, lumbar_chans, ref_chan = get_esg_channels()
 
     for freq_band in freq_bands:
@@ -56,8 +70,12 @@ if __name__ == '__main__':
                 # Time  Course Information
                 ##########################################################
                 # Select the right files
-                fname = f"{freq_band}_{cond_name}.fif"
-                input_path = "/data/pt_02718/tmp_data/cca/" + subject_id + "/"
+                if use_only_good:
+                    fname = f"{freq_band}_{cond_name}.fif"
+                    input_path = "/data/pt_02718/tmp_data/cca_goodonly/" + subject_id + "/"
+                else:
+                    fname = f"{freq_band}_{cond_name}.fif"
+                    input_path = "/data/pt_02718/tmp_data/cca/" + subject_id + "/"
 
                 epochs = mne.read_epochs(input_path + fname, preload=True)
 
@@ -87,7 +105,7 @@ if __name__ == '__main__':
                 ax.plot(epochs.times, evoked.get_data().reshape(-1))
                 ax.set_ylabel('Cleaned SEP Amplitude (AU)')
                 ax.set_xlabel('Time (s)')
-                ax.set_title(f'Grand Average Time Course, {subject_id}')
+                ax.set_title(f'Time Course, {subject_id}')
                 if cond_name == 'median':
                     ax.set_xlim([0.0, 0.05])
                 else:

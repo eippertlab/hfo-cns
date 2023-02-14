@@ -19,9 +19,9 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 
 if __name__ == '__main__':
-    subjects = [3, 10, 15, 21, 22, 32]
+    subjects = [3, 10, 15, 18, 21, 22, 32]
     conditions = [2, 3]
-    freq_bands = ['sigma', 'kappa']
+    freq_bands = ['sigma']
     srmr_nr = 1
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment

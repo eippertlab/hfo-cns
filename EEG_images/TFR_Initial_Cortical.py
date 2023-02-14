@@ -85,10 +85,6 @@ if __name__ == '__main__':
                 # vmin = -200
                 # vmax = -130
                 fig, ax = plt.subplots(1, 1)
-                # power = mne.time_frequency.tfr_stockwell(relevant_channel, fmin=fmin, fmax=fmax, width=1.0, n_jobs=5)
-                # power.plot([0], baseline=iv_baseline, mode='mean', cmap='jet',
-                #            axes=ax, show=False, colorbar=True, dB=False,
-                #            tmin=tmin, tmax=tmax, vmin=0)
                 power.plot([0], baseline=iv_baseline, mode='ratio', cmap='jet',
                            axes=ax, show=False, colorbar=True, dB=False,
                            tmin=tmin, tmax=tmax, vmin=0)

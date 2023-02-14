@@ -13,6 +13,7 @@ from ESG.run_CCA_spinal import run_CCA
 from Common_Functions.keep_good_trials import keep_good_trials
 from ESG.run_CCA_spinal_good import run_CCA_good
 from ESG.run_CCA_spinal_opposite import run_CCA_oppo
+from ESG.run_CCA_spinal_opposite_anterior import run_CCA_oppo_anterior
 from ESG.rm_heart_artefact import rm_heart_artefact
 
 if __name__ == '__main__':
@@ -42,7 +43,10 @@ if __name__ == '__main__':
     CCA_good_flag = False
 
     ######### Extra. Run CCA on opposite patch - control analyses #########
-    CCA_oppo_flag = True
+    CCA_oppo_flag = False
+
+    ######### Extra. Run CCA on opposite patch - control analyses #########
+    CCA_oppo_ant_flag = False
 
     ######### Old. Run CCA on each frequency band ##########
     CCA_flag = False
@@ -117,6 +121,16 @@ if __name__ == '__main__':
             for condition in conditions:
                 for freq_band in ['sigma']:
                     run_CCA_oppo(subject, condition, srmr_nr, freq_band)
+
+    ###################################################
+    # Run CCA on the opposite patch, data anteriorly rereferenced
+    # To check for spatial specificity
+    ###################################################
+    if CCA_oppo_ant_flag:
+        for subject in subjects:
+            for condition in conditions:
+                for freq_band in ['sigma']:
+                    run_CCA_oppo_anterior(subject, condition, srmr_nr, freq_band)
 
     ###################################################
     # Keep Good

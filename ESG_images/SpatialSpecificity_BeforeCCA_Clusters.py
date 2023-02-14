@@ -29,8 +29,8 @@ if __name__ == '__main__':
                  'S21', 'S25', 'L1', 'S29', 'S14', 'S33', 'S3', 'AL', 'L4', 'S6',
                  'S23']
 
-    image_path_singlesubject = "/data/p_02718/Images/BeforeCCA_SpatialSpecificity/SingleSubject/"
-    image_path_grandaverage = "/data/p_02718/Images/BeforeCCA_SpatialSpecificity/GrandAverage/"
+    image_path_singlesubject = "/data/p_02718/Images/BeforeCCA_SpatialSpecificity_Cluster/SingleSubject/"
+    image_path_grandaverage = "/data/p_02718/Images/BeforeCCA_SpatialSpecificity_Cluster/GrandAverage/"
     os.makedirs(image_path_singlesubject, exist_ok=True)
     os.makedirs(image_path_grandaverage, exist_ok=True)
 
@@ -39,7 +39,7 @@ if __name__ == '__main__':
     cond_names = ['median', 'tibial']
     # cond_names = ['tibial']
 
-    plot_single_subject = False
+    plot_single_subject = True
     plot_grand_average = True
 
     for freq_type in ['upper', 'full']:
@@ -59,14 +59,14 @@ if __name__ == '__main__':
             if cond_name == 'tibial':
                 full_name = 'Tibial Nerve Stimulation'
                 trigger_name = 'Tibial - Stimulation'
-                correct_channel = ['L1']
-                incorrect_channel = ['SC6']
+                correct_channel = ['S23', 'L1', 'S31']
+                incorrect_channel = ['S6', 'SC6', 'S14']
 
             elif cond_name == 'median':
                 full_name = 'Median Nerve Stimulation'
                 trigger_name = 'Median - Stimulation'
-                correct_channel = ['SC6']
-                incorrect_channel = ['L1']
+                correct_channel = ['S6', 'SC6', 'S14']
+                incorrect_channel = ['S23', 'L1', 'S31']
 
             for subject in subjects:  # All subjects
                 subject_id = f'sub-{str(subject).zfill(3)}'
@@ -115,16 +115,12 @@ if __name__ == '__main__':
                             vmax = 4
                     fig, ax = plt.subplots(1, 2)
                     ax = ax.flatten()
-                    # power = mne.time_frequency.tfr_stockwell(relevant_channel, fmin=fmin, fmax=fmax, width=1.0, n_jobs=5)
-                    # power.plot([0], baseline=iv_baseline, mode='mean', cmap='jet',
-                    #            axes=ax, show=False, colorbar=True, dB=False,
-                    #            tmin=tmin, tmax=tmax, vmin=0)
                     power_correct.plot([0], baseline=iv_baseline, mode='ratio', cmap='jet',
                                        axes=ax[0], show=False, colorbar=True, dB=False,
-                                       tmin=tmin, tmax=tmax, vmin=vmin, vmax=vmax)
+                                       tmin=tmin, tmax=tmax, vmin=vmin, vmax=vmax, combine='mean')
                     power_incorrect.plot([0], baseline=iv_baseline, mode='ratio', cmap='jet',
                                          axes=ax[1], show=False, colorbar=True, dB=False,
-                                         tmin=tmin, tmax=tmax, vmin=vmin, vmax=vmax)
+                                         tmin=tmin, tmax=tmax, vmin=vmin, vmax=vmax, combine='mean')
 
                     im = ax[0].images
                     cb = im[-1].colorbar
@@ -169,10 +165,10 @@ if __name__ == '__main__':
                         vmax = 4
                 averaged_correct.plot([0], baseline=iv_baseline, mode='ratio', cmap='jet',
                                       axes=ax[0], show=False, colorbar=True, dB=False,
-                                      tmin=tmin, tmax=tmax, vmin=0, vmax=vmax)
+                                      tmin=tmin, tmax=tmax, vmin=0, vmax=vmax, combine='mean')
                 averaged_incorrect.plot([0], baseline=iv_baseline, mode='ratio', cmap='jet',
                                         axes=ax[1], show=False, colorbar=True, dB=False,
-                                        tmin=tmin, tmax=tmax, vmin=0, vmax=vmax)
+                                        tmin=tmin, tmax=tmax, vmin=0, vmax=vmax, combine='mean')
                 im = ax[0].images
                 cb = im[-1].colorbar
                 cb.set_label('Amplitude')
@@ -210,7 +206,7 @@ if __name__ == '__main__':
                         vmax = 15
                 averaged_difference.plot([0], baseline=iv_baseline, mode='ratio', cmap='jet',
                                          axes=ax, show=False, colorbar=True, dB=False,
-                                         tmin=tmin, tmax=tmax, vmin=0, vmax=vmax)
+                                         tmin=tmin, tmax=tmax, vmin=0, vmax=vmax, combine='mean')
                 im = ax.images
                 cb = im[-1].colorbar
                 cb.set_label('Amplitude')

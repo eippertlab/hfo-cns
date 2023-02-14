@@ -15,9 +15,10 @@ import pickle
 
 
 if __name__ == '__main__':
-    conditions = [2, 3]
+    conditions = [3, 2]
     srmr_nr = 1
-    subjects = np.arange(1, 3)
+    # subjects = np.arange(1, 3)
+    subjects = [15]
     freq_band = 'sigma'
     sfreq = 5000
 
@@ -55,9 +56,35 @@ if __name__ == '__main__':
             raw = raw.pick_channels(eeg_chans)
             # now create epochs based on the trigger names
             events, event_ids = mne.events_from_annotations(raw)
-            event_id_dict = {key: value for key, value in event_ids.items() if key == trigger_name}
-            epochs = mne.Epochs(raw, events, event_id=event_id_dict, tmin=iv_epoch[0], tmax=iv_epoch[1] - 1 / 1000,
-                                baseline=tuple(iv_baseline), preload=True, reject_by_annotation=True)
+            if cond_name == 'median':
+                samples = [int(event[[0]]) for event in events if event[[2]] == event_ids['Median - Stimulation']]
+                pick = 'CP4'
+            else:
+                samples = [int(event[[0]]) for event in events if event[[2]] == event_ids['Tibial - Stimulation']]
+                pick = 'Cz'
+            # event_id_dict = {key: value for key, value in event_ids.items() if key == trigger_name}
+            # epochs = mne.Epochs(raw, events, event_id=event_id_dict, tmin=iv_epoch[0], tmax=iv_epoch[1] - 1 / 1000,
+            #                     baseline=tuple(iv_baseline), preload=True, reject_by_annotation=True)
+
+            # Trying to make code to create epochs from the raw data
+            data = raw.get_data()  # (n_channels, n_times)
+            samples_before = int(0.1*raw.info['sfreq'])
+            samples_after = int(0.3*raw.info['sfreq'])
+            epochs_manual = np.zeros((int(len(samples)), 1, samples_after+samples_before))
+            data_single_chan = raw.get_data(picks=pick).reshape(-1)
+            for i, sample in enumerate(samples):
+                epochs_manual[i, 0, :] = data_single_chan[sample-samples_before:sample+samples_after]
+
+            print(epochs_manual)
+            print(np.shape(epochs_manual))
+            print(np.shape(np.mean(epochs_manual, axis=0)))
+            # Now make a graph based on these manual epochs
+            plt.figure()
+            times = np.arange(-samples_before, samples_after)/raw.info['sfreq']
+            print(times)
+            plt.plot(times, np.mean(epochs_manual, axis=0).reshape(-1))
+            plt.show()
+            exit()
 
             if cond_name == 'median':
                 sep_latency = 20
@@ -67,13 +94,13 @@ if __name__ == '__main__':
                 print('Invalid condition name attempted for use')
                 exit()
 
-            freqs_sig = 500, 600
-            freqs_noise = 450, 650
+            freqs_sig = 400, 800
+            freqs_noise = 350, 850
 
             #########################################################################################################
             # Working with Raw
             #########################################################################################################
-            # raw.crop(50., 110.).load_data()  # crop for memory purposes
+            # raw.crop(0., raw.times[-1]/4).load_data()  # crop (should be one block)
 
             # Stores all the options we want applied in the SSD
             ssd = SSD(info=raw.info,
@@ -89,7 +116,7 @@ if __name__ == '__main__':
             # ssd.fit(X=epochs.get_data())
 
             # Removes the selected components from the signal - leaves us only the 4 we asked for
-            ssd_sources = ssd.transform(X=epochs.get_data())  # Returns X_SSD
+            ssd_sources = ssd.transform(X=epochs.get_data())  # Returns X_SSD (n_components, n_times)
 
             # patterns_ has shape (n_components, n_channels)
             pattern = mne.EvokedArray(data=ssd.patterns_[:4].T,
