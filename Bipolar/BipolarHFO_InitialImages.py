@@ -13,7 +13,7 @@ from Common_Functions.pchip_interpolation import PCHIP_interpolation
 
 if __name__ == '__main__':
     srmr_nr = 1
-    subjects = np.arange(1, 6)
+    subjects = np.arange(1, 37)
     # subjects = [1]
     conditions = [2, 3]
     use_repaired = True
