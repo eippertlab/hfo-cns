@@ -20,8 +20,9 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 
 if __name__ == '__main__':
-    cca_good = False  # Use CCA performed only on good trials when true, otherwise all trials
-    create_plot = False
+    cca_good = True  # Use CCA performed only on good trials when true, otherwise all trials
+    create_plot = True
+    save_to_excel = False
     subjects = np.arange(1, 37)
     # subjects = np.arange(1, 2)
     conditions = [2, 3]
@@ -110,16 +111,25 @@ if __name__ == '__main__':
                         ax[c].set_xlim([0.0, 0.05])
                     else:
                         ax[c].set_xlim([0.0, 0.07])
+
+                    # Add lines at mean +-3*std of the noise period
+                    noise_data = evoked.copy().crop(tmin=noise_window[0], tmax=noise_window[1]).get_data().reshape(-1)
+                    noise_mean = np.mean(noise_data)
+                    noise_std = np.std(noise_data)
+                    ax[c].axhline(y=noise_mean-3*noise_std, color='blue', linewidth='1')
+                    ax[c].axhline(y=noise_mean+3*noise_std, color='blue', linewidth='1')
                     plt.suptitle(f'Subject {subject}, {trigger_name}')
                     plt.tight_layout()
                     plt.savefig(figure_path+f'{subject_id}_{cond_name}')
 
-        # Create data frame
-        if cond_name == 'median':
-            df_med = pd.DataFrame(snr_cond, columns=['Component 1', 'Component 2', 'Component 3', 'Component 4'])
-        else:
-            df_tib = pd.DataFrame(snr_cond, columns=['Component 1', 'Component 2', 'Component 3', 'Component 4'])
+        if save_to_excel:
+            # Create data frame
+            if cond_name == 'median':
+                df_med = pd.DataFrame(snr_cond, columns=['Component 1', 'Component 2', 'Component 3', 'Component 4'])
+            else:
+                df_tib = pd.DataFrame(snr_cond, columns=['Component 1', 'Component 2', 'Component 3', 'Component 4'])
 
-    with pd.ExcelWriter(f'{figure_path}ComponentSNR.xlsx') as writer:
-        df_med.to_excel(writer, sheet_name='Median Stimulation')
-        df_tib.to_excel(writer, sheet_name='Tibial Stimulation')
+    if save_to_excel:
+        with pd.ExcelWriter(f'{figure_path}ComponentSNR.xlsx') as writer:
+            df_med.to_excel(writer, sheet_name='Median Stimulation')
+            df_tib.to_excel(writer, sheet_name='Tibial Stimulation')

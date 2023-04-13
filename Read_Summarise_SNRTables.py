@@ -38,6 +38,8 @@ if __name__ == '__main__':
             # threshold = np.mean(df.mean()) - np.mean(df.std())  # Returns a float
             # print(threshold)
             threshold = df.describe()['Component 1'].loc['25%']
-            df_subset = df[(df['Component 1'] > threshold) | (df['Component 2'] > threshold) | (df['Component 3'] > threshold)
-                        | (df['Component 3'] > threshold)]
+            df_subset = df[(df['Component 1'] > threshold)
+                           | (df['Component 2'] > threshold)
+                           | (df['Component 3'] > threshold)
+                           | (df['Component 3'] > threshold)]
             print(df_subset.count())
