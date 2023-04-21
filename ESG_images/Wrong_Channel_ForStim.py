@@ -1,13 +1,12 @@
+# Looking at the time varying signal in the correct versus incorrect channel in the raw ESG data
+
 import os
 import mne
 import numpy as np
-from meet import spatfilt
 from scipy.io import loadmat
 from Common_Functions.get_conditioninfo import get_conditioninfo
 from Common_Functions.get_esg_channels import get_esg_channels
-from Common_Functions.IsopotentialFunctions import mrmr_esg_isopotentialplot
 import matplotlib.pyplot as plt
-import matplotlib as mpl
 import pandas as pd
 import pickle
 

@@ -21,8 +21,6 @@ if __name__ == '__main__':
                    df.loc[df['var_name'] == 'baseline_end', 'var_value'].iloc[0]]
     iv_epoch = [df.loc[df['var_name'] == 'epoch_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epoch_end', 'var_value'].iloc[0]]
-    # iv_baseline = [-0.05, -0.01]
-    # iv_epoch = [-0.06, 0.06]
 
     esg_chans = ['S35', 'S24', 'S36', 'Iz', 'S17', 'S15', 'S32', 'S22',
                  'S19', 'S26', 'S28', 'S9', 'S13', 'S11', 'S7', 'SC1', 'S4', 'S18',

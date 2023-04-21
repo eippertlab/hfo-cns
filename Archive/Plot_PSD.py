@@ -1,4 +1,4 @@
-# Script to plot the power spectral density of the grand average data before and after different processes
+# Script to plot the power spectral density of the grand average data before and after cleaning of the heart art.
 # Shows the periodogram of the evoked data about spinal triggers
 
 import mne

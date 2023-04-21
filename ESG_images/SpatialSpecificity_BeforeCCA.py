@@ -1,10 +1,9 @@
-# Script to plot the time-frequency decomposition about the spinal triggers for the correct versus incorrect patch
+# Script to plot the time-frequency decomposition about the spinal triggers for the correct versus incorrect channel
 # https://mne.tools/stable/auto_examples/time_frequency/time_frequency_simulated.html#morlet-wavelets
 
 import mne
 import os
 import numpy as np
-from scipy.io import loadmat
 from Common_Functions.evoked_from_raw import evoked_from_raw
 import matplotlib.pyplot as plt
 import pandas as pd
