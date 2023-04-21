@@ -1,5 +1,6 @@
 # Script to plot the time-frequency decomposition about the spinal triggers for the correct versus incorrect patch
 # https://mne.tools/stable/auto_examples/time_frequency/time_frequency_simulated.html#morlet-wavelets
+# Uses clusters of electrodes instead of single electrodes
 
 import mne
 import os

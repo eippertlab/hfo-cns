@@ -1,18 +1,14 @@
-# Plot grand average time courses and spatial patterns after application of CCA on ESG data
+# Plot grand average time courses and spatial patterns after application of CCA on EEG data
+# Can use only the subjects with visible HFOs, or all subjects regardless
 
 
 import os
 import mne
 import numpy as np
-from meet import spatfilt
 from Common_Functions.get_conditioninfo import get_conditioninfo
-from Common_Functions.get_channels import get_channels
 from Common_Functions.invert import invert
 import matplotlib.pyplot as plt
-import matplotlib as mpl
 import pandas as pd
-from mpl_toolkits.axes_grid1 import make_axes_locatable
-import pickle
 import matplotlib as mpl
 mpl.rcParams['pdf.fonttype'] = 42
 

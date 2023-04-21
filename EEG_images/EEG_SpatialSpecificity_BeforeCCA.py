@@ -4,7 +4,6 @@
 import mne
 import os
 import numpy as np
-from scipy.io import loadmat
 from Common_Functions.evoked_from_raw import evoked_from_raw
 import matplotlib.pyplot as plt
 import pandas as pd

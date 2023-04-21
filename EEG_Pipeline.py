@@ -9,11 +9,8 @@ from Common_Functions.bad_trial_check import bad_trial_check
 from Common_Functions.bad_channel_check import bad_channel_check
 from Common_Functions.Create_Frequency_Bands import create_frequency_bands
 from Common_Functions.keep_good_trials import keep_good_trials
-from EEG.run_CCA_brain_good import run_CCA_good
+from Archive.run_CCA_brain_good import run_CCA_good
 from EEG.run_CCA_brain import run_CCA
-from Archive.run_CSP_brain import run_CSP
-from Archive.run_bCSTP_brain import run_bCSTP
-
 
 if __name__ == '__main__':
     ######## 1. Import ############

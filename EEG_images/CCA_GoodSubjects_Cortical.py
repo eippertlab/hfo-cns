@@ -1,16 +1,13 @@
 # Plot single subject time courses and spatial patterns after application of CCA
-# Just for 2 good subjects
+# Just for some cherry picked good subjects - just for visualising for posters
 
 
 import os
 import mne
-import numpy as np
-from meet import spatfilt
 from Common_Functions.get_conditioninfo import get_conditioninfo
 from Common_Functions.get_channels import get_channels
 from Common_Functions.invert import invert
 import matplotlib.pyplot as plt
-import matplotlib as mpl
 import pandas as pd
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import pickle

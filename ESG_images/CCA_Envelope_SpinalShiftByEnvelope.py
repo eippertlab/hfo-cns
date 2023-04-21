@@ -1,4 +1,5 @@
-# Plot envelope of grand average CCA components
+# Plot envelope of grand average CCA components for ESG data
+# Shift all subjects depending on the peak of their low-frequency potential
 
 
 import os

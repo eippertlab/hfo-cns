@@ -1,15 +1,14 @@
+# Plots each subjects chosen component after CCA has been performed on EEG data
+# Plots first 18 subjects in one subplot, and then the next 18 in another
+
 import os
 import mne
 import numpy as np
-from meet import spatfilt
 from Common_Functions.get_conditioninfo import get_conditioninfo
 from Common_Functions.get_channels import get_channels
 from Common_Functions.invert import invert
 import matplotlib.pyplot as plt
-import matplotlib as mpl
 import pandas as pd
-from mpl_toolkits.axes_grid1 import make_axes_locatable
-import pickle
 import matplotlib as mpl
 mpl.rcParams['pdf.fonttype'] = 42
 
@@ -17,7 +16,7 @@ mpl.rcParams['pdf.fonttype'] = 42
 if __name__ == '__main__':
     subjects = np.arange(1, 37)
     conditions = [2, 3]
-    freq_bands = ['sigma', 'kappa']
+    freq_bands = ['sigma']
     srmr_nr = 1
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment

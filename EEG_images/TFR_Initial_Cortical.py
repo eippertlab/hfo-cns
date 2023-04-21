@@ -4,7 +4,6 @@
 import mne
 import os
 import numpy as np
-from scipy.io import loadmat
 from Common_Functions.evoked_from_raw import evoked_from_raw
 from Common_Functions.get_channels import get_channels
 import matplotlib.pyplot as plt

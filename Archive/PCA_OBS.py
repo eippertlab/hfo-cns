@@ -1,9 +1,8 @@
 import numpy as np
-import mne
 from scipy.signal import filtfilt, detrend
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
-from ESG.fit_ecgTemplate import fit_ecgTemplate
+from Archive.fit_ecgTemplate import fit_ecgTemplate
 import math
 import h5py
 
