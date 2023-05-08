@@ -25,15 +25,14 @@ def get_time_to_align(data_type, cond_names, subjects):
                     tibial.append(sep_latency)
 
             elif data_type == 'esg':
-                potential_path = f"/data/p_02068/SRMR1_experiment/analyzed_data/esg/{subject_id}/"
-                fname_pot = 'potential_latency.mat'
-                matdata = loadmat(potential_path + fname_pot)
-
+                xls = pd.ExcelFile('/data/pt_02718/tmp_data/Spinal_Timing.xlsx')
+                df_timing = pd.read_excel(xls, 'Timing')
+                df_timing.set_index('Subject', inplace=True)
                 if cond_name == 'median':
-                    sep_latency = matdata['med_potlatency'][0][0]/1000
+                    sep_latency = df_timing.loc[subject, f"N13"]
                     median.append(sep_latency)
                 elif cond_name == 'tibial':
-                    sep_latency = matdata['tib_potlatency'][0][0]/1000
+                    sep_latency = df_timing.loc[subject, f"N22"]
                     tibial.append(sep_latency)
 
     # print(f"Median: {np.mean(median)}")

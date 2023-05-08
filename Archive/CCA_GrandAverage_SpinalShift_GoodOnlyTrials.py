@@ -1,5 +1,5 @@
 # Plot grand average time courses and spatial patterns after application of CCA on ESG data
-# Data is shifted to align them based on the latency of the peak of the low-frequency potential
+# Using only the trials identified as good in trial selection
 
 
 import os
@@ -29,14 +29,14 @@ if __name__ == '__main__':
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
     xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components.xlsx')
-    df = pd.read_excel(xls, 'CCA')
+    df = pd.read_excel(xls, 'CCA_goodonly')
     df.set_index('Subject', inplace=True)
 
     xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility.xlsx')
-    df_vis = pd.read_excel(xls, 'CCA_Spinal')
+    df_vis = pd.read_excel(xls, 'CCA_Spinal_GoodOnly')
     df_vis.set_index('Subject', inplace=True)
 
-    figure_path = '/data/p_02718/Images/CCA/GrandAverageShift/'
+    figure_path = '/data/p_02718/Images/CCA_good/GrandAverageShift/'
     os.makedirs(figure_path, exist_ok=True)
     brainstem_chans, cervical_chans, lumbar_chans, ref_chan = get_esg_channels()
 
@@ -54,13 +54,12 @@ if __name__ == '__main__':
                 # Only perform if bursts marked as visible
                 visible = df_vis.loc[subject, f"{freq_band.capitalize()}_{cond_name.capitalize()}_Visible"]
                 if visible == 'T':
-
                     ##########################################################
                     # Time  Course Information
                     ##########################################################
                     # Select the right files
                     fname = f"{freq_band}_{cond_name}.fif"
-                    input_path = "/data/pt_02718/tmp_data/cca/" + subject_id + "/"
+                    input_path = "/data/pt_02718/tmp_data/cca_goodonly/" + subject_id + "/"
 
                     epochs = mne.read_epochs(input_path + fname, preload=True)
 

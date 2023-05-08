@@ -17,6 +17,12 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 
 if __name__ == '__main__':
+    use_updated = True
+    use_visible = True  # Use only subjects with visible bursting
+
+    if use_updated is True and use_visible is not True:
+        print('Error: Both must be true if use_updated is True')
+        exit()
     subjects = np.arange(1, 37)
     conditions = [2, 3]
     freq_bands = ['sigma']
@@ -29,9 +35,28 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epo_cca_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG.xlsx')
-    df = pd.read_excel(xls, 'CCA')
-    df.set_index('Subject', inplace=True)
+    if use_updated:
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG_Updated.xlsx')
+        df = pd.read_excel(xls, 'CCA')
+        df.set_index('Subject', inplace=True)
+
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility_Updated.xlsx')
+        df_vis = pd.read_excel(xls, 'CCA_Brain')
+        df_vis.set_index('Subject', inplace=True)
+
+        figure_path = '/data/p_02718/Images/CCA_eeg/GrandAverage_Updated/'
+        os.makedirs(figure_path, exist_ok=True)
+    else:
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG.xlsx')
+        df = pd.read_excel(xls, 'CCA')
+        df.set_index('Subject', inplace=True)
+
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility.xlsx')
+        df_vis = pd.read_excel(xls, 'CCA_Brain')
+        df_vis.set_index('Subject', inplace=True)
+
+        figure_path = '/data/p_02718/Images/CCA_eeg/GrandAverage/'
+        os.makedirs(figure_path, exist_ok=True)
 
     # Get a raw file so I can use the montage
     raw = mne.io.read_raw_fif("/data/pt_02718/tmp_data/freq_banded_eeg/sub-001/sigma_median.fif", preload=True)
@@ -42,14 +67,6 @@ if __name__ == '__main__':
     eeg_chans, esg_chans, bipolar_chans = get_channels(1, False, False, srmr_nr)
     idx_by_type = mne.channel_indices_by_type(raw.info, picks=eeg_chans)
     res = mne.pick_info(raw.info, sel=idx_by_type['eeg'], copy=True, verbose=None)
-    figure_path = '/data/p_02718/Images/CCA_eeg/GrandAverage/'
-    os.makedirs(figure_path, exist_ok=True)
-
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility.xlsx')
-    df_vis = pd.read_excel(xls, 'CCA_Brain')
-    df_vis.set_index('Subject', inplace=True)
-
-    use_visible = True  # Use only subjects with visible bursting
 
     for freq_band in freq_bands:
         for condition in conditions:
@@ -73,20 +90,21 @@ if __name__ == '__main__':
 
                 # Need to pick channel based on excel sheet
                 channel_no = df.loc[subject, f"{freq_band}_{cond_name}_comp"]
-                channel = f'Cor{channel_no}'
-                inv = df.loc[subject, f"{freq_band}_{cond_name}_flip"]
-                epochs = epochs.pick_channels([channel])
-                if inv == 'T':
-                    epochs.apply_function(invert, picks=channel)
-                evoked = epochs.average()
-                data = evoked.data
+                if not np.isnan(channel_no):
+                    channel = f'Cor{channel_no}'
+                    inv = df.loc[subject, f"{freq_band}_{cond_name}_flip"]
+                    epochs = epochs.pick_channels([channel])
+                    if inv == 'T':
+                        epochs.apply_function(invert, picks=channel)
+                    evoked = epochs.average()
+                    data = evoked.data
 
-                if use_visible is True:
-                    visible = df_vis.loc[subject, f"{freq_band.capitalize()}_{cond_name.capitalize()}_Visible"]
-                    if visible == 'T':
+                    if use_visible is True:
+                        visible = df_vis.loc[subject, f"{freq_band.capitalize()}_{cond_name.capitalize()}_Visible"]
+                        if visible == 'T':
+                            evoked_list.append(data)
+                    else:
                         evoked_list.append(data)
-                else:
-                    evoked_list.append(data)
 
                 ############################################################
                 # Spatial Pattern Extraction

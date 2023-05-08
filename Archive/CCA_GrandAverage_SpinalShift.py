@@ -1,5 +1,6 @@
 # Plot grand average time courses and spatial patterns after application of CCA on ESG data
-# Shift each subjects data based on the peak of their envelope
+# Data is shifted to align them based on the latency of the peak of the low-frequency potential
+# CAREFUL: For shifting it should be expected - sep_latency
 
 
 import os
@@ -10,14 +11,16 @@ from Common_Functions.get_esg_channels import get_esg_channels
 from Common_Functions.IsopotentialFunctions import mrmr_esg_isopotentialplot
 from Common_Functions.invert import invert
 import matplotlib.pyplot as plt
+from scipy.io import loadmat
 import pandas as pd
 import pickle
 
 
 if __name__ == '__main__':
+    use_updated = True  # If true, use the CCA components from the updated selection
     subjects = np.arange(1, 37)
     conditions = [2, 3]
-    freq_bands = ['sigma', 'kappa']
+    freq_bands = ['sigma']
     srmr_nr = 1
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
@@ -27,16 +30,28 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epo_cca_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components.xlsx')
-    df = pd.read_excel(xls, 'CCA')
-    df.set_index('Subject', inplace=True)
+    if use_updated:
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_Updated.xlsx')
+        df = pd.read_excel(xls, 'CCA')
+        df.set_index('Subject', inplace=True)
 
-    xls = pd.ExcelFile('/data/pt_02718/BurstPeaks/Peaks_from_Envelope.xlsx')
-    df_vis = pd.read_excel(xls, 'Sheet1')
-    df_vis.set_index('Subjects', inplace=True)
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility_Updated.xlsx')
+        df_vis = pd.read_excel(xls, 'CCA_Spinal')
+        df_vis.set_index('Subject', inplace=True)
 
-    figure_path = '/data/p_02718/Images/CCA/GrandAverageShiftByEnvelope/'
-    os.makedirs(figure_path, exist_ok=True)
+        figure_path = '/data/p_02718/Images/CCA/GrandAverageShift_Updated/'
+        os.makedirs(figure_path, exist_ok=True)
+    else:
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components.xlsx')
+        df = pd.read_excel(xls, 'CCA')
+        df.set_index('Subject', inplace=True)
+
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility.xlsx')
+        df_vis = pd.read_excel(xls, 'CCA_Spinal')
+        df_vis.set_index('Subject', inplace=True)
+
+        figure_path = '/data/p_02718/Images/CCA/GrandAverageShift/'
+        os.makedirs(figure_path, exist_ok=True)
     brainstem_chans, cervical_chans, lumbar_chans, ref_chan = get_esg_channels()
 
     for freq_band in freq_bands:
@@ -51,9 +66,8 @@ if __name__ == '__main__':
                 subject_id = f'sub-{str(subject).zfill(3)}'
 
                 # Only perform if bursts marked as visible
-                visible = df_vis.loc[subject, f"{freq_band}_{cond_name}_visible"]
-                double = df_vis.loc[subject, f"{freq_band}_{cond_name}_double"]
-                if visible == 'T' and double == 'F':
+                visible = df_vis.loc[subject, f"{freq_band.capitalize()}_{cond_name.capitalize()}_Visible"]
+                if visible == 'T':
                     ##########################################################
                     # Time  Course Information
                     ##########################################################
@@ -64,7 +78,7 @@ if __name__ == '__main__':
                     epochs = mne.read_epochs(input_path + fname, preload=True)
 
                     # Need to pick channel based on excel sheet
-                    channel_no = df.loc[subject, f"{freq_band}_{cond_name}_comp"]
+                    channel_no = int(df.loc[subject, f"{freq_band}_{cond_name}_comp"])
                     channel = f'Cor{channel_no}'
                     inv = df.loc[subject, f"{freq_band}_{cond_name}_flip"]
                     epochs = epochs.pick_channels([channel])
@@ -75,13 +89,16 @@ if __name__ == '__main__':
                     # evoked_list.append(data)
 
                     # Apply relative time-shift depending on expected latency
+                    potential_path = f"/data/p_02068/SRMR1_experiment/analyzed_data/esg/{subject_id}/"
+                    fname_pot = 'potential_latency.mat'
+                    matdata = loadmat(potential_path + fname_pot)
                     if cond_name == 'median':
-                        sep_latency = df_vis.loc[subject, f"{freq_band}_{cond_name}"]
+                        sep_latency = matdata['med_potlatency']
                         expected = 13 / 1000
                     elif cond_name == 'tibial':
-                        sep_latency = df_vis.loc[subject, f"{freq_band}_{cond_name}"]
+                        sep_latency = matdata['tib_potlatency']
                         expected = 22 / 1000
-                    shift = sep_latency - expected
+                    shift = expected - sep_latency[0][0] / 1000
                     evoked.shift_time(shift, relative=True)
                     evoked.crop(tmin=-0.06, tmax=0.20)
                     data = evoked.data

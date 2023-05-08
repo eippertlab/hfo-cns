@@ -11,6 +11,8 @@ import pandas as pd
 
 
 if __name__ == '__main__':
+    # Not yet implemented
+    # shifting = True  # If true, shift based on latency of underlying potential
     subjects = np.arange(1, 37)
     conditions = [2, 3]
     srmr_nr = 1

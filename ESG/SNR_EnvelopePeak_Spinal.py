@@ -20,9 +20,10 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 
 if __name__ == '__main__':
-    cca_good = True  # Use CCA performed only on good trials when true, otherwise all trials
+    cca_good = False  # Use CCA performed only on good trials when true, otherwise all trials
     create_plot = True
-    save_to_excel = False
+    save_to_excel = True
+    easier_threshold = True
     subjects = np.arange(1, 37)
     # subjects = np.arange(1, 2)
     conditions = [2, 3]
@@ -36,18 +37,23 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epo_cca_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
-    xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/Cortical_Timing.xlsx')
-    df_timing = pd.read_excel(xls_timing, 'Timing')
-    df_timing.set_index('Subject', inplace=True)
-
     n_components = 4
 
     if cca_good:
-        figure_path = '/data/p_02718/Images/CCA_good/SNR&EnvelopePeak/'
-        os.makedirs(figure_path, exist_ok=True)
+        if easier_threshold:
+            figure_path = '/data/p_02718/Images/CCA_good/SNR&EnvelopePeak_Easier/'
+            os.makedirs(figure_path, exist_ok=True)
+        else:
+            figure_path = '/data/p_02718/Images/CCA_good/SNR&EnvelopePeak/'
+            os.makedirs(figure_path, exist_ok=True)
+
     else:
-        figure_path = '/data/p_02718/Images/CCA/SNR&EnvelopePeak/'
-        os.makedirs(figure_path, exist_ok=True)
+        if easier_threshold:
+            figure_path = '/data/p_02718/Images/CCA/SNR&EnvelopePeak_Easier/'
+            os.makedirs(figure_path, exist_ok=True)
+        else:
+            figure_path = '/data/p_02718/Images/CCA/SNR&EnvelopePeak/'
+            os.makedirs(figure_path, exist_ok=True)
 
     for condition in conditions:
         snr_cond = [[0 for x in range(n_components)] for x in range(len(subjects))]
@@ -116,8 +122,13 @@ if __name__ == '__main__':
                     noise_data = evoked.copy().crop(tmin=noise_window[0], tmax=noise_window[1]).get_data().reshape(-1)
                     noise_mean = np.mean(noise_data)
                     noise_std = np.std(noise_data)
-                    ax[c].axhline(y=noise_mean-3*noise_std, color='blue', linewidth='1')
-                    ax[c].axhline(y=noise_mean+3*noise_std, color='blue', linewidth='1')
+
+                    if easier_threshold:
+                        thresh = 4
+                    else:
+                        thresh = 3
+                    ax[c].axhline(y=noise_mean-thresh*noise_std, color='blue', linewidth='1')
+                    ax[c].axhline(y=noise_mean+thresh*noise_std, color='blue', linewidth='1')
                     plt.suptitle(f'Subject {subject}, {trigger_name}')
                     plt.tight_layout()
                     plt.savefig(figure_path+f'{subject_id}_{cond_name}')

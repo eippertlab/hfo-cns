@@ -103,10 +103,10 @@ if __name__ == '__main__':
                             vmax = 8
                     fig, ax = plt.subplots(1, 2)
                     ax = ax.flatten()
-                    power_correct.plot([0], baseline=iv_baseline, mode='ratio', cmap='jet',
+                    power_correct.plot('eeg', baseline=iv_baseline, mode='ratio', cmap='jet',
                                        axes=ax[0], show=False, colorbar=True, dB=False,
                                        tmin=tmin, tmax=tmax, vmin=vmin, vmax=vmax)
-                    power_incorrect.plot([0], baseline=iv_baseline, mode='ratio', cmap='jet',
+                    power_incorrect.plot('eeg', baseline=iv_baseline, mode='ratio', cmap='jet',
                                          axes=ax[1], show=False, colorbar=True, dB=False,
                                          tmin=tmin, tmax=tmax, vmin=vmin, vmax=vmax)
 
@@ -151,10 +151,10 @@ if __name__ == '__main__':
                     elif freq_type == 'upper':
                         vmin = 0
                         vmax = 8
-                averaged_correct.plot([0], baseline=iv_baseline, mode='ratio', cmap='jet',
+                averaged_correct.plot('eeg', baseline=iv_baseline, mode='ratio', cmap='jet',
                                       axes=ax[0], show=False, colorbar=True, dB=False,
                                       tmin=tmin, tmax=tmax, vmin=0, vmax=vmax)
-                averaged_incorrect.plot([0], baseline=iv_baseline, mode='ratio', cmap='jet',
+                averaged_incorrect.plot('eeg', baseline=iv_baseline, mode='ratio', cmap='jet',
                                         axes=ax[1], show=False, colorbar=True, dB=False,
                                         tmin=tmin, tmax=tmax, vmin=0, vmax=vmax)
                 im = ax[0].images

@@ -1,5 +1,6 @@
 # Plot envelope of grand average CCA components of the ESG data
 # Can choose to use only subjects marked for visible bursting, or all subjects regardless
+# Shifting the envelope based on my updated estimates of the spinal timing
 
 
 import os
@@ -35,6 +36,10 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epo_cca_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
+    xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/Spinal_Timing.xlsx')
+    df_timing = pd.read_excel(xls_timing, 'Timing')
+    df_timing.set_index('Subject', inplace=True)
+
     if use_updated:
         xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_Updated.xlsx')
         df = pd.read_excel(xls, 'CCA')
@@ -44,7 +49,7 @@ if __name__ == '__main__':
         df_vis = pd.read_excel(xls, 'CCA_Spinal')
         df_vis.set_index('Subject', inplace=True)
 
-        figure_path = '/data/p_02718/Images/CCA/Envelope_Updated/'
+        figure_path = '/data/p_02718/Images/CCA/Envelope_Updated_Shifted/'
         os.makedirs(figure_path, exist_ok=True)
     else:
         xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components.xlsx')
@@ -55,7 +60,7 @@ if __name__ == '__main__':
         df_vis = pd.read_excel(xls, 'CCA_Spinal')
         df_vis.set_index('Subject', inplace=True)
 
-        figure_path = '/data/p_02718/Images/CCA/Envelope/'
+        figure_path = '/data/p_02718/Images/CCA/Envelope_Shifted/'
         os.makedirs(figure_path, exist_ok=True)
     brainstem_chans, cervical_chans, lumbar_chans, ref_chan = get_esg_channels()
 
@@ -90,6 +95,14 @@ if __name__ == '__main__':
                         if inv == 'T':
                             epochs.apply_function(invert, picks=channel)
                         evoked = epochs.copy().average()
+                        if cond_name == 'median':
+                            sep_latency = df_timing.loc[subject, f"N13"]
+                            expected = 13 / 1000
+                        elif cond_name == 'tibial':
+                            sep_latency = df_timing.loc[subject, f"N22"]
+                            expected = 22 / 1000
+                        shift = expected - sep_latency
+                        evoked.shift_time(shift, relative=True)
                         envelope = evoked.apply_hilbert(envelope=True)
                         data = envelope.get_data()
                         evoked_list.append(data)
@@ -109,6 +122,14 @@ if __name__ == '__main__':
                     if inv == 'T':
                         epochs.apply_function(invert, picks=channel)
                     evoked = epochs.copy().average()
+                    if cond_name == 'median':
+                        sep_latency = df_timing.loc[subject, f"N13"]
+                        expected = 13 / 1000
+                    elif cond_name == 'tibial':
+                        sep_latency = df_timing.loc[subject, f"N22"]
+                        expected = 22 / 1000
+                    shift = expected - sep_latency
+                    evoked.shift_time(shift, relative=True)
                     envelope = evoked.apply_hilbert(envelope=True)
                     data = envelope.get_data()
                     evoked_list.append(data)

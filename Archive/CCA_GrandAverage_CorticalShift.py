@@ -1,5 +1,6 @@
 # Plot grand average time courses and spatial patterns after application of CCA to EEG data
 # Each time courses is shifted based on the latency of peak of the low-frequency response
+# CAREFUL: For shifting it should be expected - sep_latency
 
 
 import os
@@ -91,7 +92,7 @@ if __name__ == '__main__':
                 elif cond_name == 'tibial':
                     sep_latency = df_timing.loc[subject, f"P39"]
                     expected = 39 / 1000
-                shift = sep_latency - expected
+                shift = expected - sep_latency
                 evoked.shift_time(shift, relative=True)
                 evoked.crop(tmin=-0.06, tmax=0.20)
 

@@ -22,7 +22,7 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epoch_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epoch_end', 'var_value'].iloc[0]]
 
-    alternative_cluster = True  # If true, use the alternative cluster definition for incorrect patch
+    alternative_cluster = False  # If true, use the alternative cluster definition for incorrect patch
 
     if alternative_cluster:
         image_path_singlesubject = "/data/p_02718/Images/BeforeCCA_SpatialSpecificity_AltCluster_EEG/SingleSubject/"
@@ -119,10 +119,10 @@ if __name__ == '__main__':
                             vmax = 8
                     fig, ax = plt.subplots(1, 2)
                     ax = ax.flatten()
-                    power_correct.plot([0], baseline=iv_baseline, mode='ratio', cmap='jet',
+                    power_correct.plot('eeg', baseline=iv_baseline, mode='ratio', cmap='jet',
                                        axes=ax[0], show=False, colorbar=True, dB=False,
                                        tmin=tmin, tmax=tmax, vmin=vmin, vmax=vmax, combine='mean')
-                    power_incorrect.plot([0], baseline=iv_baseline, mode='ratio', cmap='jet',
+                    power_incorrect.plot('eeg', baseline=iv_baseline, mode='ratio', cmap='jet',
                                          axes=ax[1], show=False, colorbar=True, dB=False,
                                          tmin=tmin, tmax=tmax, vmin=vmin, vmax=vmax, combine='mean')
 
@@ -167,10 +167,10 @@ if __name__ == '__main__':
                     elif freq_type == 'upper':
                         vmin = 0
                         vmax = 8
-                averaged_correct.plot([0], baseline=iv_baseline, mode='ratio', cmap='jet',
+                averaged_correct.plot('eeg', baseline=iv_baseline, mode='ratio', cmap='jet',
                                       axes=ax[0], show=False, colorbar=True, dB=False,
                                       tmin=tmin, tmax=tmax, vmin=0, vmax=vmax, combine='mean')
-                averaged_incorrect.plot([0], baseline=iv_baseline, mode='ratio', cmap='jet',
+                averaged_incorrect.plot('eeg', baseline=iv_baseline, mode='ratio', cmap='jet',
                                         axes=ax[1], show=False, colorbar=True, dB=False,
                                         tmin=tmin, tmax=tmax, vmin=0, vmax=vmax, combine='mean')
                 im = ax[0].images

@@ -16,9 +16,16 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 
 if __name__ == '__main__':
+    use_updated = True
+    use_only_good = True
+
+    if use_updated is True and use_only_good is not True:
+        print('Error: Both must be true if use_updated is True')
+        exit()
+
     subjects = np.arange(1, 37)
     conditions = [2, 3]
-    freq_bands = ['sigma', 'kappa']
+    freq_bands = ['sigma']
     srmr_nr = 1
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
@@ -28,19 +35,30 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epo_cca_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components.xlsx')
-    df = pd.read_excel(xls, 'CCA')
-    df.set_index('Subject', inplace=True)
+    if use_updated:
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_Updated.xlsx')
+        df = pd.read_excel(xls, 'CCA')
+        df.set_index('Subject', inplace=True)
 
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility.xlsx')
-    df_vis = pd.read_excel(xls, 'CCA_Spinal')
-    df_vis.set_index('Subject', inplace=True)
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility_Updated.xlsx')
+        df_vis = pd.read_excel(xls, 'CCA_Spinal')
+        df_vis.set_index('Subject', inplace=True)
 
-    figure_path = '/data/p_02718/Images/CCA/GrandAverage/'
-    os.makedirs(figure_path, exist_ok=True)
-    brainstem_chans, cervical_chans, lumbar_chans, ref_chan = get_esg_channels()
+        figure_path = '/data/p_02718/Images/CCA/GrandAverage_Updated/'
+        os.makedirs(figure_path, exist_ok=True)
+        brainstem_chans, cervical_chans, lumbar_chans, ref_chan = get_esg_channels()
+    else:
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components.xlsx')
+        df = pd.read_excel(xls, 'CCA')
+        df.set_index('Subject', inplace=True)
 
-    use_only_good = False
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility.xlsx')
+        df_vis = pd.read_excel(xls, 'CCA_Spinal')
+        df_vis.set_index('Subject', inplace=True)
+
+        figure_path = '/data/p_02718/Images/CCA/GrandAverage/'
+        os.makedirs(figure_path, exist_ok=True)
+        brainstem_chans, cervical_chans, lumbar_chans, ref_chan = get_esg_channels()
 
     for freq_band in freq_bands:
         for condition in conditions:
@@ -67,7 +85,7 @@ if __name__ == '__main__':
                         epochs = mne.read_epochs(input_path + fname, preload=True)
 
                         # Need to pick channel based on excel sheet
-                        channel_no = df.loc[subject, f"{freq_band}_{cond_name}_comp"]
+                        channel_no = int(df.loc[subject, f"{freq_band}_{cond_name}_comp"])
                         channel = f'Cor{channel_no}'
                         inv = df.loc[subject, f"{freq_band}_{cond_name}_flip"]
                         epochs = epochs.pick_channels([channel])
