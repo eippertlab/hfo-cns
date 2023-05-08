@@ -22,7 +22,7 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epoch_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epoch_end', 'var_value'].iloc[0]]
 
-    alternative_cluster = False  # If true, use the alternative cluster definition for incorrect patch
+    alternative_cluster = True  # If true, use the alternative cluster definition for incorrect patch
 
     if alternative_cluster:
         image_path_singlesubject = "/data/p_02718/Images/BeforeCCA_SpatialSpecificity_AltCluster_EEG/SingleSubject/"

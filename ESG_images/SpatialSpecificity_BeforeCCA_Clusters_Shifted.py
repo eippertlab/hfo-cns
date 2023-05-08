@@ -28,7 +28,7 @@ if __name__ == '__main__':
                  'S21', 'S25', 'L1', 'S29', 'S14', 'S33', 'S3', 'AL', 'L4', 'S6',
                  'S23']
 
-    alternative_cluster = False  # USe the laternal electrodes in the patch too
+    alternative_cluster = True  # USe the laternal electrodes in the patch too
 
     if alternative_cluster:
         image_path_singlesubject = "/data/p_02718/Images/BeforeCCA_SpatialSpecificity_AltCluster_Shifted/SingleSubject/"
