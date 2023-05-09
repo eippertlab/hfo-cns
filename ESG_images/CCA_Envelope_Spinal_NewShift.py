@@ -12,6 +12,7 @@ from Common_Functions.invert import invert
 import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib as mpl
+from Common_Functions.GetTimeToAlign import get_time_to_align
 mpl.rcParams['pdf.fonttype'] = 42
 
 
@@ -77,6 +78,16 @@ if __name__ == '__main__':
                 ##########################################################
                 # Time  Course Information
                 ##########################################################
+                # Align subject with average latency across all subjects
+                median_lat, tibial_lat = get_time_to_align('esg', ['median', 'tibial'], np.arange(1, 37))
+                if cond_name == 'median':
+                    sep_latency = round(df_timing.loc[subject, f"N13"], 3)
+                    expected = median_lat
+                elif cond_name == 'tibial':
+                    sep_latency = round(df_timing.loc[subject, f"N22"], 3)
+                    expected = tibial_lat
+                shift = expected - sep_latency
+
                 if use_only_good:
                     # Only perform if bursts marked as visible
                     visible = df_vis.loc[subject, f"{freq_band.capitalize()}_{cond_name.capitalize()}_Visible"]
@@ -101,8 +112,9 @@ if __name__ == '__main__':
                         elif cond_name == 'tibial':
                             sep_latency = df_timing.loc[subject, f"N22"]
                             expected = 22 / 1000
-                        shift = expected - sep_latency
+                        # shift = expected - sep_latency
                         evoked.shift_time(shift, relative=True)
+                        evoked.crop(tmin=-0.06, tmax=0.07)
                         envelope = evoked.apply_hilbert(envelope=True)
                         data = envelope.get_data()
                         evoked_list.append(data)
@@ -128,8 +140,9 @@ if __name__ == '__main__':
                     elif cond_name == 'tibial':
                         sep_latency = df_timing.loc[subject, f"N22"]
                         expected = 22 / 1000
-                    shift = expected - sep_latency
+                    # shift = expected - sep_latency
                     evoked.shift_time(shift, relative=True)
+                    evoked.crop(tmin=-0.06, tmax=0.07)
                     envelope = evoked.apply_hilbert(envelope=True)
                     data = envelope.get_data()
                     evoked_list.append(data)
@@ -139,7 +152,7 @@ if __name__ == '__main__':
 
             # Plot Time Course
             fig, ax = plt.subplots()
-            ax.plot(epochs.times, grand_average[0, :])
+            ax.plot(evoked.times, grand_average[0, :])
             ax.set_xlabel('Time (s)')
             ax.set_title(f'Grand Average Envelope, n={len(evoked_list)}')
             ax.set_ylabel('Amplitude')

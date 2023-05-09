@@ -90,6 +90,7 @@ if __name__ == '__main__':
                         if inv == 'T':
                             epochs.apply_function(invert, picks=channel)
                         evoked = epochs.copy().average()
+                        evoked.crop(tmin=-0.06, tmax=0.07)
                         envelope = evoked.apply_hilbert(envelope=True)
                         data = envelope.get_data()
                         evoked_list.append(data)
@@ -109,6 +110,7 @@ if __name__ == '__main__':
                     if inv == 'T':
                         epochs.apply_function(invert, picks=channel)
                     evoked = epochs.copy().average()
+                    evoked.crop(tmin=-0.06, tmax=0.07)
                     envelope = evoked.apply_hilbert(envelope=True)
                     data = envelope.get_data()
                     evoked_list.append(data)
@@ -118,7 +120,7 @@ if __name__ == '__main__':
 
             # Plot Time Course
             fig, ax = plt.subplots()
-            ax.plot(epochs.times, grand_average[0, :])
+            ax.plot(evoked.times, grand_average[0, :])
             ax.set_xlabel('Time (s)')
             ax.set_title(f'Grand Average Envelope, n={len(evoked_list)}')
             ax.set_ylabel('Amplitude')
