@@ -16,7 +16,7 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
 
-    shift_spinal = True  # If true, shift the spinal based on time of underlying low freq SEP
+    shift_spinal = False  # If true, shift the spinal based on time of underlying low freq SEP
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)
@@ -93,13 +93,13 @@ if __name__ == '__main__':
                             expected = tibial_lat
                         shift = expected - sep_latency
                         evoked.shift_time(shift, relative=True)
-                        evoked.crop(tmin=-0.06, tmax=0.06)
-                else:
-                    evoked_correct.crop(tmin=-0.06, tmax=0.06)
-                    evoked_incorrect.crop(tmin=-0.06, tmax=0.06)
+                        evoked.crop(tmin=-0.06, tmax=0.1)
+                    else:
+                        evoked_correct.crop(tmin=-0.06, tmax=0.1)
+                        evoked_incorrect.crop(tmin=-0.06, tmax=0.1)
 
-                # No shift for cortical data
-                evoked_cortical.crop(tmin=-0.06, tmax=0.06)
+                    # No shift for cortical data
+                    evoked_cortical.crop(tmin=-0.06, tmax=0.1)
 
                 # Get power
                 power_cortical = mne.time_frequency.tfr_stockwell(evoked_cortical, fmin=fmin, fmax=fmax, width=3.0,
@@ -177,9 +177,9 @@ if __name__ == '__main__':
                 fname = f"{trigger_name}_ratio"
             plt.tight_layout()
             if shift_spinal:
-                fig.savefig(image_path + fname + '_spinalshifted.png')
-                plt.savefig(image_path + fname+'_spinalshifted.pdf', bbox_inches='tight', format="pdf")
+                fig.savefig(image_path + fname + '_spinalshifted_longcrop.png')
+                plt.savefig(image_path + fname+'_spinalshifted_longcrop.pdf', bbox_inches='tight', format="pdf")
             else:
-                fig.savefig(image_path + fname+'.png')
-                plt.savefig(image_path + fname+'.pdf', bbox_inches='tight', format="pdf")
+                fig.savefig(image_path + fname+'_longcrop.png')
+                plt.savefig(image_path + fname+'_longcrop.pdf', bbox_inches='tight', format="pdf")
             plt.clf()
