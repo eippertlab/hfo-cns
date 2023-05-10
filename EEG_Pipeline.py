@@ -11,6 +11,7 @@ from Common_Functions.Create_Frequency_Bands import create_frequency_bands
 from Common_Functions.keep_good_trials import keep_good_trials
 from Archive.run_CCA_brain_good import run_CCA_good
 from EEG.run_CCA_brain import run_CCA
+from EEG.run_CCA_brain_2 import run_CCA2
 
 if __name__ == '__main__':
     srmr_nr = 2  # Set the experiment number
@@ -30,7 +31,7 @@ if __name__ == '__main__':
         sampling_rate = 5000  # Frequency to downsample to from original of 10kHz
 
     ######## 1. Import ############
-    import_d = True  # Prep work
+    import_d = False  # Prep work
 
     ######## 2. Bad Channel Check ###########
     check_channels = False
@@ -42,7 +43,7 @@ if __name__ == '__main__':
     split_bands_flag = False
 
     ######## 5. Run CCA ########
-    CCA_flag = False
+    CCA_flag = True
 
     ############################################
     # Import Data from BIDS directory
@@ -84,10 +85,17 @@ if __name__ == '__main__':
     # Run CCA on Freq Bands - all trials
     ###################################################
     if CCA_flag:
-        for subject in subjects:
-            for condition in conditions:
-                for freq_band in ['sigma']:
-                    run_CCA(subject, condition, srmr_nr, freq_band, sampling_rate)
+        if srmr_nr == 1:
+            for subject in subjects:
+                for condition in conditions:
+                    for freq_band in ['sigma']:
+                        run_CCA(subject, condition, srmr_nr, freq_band, sampling_rate)
+        elif srmr_nr == 2:
+            conditions_d2 = [2, 4]  # only need to specify digits, takes care of mixed nerve within other script
+            for subject in subjects:
+                for condition in conditions_d2:
+                    for freq_band in ['sigma']:
+                        run_CCA2(subject, condition, srmr_nr, freq_band, sampling_rate)
 
     ###################################################################################################################
     # GRAVEYARD

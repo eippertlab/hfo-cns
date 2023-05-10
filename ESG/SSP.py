@@ -11,9 +11,16 @@ from Common_Functions.get_conditioninfo import *
 def apply_SSP(subject, condition, srmr_nr, sampling_rate, n_p):
     # set variables
     subject_id = f'sub-{str(subject).zfill(3)}'
-    load_path = "/data/pt_02718/tmp_data/imported/" + subject_id + "/"
-    save_path = "/data/pt_02718/tmp_data/ssp_cleaned/" + subject_id + "/"
-    os.makedirs(save_path, exist_ok=True)
+    if srmr_nr == 1:
+        load_path = "/data/pt_02718/tmp_data/imported/" + subject_id + "/"
+        save_path = "/data/pt_02718/tmp_data/ssp_cleaned/" + subject_id + "/"
+        os.makedirs(save_path, exist_ok=True)
+    elif srmr_nr == 2:
+        load_path = "/data/pt_02718/tmp_data_2/imported/" + subject_id + "/"
+        save_path = "/data/pt_02718/tmp_data_2/ssp_cleaned/" + subject_id + "/"
+        os.makedirs(save_path, exist_ok=True)
+    else:
+        print('Error: Experiment 1 or 2 must be specified')
 
     # get condition info
     cond_info = get_conditioninfo(condition, srmr_nr)

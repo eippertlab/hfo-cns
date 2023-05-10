@@ -19,16 +19,27 @@ def create_frequency_bands(subject, condition, srmr_nr, sampling_rate, channel_t
 
     if channel_type == 'esg':
         # set variables
-        load_path = "/data/pt_02718/tmp_data/ssp_cleaned/" + subject_id + "/"
-        save_path = "/data/pt_02718/tmp_data/freq_banded_esg/" + subject_id + "/"
-        os.makedirs(save_path, exist_ok=True)
-        fname = f'ssp6_cleaned_{cond_name}.fif'
+        if srmr_nr == 1:
+            load_path = "/data/pt_02718/tmp_data/ssp_cleaned/" + subject_id + "/"
+            save_path = "/data/pt_02718/tmp_data/freq_banded_esg/" + subject_id + "/"
+            os.makedirs(save_path, exist_ok=True)
+            fname = f'ssp6_cleaned_{cond_name}.fif'
+        elif srmr_nr == 2:
+            load_path = "/data/pt_02718/tmp_data_2/ssp_cleaned/" + subject_id + "/"
+            save_path = "/data/pt_02718/tmp_data_2/freq_banded_esg/" + subject_id + "/"
+            os.makedirs(save_path, exist_ok=True)
+            fname = f'ssp6_cleaned_{cond_name}.fif'
 
     elif channel_type == 'eeg':
         # set variables
-        load_path = "/data/pt_02718/tmp_data/imported/" + subject_id + "/"
-        save_path = "/data/pt_02718/tmp_data/freq_banded_eeg/" + subject_id + "/"
-        fname = f'noStimart_sr{sampling_rate}_{cond_name}_withqrs_eeg.fif'
+        if srmr_nr == 1:
+            load_path = "/data/pt_02718/tmp_data/imported/" + subject_id + "/"
+            save_path = "/data/pt_02718/tmp_data/freq_banded_eeg/" + subject_id + "/"
+            fname = f'noStimart_sr{sampling_rate}_{cond_name}_withqrs_eeg.fif'
+        elif srmr_nr == 2:
+            load_path = "/data/pt_02718/tmp_data_2/imported/" + subject_id + "/"
+            save_path = "/data/pt_02718/tmp_data_2/freq_banded_eeg/" + subject_id + "/"
+            fname = f'noStimart_sr{sampling_rate}_{cond_name}_withqrs_eeg.fif'
 
     os.makedirs(save_path, exist_ok=True)
     raw = mne.io.read_raw_fif(load_path + fname, preload=True)
@@ -48,8 +59,10 @@ def create_frequency_bands(subject, condition, srmr_nr, sampling_rate, channel_t
     #              'kappa1': kappa1,
     #              'kappa2': kappa2}
 
-    band_dict = {'sigma': sigma,
-                 'kappa': kappa}
+    # band_dict = {'sigma': sigma,
+    #              'kappa': kappa}
+
+    band_dict = {'sigma': sigma}
     for band_name in band_dict.keys():
         raw.filter(l_freq=band_dict[band_name][0], h_freq=band_dict[band_name][1], n_jobs=len(raw.ch_names), method='iir',
                    iir_params={'order': 5, 'ftype': 'butter'}, phase='zero')

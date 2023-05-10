@@ -10,6 +10,7 @@ from Common_Functions.bad_channel_check import bad_channel_check
 from Common_Functions.bad_trial_check import bad_trial_check
 from Common_Functions.Create_Frequency_Bands import create_frequency_bands
 from ESG.run_CCA_spinal import run_CCA
+from ESG.run_CCA_spinal_2 import run_CCA2
 from Common_Functions.keep_good_trials import keep_good_trials
 from ESG.run_CCA_spinal_good import run_CCA_good
 from Archive.run_CCA_spinal_opposite import run_CCA_oppo
@@ -51,7 +52,7 @@ if __name__ == '__main__':
     split_bands_flag = False
 
     ######### 6. Run CCA on each frequency band ##########
-    CCA_flag = False
+    CCA_flag = True
 
     ############################################
     # Import Data from BIDS directory
@@ -98,13 +99,20 @@ if __name__ == '__main__':
                 create_frequency_bands(subject, condition, srmr_nr, sampling_rate, channel_type='esg')
 
     ###################################################
-    # Old: Run CCA on Freq Bands
+    # Run CCA on Freq Bands
     ###################################################
     if CCA_flag:
-        for subject in subjects:
-            for condition in conditions:
-                for freq_band in ['sigma', 'kappa']:
-                    run_CCA(subject, condition, srmr_nr, freq_band)
+        if srmr_nr == 1:
+            for subject in subjects:
+                for condition in conditions:
+                    for freq_band in ['sigma']:
+                        run_CCA(subject, condition, srmr_nr, freq_band)
+        elif srmr_nr == 2:
+            conditions_d2 = [2, 4]  # only need to specify digits, takes care of mixed nerve within other script
+            for subject in subjects:
+                for condition in conditions_d2:
+                    for freq_band in ['sigma']:
+                        run_CCA2(subject, condition, srmr_nr, freq_band)
 
     ###################################################################################################################
     # GRAVEYARD

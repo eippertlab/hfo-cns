@@ -19,16 +19,28 @@ def bad_channel_check(subject, condition, srmr_nr, sampling_rate, channel_type):
 
     # Select the right files based on the data_string
     if channel_type == 'esg':
-        input_path = "/data/pt_02718/tmp_data/ssp_cleaned/" + subject_id + "/"
-        fname = f'ssp6_cleaned_{cond_name}.fif'
-        figure_path = "/data/pt_02718/tmp_data/bad_channels_esg/" + subject_id + "/"
-        os.makedirs(figure_path, exist_ok=True)
+        if srmr_nr == 1:
+            input_path = "/data/pt_02718/tmp_data/ssp_cleaned/" + subject_id + "/"
+            fname = f'ssp6_cleaned_{cond_name}.fif'
+            figure_path = "/data/pt_02718/tmp_data/bad_channels_esg/" + subject_id + "/"
+            os.makedirs(figure_path, exist_ok=True)
+        elif srmr_nr == 2:
+            input_path = "/data/pt_02718/tmp_data_2/ssp_cleaned/" + subject_id + "/"
+            fname = f'ssp6_cleaned_{cond_name}.fif'
+            figure_path = "/data/pt_02718/tmp_data_2/bad_channels_esg/" + subject_id + "/"
+            os.makedirs(figure_path, exist_ok=True)
 
     elif channel_type == 'eeg':
-        input_path = "/data/pt_02718/tmp_data/imported/" + subject_id + "/"
-        fname = f'noStimart_sr{sampling_rate}_{cond_name}_withqrs_eeg.fif'
-        figure_path = "/data/pt_02718/tmp_data/bad_channels_eeg/" + subject_id + "/"
-        os.makedirs(figure_path, exist_ok=True)
+        if srmr_nr == 1:
+            input_path = "/data/pt_02718/tmp_data/imported/" + subject_id + "/"
+            fname = f'noStimart_sr{sampling_rate}_{cond_name}_withqrs_eeg.fif'
+            figure_path = "/data/pt_02718/tmp_data/bad_channels_eeg/" + subject_id + "/"
+            os.makedirs(figure_path, exist_ok=True)
+        elif srmr_nr == 2:
+            input_path = "/data/pt_02718/tmp_data_2/imported/" + subject_id + "/"
+            fname = f'noStimart_sr{sampling_rate}_{cond_name}_withqrs_eeg.fif'
+            figure_path = "/data/pt_02718/tmp_data_2/bad_channels_eeg/" + subject_id + "/"
+            os.makedirs(figure_path, exist_ok=True)
 
     raw = mne.io.read_raw_fif(input_path + fname, preload=True)
 
@@ -45,7 +57,10 @@ def bad_channel_check(subject, condition, srmr_nr, sampling_rate, channel_type):
     fig, axes = plt.subplots(figsize=(12, 8))
     fig.suptitle(f"Power spectral density of {channel_type} data sub-{subject}")
     fig.tight_layout(pad=3.0)
-    raw.compute_psd(fmax=2000).plot(axes=axes, show=False)
+    if 'TH6' in raw.ch_names:  # Can't use zero value in spectrum for channel
+        raw.copy().drop_channels('TH6').compute_psd(fmax=2000).plot(axes=axes, show=False)
+    else:
+        raw.compute_psd(fmax=2000).plot(axes=axes, show=False)
     axes.set_ylim([-80, 50])
     plt.savefig(figure_path + f'psd_{cond_name}.png')
 
@@ -53,7 +68,10 @@ def bad_channel_check(subject, condition, srmr_nr, sampling_rate, channel_type):
     # Squared log means of each channel
     ###########################################################################################
     events, event_ids = mne.events_from_annotations(raw)
-    event_id_dict = {key: value for key, value in event_ids.items() if key == trigger_name}
+    if srmr_nr == 1:
+        event_id_dict = {key: value for key, value in event_ids.items() if key == trigger_name}
+    elif srmr_nr == 2:   # Because we have e.g. med1, med2 and med12
+        event_id_dict = {key: value for key, value in event_ids.items() if key in trigger_name}
     epochs = mne.Epochs(raw, events, event_id=event_id_dict, tmin=iv_epoch[0], tmax=iv_epoch[1],
                         baseline=tuple(iv_baseline), preload=True)
     fig, axes = plt.subplots(figsize=(12, 8))
