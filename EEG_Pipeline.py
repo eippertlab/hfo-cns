@@ -13,8 +13,24 @@ from Archive.run_CCA_brain_good import run_CCA_good
 from EEG.run_CCA_brain import run_CCA
 
 if __name__ == '__main__':
+    srmr_nr = 2  # Set the experiment number
+
+    if srmr_nr == 1:
+        n_subjects = 36  # Number of subjects
+        subjects = np.arange(1, 37)  # 1 through 36 to access subject data
+        # subjects = [1]
+        conditions = [2, 3]  # Conditions of interest
+        sampling_rate = 5000  # Frequency to downsample to from original of 10kHz
+
+    elif srmr_nr == 2:
+        n_subjects = 24  # Number of subjects
+        # Testing with just subject 1 at the moment
+        subjects = np.arange(1, 2)  # (1, 25) # 1 through 24 to access subject data
+        conditions = [2, 3, 4, 5]  # Conditions of interest - tib digits and med digits, also including mixed nerve now
+        sampling_rate = 5000  # Frequency to downsample to from original of 10kHz
+
     ######## 1. Import ############
-    import_d = False  # Prep work
+    import_d = True  # Prep work
 
     ######## 2. Bad Channel Check ###########
     check_channels = False
@@ -25,27 +41,8 @@ if __name__ == '__main__':
     ######## 4. Freq band ##########
     split_bands_flag = False
 
-    ####### 5. Keep Good Trials #######
-    keep_good = False
-
-    ####### 6. Keep Good Trials #######
-    CCA_good_flag = False
-
-    ######## Old. Run CCA ########
+    ######## 5. Run CCA ########
     CCA_flag = False
-
-    ######## Old. Run CSP ########
-    CSP_flag = False
-
-    ######## Old. Run bCSTP #######
-    bCSTP_flag = False
-
-    n_subjects = 36  # Number of subjects
-    subjects = np.arange(1, 37)  # 1 through 36 to access subject data
-    # subjects = [1]
-    srmr_nr = 1  # Experiment Number
-    conditions = [2, 3]  # Conditions of interest
-    sampling_rate = 5000  # Frequency to downsample to from original of 10kHz
 
     ############################################
     # Import Data from BIDS directory
@@ -84,24 +81,6 @@ if __name__ == '__main__':
                 create_frequency_bands(subject, condition, srmr_nr, sampling_rate, channel_type='eeg')
 
     ###################################################
-    # Keep Good
-    ###################################################
-    if keep_good:
-        for subject in subjects:
-            for condition in conditions:
-                for freq_band in ['sigma']:
-                    keep_good_trials(subject, condition, srmr_nr, freq_band, 'eeg')
-
-    ###################################################
-    # Run CCA on Freq Bands - good trials only
-    ###################################################
-    if CCA_good_flag:
-        for subject in subjects:
-            for condition in conditions:
-                for freq_band in ['sigma']:
-                    run_CCA_good(subject, condition, srmr_nr, freq_band, sampling_rate)
-
-    ###################################################
     # Run CCA on Freq Bands - all trials
     ###################################################
     if CCA_flag:
@@ -113,6 +92,36 @@ if __name__ == '__main__':
     ###################################################################################################################
     # GRAVEYARD
     ###################################################################################################################
+    # ####### 6. Keep Good Trials #######
+    # CCA_good_flag = False
+    #
+    # ###################################################
+    # # Run CCA on Freq Bands - good trials only
+    # ###################################################
+    # if CCA_good_flag:
+    #     for subject in subjects:
+    #         for condition in conditions:
+    #             for freq_band in ['sigma']:
+    #                 run_CCA_good(subject, condition, srmr_nr, freq_band, sampling_rate)
+
+
+    # ####### 5. Keep Good Trials #######
+    # keep_good = False
+    ###################################################
+    # Keep Good
+    ###################################################
+    # if keep_good:
+    #     for subject in subjects:
+    #         for condition in conditions:
+    #             for freq_band in ['sigma']:
+    #                 keep_good_trials(subject, condition, srmr_nr, freq_band, 'eeg')
+    #
+
+    # ######## Old. Run CSP ########
+    # CSP_flag = False
+    #
+    # ######## Old. Run bCSTP #######
+    # bCSTP_flag = False
     # ###################################################
     # # Old: Run CSP on Freq Bands
     # ###################################################

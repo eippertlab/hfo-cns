@@ -107,14 +107,14 @@ def get_conditioninfo(condition, srmr_nr):
         if nerve > 0:
             if str_stimulation == '_mixed':
                 stimulation = 1
-                trigger_name = [[str_nerve + 'Mixed']]
+                trigger_name = str_nerve + 'Mixed'
 
             elif str_stimulation == '_digits':
                 stimulation = 2
-                trigger_name = [[str_nerve + '1'], [str_nerve + '2'], [str_nerve + '12']]
+                trigger_name = str_nerve + '1', str_nerve + '2', str_nerve + '12'
 
-            cond_name = [str_nerve + str_stimulation]
-            cond_name2 = [str_cond1 + str_cond2]
+            cond_name = str_nerve + str_stimulation
+            cond_name2 = str_cond1 + str_cond2
 
     cond_info = CondInfo()
     cond_info.nblocks = nblocks

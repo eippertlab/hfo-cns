@@ -23,14 +23,28 @@ from Common_Functions.pchip_interpolation import PCHIP_interpolation
 
 
 def import_data(subject, condition, srmr_nr, sampling_rate, esg_flag):
-    # Set paths
     subject_id = f'sub-{str(subject).zfill(3)}'
-    save_path = "../tmp_data/imported/" + subject_id  # Saving to prepared_py
-    input_path = "/data/p_02068/SRMR1_experiment/bids/" + subject_id + "/eeg/"  # Taking data from the bids folder
-    # cfg_path = "/data/pt_02569/"  # Contains important info about experiment
-    montage_path = '/data/pt_02068/cfg/'
-    montage_name = 'standard-10-5-cap385_added_mastoids.elp'
-    os.makedirs(save_path, exist_ok=True)
+    cond_info = get_conditioninfo(condition, srmr_nr)
+
+    if srmr_nr == 1:
+        save_path = "../tmp_data/imported/" + subject_id
+        input_path = "/data/p_02068/SRMR1_experiment/bids/" + subject_id + "/eeg/"  # Taking data from the bids folder
+        montage_path = '/data/pt_02068/cfg/'
+        montage_name = 'standard-10-5-cap385_added_mastoids.elp'
+        os.makedirs(save_path, exist_ok=True)
+        cond_name = cond_info.cond_name
+        stimulation = condition - 1
+
+    elif srmr_nr == 2:
+        save_path = "../tmp_data_2/imported/" + subject_id
+        input_path = "/data/p_02151/SRMR2_experiment/bids/" + subject_id + "/eeg/"  # Taking data from the bids folder
+        os.makedirs(save_path, exist_ok=True)
+        cond_name = cond_info.cond_name   # med_digits/mixed and tib_digits/mixed
+        cond_name2 = cond_info.cond_name2  # mediansensory/mixed or tibialsensory/mixed
+        stimulation = condition - 1
+    else:
+        print('Error: Experiment 1 or experiment 2 must be specified')
+        exit()
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)
@@ -38,13 +52,6 @@ def import_data(subject, condition, srmr_nr, sampling_rate, esg_flag):
     notch_high = df.loc[df['var_name'] == 'notch_freq_high', 'var_value'].iloc[0]
 
     sampling_rate_og = 10000
-
-    # Process ESG channels and then EEG channels separately
-    # for esg_flag in [True, False]:  # True for esg, false for eeg
-    # Get the condition information based on the condition read in
-    cond_info = get_conditioninfo(condition, srmr_nr)
-    cond_name = cond_info.cond_name
-    stimulation = condition - 1
 
     # Set interpolation window (different for eeg and esg data, both in seconds)
     tstart_esg = -0.007
@@ -54,7 +61,13 @@ def import_data(subject, condition, srmr_nr, sampling_rate, esg_flag):
     tmax_eeg = 0.006
 
     # Get file names that match pattern
-    search = input_path + subject_id + '*' + cond_name + '*.set'
+    if srmr_nr == 1:
+        search = input_path + subject_id + '*' + cond_name + '*.set'
+    elif srmr_nr == 2:
+        search = input_path + subject_id + '*' + cond_name2 + '*.set'
+    else:
+        print('Error: Check experiment number')
+        exit()
     cond_files = glob.glob(search)
     cond_files = sorted(cond_files)  # Arrange in order from lowest to highest value
     nblocks = len(cond_files)
@@ -132,9 +145,18 @@ def import_data(subject, condition, srmr_nr, sampling_rate, esg_flag):
         else:
             mne.concatenate_raws([raw_concat, raw])
 
-    # Read .mat file with QRS events
-    input_path_m = "/data/pt_02718/Rpeaks/" + subject_id + "/"
-    fname_m = f"raw_{sampling_rate}_spinal_{cond_name}"
+    # Read .mat file with QRS events - don't use these anymore since we use SSP but adding for completeness
+    # Would have to rerun prior to doing this to get the correct times for dataset 2
+    if srmr_nr == 1:
+        input_path_m = "/data/pt_02718/Rpeaks/" + subject_id + "/"
+        fname_m = f"raw_{sampling_rate}_spinal_{cond_name}"
+    elif srmr_nr == 2:
+        input_path_m = "/data/pt_02718/Rpeaks_2/" + subject_id + "/"
+        fname_m = f"raw_{sampling_rate}_spinal_{cond_name}"
+    else:
+        print('Error: Experiment 1 or 2 must be specified')
+        exit()
+
     matdata = loadmat(input_path_m + fname_m + '.mat')
     QRSevents_m = matdata['QRSevents'][0]
 
