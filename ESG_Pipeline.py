@@ -29,9 +29,7 @@ if __name__ == '__main__':
 
     elif srmr_nr == 2:
         n_subjects = 24  # Number of subjects
-        # Testing with just subject 1 at the moment
-        # subjects = np.arange(1, 25)   # 1 through 36 to access subject data
-        subjects = np.arange(1, 2)
+        subjects = np.arange(1, 25)
         conditions = [2, 3, 4, 5]  # Conditions of interest - tib digits and med digits, also including mixed nerve now
         sampling_rate = 5000  # Frequency to downsample to from original of 10kHz
 
@@ -46,10 +44,10 @@ if __name__ == '__main__':
     check_channels = False
 
     ######### 4. Bad trial check #############
-    check_trials = False
+    check_trials = True
 
     ######### 5. Split into frequency bands #############
-    split_bands_flag = False
+    split_bands_flag = True
 
     ######### 6. Run CCA on each frequency band ##########
     CCA_flag = True

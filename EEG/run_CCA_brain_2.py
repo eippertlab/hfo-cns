@@ -56,22 +56,21 @@ def run_CCA2(subject, condition, srmr_nr, freq_band, sfreq):
     montage = mne.channels.read_custom_montage(montage_path + montage_name)
     for raw in [raw_dig, raw_mixed]:
         raw.set_montage(montage, on_missing="ignore")
-        idx_by_type = mne.channel_indices_by_type(raw.info, picks=eeg_chans)
-        res = mne.pick_info(raw.info, sel=idx_by_type['eeg'], copy=True, verbose=None)
+        # idx_by_type = mne.channel_indices_by_type(raw.info, picks=eeg_chans)
 
     # now create epochs based on the trigger names
-        # Mixed data
-        events, event_ids = mne.events_from_annotations(raw_mixed)
-        event_id_dict = {key: value for key, value in event_ids.items() if key in trigger_name_mixed}
-        epochs_m = mne.Epochs(raw_mixed, events, event_id=event_id_dict, tmin=iv_epoch[0], tmax=iv_epoch[1] - 1 / 1000,
-                              baseline=tuple(iv_baseline), preload=True)
+    # Mixed data
+    events, event_ids = mne.events_from_annotations(raw_mixed)
+    event_id_dict = {key: value for key, value in event_ids.items() if key in trigger_name_mixed}
+    epochs_m = mne.Epochs(raw_mixed, events, event_id=event_id_dict, tmin=iv_epoch[0], tmax=iv_epoch[1] - 1 / 1000,
+                          baseline=tuple(iv_baseline), preload=True)
 
-        # Digits data
-        events_d, event_ids_d = mne.events_from_annotations(raw_dig)
-        event_id_dict_d = {key: value for key, value in event_ids_d.items() if key in trigger_name_dig}
-        epochs_d = mne.Epochs(raw_dig, events_d, event_id=event_id_dict_d, tmin=iv_epoch[0],
-                              tmax=iv_epoch[1] - 1 / 1000,
-                              baseline=tuple(iv_baseline), preload=True)
+    # Digits data
+    events_d, event_ids_d = mne.events_from_annotations(raw_dig)
+    event_id_dict_d = {key: value for key, value in event_ids_d.items() if key in trigger_name_dig}
+    epochs_d = mne.Epochs(raw_dig, events_d, event_id=event_id_dict_d, tmin=iv_epoch[0],
+                          tmax=iv_epoch[1] - 1 / 1000,
+                          baseline=tuple(iv_baseline), preload=True)
 
     if 'med1' in trigger_name_dig:  # Using list of triggers to check if this is tibial/median
         epochs_d = epochs_d.pick_channels(eeg_chans, ordered=True)
@@ -93,12 +92,16 @@ def run_CCA2(subject, condition, srmr_nr, freq_band, sfreq):
         print('Invalid condition name attempted for use')
         exit()
 
-    # Drop bad channels  -  if a channel is bad in mixed recording, drop it from mixed & digits
-    if raw_mixed.info['bads']:
-        for channel in raw_mixed.info['bads']:
+    # Drop bad channels  -  if a channel is bad in either recording, drop it from mixed & digits
+    if raw_mixed.info['bads'] or raw_dig.info['bads']:
+        for channel in raw_mixed.info['bads'] or raw_dig.info['bads']:
             if channel in eeg_chans:
                 epochs_d.drop_channels(ch_names=[channel])
                 epochs_m.drop_channels(ch_names=[channel])
+
+    # We plot for the mixed data so we want this below - need info object after channels dropped
+    idx_by_type = mne.channel_indices_by_type(epochs_m.info, picks=eeg_chans)
+    res = mne.pick_info(epochs_m.info, sel=idx_by_type['eeg'], copy=True, verbose=None)
 
     # Crop the epochs
     window = epochs_m.time_as_index(window_times)
@@ -250,32 +253,6 @@ def run_CCA2(subject, condition, srmr_nr, freq_band, sfreq):
         plt.tight_layout()
         plt.savefig(figure_path_time + f'{freq_band}_{cond_name_mixed}.png')
         plt.close(fig)
-
-        # ######################## Plot image for cca_epochs ############################
-        # # cca_epochs and cca_epochs_d both already baseline corrected before this point
-        # figure_path_st = f'/data/p_02718/Images/CCA_eeg/ComponentSinglePlots/{subject_id}/'
-        # os.makedirs(figure_path_st, exist_ok=True)
-        #
-        # fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(nrows=2, ncols=2)
-        # axes = [ax1, ax2, ax3, ax4]
-        # cropped = cca_epochs.copy().crop(tmin=0.01, tmax=0.07)
-        # cmap = mpl.colors.ListedColormap(["blue", "green", "red"])
-        #
-        # for icomp in np.arange(0, 4):
-        #     cropped.plot_image(picks=f'Cor{icomp + 1}', combine=None, cmap='jet', evoked=False, show=False,
-        #                        axes=axes[icomp], title=f'Component {icomp + 1}', colorbar=False, group_by=None,
-        #                        vmin=-1.6, vmax=1.6, units=dict(eeg='V'), scalings=dict(eeg=1))
-        #
-        # plt.tight_layout()
-        # fig.subplots_adjust(right=0.85)
-        # ax5 = fig.add_axes([0.9, 0.1, 0.01, 0.8])
-        # norm = mpl.colors.Normalize(vmin=-1.6, vmax=1.6)
-        # # mpl.colorbar.ColorbarBase(ax5, cmap=cmap, norm=norm, spacing='proportional')
-        # mpl.colorbar.ColorbarBase(ax5, cmap='jet', norm=norm)
-        # # has to be as a list - starts with x, y coordinates for start and then width and height in % of figure width
-        # plt.savefig(figure_path_st + f'{freq_band}_{cond_name}.png')
-        # plt.close(fig)
-        # # plt.show()
 
         ############################ Combine to one Image ##########################
         figure_path = f'/data/p_02718/Images_2/CCA_eeg/ComponentPlots/{subject_id}/'

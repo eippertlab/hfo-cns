@@ -23,7 +23,6 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 
 if __name__ == '__main__':
-    # use_visible = False  # Not yet implemented
     use_birgitstiming = False  # If True, use estimates Birgit made
 
     subjects = np.arange(1, 37)
