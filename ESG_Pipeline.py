@@ -44,10 +44,10 @@ if __name__ == '__main__':
     check_channels = False
 
     ######### 4. Bad trial check #############
-    check_trials = True
+    check_trials = False
 
     ######### 5. Split into frequency bands #############
-    split_bands_flag = True
+    split_bands_flag = False
 
     ######### 6. Run CCA on each frequency band ##########
     CCA_flag = True

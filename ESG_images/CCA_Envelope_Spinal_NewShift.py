@@ -20,15 +20,20 @@ if __name__ == '__main__':
     use_updated = True  # If true use components selected with criteria in mind
     use_only_good = True  # If true use only the subjects marked as visible
     # use_only_good must be true if use_updated is true
+    srmr_nr = 2
 
     if use_updated is True and use_only_good is not True:
         print('Error: use_only_good must be true if use_updated is true')
         exit()
 
-    subjects = np.arange(1, 37)
-    conditions = [2, 3]
-    freq_bands = ['sigma']
-    srmr_nr = 1
+    if srmr_nr == 1:
+        subjects = np.arange(1, 37)
+        conditions = [2, 3]
+        freq_bands = ['sigma']
+    elif srmr_nr == 2:
+        subjects = np.arange(1, 25)
+        conditions = [3, 5]
+        freq_bands = ['sigma']
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)
@@ -37,21 +42,37 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epo_cca_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
-    xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/Spinal_Timing.xlsx')
-    df_timing = pd.read_excel(xls_timing, 'Timing')
-    df_timing.set_index('Subject', inplace=True)
-
     if use_updated:
-        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_Updated.xlsx')
-        df = pd.read_excel(xls, 'CCA')
-        df.set_index('Subject', inplace=True)
+        if srmr_nr == 1:
+            xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_Updated.xlsx')
+            df = pd.read_excel(xls, 'CCA')
+            df.set_index('Subject', inplace=True)
 
-        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility_Updated.xlsx')
-        df_vis = pd.read_excel(xls, 'CCA_Spinal')
-        df_vis.set_index('Subject', inplace=True)
+            xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility_Updated.xlsx')
+            df_vis = pd.read_excel(xls, 'CCA_Spinal')
+            df_vis.set_index('Subject', inplace=True)
 
-        figure_path = '/data/p_02718/Images/CCA/Envelope_Updated_Shifted/'
-        os.makedirs(figure_path, exist_ok=True)
+            xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/Spinal_Timing.xlsx')
+            df_timing = pd.read_excel(xls_timing, 'Timing')
+            df_timing.set_index('Subject', inplace=True)
+
+            figure_path = '/data/p_02718/Images/CCA/Envelope_Updated_Shifted/'
+            os.makedirs(figure_path, exist_ok=True)
+        elif srmr_nr == 2:
+            xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Components_Updated.xlsx')
+            df = pd.read_excel(xls, 'CCA')
+            df.set_index('Subject', inplace=True)
+
+            xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Visibility_Updated.xlsx')
+            df_vis = pd.read_excel(xls, 'CCA_Spinal')
+            df_vis.set_index('Subject', inplace=True)
+
+            xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/Spinal_Timing.xlsx')
+            df_timing = pd.read_excel(xls_timing, 'Timing')
+            df_timing.set_index('Subject', inplace=True)
+
+            figure_path = '/data/p_02718/Images_2/CCA/Envelope_Updated_Shifted/'
+            os.makedirs(figure_path, exist_ok=True)
     else:
         xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components.xlsx')
         df = pd.read_excel(xls, 'CCA')
@@ -61,9 +82,15 @@ if __name__ == '__main__':
         df_vis = pd.read_excel(xls, 'CCA_Spinal')
         df_vis.set_index('Subject', inplace=True)
 
+        xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/Spinal_Timing.xlsx')
+        df_timing = pd.read_excel(xls_timing, 'Timing')
+        df_timing.set_index('Subject', inplace=True)
+
         figure_path = '/data/p_02718/Images/CCA/Envelope_Shifted/'
         os.makedirs(figure_path, exist_ok=True)
     brainstem_chans, cervical_chans, lumbar_chans, ref_chan = get_esg_channels()
+    median_names = ['median', 'med_mixed']
+    tibial_names = ['tibial', 'tib_mixed']
 
     for freq_band in freq_bands:
         for condition in conditions:
@@ -79,11 +106,15 @@ if __name__ == '__main__':
                 # Time  Course Information
                 ##########################################################
                 # Align subject with average latency across all subjects
-                median_lat, tibial_lat = get_time_to_align('esg', ['median', 'tibial'], np.arange(1, 37))
-                if cond_name == 'median':
+                if srmr_nr == 1:
+                    condition_names = ['median', 'tibial']
+                elif srmr_nr == 2:
+                    condition_names = ['med_mixed', 'tib_mixed']
+                median_lat, tibial_lat = get_time_to_align('esg', srmr_nr, condition_names, subjects)
+                if cond_name in median_names:
                     sep_latency = round(df_timing.loc[subject, f"N13"], 3)
                     expected = median_lat
-                elif cond_name == 'tibial':
+                elif cond_name in tibial_names:
                     sep_latency = round(df_timing.loc[subject, f"N22"], 3)
                     expected = tibial_lat
                 shift = expected - sep_latency
@@ -94,7 +125,10 @@ if __name__ == '__main__':
                     if visible == 'T':
                         # Select the right files
                         fname = f"{freq_band}_{cond_name}.fif"
-                        input_path = "/data/pt_02718/tmp_data/cca/" + subject_id + "/"
+                        if srmr_nr == 1:
+                            input_path = "/data/pt_02718/tmp_data/cca/" + subject_id + "/"
+                        elif srmr_nr == 2:
+                            input_path = "/data/pt_02718/tmp_data_2/cca/" + subject_id + "/"
 
                         epochs = mne.read_epochs(input_path + fname, preload=True)
 
@@ -106,13 +140,12 @@ if __name__ == '__main__':
                         if inv == 'T':
                             epochs.apply_function(invert, picks=channel)
                         evoked = epochs.copy().average()
-                        if cond_name == 'median':
+                        if cond_name in median_names:
                             sep_latency = df_timing.loc[subject, f"N13"]
                             expected = 13 / 1000
-                        elif cond_name == 'tibial':
+                        elif cond_name in tibial_names:
                             sep_latency = df_timing.loc[subject, f"N22"]
                             expected = 22 / 1000
-                        # shift = expected - sep_latency
                         evoked.shift_time(shift, relative=True)
                         evoked.crop(tmin=-0.06, tmax=0.07)
                         envelope = evoked.apply_hilbert(envelope=True)
@@ -122,7 +155,10 @@ if __name__ == '__main__':
                 else:
                     # Select the right files
                     fname = f"{freq_band}_{cond_name}.fif"
-                    input_path = "/data/pt_02718/tmp_data/cca/" + subject_id + "/"
+                    if srmr_nr == 1:
+                        input_path = "/data/pt_02718/tmp_data/cca/" + subject_id + "/"
+                    elif srmr_nr == 2:
+                        input_path = "/data/pt_02718/tmp_data_2/cca/" + subject_id + "/"
 
                     epochs = mne.read_epochs(input_path + fname, preload=True)
 
@@ -134,20 +170,19 @@ if __name__ == '__main__':
                     if inv == 'T':
                         epochs.apply_function(invert, picks=channel)
                     evoked = epochs.copy().average()
-                    if cond_name == 'median':
+                    if cond_name in median_names:
                         sep_latency = df_timing.loc[subject, f"N13"]
                         expected = 13 / 1000
-                    elif cond_name == 'tibial':
+                    elif cond_name in tibial_names:
                         sep_latency = df_timing.loc[subject, f"N22"]
                         expected = 22 / 1000
-                    # shift = expected - sep_latency
                     evoked.shift_time(shift, relative=True)
                     evoked.crop(tmin=-0.06, tmax=0.07)
                     envelope = evoked.apply_hilbert(envelope=True)
                     data = envelope.get_data()
                     evoked_list.append(data)
 
-            # Get grand average across chosen epochs, and spatial patterns
+            # Get grand average across chosen epochs
             grand_average = np.mean(evoked_list, axis=0)
 
             # Plot Time Course
@@ -156,7 +191,7 @@ if __name__ == '__main__':
             ax.set_xlabel('Time (s)')
             ax.set_title(f'Grand Average Envelope, n={len(evoked_list)}')
             ax.set_ylabel('Amplitude')
-            if cond_name == 'median':
+            if cond_name in median_names:
                 ax.set_xlim([0.0, 0.05])
             else:
                 ax.set_xlim([0.0, 0.07])

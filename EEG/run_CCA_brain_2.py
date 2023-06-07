@@ -92,12 +92,17 @@ def run_CCA2(subject, condition, srmr_nr, freq_band, sfreq):
         print('Invalid condition name attempted for use')
         exit()
 
-    # Drop bad channels  -  if a channel is bad in either recording, drop it from mixed & digits
-    if raw_mixed.info['bads'] or raw_dig.info['bads']:
-        for channel in raw_mixed.info['bads'] or raw_dig.info['bads']:
-            if channel in eeg_chans:
-                epochs_d.drop_channels(ch_names=[channel])
-                epochs_m.drop_channels(ch_names=[channel])
+    # Drop bad channels  -  if a channel is bad in mixed, drop it from mixed & digits
+    # if raw_mixed.info['bads'] or raw_dig.info['bads']:
+    #     for channel in raw_mixed.info['bads'] + raw_dig.info['bads']:
+    #         if channel in eeg_chans:
+    #             epochs_d.drop_channels(ch_names=[channel])
+    #             epochs_m.drop_channels(ch_names=[channel])
+    # if raw_mixed.info['bads']:
+    #     for channel in raw_mixed.info['bads']:
+    #         if channel in esg_chans:
+    #             # epochs_d.drop_channels(ch_names=[channel])
+    #             epochs_m.drop_channels(ch_names=[channel])
 
     # We plot for the mixed data so we want this below - need info object after channels dropped
     idx_by_type = mne.channel_indices_by_type(epochs_m.info, picks=eeg_chans)

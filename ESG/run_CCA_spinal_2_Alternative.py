@@ -39,10 +39,10 @@ def run_CCA2(subject, condition, srmr_nr, freq_band):
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
     # Select the right files based on the data_string
-    input_path = "/data/pt_02718/tmp_data_2/freq_banded_esg/" + subject_id + "/"
+    input_path = "/data/pt_02718/tmp_data_2_otp/freq_banded_esg/" + subject_id + "/"
     fname_dig = f"{freq_band}_{cond_name_dig}.fif"
     fname_mixed = f"{freq_band}_{cond_name_mixed}.fif"
-    save_path = "/data/pt_02718/tmp_data_2/cca/" + subject_id + "/"
+    save_path = "/data/pt_02718/tmp_data_2_otp/cca/" + subject_id + "/"
     os.makedirs(save_path, exist_ok=True)
 
     esg_chans = ['S35', 'S24', 'S36', 'Iz', 'S17', 'S15', 'S32', 'S22',
@@ -190,7 +190,6 @@ def run_CCA2(subject, condition, srmr_nr, freq_band):
     # Create and save
     cca_epochs_d = mne.EpochsArray(data_d, info, events_d, tmin, event_id_d)
     cca_epochs_d = cca_epochs_d.apply_baseline(baseline=tuple(iv_baseline))
-    # cca_epochs['med1'].average(picks='Cor1').plot()  # Just testing the data to see if it's prettier
     cca_epochs_d.save(os.path.join(save_path, fname_dig), fmt='double', overwrite=True)
 
     ################################ Save Spatial Pattern #################################
@@ -199,7 +198,7 @@ def run_CCA2(subject, condition, srmr_nr, freq_band):
     afile.close()
 
     ################################ Plotting Graphs #######################################
-    figure_path_spatial = f'/data/p_02718/Images_2/CCA/ComponentIsopotentialPlots/{subject_id}/'
+    figure_path_spatial = f'/data/p_02718/Images_2_OTP/CCA/ComponentIsopotentialPlots/{subject_id}/'
     os.makedirs(figure_path_spatial, exist_ok=True)
 
     if plot_graphs:
@@ -230,7 +229,7 @@ def run_CCA2(subject, condition, srmr_nr, freq_band):
 
         ############ Time Course of First 4 components ###############
         # cca_epochs and cca_epochs_d both already baseline corrected before this point
-        figure_path_time = f'/data/p_02718/Images_2/CCA/ComponentTimePlots/{subject_id}/'
+        figure_path_time = f'/data/p_02718/Images_2_OTP/CCA/ComponentTimePlots/{subject_id}/'
         os.makedirs(figure_path_time, exist_ok=True)
 
         fig = plt.figure()
@@ -243,7 +242,6 @@ def run_CCA2(subject, condition, srmr_nr, freq_band):
             to_plot = np.mean(data[:, 0, :], axis=0)
             plt.plot(cca_epochs.times, to_plot)
             plt.xlim([-0.025, 0.065])
-            # plt.xlim([0.0, 0.05])
             if cond_name_mixed == 'med_mixed':
                 line_label = f"{0.013}s"
                 plt.axvline(x=0.013, color='r', linewidth='0.6', label=line_label)
@@ -257,48 +255,18 @@ def run_CCA2(subject, condition, srmr_nr, freq_band):
             plt.savefig(figure_path_time + f'{freq_band}_{cond_name_mixed}.png')
         plt.close(fig)
 
-        # ######################## Plot image for cca_epochs ############################
-        # # cca_epochs and cca_epochs_d both already baseline corrected before this point
-        # figure_path_st = f'/data/p_02718/Images/CCA/ComponentSinglePlots/{subject_id}/'
-        # os.makedirs(figure_path_st, exist_ok=True)
-        #
-        # fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(nrows=2, ncols=2)
-        # axes = [ax1, ax2, ax3, ax4]
-        # cropped = cca_epochs.copy().crop(tmin=-0.025, tmax=0.065)
-        # cmap = mpl.colors.ListedColormap(["blue", "green", "red"])
-        #
-        # for icomp in np.arange(0, 4):
-        #     cropped.plot_image(picks=f'Cor{icomp + 1}', combine=None, cmap='jet', evoked=False, show=False,
-        #                        axes=axes[icomp], title=f'Component {icomp + 1}', colorbar=False, group_by=None,
-        #                        vmin=-1.6, vmax=1.6, units=dict(eeg='V'), scalings=dict(eeg=1))
-        #
-        # plt.tight_layout()
-        # fig.subplots_adjust(right=0.85)
-        # ax5 = fig.add_axes([0.9, 0.1, 0.01, 0.8])
-        # norm = mpl.colors.Normalize(vmin=-1.6, vmax=1.6)
-        # # mpl.colorbar.ColorbarBase(ax5, cmap=cmap, norm=norm, spacing='proportional')
-        # mpl.colorbar.ColorbarBase(ax5, cmap='jet', norm=norm)
-        # # has to be as a list - starts with x, y coordinates for start and then width and height in % of figure width
-        # plt.savefig(figure_path_st + f'{freq_band}_{cond_name}.png')
-        # plt.close(fig)
-        # # plt.show()
-
         ############################ Combine to one Image ##########################
-        figure_path = f'/data/p_02718/Images_2/CCA/ComponentPlots/{subject_id}/'
+        figure_path = f'/data/p_02718/Images_2_OTP/CCA/ComponentPlots/{subject_id}/'
         os.makedirs(figure_path, exist_ok=True)
 
         spatial = plt.imread(figure_path_spatial + f'{freq_band}_{cond_name_mixed}.png')
         time = plt.imread(figure_path_time + f'{freq_band}_{cond_name_mixed}.png')
-        # single_trial = plt.imread(figure_path_st + f'{freq_band}_{cond_name}.png')
 
         fig, axes = plt.subplots(1, 2, figsize=(10, 6))
         axes[0].imshow(time)
         axes[0].axis('off')
         axes[1].imshow(spatial)
         axes[1].axis('off')
-        # axes[1, 0].imshow(single_trial)
-        # axes[1, 0].axis('off')
-        # axes[1, 1].axis('off')
 
         plt.subplots_adjust(top=0.95, wspace=0, hspace=0)
 

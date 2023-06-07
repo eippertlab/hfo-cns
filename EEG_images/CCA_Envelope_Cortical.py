@@ -21,10 +21,17 @@ if __name__ == '__main__':
         print('Error: If use_updated is True, use_visible must be True')
         exit()
 
-    subjects = np.arange(1, 37)
-    conditions = [2, 3]
-    freq_bands = ['sigma']
-    srmr_nr = 1
+    srmr_nr = 2
+
+    if srmr_nr == 1:
+        subjects = np.arange(1, 37)
+        conditions = [2, 3]
+        freq_bands = ['sigma']
+    elif srmr_nr == 2:
+        subjects = np.arange(1, 25)
+        conditions = [3, 5]
+        freq_bands = ['sigma']
+
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)
@@ -34,16 +41,28 @@ if __name__ == '__main__':
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
     if use_updated:
-        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG_Updated.xlsx')
-        df = pd.read_excel(xls, 'CCA')
-        df.set_index('Subject', inplace=True)
+        if srmr_nr == 1:
+            xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG_Updated.xlsx')
+            df = pd.read_excel(xls, 'CCA')
+            df.set_index('Subject', inplace=True)
 
-        figure_path = '/data/p_02718/Images/CCA_eeg/Envelope_Updated/'
-        os.makedirs(figure_path, exist_ok=True)
+            figure_path = '/data/p_02718/Images/CCA_eeg/Envelope_Updated/'
+            os.makedirs(figure_path, exist_ok=True)
 
-        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility_Updated.xlsx')
-        df_vis = pd.read_excel(xls, 'CCA_Brain')
-        df_vis.set_index('Subject', inplace=True)
+            xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility_Updated.xlsx')
+            df_vis = pd.read_excel(xls, 'CCA_Brain')
+            df_vis.set_index('Subject', inplace=True)
+        elif srmr_nr == 2:
+            xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Components_EEG_Updated.xlsx')
+            df = pd.read_excel(xls, 'CCA')
+            df.set_index('Subject', inplace=True)
+
+            figure_path = '/data/p_02718/Images_2/CCA_eeg/Envelope_Updated/'
+            os.makedirs(figure_path, exist_ok=True)
+
+            xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Visibility_Updated.xlsx')
+            df_vis = pd.read_excel(xls, 'CCA_Brain')
+            df_vis.set_index('Subject', inplace=True)
 
     else:
         xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG.xlsx')
@@ -72,7 +91,10 @@ if __name__ == '__main__':
                 ##########################################################
                 # Select the right files
                 fname = f"{freq_band}_{cond_name}.fif"
-                input_path = "/data/pt_02718/tmp_data/cca_eeg/" + subject_id + "/"
+                if srmr_nr == 1:
+                    input_path = "/data/pt_02718/tmp_data/cca_eeg/" + subject_id + "/"
+                elif srmr_nr == 2:
+                    input_path = "/data/pt_02718/tmp_data_2/cca_eeg/" + subject_id + "/"
 
                 epochs = mne.read_epochs(input_path + fname, preload=True)
 
