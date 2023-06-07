@@ -12,7 +12,7 @@ import pandas as pd
 import pickle
 
 
-def run_CCA(subject, condition, srmr_nr, freq_band):
+def run_CCA(subject, condition, srmr_nr, freq_band, both_patches):
     plot_graphs = True
 
     # Set variables
@@ -31,7 +31,11 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
 
     # Select the right files based on the data_string
     input_path = "/data/pt_02718/tmp_data_otp/freq_banded_esg/" + subject_id + "/"
-    fname = f"{freq_band}_{cond_name}.fif"
+    if both_patches:
+        fname = f"{freq_band}_{cond_name}.fif"
+    else:
+        fname = f"{freq_band}_{cond_name}_separatepatch.fif"
+
     save_path = "/data/pt_02718/tmp_data_otp/cca/" + subject_id + "/"
     os.makedirs(save_path, exist_ok=True)
 
@@ -152,12 +156,18 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
     cca_epochs.save(os.path.join(save_path, fname), fmt='double', overwrite=True)
 
     ################################ Save Spatial Pattern #################################
-    afile = open(save_path + f'A_st_{freq_band}_{cond_name}.pkl', 'wb')
+    if both_patches:
+        afile = open(save_path + f'A_st_{freq_band}_{cond_name}.pkl', 'wb')
+    else:
+        afile = open(save_path + f'A_st_{freq_band}_{cond_name}_separatepatch.pkl', 'wb')
     pickle.dump(A_st, afile)
     afile.close()
 
     ################################ Plotting Graphs #######################################
-    figure_path_spatial = f'/data/p_02718/Images_OTP/CCA/ComponentIsopotentialPlots/{subject_id}/'
+    if both_patches:
+        figure_path_spatial = f'/data/p_02718/Images_OTP/CCA/ComponentIsopotentialPlots/{subject_id}/'
+    else:
+        figure_path_spatial = f'/data/p_02718/Images_OTP_SeparatePatch/CCA/ComponentIsopotentialPlots/{subject_id}/'
     os.makedirs(figure_path_spatial, exist_ok=True)
 
     if plot_graphs:
@@ -188,7 +198,11 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
 
         ############ Time Course of First 4 components ###############
         # cca_epochs and cca_epochs_d both already baseline corrected before this point
-        figure_path_time = f'/data/p_02718/Images_OTP/CCA/ComponentTimePlots/{subject_id}/'
+        if both_patches:
+            figure_path_time = f'/data/p_02718/Images_OTP/CCA/ComponentTimePlots/{subject_id}/'
+        else:
+            figure_path_time = f'/data/p_02718/Images_OTP_SeparatePatch/CCA/ComponentTimePlots/{subject_id}/'
+
         os.makedirs(figure_path_time, exist_ok=True)
 
         fig = plt.figure()
@@ -212,7 +226,11 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
         plt.close(fig)
 
         ############################ Combine to one Image ##########################
-        figure_path = f'/data/p_02718/Images_OTP/CCA/ComponentPlots/{subject_id}/'
+        if both_patches:
+            figure_path = f'/data/p_02718/Images_OTP/CCA/ComponentPlots/{subject_id}/'
+        else:
+            figure_path = f'/data/p_02718/Images_OTP_SeparatePatch/CCA/ComponentPlots/{subject_id}/'
+
         os.makedirs(figure_path, exist_ok=True)
 
         spatial = plt.imread(figure_path_spatial + f'{freq_band}_{cond_name}.png')

@@ -7,7 +7,7 @@ import pandas as pd
 from Common_Functions.get_conditioninfo import *
 
 
-def create_frequency_bands(subject, condition, srmr_nr, sampling_rate, channel_type):
+def create_frequency_bands(subject, condition, srmr_nr, sampling_rate, channel_type, both_patches):
     subject_id = f'sub-{str(subject).zfill(3)}'
 
     # get condition info
@@ -23,7 +23,10 @@ def create_frequency_bands(subject, condition, srmr_nr, sampling_rate, channel_t
             load_path = "/data/pt_02718/tmp_data_otp/ssp_cleaned/" + subject_id + "/"
             save_path = "/data/pt_02718/tmp_data_otp/freq_banded_esg/" + subject_id + "/"
             os.makedirs(save_path, exist_ok=True)
-            fname = f'ssp6_cleaned_{cond_name}.fif'
+            if both_patches:
+                fname = f'ssp6_cleaned_{cond_name}.fif'
+            else:
+                fname = f'ssp6_cleaned_{cond_name}_separatepatch.fif'
         elif srmr_nr == 2:
             load_path = "/data/pt_02718/tmp_data_2_otp/ssp_cleaned/" + subject_id + "/"
             save_path = "/data/pt_02718/tmp_data_2_otp/freq_banded_esg/" + subject_id + "/"
@@ -66,4 +69,8 @@ def create_frequency_bands(subject, condition, srmr_nr, sampling_rate, channel_t
     for band_name in band_dict.keys():
         raw.filter(l_freq=band_dict[band_name][0], h_freq=band_dict[band_name][1], n_jobs=len(raw.ch_names), method='iir',
                    iir_params={'order': 5, 'ftype': 'butter'}, phase='zero')
-        raw.save(f"{save_path}{band_name}_{cond_name}.fif", fmt='double', overwrite=True)
+        if channel_type == 'esg' and both_patches is False:
+            raw.save(f"{save_path}{band_name}_{cond_name}_separatepatch.fif", fmt='double', overwrite=True)
+        else:
+            raw.save(f"{save_path}{band_name}_{cond_name}.fif", fmt='double', overwrite=True)
+

@@ -2,11 +2,11 @@
 
 import os
 import mne
-import pandas as pd
+from Common_Functions.get_esg_channels import get_esg_channels
 from Common_Functions.get_conditioninfo import *
 
 
-def apply_OTP(subject, condition, srmr_nr, sampling_rate):
+def apply_OTP(subject, condition, srmr_nr, sampling_rate, both_patches):
     # set variables
     subject_id = f'sub-{str(subject).zfill(3)}'
     if srmr_nr == 1:
@@ -26,6 +26,7 @@ def apply_OTP(subject, condition, srmr_nr, sampling_rate):
     trigger_name = cond_info.trigger_name
     nerve = cond_info.nerve
     nblocks = cond_info.nblocks
+    brainstem_chans, cervical_chans, lumbar_chans, ref_chan = get_esg_channels()
 
     ###########################################################################################
     # Load
@@ -38,10 +39,20 @@ def apply_OTP(subject, condition, srmr_nr, sampling_rate):
     ##########################################################################################
     # OTP
     ##########################################################################################
-    clean_raw = mne.preprocessing.oversampled_temporal_projection(raw)
+    if both_patches:
+        clean_raw = mne.preprocessing.oversampled_temporal_projection(raw)
+    else:
+        if cond_name in ['median', 'med_mixed']:
+            clean_raw = mne.preprocessing.oversampled_temporal_projection(raw, picks=cervical_chans)
+        elif cond_name in ['tibial', 'tib_mixed']:
+            clean_raw = mne.preprocessing.oversampled_temporal_projection(raw, picks=lumbar_chans)
 
     ##############################################################################################
     # Save
     ##############################################################################################
     # Save the SSP cleaned data for future comparison
-    clean_raw.save(f"{save_path}otp_cleaned_{cond_name}.fif", fmt='double', overwrite=True)
+    if both_patches:
+        clean_raw.save(f"{save_path}otp_cleaned_{cond_name}.fif", fmt='double', overwrite=True)
+    else:
+        clean_raw.save(f"{save_path}otp_cleaned_{cond_name}_separatepatch.fif", fmt='double', overwrite=True)
+

@@ -8,7 +8,7 @@ import pandas as pd
 from Common_Functions.get_conditioninfo import *
 
 
-def apply_SSP(subject, condition, srmr_nr, sampling_rate, n_p):
+def apply_SSP(subject, condition, srmr_nr, sampling_rate, n_p, both_patches):
     # set variables
     subject_id = f'sub-{str(subject).zfill(3)}'
     if srmr_nr == 1:
@@ -33,7 +33,10 @@ def apply_SSP(subject, condition, srmr_nr, sampling_rate, n_p):
     # Load
     ###########################################################################################
     # load imported ESG data
-    fname = f"otp_cleaned_{cond_name}.fif"
+    if both_patches:
+        fname = f"otp_cleaned_{cond_name}.fif"
+    else:
+        fname = f"otp_cleaned_{cond_name}_separatepatch.fif"
 
     raw = mne.io.read_raw_fif(load_path + fname, preload=True)
 
@@ -51,4 +54,8 @@ def apply_SSP(subject, condition, srmr_nr, sampling_rate, n_p):
     # Save
     ##############################################################################################
     # Save the SSP cleaned data for future comparison
-    clean_raw.save(f"{save_path}ssp{n_p}_cleaned_{cond_name}.fif", fmt='double', overwrite=True)
+    if both_patches:
+        clean_raw.save(f"{save_path}ssp{n_p}_cleaned_{cond_name}.fif", fmt='double', overwrite=True)
+    else:
+        clean_raw.save(f"{save_path}ssp{n_p}_cleaned_{cond_name}_separatepatch.fif", fmt='double', overwrite=True)
+

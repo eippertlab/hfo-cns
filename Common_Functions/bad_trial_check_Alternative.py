@@ -9,7 +9,7 @@ from mne import Annotations
 from Common_Functions.get_channels import get_channels
 
 
-def bad_trial_check(subject, condition, srmr_nr, sampling_rate, channel_type):
+def bad_trial_check(subject, condition, srmr_nr, sampling_rate, channel_type, both_patches):
     subject_id = f'sub-{str(subject).zfill(3)}'
     # get condition info
     cond_info = get_conditioninfo(condition, srmr_nr)
@@ -19,7 +19,10 @@ def bad_trial_check(subject, condition, srmr_nr, sampling_rate, channel_type):
     if channel_type == 'esg':
         if srmr_nr == 1:
             input_path = "/data/pt_02718/tmp_data_otp/ssp_cleaned/" + subject_id + "/"
-            fname = f'ssp6_cleaned_{cond_name}.fif'
+            if both_patches:
+                fname = f'ssp6_cleaned_{cond_name}.fif'
+            else:
+                fname = f'ssp6_cleaned_{cond_name}_separatepatch.fif'
         else:
             input_path = "/data/pt_02718/tmp_data_2_otp/ssp_cleaned/" + subject_id + "/"
             fname = f'ssp6_cleaned_{cond_name}.fif'

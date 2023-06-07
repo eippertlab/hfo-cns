@@ -16,9 +16,10 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
     srmr_nr = 1
-    subjects = [6]  # [15, 18, 25, 26]
+    subjects = [6, 15, 18, 25, 26]
     conditions = [2, 3]
     freq_bands = ['sigma']
+    both_patches = False
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)
@@ -59,6 +60,11 @@ if __name__ == '__main__':
 
                 # Select the right files
                 fname = f"{freq_band}_{cond_name}.fif"
+                if both_patches:
+                    fname_otp = f"{freq_band}_{cond_name}.fif"
+                else:
+                    fname_otp = f"{freq_band}_{cond_name}_separatepatch.fif"
+
                 input_path_raw = "/data/pt_02718/tmp_data/freq_banded_esg/" + subject_id + "/"
                 input_path_otp = "/data/pt_02718/tmp_data_otp/freq_banded_esg/" + subject_id + "/"
 
@@ -66,9 +72,10 @@ if __name__ == '__main__':
                 for input_path in [input_path_raw, input_path_otp]:
                     if input_path == input_path_raw:
                         lab = 'Original'
+                        raw = mne.io.read_raw_fif(input_path + fname, preload=True)
                     else:
                         lab = 'OTP'
-                    raw = mne.io.read_raw_fif(input_path + fname, preload=True)
+                        raw = mne.io.read_raw_fif(input_path + fname_otp, preload=True)
                     evoked = evoked_from_raw(raw, iv_epoch, iv_baseline, trigger_name, False)
                     cluster_ix = mne.pick_channels(evoked.info["ch_names"], include=cluster_channels)
                     groups = dict(ROI=cluster_ix)
@@ -88,7 +95,10 @@ if __name__ == '__main__':
 
                 plt.legend()
                 plt.tight_layout()
-                plt.savefig(figure_path+f'{subject_id}_{cond_name}.png')
+                if both_patches:
+                    plt.savefig(figure_path+f'{subject_id}_{cond_name}.png')
+                else:
+                    plt.savefig(figure_path+f'{subject_id}_{cond_name}_separatepatch.png')
                 # plt.savefig(figure_path + f'{subject_id}_{cond_name}.pdf',
                 #             bbox_inches='tight', format="pdf")
                 plt.close(fig)

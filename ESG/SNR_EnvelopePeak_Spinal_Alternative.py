@@ -23,13 +23,14 @@ if __name__ == '__main__':
     cca_good = False  # Use CCA performed only on good trials when true, otherwise all trials
     create_plot = True
     save_to_excel = False
+    both_patches = False
 
     freq_band = 'sigma'
     srmr_nr = 1
 
     if srmr_nr == 1:
         # subjects = np.arange(1, 37)  # 1 through 36 to access subject data
-        subjects = [6]  #[15, 18, 25, 26]  # First 2 I currently reject median, second 2 tibial
+        subjects = [6, 15, 18, 25, 26]  # First 2 I currently reject median, second 2 tibial
         conditions = [2, 3]  # Conditions of interest
 
     elif srmr_nr == 2:
@@ -55,7 +56,10 @@ if __name__ == '__main__':
 
     else:
         if srmr_nr == 1:
-            figure_path = '/data/p_02718/Images_OTP/CCA/SNR&EnvelopePeak/'
+            if both_patches:
+                figure_path = '/data/p_02718/Images_OTP/CCA/SNR&EnvelopePeak/'
+            else:
+                figure_path = '/data/p_02718/Images_OTP/CCA/SNR&EnvelopePeak_SeparatePatches/'
             os.makedirs(figure_path, exist_ok=True)
         elif srmr_nr == 2:
             figure_path = '/data/p_02718/Images_2_OTP/CCA/SNR&EnvelopePeak/'
@@ -75,7 +79,10 @@ if __name__ == '__main__':
             ax = ax.flatten()
             subject_id = f'sub-{str(subject).zfill(3)}'
             # Select the right files
-            fname = f"{freq_band}_{cond_name}.fif"
+            if both_patches:
+                fname = f"{freq_band}_{cond_name}.fif"
+            else:
+                fname = f"{freq_band}_{cond_name}_separatepatch.fif"
             if cca_good and srmr_nr == 1:
                 input_path = "/data/pt_02718/tmp_data_otp/cca_goodonly/" + subject_id + "/"
             else:
