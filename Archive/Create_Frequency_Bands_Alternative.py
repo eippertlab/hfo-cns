@@ -36,13 +36,13 @@ def create_frequency_bands(subject, condition, srmr_nr, sampling_rate, channel_t
     elif channel_type == 'eeg':
         # set variables
         if srmr_nr == 1:
-            load_path = "/data/pt_02718/tmp_data_otp/imported/" + subject_id + "/"
+            load_path = "/data/pt_02718/tmp_data_otp/otp_cleaned_eeg/" + subject_id + "/"
+            fname = f'otp_cleaned_{cond_name}.fif'
             save_path = "/data/pt_02718/tmp_data_otp/freq_banded_eeg/" + subject_id + "/"
-            fname = f'noStimart_sr{sampling_rate}_{cond_name}_withqrs_eeg.fif'
         elif srmr_nr == 2:
-            load_path = "/data/pt_02718/tmp_data_2_otp/imported/" + subject_id + "/"
+            load_path = "/data/pt_02718/tmp_data_2_otp/otp_cleaned_eeg/" + subject_id + "/"
+            fname = f'otp_cleaned_{cond_name}.fif'
             save_path = "/data/pt_02718/tmp_data_2_otp/freq_banded_eeg/" + subject_id + "/"
-            fname = f'noStimart_sr{sampling_rate}_{cond_name}_withqrs_eeg.fif'
 
     os.makedirs(save_path, exist_ok=True)
     raw = mne.io.read_raw_fif(load_path + fname, preload=True)

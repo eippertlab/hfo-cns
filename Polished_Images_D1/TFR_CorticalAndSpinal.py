@@ -11,12 +11,13 @@ from Common_Functions.GetTimeToAlign import get_time_to_align
 import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib as mpl
+import matplotlib.patches as patches
 mpl.rcParams['pdf.fonttype'] = 42
 
 
 if __name__ == '__main__':
 
-    shift_spinal = False  # If true, shift the spinal based on time of underlying low freq SEP
+    shift_spinal = True  # If true, shift the spinal based on time of underlying low freq SEP
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)
@@ -36,7 +37,7 @@ if __name__ == '__main__':
     sfreq = 5000
     cond_names = ['median', 'tibial']
 
-    for freq_type in ['upper']:  #, 'full'
+    for freq_type in ['upper']:  # 'full'
         if freq_type == 'full':
             freqs = np.arange(0., 1000., 3.)
             fmin, fmax = freqs[[0, -1]]
@@ -83,7 +84,7 @@ if __name__ == '__main__':
 
                 if shift_spinal:
                     # Apply relative time-shift depending on expected latency for spinal data
-                    median_lat, tibial_lat = get_time_to_align('esg', ['median', 'tibial'], np.arange(1, 37))
+                    median_lat, tibial_lat = get_time_to_align('esg', 1, ['median', 'tibial'], np.arange(1, 37))
                     for evoked in [evoked_correct, evoked_incorrect]:
                         if cond_name == 'median':
                             sep_latency = round(df_timing_spinal.loc[subject, f"N13"], 3)
@@ -166,20 +167,51 @@ if __name__ == '__main__':
                                 f"Target cervical electrodes")
                 ax[2].set_title(f"Grand average spinal TFR\n"
                                 f"Non-target lumbar electrodes")
+
+                # Add a box to show people where to focus
+                rect = patches.Rectangle((0.02-0.003, 400), 0.006, 400, linewidth=1, linestyle='dashed', edgecolor='white',
+                                         facecolor='none')
+                ax[0].add_patch(rect)
+                rect = patches.Rectangle((0.012 - 0.003, 400), 0.006, 400, linewidth=1, linestyle='dashed', edgecolor='white',
+                                         facecolor='none')
+                ax[1].add_patch(rect)
+                rect = patches.Rectangle((0.012 - 0.003, 400), 0.006, 400, linewidth=1, linestyle='dashed', edgecolor='white',
+                                         facecolor='none')
+                ax[2].add_patch(rect)
+
             elif cond_name == 'tibial':
                 ax[1].set_title(f"Grand average spinal TFR\n"
                                 f"Target lumbar electrodes")
                 ax[2].set_title(f"Grand average spinal TFR\n"
                                 f"Non-target cervical electrodes")
+
+                # Add a box to show people where to focus
+                rect = patches.Rectangle((0.041 - 0.003, 400), 0.006, 400, linewidth=1, linestyle='dashed', edgecolor='k',
+                                         facecolor='none')
+                ax[0].add_patch(rect)
+                rect = patches.Rectangle((0.022 - 0.003, 400), 0.006, 400, linewidth=1, linestyle='dashed', edgecolor='k',
+                                         facecolor='none')
+                ax[1].add_patch(rect)
+                rect = patches.Rectangle((0.022 - 0.003, 400), 0.006, 400, linewidth=1, linestyle='dashed', edgecolor='k',
+                                         facecolor='none')
+                ax[2].add_patch(rect)
             if freq_type == 'full':
                 fname = f"{trigger_name}_full_ratio"
             elif freq_type == 'upper':
                 fname = f"{trigger_name}_ratio"
             plt.tight_layout()
-            if shift_spinal:
-                fig.savefig(image_path + fname + '_spinalshifted_longcrop.png')
-                plt.savefig(image_path + fname+'_spinalshifted_longcrop.pdf', bbox_inches='tight', format="pdf")
+            if freq_type == 'full':
+                if shift_spinal:
+                    fig.savefig(image_path + fname + '_spinalshifted_longcrop_full.png')
+                    plt.savefig(image_path + fname+'_spinalshifted_longcrop_full.pdf', bbox_inches='tight', format="pdf")
+                else:
+                    fig.savefig(image_path + fname+'_longcrop_full.png')
+                    plt.savefig(image_path + fname+'_longcrop_full.pdf', bbox_inches='tight', format="pdf")
             else:
-                fig.savefig(image_path + fname+'_longcrop.png')
-                plt.savefig(image_path + fname+'_longcrop.pdf', bbox_inches='tight', format="pdf")
+                if shift_spinal:
+                    fig.savefig(image_path + fname + '_spinalshifted_longcrop.png')
+                    plt.savefig(image_path + fname+'_spinalshifted_longcrop.pdf', bbox_inches='tight', format="pdf")
+                else:
+                    fig.savefig(image_path + fname+'_longcrop.png')
+                    plt.savefig(image_path + fname+'_longcrop.pdf', bbox_inches='tight', format="pdf")
             plt.clf()

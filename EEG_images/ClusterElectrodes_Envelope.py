@@ -6,9 +6,8 @@ import os
 import mne
 import numpy as np
 from Common_Functions.get_conditioninfo import get_conditioninfo
-from Common_Functions.get_esg_channels import get_esg_channels
+from Common_Functions.get_channels import get_channels
 from Common_Functions.evoked_from_raw import evoked_from_raw
-from Common_Functions.invert import invert
 import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib as mpl
@@ -37,21 +36,20 @@ if __name__ == '__main__':
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
     if srmr_nr == 1:
-        xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/Spinal_Timing.xlsx')
+        xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/Cortical_Timing.xlsx')
         df_timing = pd.read_excel(xls_timing, 'Timing')
         df_timing.set_index('Subject', inplace=True)
 
-        figure_path = '/data/p_02718/Images/ESG/ClusterElectrode_Envelopes/'
+        figure_path = '/data/p_02718/Images/EEG/ClusterElectrode_Envelopes/'
         os.makedirs(figure_path, exist_ok=True)
     elif srmr_nr == 2:
-        xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/Spinal_Timing.xlsx')
+        xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/Cortical_Timing.xlsx')
         df_timing = pd.read_excel(xls_timing, 'Timing')
         df_timing.set_index('Subject', inplace=True)
 
-        figure_path = '/data/p_02718/Images_2/ESG/ClusterElectrode_Envelopes/'
+        figure_path = '/data/p_02718/Images_2/EEG/ClusterElectrode_Envelopes/'
         os.makedirs(figure_path, exist_ok=True)
 
-    brainstem_chans, cervical_chans, lumbar_chans, ref_chan = get_esg_channels()
     median_names = ['median', 'med_mixed']
     tibial_names = ['tibial', 'tib_mixed']
 
@@ -64,6 +62,7 @@ if __name__ == '__main__':
                 cond_name = cond_info.cond_name
                 trigger_name = cond_info.trigger_name
                 subject_id = f'sub-{str(subject).zfill(3)}'
+                eeg_chans, esg_chans, bipolar_chans = get_channels(subject, False, False, srmr_nr)
 
                 ##########################################################
                 # Time  Course Information
@@ -73,29 +72,29 @@ if __name__ == '__main__':
                     condition_names = ['median', 'tibial']
                 elif srmr_nr == 2:
                     condition_names = ['med_mixed', 'tib_mixed']
-                median_lat, tibial_lat = get_time_to_align('esg', srmr_nr, condition_names, subjects)
+                median_lat, tibial_lat = get_time_to_align('eeg', srmr_nr, condition_names, subjects)
                 if cond_name in median_names:
-                    sep_latency = round(df_timing.loc[subject, f"N13"], 3)
+                    sep_latency = round(df_timing.loc[subject, f"N20"], 3)
                     expected = median_lat
                     if cluster_electrodes:
-                        cluster_channels = ['S6', 'SC6', 'S14']
+                        cluster_channels = ['CP4', 'C4', 'CP6', 'P4', 'CP2']
                     else:
-                        cluster_channels = ['SC6']
+                        cluster_channels = ['CP4']
                 elif cond_name in tibial_names:
-                    sep_latency = round(df_timing.loc[subject, f"N22"], 3)
+                    sep_latency = round(df_timing.loc[subject, f"P39"], 3)
                     expected = tibial_lat
                     if cluster_electrodes:
-                        cluster_channels = ['S23', 'L1', 'S31']
+                        cluster_channels = ['Cz', 'FCz', 'C2', 'CPz', 'C1']
                     else:
-                        cluster_channels = ['L1']
+                        cluster_channels = ['Cz']
                 shift = expected - sep_latency
 
                 # Select the right files
                 fname = f"{freq_band}_{cond_name}.fif"
                 if srmr_nr == 1:
-                    input_path = "/data/pt_02718/tmp_data/freq_banded_esg/" + subject_id + "/"
+                    input_path = "/data/pt_02718/tmp_data/freq_banded_eeg/" + subject_id + "/"
                 elif srmr_nr == 2:
-                    input_path = "/data/pt_02718/tmp_data_2/freq_banded_esg/" + subject_id + "/"
+                    input_path = "/data/pt_02718/tmp_data_2/freq_banded_eeg/" + subject_id + "/"
 
                 raw = mne.io.read_raw_fif(input_path + fname, preload=True)
                 evoked = evoked_from_raw(raw, iv_epoch, iv_baseline, trigger_name, False)
@@ -111,7 +110,6 @@ if __name__ == '__main__':
                     evoked.shift_time(shift, relative=True)
                     evoked.crop(tmin=-0.06, tmax=0.07)
                     envelope = evoked.apply_hilbert(envelope=True)
-
                 data = envelope.get_data()
                 evoked_list.append(data)
 

@@ -29,11 +29,11 @@ def bad_trial_check(subject, condition, srmr_nr, sampling_rate, channel_type, bo
 
     elif channel_type == 'eeg':
         if srmr_nr == 1:
-            input_path = "/data/pt_02718/tmp_data/imported/" + subject_id + "/"
-            fname = f'noStimart_sr{sampling_rate}_{cond_name}_withqrs_eeg.fif'
+            input_path = "/data/pt_02718/tmp_data_otp/otp_cleaned_eeg/" + subject_id + "/"
+            fname = f'otp_cleaned_{cond_name}.fif'
         elif srmr_nr == 2:
-            input_path = "/data/pt_02718/tmp_data_2/imported/" + subject_id + "/"
-            fname = f'noStimart_sr{sampling_rate}_{cond_name}_withqrs_eeg.fif'
+            input_path = "/data/pt_02718/tmp_data_2/otp_cleaned_eeg/" + subject_id + "/"
+            fname = f'otp_cleaned_{cond_name}.fif'
 
     raw = mne.io.read_raw_fif(input_path + fname, preload=True)
 

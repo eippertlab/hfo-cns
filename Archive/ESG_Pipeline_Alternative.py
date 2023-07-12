@@ -5,12 +5,12 @@
 
 import numpy as np
 from Common_Functions.import_data import import_data
-from ESG.OTP import apply_OTP
-from ESG.SSP_Alternative import apply_SSP
-from Common_Functions.bad_trial_check_Alternative import bad_trial_check
-from Common_Functions.Create_Frequency_Bands_Alternative import create_frequency_bands
-from ESG.run_CCA_spinal_Alternative import run_CCA
-from ESG.run_CCA_spinal_2_Alternative import run_CCA2
+from Archive.OTP_Spinal import apply_OTP
+from Archive.SSP_Alternative import apply_SSP
+from Archive.bad_trial_check_Alternative import bad_trial_check
+from Archive.Create_Frequency_Bands_Alternative import create_frequency_bands
+from Archive.run_CCA_spinal_Alternative import run_CCA
+from Archive.run_CCA_spinal_2_Alternative import run_CCA2
 
 if __name__ == '__main__':
     srmr_nr = 1  # Set the experiment number - NOT implemented for project 2 be wary

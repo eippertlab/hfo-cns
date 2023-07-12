@@ -73,10 +73,10 @@ def run_CCA(subject, condition, srmr_nr, freq_band, sfreq):
         exit()
 
     # Drop bad channels
-    if raw.info['bads']:
-        for channel in raw.info['bads']:
-            if channel in esg_chans:
-                epochs.drop_channels(ch_names=[channel])
+    # if raw.info['bads']:
+    #     for channel in raw.info['bads']:
+    #         if channel in esg_chans:
+    #             epochs.drop_channels(ch_names=[channel])
 
     # For plotting of spatial topographies later
     idx_by_type = mne.channel_indices_by_type(epochs.info, picks=eeg_chans)

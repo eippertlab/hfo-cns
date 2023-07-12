@@ -99,10 +99,10 @@ if __name__ == '__main__':
     use_visible = True  # Use only subjects with visible bursting
     shift_spinal = True  # If true shift spinal HFO and SEP based on timing of low frequency potential
 
-    subjects = np.arange(1, 37)
-    conditions = [2, 3]
+    subjects = np.arange(1, 25)
+    conditions = [3, 5]
     freq_bands = ['sigma']
-    srmr_nr = 1
+    srmr_nr = 2
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)
@@ -114,7 +114,7 @@ if __name__ == '__main__':
                df.loc[df['var_name'] == 'epoch_end', 'var_value'].iloc[0]]
 
     # Get a raw file so I can use the montage
-    raw = mne.io.read_raw_fif("/data/pt_02718/tmp_data/freq_banded_eeg/sub-001/sigma_median.fif", preload=True)
+    raw = mne.io.read_raw_fif("/data/pt_02718/tmp_data_2/freq_banded_eeg/sub-001/sigma_med_mixed.fif", preload=True)
     montage_path = '/data/pt_02718/'
     montage_name = 'electrode_montage_eeg_10_5.elp'
     montage = mne.channels.read_custom_montage(montage_path + montage_name)
@@ -123,28 +123,28 @@ if __name__ == '__main__':
     idx_by_type = mne.channel_indices_by_type(raw.info, picks=eeg_chans)
     res = mne.pick_info(raw.info, sel=idx_by_type['eeg'], copy=True, verbose=None)
 
-    figure_path = '/data/p_02718/Polished/GrandAverageEnvelope_LowFreqTime_YY/'
+    figure_path = '/data/p_02718/Polished_2/GrandAverageEnvelope_LowFreqTime_YY/'
     os.makedirs(figure_path, exist_ok=True)
 
     # Cortical Excel files
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG_Updated.xlsx')
+    xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Components_EEG_Updated.xlsx')
     df_cortical = pd.read_excel(xls, 'CCA')
     df_cortical.set_index('Subject', inplace=True)
 
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility_Updated.xlsx')
+    xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Visibility_Updated.xlsx')
     df_vis_cortical = pd.read_excel(xls, 'CCA_Brain')
     df_vis_cortical.set_index('Subject', inplace=True)
 
     # Spinal Excel files
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_Updated.xlsx')
+    xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Components_Updated.xlsx')
     df_spinal = pd.read_excel(xls, 'CCA')
     df_spinal.set_index('Subject', inplace=True)
 
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility_Updated.xlsx')
+    xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Visibility_Updated.xlsx')
     df_vis_spinal = pd.read_excel(xls, 'CCA_Spinal')
     df_vis_spinal.set_index('Subject', inplace=True)
 
-    xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/Spinal_Timing.xlsx')
+    xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/Spinal_Timing.xlsx')
     df_timing = pd.read_excel(xls_timing, 'Timing')
     df_timing.set_index('Subject', inplace=True)
 
@@ -156,12 +156,12 @@ if __name__ == '__main__':
                 evoked_list_low = []
 
                 # Define target electrodes for the low frequency potentials
-                if condition == 2:
+                if condition == 3:
                     if data_type == 'eeg':
                         target_electrode = 'CP4'
                     else:
                         target_electrode = 'SC6'
-                elif condition == 3:
+                elif condition == 5:
                     if data_type == 'eeg':
                         target_electrode = 'Cz'
                     else:
@@ -176,11 +176,11 @@ if __name__ == '__main__':
 
                     if shift_spinal:
                         # Apply relative time-shift depending on expected latency for spinal data
-                        median_lat, tibial_lat = get_time_to_align('esg', srmr_nr, ['median', 'tibial'], np.arange(1, 37))
-                        if cond_name == 'median':
+                        median_lat, tibial_lat = get_time_to_align('esg', srmr_nr, ['med_mixed', 'tib_mixed'], np.arange(1, 25))
+                        if cond_name == 'med_mixed':
                             sep_latency = round(df_timing.loc[subject, f"N13"], 3)
                             expected = median_lat
-                        elif cond_name == 'tibial':
+                        elif cond_name == 'tib_mixed':
                             sep_latency = round(df_timing.loc[subject, f"N22"], 3)
                             expected = tibial_lat
                         shift = expected - sep_latency
@@ -194,12 +194,12 @@ if __name__ == '__main__':
                         color_low = 'tab:red'
                         # HFO
                         fname = f"{freq_band}_{cond_name}.fif"
-                        input_path = "/data/pt_02718/tmp_data/cca_eeg/" + subject_id + "/"
+                        input_path = "/data/pt_02718/tmp_data_2/cca_eeg/" + subject_id + "/"
                         df = df_cortical
                         df_vis = df_vis_cortical
 
                         # Low Freq SEP
-                        input_path_low = "/data/pt_02068/analysis/final/tmp_data/" + subject_id + "/eeg/prepro/"
+                        input_path_low = "/data/pt_02151/analysis/final/tmp_data/" + subject_id + "/eeg/prepro/"
                         fname_low = f"cnt_clean_{cond_name}.set"
                         raw = mne.io.read_raw_eeglab(input_path_low + fname_low, preload=True)
                         raw.set_montage(montage, on_missing="ignore")
@@ -211,14 +211,19 @@ if __name__ == '__main__':
                         color_low = 'deeppink'
                         # HFO
                         fname = f"{freq_band}_{cond_name}.fif"
-                        input_path = "/data/pt_02718/tmp_data/cca/" + subject_id + "/"
+                        input_path = "/data/pt_02718/tmp_data_2/cca/" + subject_id + "/"
                         df = df_spinal
                         df_vis = df_vis_spinal
 
                         # Low Freq SEP
-                        input_path_low = f"/data/p_02569/SSP/{subject_id}/6 projections/"
-                        fname_low = f"epochs_{cond_name}.fif"
-                        epochs_low = mne.read_epochs(input_path_low + fname_low, preload=True)
+                        input_path_low = f"/data/pt_02569/tmp_data_2/ssp_py/{subject_id}/esg/prepro/6 projections/"
+                        fname_low = f"ssp_cleaned_{cond_name}.fif"
+                        raw = mne.io.read_raw_fif(input_path_low + fname_low, preload=True)
+                        events, event_ids = mne.events_from_annotations(raw)
+                        event_id_dict = {key: value for key, value in event_ids.items() if key == trigger_name}
+                        epochs_low = mne.Epochs(raw, events, event_id=event_id_dict, tmin=iv_epoch[0],
+                                                tmax=iv_epoch[1] - 1 / 1000, baseline=tuple(iv_baseline), preload=True,
+                                                reject_by_annotation=True)
                         evoked_low = epochs_low.average()
                         if shift_spinal:
                             evoked_low.shift_time(shift, relative=True)
@@ -293,15 +298,15 @@ if __name__ == '__main__':
                 fig.align_ylabels([ax1, ax10])
 
                 if data_type == 'eeg':
-                    if condition == 2:
+                    if condition == 3:
                         ax1.set_ylim([-0.05, 0.5])
-                    elif condition == 3:
-                        ax1.set_ylim([-0.05, 0.2])
+                    elif condition == 5:
+                        ax1.set_ylim([-0.05, 0.15])
                 elif data_type == 'esg':
-                    if condition == 2:
+                    if condition == 3:
                         ax1.set_ylim([-0.05, 0.35])
-                    elif condition == 3:
-                        ax1.set_ylim([-0.02, 0.08])
+                    elif condition == 5:
+                        ax1.set_ylim([-0.02, 0.1])
 
                 if use_visible is True:
                     plt.tight_layout()

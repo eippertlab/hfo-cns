@@ -20,7 +20,7 @@ if __name__ == '__main__':
     use_updated = True  # If true use components selected with criteria in mind
     use_only_good = True  # If true use only the subjects marked as visible
     # use_only_good must be true if use_updated is true
-    srmr_nr = 2
+    srmr_nr = 1
 
     if use_updated is True and use_only_good is not True:
         print('Error: use_only_good must be true if use_updated is true')

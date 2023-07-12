@@ -6,17 +6,17 @@ import os
 import mne
 import numpy as np
 from meet import spatfilt
-from scipy.io import loadmat
 from Common_Functions.get_conditioninfo import get_conditioninfo
-from Common_Functions.get_esg_channels import get_esg_channels
-from Common_Functions.IsopotentialFunctions import mrmr_esg_isopotentialplot
+from Common_Functions.get_channels import get_channels
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import pandas as pd
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 import pickle
 
 
-def run_CCA(subject, condition, srmr_nr, freq_band):
+def run_CCA(subject, condition, srmr_nr, freq_band, sfreq):
+    # Read in locations of channels
     plot_graphs = True
 
     # Set variables
@@ -25,7 +25,6 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
     trigger_name = cond_info.trigger_name
     subject_id = f'sub-{str(subject).zfill(3)}'
 
-    potential_path = f"/data/p_02068/SRMR1_experiment/analyzed_data/esg/{subject_id}/"
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)
     iv_baseline = [df.loc[df['var_name'] == 'baseline_start', 'var_value'].iloc[0],
@@ -34,52 +33,54 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
     # Select the right files based on the data_string
-    input_path = "/data/pt_02718/tmp_data/freq_banded_esg/" + subject_id + "/"
+    input_path = "/data/pt_02718/tmp_data_otp/freq_banded_eeg/" + subject_id + "/"
     fname = f"{freq_band}_{cond_name}.fif"
-    save_path = "/data/pt_02718/tmp_data/cca/" + subject_id + "/"
+    save_path = "/data/pt_02718/tmp_data_otp/cca_eeg/" + subject_id + "/"
     os.makedirs(save_path, exist_ok=True)
 
-    esg_chans = ['S35', 'S24', 'S36', 'Iz', 'S17', 'S15', 'S32', 'S22',
-                 'S19', 'S26', 'S28', 'S9', 'S13', 'S11', 'S7', 'SC1', 'S4', 'S18',
-                 'S8', 'S31', 'SC6', 'S12', 'S16', 'S5', 'S30', 'S20', 'S34', 'AC',
-                 'S21', 'S25', 'L1', 'S29', 'S14', 'S33', 'S3', 'AL', 'L4', 'S6',
-                 'S23', 'TH6']
-
-    brainstem_chans, cervical_chans, lumbar_chans, ref_chan = get_esg_channels()
+    eeg_chans, esg_chans, bipolar_chans = get_channels(subject, False, False, srmr_nr)
 
     raw = mne.io.read_raw_fif(input_path + fname, preload=True)
+
+    # Set montage
+    montage_path = '/data/pt_02718/'
+    montage_name = 'electrode_montage_eeg_10_5.elp'
+    montage = mne.channels.read_custom_montage(montage_path + montage_name)
+    raw.set_montage(montage, on_missing="ignore")
 
     # now create epochs based on the trigger names
     events, event_ids = mne.events_from_annotations(raw)
     event_id_dict = {key: value for key, value in event_ids.items() if key == trigger_name}
     epochs = mne.Epochs(raw, events, event_id=event_id_dict, tmin=iv_epoch[0], tmax=iv_epoch[1]-1/1000,
-                        baseline=tuple(iv_baseline), preload=True)
-
-    # cca window size - Birgit created individual potential latencies for each subject
-    fname_pot = 'potential_latency.mat'
-    matdata = loadmat(potential_path + fname_pot)
+                        baseline=tuple(iv_baseline), preload=True, reject_by_annotation=True)
 
     if cond_name == 'median':
-        epochs = epochs.pick_channels(cervical_chans, ordered=True)
-        esg_chans = cervical_chans
-        sep_latency = matdata['med_potlatency']
-        # window_times = [7/1000, 37/1000]
-        window_times = [7/1000, 22/1000]
+        epochs = epochs.pick_channels(eeg_chans, ordered=True)
+        if freq_band == 'sigma':
+            window_times = [15.4/1000, 24.8/1000]
+        elif freq_band == 'kappa':
+            window_times = [18.4/1000, 24.8/1000]
+        sep_latency = 20
     elif cond_name == 'tibial':
-        epochs = epochs.pick_channels(lumbar_chans, ordered=True)
-        esg_chans = lumbar_chans
-        sep_latency = matdata['tib_potlatency']
-        # window_times = [7/1000, 47/1000]
-        window_times = [15/1000, 30/1000]
+        epochs = epochs.pick_channels(eeg_chans, ordered=True)
+        if freq_band == 'sigma':
+            window_times = [32 / 1000, 44 / 1000]
+        elif freq_band == 'kappa':
+            window_times = [32 / 1000, 44 / 1000]
+        sep_latency = 40
     else:
         print('Invalid condition name attempted for use')
         exit()
 
     # Drop bad channels
-    # if raw.info['bads']:
-    #     for channel in raw.info['bads']:
-    #         if channel in esg_chans:
-    #             epochs.drop_channels(ch_names=[channel])
+    if raw.info['bads']:
+        for channel in raw.info['bads']:
+            if channel in esg_chans:
+                epochs.drop_channels(ch_names=[channel])
+
+    # For plotting of spatial topographies later
+    idx_by_type = mne.channel_indices_by_type(epochs.info, picks=eeg_chans)
+    res = mne.pick_info(epochs.info, sel=idx_by_type['eeg'], copy=True, verbose=None)
 
     # Crop the epochs
     window = epochs.time_as_index(window_times)
@@ -96,8 +97,8 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
     avg_matrix = avg_matrix.T  # Need to transpose for correct form for function - channels x observations
 
     ##### Single trial matrix
-    epo_cca_data = epo_cca.get_data(picks=esg_chans)
-    epo_data = epochs.get_data(picks=esg_chans)
+    epo_cca_data = epo_cca.get_data(picks=eeg_chans)
+    epo_data = epochs.get_data(picks=eeg_chans)
 
     # 0 to access number of epochs, 1 to access number of channels
     # channels x observations
@@ -135,7 +136,7 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
     events = epochs.events
     event_id = epochs.event_id
     tmin = iv_epoch[0]
-    sfreq = 5000
+    sfreq = sfreq
 
     ch_names = []
     ch_types = []
@@ -161,38 +162,33 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
     afile.close()
 
     ################################ Plotting Graphs #######################################
-    figure_path_spatial = f'/data/p_02718/Images/CCA/ComponentIsopotentialPlots/{subject_id}/'
+    figure_path_spatial = f'/data/p_02718/Images_OTP/CCA_eeg/ComponentIsopotentialPlots/{subject_id}/'
     os.makedirs(figure_path_spatial, exist_ok=True)
 
     if plot_graphs:
-        ####### Spinal Isopotential Plots for the first 4 components ########
+        ####### Isopotential Plots for the first 4 components ########
         # fig, axes = plt.figure()
         fig, axes = plt.subplots(2, 2)
         axes_unflat = axes
         axes = axes.flatten()
         for icomp in np.arange(0, 4):  # Plot for each of four components
             # plt.subplot(2, 2, icomp + 1, title=f'Component {icomp + 1}')
-            if freq_band == 'sigma' or freq_band == 'general' or freq_band == 'ktest':
-                colorbar_axes = [-0.2, 0.2]
-            else:
-                colorbar_axes = [-0.025, 0.025]
             chan_labels = epochs.ch_names
-            colorbar = True
-            time = 0.0
-            mrmr_esg_isopotentialplot([subject], A_st[:, icomp], colorbar_axes, chan_labels,
-                                      colorbar, time, axes[icomp])
+            mne.viz.plot_topomap(data=A_st[:, icomp], pos=res, ch_type='eeg', sensors=True, names=None,
+                                 contours=6, outlines='head', sphere=None, image_interp='cubic',
+                                 extrapolate='head', border='mean', res=64, size=1, cmap='jet', vlim=(None, None),
+                                 cnorm=None, axes=axes[icomp], show=False)
             axes[icomp].set_title(f'Component {icomp + 1}')
-            axes[icomp].set_yticklabels([])
-            axes[icomp].set_ylabel(None)
-            axes[icomp].set_xticklabels([])
-            axes[icomp].set_xlabel(None)
+            divider = make_axes_locatable(axes[icomp])
+            cax = divider.append_axes('right', size='5%', pad=0.05)
+            cb = fig.colorbar(axes[icomp].images[-1], cax=cax, shrink=0.6, orientation='vertical')
 
         plt.savefig(figure_path_spatial + f'{freq_band}_{cond_name}.png')
         plt.close(fig)
 
         ############ Time Course of First 4 components ###############
         # cca_epochs and cca_epochs_d both already baseline corrected before this point
-        figure_path_time = f'/data/p_02718/Images/CCA/ComponentTimePlots/{subject_id}/'
+        figure_path_time = f'/data/p_02718/Images_OTP/CCA_eeg/ComponentTimePlots/{subject_id}/'
         os.makedirs(figure_path_time, exist_ok=True)
 
         fig = plt.figure()
@@ -204,45 +200,18 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
             data = cca_epochs.get_data(picks=[f'Cor{icomp + 1}'])
             to_plot = np.mean(data[:, 0, :], axis=0)
             plt.plot(cca_epochs.times, to_plot)
-            plt.xlim([-0.025, 0.065])
-            # plt.xlim([0.0, 0.05])
-            line_label = f"{sep_latency[0][0] / 1000}s"
-            plt.axvline(x=sep_latency[0][0] / 1000, color='r', linewidth='0.6', label=line_label)
+            plt.xlim([0.01, 0.07])
+            line_label = f"{sep_latency / 1000}s"
+            plt.axvline(x=sep_latency / 1000, color='r', linewidth='0.6', label=line_label)
             plt.xlabel('Time [s]')
             plt.ylabel('Amplitude [A.U.]')
             plt.legend()
-            plt.tight_layout()
-            plt.savefig(figure_path_time + f'{freq_band}_{cond_name}.png')
+        plt.tight_layout()
+        plt.savefig(figure_path_time + f'{freq_band}_{cond_name}.png')
         plt.close(fig)
 
-        # ######################## Plot image for cca_epochs ############################
-        # # cca_epochs and cca_epochs_d both already baseline corrected before this point
-        # figure_path_st = f'/data/p_02718/Images/CCA/ComponentSinglePlots/{subject_id}/'
-        # os.makedirs(figure_path_st, exist_ok=True)
-        #
-        # fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(nrows=2, ncols=2)
-        # axes = [ax1, ax2, ax3, ax4]
-        # cropped = cca_epochs.copy().crop(tmin=-0.025, tmax=0.065)
-        # cmap = mpl.colors.ListedColormap(["blue", "green", "red"])
-        #
-        # for icomp in np.arange(0, 4):
-        #     cropped.plot_image(picks=f'Cor{icomp + 1}', combine=None, cmap='jet', evoked=False, show=False,
-        #                        axes=axes[icomp], title=f'Component {icomp + 1}', colorbar=False, group_by=None,
-        #                        vmin=-1.6, vmax=1.6, units=dict(eeg='V'), scalings=dict(eeg=1))
-        #
-        # plt.tight_layout()
-        # fig.subplots_adjust(right=0.85)
-        # ax5 = fig.add_axes([0.9, 0.1, 0.01, 0.8])
-        # norm = mpl.colors.Normalize(vmin=-1.6, vmax=1.6)
-        # # mpl.colorbar.ColorbarBase(ax5, cmap=cmap, norm=norm, spacing='proportional')
-        # mpl.colorbar.ColorbarBase(ax5, cmap='jet', norm=norm)
-        # # has to be as a list - starts with x, y coordinates for start and then width and height in % of figure width
-        # plt.savefig(figure_path_st + f'{freq_band}_{cond_name}.png')
-        # plt.close(fig)
-        # # plt.show()
-
         ############################ Combine to one Image ##########################
-        figure_path = f'/data/p_02718/Images/CCA/ComponentPlots/{subject_id}/'
+        figure_path = f'/data/p_02718/Images_OTP/CCA_eeg/ComponentPlots/{subject_id}/'
         os.makedirs(figure_path, exist_ok=True)
 
         spatial = plt.imread(figure_path_spatial + f'{freq_band}_{cond_name}.png')

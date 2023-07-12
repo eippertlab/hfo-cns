@@ -19,18 +19,19 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
     plot_image = True
-    save_to_excel = True
+    save_to_excel = False
 
     freq_band = 'sigma'
     srmr_nr = 1
 
     if srmr_nr == 1:
-        subjects = np.arange(1, 37)  # 1 through 36 to access subject data
+        # subjects = np.arange(1, 37)  # 1 through 36 to access subject data
+        subjects = [6, 15, 18, 25, 26]
         conditions = [2, 3]  # Conditions of interest
         xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/Cortical_Timing.xlsx')
         df_timing = pd.read_excel(xls_timing, 'Timing')
         df_timing.set_index('Subject', inplace=True)
-        figure_path = '/data/p_02718/Images/CCA_eeg/SNR&EnvelopePeak/'
+        figure_path = '/data/p_02718/Images_OTP/CCA_eeg/SNR&EnvelopePeak/'
         os.makedirs(figure_path, exist_ok=True)
 
     elif srmr_nr == 2:
@@ -39,7 +40,7 @@ if __name__ == '__main__':
         xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/Cortical_Timing.xlsx')
         df_timing = pd.read_excel(xls_timing, 'Timing')
         df_timing.set_index('Subject', inplace=True)
-        figure_path = '/data/p_02718/Images_2/CCA_eeg/SNR&EnvelopePeak/'
+        figure_path = '/data/p_02718/Images_2_OTP/CCA_eeg/SNR&EnvelopePeak/'
         os.makedirs(figure_path, exist_ok=True)
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
@@ -66,10 +67,10 @@ if __name__ == '__main__':
             subject_id = f'sub-{str(subject).zfill(3)}'
             if srmr_nr == 1:
                 fname = f"{freq_band}_{cond_name}.fif"
-                input_path = "/data/pt_02718/tmp_data/cca_eeg/" + subject_id + "/"
+                input_path = "/data/pt_02718/tmp_data_otp/cca_eeg/" + subject_id + "/"
             elif srmr_nr == 2:
                 fname = f"{freq_band}_{cond_name}.fif"
-                input_path = "/data/pt_02718/tmp_data_2/cca_eeg/" + subject_id + "/"
+                input_path = "/data/pt_02718/tmp_data_2_otp/cca_eeg/" + subject_id + "/"
             epochs = mne.read_epochs(input_path + fname, preload=True)
 
             if cond_name in ['median', 'med_mixed']:
@@ -92,7 +93,8 @@ if __name__ == '__main__':
                 noise_window = [-100/1000, -10/1000]
                 signal_window = 7.5/1000
                 snr = calculate_snr(evoked.copy(), noise_window, signal_window, sep_latency)
-                snr_cond[subject-1][c] = snr
+                if save_to_excel:
+                    snr_cond[subject-1][c] = snr
 
                 # Get Envelope
                 envelope = evoked.copy().apply_hilbert(envelope=True)

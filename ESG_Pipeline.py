@@ -11,14 +11,9 @@ from Common_Functions.bad_trial_check import bad_trial_check
 from Common_Functions.Create_Frequency_Bands import create_frequency_bands
 from ESG.run_CCA_spinal import run_CCA
 from ESG.run_CCA_spinal_2 import run_CCA2
-from Common_Functions.keep_good_trials import keep_good_trials
-from ESG.run_CCA_spinal_good import run_CCA_good
-from Archive.run_CCA_spinal_opposite import run_CCA_oppo
-from Archive.run_CCA_spinal_opposite_anterior import run_CCA_oppo_anterior
-from Archive.rm_heart_artefact import rm_heart_artefact
 
 if __name__ == '__main__':
-    srmr_nr = 2  # Set the experiment number
+    srmr_nr = 1  # Set the experiment number
 
     if srmr_nr == 1:
         n_subjects = 36  # Number of subjects

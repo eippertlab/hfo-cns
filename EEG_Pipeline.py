@@ -14,7 +14,7 @@ from EEG.run_CCA_brain import run_CCA
 from EEG.run_CCA_brain_2 import run_CCA2
 
 if __name__ == '__main__':
-    srmr_nr = 2  # Set the experiment number
+    srmr_nr = 1  # Set the experiment number
 
     if srmr_nr == 1:
         n_subjects = 36  # Number of subjects

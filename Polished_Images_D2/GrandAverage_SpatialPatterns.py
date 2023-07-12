@@ -324,10 +324,10 @@ if __name__ == '__main__':
 
                     # chan_labels = evoked.ch_names
                     chan_labels = esg_chans
-                    if cond_name == 'median':
+                    if cond_name == 'med_mixed':
                         colorbar_axes = [-0.3, 0.3]
                     else:
-                        colorbar_axes = [-0.1, 0.1]
+                        colorbar_axes = [-0.15, 0.15]
                     subjects_4grid = np.arange(1, 25)
                     # then the function takes the average over the channel positions of all those subjects
                     colorbar = True

@@ -13,7 +13,7 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 
 if __name__ == '__main__':
-
+    mode_comp = 'mean'  # 'ratio'
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)
     iv_baseline = [df.loc[df['var_name'] == 'baseline_start', 'var_value'].iloc[0],
@@ -38,7 +38,7 @@ if __name__ == '__main__':
     sfreq = 5000
     cond_names = ['median', 'tibial']
 
-    for freq_type in ['200', '300']:
+    for freq_type in ['full']:
         if freq_type == 'full':
             freqs = np.arange(0., 1800., 3.)
             fmin, fmax = freqs[[0, -1]]
@@ -55,16 +55,19 @@ if __name__ == '__main__':
         # To use mne grand_average method, need to generate a list of evoked potentials for each subject
         for cond_name in cond_names:  # Conditions (median, tibial)
             evoked_list = []
+            evoked_list_wrong = []
 
             if cond_name == 'tibial':
                 full_name = 'Tibial Nerve Stimulation'
                 trigger_name = 'Tibial - Stimulation'
                 channel = ['L1']
+                wrong_channel = ['SC6']
 
             elif cond_name == 'median':
                 full_name = 'Median Nerve Stimulation'
                 trigger_name = 'Median - Stimulation'
                 channel = ['SC6']
+                wrong_channel = ['L1']
 
             for subject in subjects:  # All subjects
                 subject_id = f'sub-{str(subject).zfill(3)}'
@@ -74,9 +77,12 @@ if __name__ == '__main__':
                 raw = mne.io.read_raw_fif(input_path + fname, preload=True)
                 evoked = evoked_from_raw(raw, iv_epoch, iv_baseline, trigger_name, False)
                 evoked.reorder_channels(esg_chans)
-                evoked = evoked.pick_channels(channel)
+                evoked_wrong = evoked.copy().pick_channels(wrong_channel)
+                evoked = evoked.copy().pick_channels(channel)
                 power = mne.time_frequency.tfr_stockwell(evoked, fmin=fmin, fmax=fmax, width=3.0, n_jobs=5)
+                power_wrong = mne.time_frequency.tfr_stockwell(evoked_wrong, fmin=fmin, fmax=fmax, width=3.0, n_jobs=5)
                 evoked_list.append(power)
+                evoked_list_wrong.append(power_wrong)
 
                 # Generate Single Subject Images
                 if cond_name == 'tibial':
@@ -87,57 +93,63 @@ if __name__ == '__main__':
                     tmax = 0.025
                 # vmin = -200
                 # vmax = -130
+                for power_type in ['right', 'wrong']:
+                    fig, ax = plt.subplots(1, 1)
+                    if power_type == 'wrong':
+                        add = 'wrongchannel'
+                        pow = power_wrong
+                    else:
+                        add = ''
+                        pow = power
+                    pow.plot([0], baseline=iv_baseline, mode=mode_comp, cmap='jet',
+                               axes=ax, show=False, colorbar=True, dB=False,
+                               tmin=tmin, tmax=tmax, vmin=0)
+                    im = ax.images
+                    cb = im[-1].colorbar
+                    cb.set_label('Amplitude')
+                    plt.title(f"Subject {subject} TFR\n"
+                              f"Condition: {trigger_name}")
+                    if freq_type == 'full':
+                        fname = f"{subject_id}_{trigger_name}_full_{mode_comp}{add}"
+                    elif freq_type == 'upper':
+                        fname = f"{subject_id}_{trigger_name}_{mode_comp}{add}"
+                    elif freq_type == '200':
+                        fname = f"{subject_id}_{trigger_name}_{mode_comp}_200{add}"
+                    elif freq_type == '300':
+                        fname = f"{subject_id}_{trigger_name}_{mode_comp}_300{add}"
+                    fig.savefig(image_path_singlesubject + fname+'.png')
+                    plt.savefig(image_path_singlesubject + fname+'.pdf', bbox_inches='tight', format="pdf")
+                    # exit()
+                    plt.clf()
+
+            averaged = mne.grand_average(evoked_list, interpolate_bads=False, drop_bads=False)
+            averaged_wrong = mne.grand_average(evoked_list_wrong, interpolate_bads=False, drop_bads=False)
+
+            for GA_type in ['right', 'wrong']:
+                if GA_type == 'wrong':
+                    add = 'wrongchannel'
+                    GA = averaged_wrong
+                else:
+                    add = ''
+                    GA = averaged
                 fig, ax = plt.subplots(1, 1)
-                # power = mne.time_frequency.tfr_stockwell(relevant_channel, fmin=fmin, fmax=fmax, width=1.0, n_jobs=5)
-                # power.plot([0], baseline=iv_baseline, mode='mean', cmap='jet',
-                #            axes=ax, show=False, colorbar=True, dB=False,
-                #            tmin=tmin, tmax=tmax, vmin=0)
-                power.plot([0], baseline=iv_baseline, mode='ratio', cmap='jet',
-                           axes=ax, show=False, colorbar=True, dB=False,
-                           tmin=tmin, tmax=tmax, vmin=0)
+                GA.plot([0], baseline=iv_baseline, mode=mode_comp, cmap='jet',
+                              axes=ax, show=False, colorbar=True, dB=False,
+                              tmin=tmin, tmax=tmax, vmin=0)
                 im = ax.images
                 cb = im[-1].colorbar
                 cb.set_label('Amplitude')
-                plt.title(f"Subject {subject} TFR\n"
+                plt.title(f"Grand Average TFR\n"
                           f"Condition: {trigger_name}")
                 if freq_type == 'full':
-                    fname = f"{subject_id}_{trigger_name}_full_ratio"
+                    fname = f"{trigger_name}_full_{mode_comp}{add}"
                 elif freq_type == 'upper':
-                    fname = f"{subject_id}_{trigger_name}_ratio"
+                    fname = f"{trigger_name}_{mode_comp}{add}"
                 elif freq_type == '200':
-                    fname = f"{subject_id}_{trigger_name}_ratio_200"
+                    fname = f"{trigger_name}_{mode_comp}_200{add}"
                 elif freq_type == '300':
-                    fname = f"{subject_id}_{trigger_name}_ratio_300"
-                fig.savefig(image_path_singlesubject + fname+'.png')
-                plt.savefig(image_path_singlesubject + fname+'.pdf', bbox_inches='tight', format="pdf")
-                # exit()
+                    fname = f"{trigger_name}_{mode_comp}_300{add}"
+                fig.savefig(image_path_grandaverage + fname+'.png')
+                plt.savefig(image_path_grandaverage + fname+'.pdf', bbox_inches='tight', format="pdf")
                 plt.clf()
-
-            averaged = mne.grand_average(evoked_list, interpolate_bads=False, drop_bads=False)
-            # relevant_channel = averaged.pick_channels(channel)
-
-            # power = mne.time_frequency.tfr_stockwell(relevant_channel, fmin=fmin, fmax=fmax, width=1.0, n_jobs=5)
-            fig, ax = plt.subplots(1, 1)
-            # averaged.plot([0], baseline=iv_baseline, mode='mean', cmap='jet',
-            #               axes=ax, show=False, colorbar=True, dB=False,
-            #               tmin=tmin, tmax=tmax, vmin=0)
-            averaged.plot([0], baseline=iv_baseline, mode='ratio', cmap='jet',
-                          axes=ax, show=False, colorbar=True, dB=False,
-                          tmin=tmin, tmax=tmax, vmin=0)
-            im = ax.images
-            cb = im[-1].colorbar
-            cb.set_label('Amplitude')
-            plt.title(f"Grand Average TFR\n"
-                      f"Condition: {trigger_name}")
-            if freq_type == 'full':
-                fname = f"{trigger_name}_full_ratio"
-            elif freq_type == 'upper':
-                fname = f"{trigger_name}_ratio"
-            elif freq_type == '200':
-                fname = f"{trigger_name}_ratio_200"
-            elif freq_type == '300':
-                fname = f"{trigger_name}_ratio_300"
-            fig.savefig(image_path_grandaverage + fname+'.png')
-            plt.savefig(image_path_grandaverage + fname+'.pdf', bbox_inches='tight', format="pdf")
-            plt.clf()
 
