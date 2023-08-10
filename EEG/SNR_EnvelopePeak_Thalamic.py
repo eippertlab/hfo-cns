@@ -1,13 +1,12 @@
 # Plot single subject envelopes with bounds where peak should be
 # Calculate SNR and add information to plot
-# While we're running this, create an excel sheet with the SNR for each subject and component
+# Implement automatic selection of components
 # This will select components BUT you still need to manually choose flipping of components
 
 
 import os
 import mne
 import numpy as np
-from scipy.io import loadmat
 from meet import spatfilt
 from Common_Functions.get_conditioninfo import get_conditioninfo
 from Common_Functions.calculate_snr import calculate_snr
@@ -21,34 +20,38 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 
 if __name__ == '__main__':
-    create_plot = True
-    save_to_excel = False
+    plot_image = True
+    save_to_excel = True  # If we want to save the SNR values on each run
 
     freq_band = 'sigma'
-    srmr_nr = 1
+    srmr_nr = 1  # Experiment 2 not implemented for this part
+
+    if srmr_nr != 1:
+        print('Error: Not implemented for srmr_nr 2')
+        exit()
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)  # 1 through 36 to access subject data
         conditions = [2, 3]  # Conditions of interest
-        figure_path = '/data/p_02718/Images/CCA/SNR&EnvelopePeak/'
+        # xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/Cortical_Timing.xlsx')
+        component_fname = '/data/pt_02718/tmp_data/Components_EEG_Thalamic_Updated.xlsx'
+        visibility_fname = '/data/pt_02718/tmp_data/Visibility_Thalamic_Updated.xlsx'
+        figure_path = '/data/p_02718/Images/CCA_eeg_thalamic/SNR&EnvelopePeak/'
         os.makedirs(figure_path, exist_ok=True)
-        xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/Spinal_Timing.xlsx')
-        component_fname = '/data/pt_02718/tmp_data/Components_Updated.xlsx'
-        visibility_fname = '/data/pt_02718/tmp_data/Visibility_Updated.xlsx'
 
     elif srmr_nr == 2:
         subjects = np.arange(1, 25)  # (1, 2) # 1 through 24 to access subject data
-        conditions = [3, 5]  # Conditions of interest - med_mixed and tib_mixed
-        figure_path = '/data/p_02718/Images_2/CCA/SNR&EnvelopePeak/'
+        conditions = [3, 5]  # Conditions of interest - med_mixed and tib_mixed [3, 5]
+        # xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/Cortical_Timing.xlsx')
+        component_fname = '/data/pt_02718/tmp_data_2/Components_EEG_Thalamic_Updated.xlsx'
+        visibility_fname = '/data/pt_02718/tmp_data_2/Visibility_Thalamic_Updated.xlsx'
+        figure_path = '/data/p_02718/Images_2/CCA_eeg_thalamic/SNR&EnvelopePeak/'
         os.makedirs(figure_path, exist_ok=True)
-        xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/Spinal_Timing.xlsx')
-        component_fname = '/data/pt_02718/tmp_data_2/Components_Updated.xlsx'
-        visibility_fname = '/data/pt_02718/tmp_data_2/Visibility_Updated.xlsx'
 
     # Check the component file is already generated - want to store the flipping info in the same place so easier to
     # do it this way
     component_sheetname = 'CCA'
-    visibility_sheetname = 'CCA_Spinal'
+    visibility_sheetname = 'CCA_Brain'
     col_names = ['Subject', 'sigma_median_comp', 'sigma_median_flip', 'sigma_tibial_comp', 'sigma_tibial_flip']
     if not os.path.isfile(component_fname):
         print(f'Created an excel file with the name {component_fname} and the column headers '
@@ -56,8 +59,8 @@ if __name__ == '__main__':
               f'before continuing')
         exit()
 
-    df_timing = pd.read_excel(xls_timing, 'Timing')
-    df_timing.set_index('Subject', inplace=True)
+    # df_timing = pd.read_excel(xls_timing, 'Timing')
+    # df_timing.set_index('Subject', inplace=True)
 
     df_comp = pd.read_excel(component_fname, component_sheetname)
     df_comp.set_index('Subject', inplace=True)
@@ -87,23 +90,23 @@ if __name__ == '__main__':
             fig, ax = plt.subplots(2, 2)
             ax = ax.flatten()
             subject_id = f'sub-{str(subject).zfill(3)}'
-            # Select the right files
-            fname = f"{freq_band}_{cond_name}.fif"
             if srmr_nr == 1:
-                input_path = "/data/pt_02718/tmp_data/cca/" + subject_id + "/"
+                fname = f"{freq_band}_{cond_name}.fif"
+                input_path = "/data/pt_02718/tmp_data/cca_eeg_thalamic/" + subject_id + "/"
             elif srmr_nr == 2:
-                input_path = "/data/pt_02718/tmp_data_2/cca/" + subject_id + "/"
-
+                fname = f"{freq_band}_{cond_name}.fif"
+                input_path = "/data/pt_02718/tmp_data_2/cca_eeg_thalamic/" + subject_id + "/"
             epochs = mne.read_epochs(input_path + fname, preload=True)
 
             if cond_name in ['median', 'med_mixed']:
-                sep_latency = df_timing.loc[subject, f"N13"]
+                sep_latency = 0.013
             elif cond_name in ['tibial', 'tib_mixed']:
-                sep_latency = df_timing.loc[subject, f"N22"]
+                sep_latency = 0.030
 
             snr_comp = []
             peak_latency_comp = []
             for c in np.arange(0, n_components):  # Loop through all components
+
                 # Need to pick channel
                 channel = f'Cor{c+1}'
                 epochs_ch = epochs.copy().pick_channels([channel])
@@ -115,7 +118,7 @@ if __name__ == '__main__':
 
                 # # Get SNR of HFO
                 noise_window = [-100/1000, -10/1000]
-                signal_window = 5/1000
+                signal_window = 3/1000
                 snr = calculate_snr(evoked.copy(), noise_window, signal_window, sep_latency)
                 snr_comp.append(snr)
                 snr_cond[subject-1][c] = snr
@@ -124,12 +127,13 @@ if __name__ == '__main__':
                 envelope = evoked.copy().apply_hilbert(envelope=True)
                 data = envelope.get_data()
                 if cond_name in ['median', 'med_mixed']:
-                    ch_name, latency = envelope.get_peak(tmin=0, tmax=50 / 1000, mode='pos')
+                    ch_name, latency = envelope.get_peak(tmin=0, tmax=50/1000, mode='pos')
                 elif cond_name in ['tibial', 'tib_mixed']:
-                    ch_name, latency = envelope.get_peak(tmin=0, tmax=70 / 1000, mode='pos')
+                    ch_name, latency = envelope.get_peak(tmin=0, tmax=70/1000, mode='pos')
+
                 peak_latency_comp.append(latency)
 
-                if create_plot:
+                if plot_image:
                     # Plot Envelope with SNR
                     ax[c].plot(evoked.times, evoked.get_data().reshape(-1), color='lightblue')
                     ax[c].plot(evoked.times, data.reshape(-1))
@@ -143,15 +147,12 @@ if __name__ == '__main__':
                         ax[c].set_xlim([0.0, 0.05])
                     elif cond_name in ['tibial', 'tib_mixed']:
                         ax[c].set_xlim([0.0, 0.07])
-
-                    # Add lines at mean +-3*std of the noise period
+                    # Add lines for mean+-3*std of noise period
                     noise_data = evoked.copy().crop(tmin=noise_window[0], tmax=noise_window[1]).get_data().reshape(-1)
                     noise_mean = np.mean(noise_data)
                     noise_std = np.std(noise_data)
-
-                    thresh = 3
-                    ax[c].axhline(y=noise_mean-thresh*noise_std, color='blue', linewidth='1')
-                    ax[c].axhline(y=noise_mean+thresh*noise_std, color='blue', linewidth='1')
+                    ax[c].axhline(y=noise_mean - 3 * noise_std, color='blue', linewidth='1')
+                    ax[c].axhline(y=noise_mean + 3 * noise_std, color='blue', linewidth='1')
                     plt.suptitle(f'Subject {subject}, {trigger_name}')
                     plt.tight_layout()
                     plt.savefig(figure_path+f'{subject_id}_{cond_name}')

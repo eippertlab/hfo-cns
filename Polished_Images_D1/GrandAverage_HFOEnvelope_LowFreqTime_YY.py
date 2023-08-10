@@ -301,7 +301,7 @@ if __name__ == '__main__':
                     if condition == 2:
                         ax1.set_ylim([-0.05, 0.35])
                     elif condition == 3:
-                        ax1.set_ylim([-0.02, 0.08])
+                        ax1.set_ylim([-0.02, 0.09])
 
                 if use_visible is True:
                     plt.tight_layout()
