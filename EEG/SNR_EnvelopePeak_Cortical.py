@@ -16,6 +16,7 @@ import pandas as pd
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import pickle
 import matplotlib as mpl
+from Common_Functions.check_excel_exist import check_excel_exist
 mpl.rcParams['pdf.fonttype'] = 42
 
 
@@ -48,12 +49,7 @@ if __name__ == '__main__':
     # do it this way
     component_sheetname = 'CCA'
     visibility_sheetname = 'CCA_Brain'
-    col_names = ['Subject', 'sigma_median_comp', 'sigma_median_flip', 'sigma_tibial_comp', 'sigma_tibial_flip']
-    if not os.path.isfile(component_fname):
-        print(f'Created an excel file with the name {component_fname} and the column headers '
-              f'{col_names} '
-              f'before continuing')
-        exit()
+    check_excel_exist(srmr_nr, subjects, component_fname, component_sheetname, visibility_fname, visibility_sheetname)
 
     df_timing = pd.read_excel(xls_timing, 'Timing')
     df_timing.set_index('Subject', inplace=True)
