@@ -31,7 +31,7 @@ if __name__ == '__main__':
 
     subjects = np.arange(1, 25)  # (1, 2) # 1 through 24 to access subject data
     conditions = [2, 4]  # Conditions of interest - med_digits and tib_digits
-    xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/Spinal_Timing.xlsx')
+    xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/Spinal_Timing_Digits.xlsx')
     component_fname = '/data/pt_02718/tmp_data_2/Components_Updated_Digits.xlsx'
     visibility_fname = '/data/pt_02718/tmp_data_2/Visibility_Updated_Digits.xlsx'
     figure_path = '/data/p_02718/Images_2/CCA_digits/SNR&EnvelopePeak/'

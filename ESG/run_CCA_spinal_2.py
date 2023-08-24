@@ -78,7 +78,7 @@ def run_CCA2(subject, condition, srmr_nr, freq_band):
         epochs_d = epochs_d.pick_channels(lumbar_chans, ordered=True)
         epochs_m = epochs_m.pick_channels(lumbar_chans, ordered=True)
         esg_chans = lumbar_chans
-        window_times = [7/1000, 30/1000]
+        window_times = [15/1000, 30/1000]
     else:
         print('Invalid condition name attempted for use')
         exit()

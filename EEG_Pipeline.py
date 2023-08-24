@@ -15,7 +15,7 @@ from EEG.run_CCA_brain_2 import run_CCA2
 from EEG.run_CCA_brain_thalamic import run_CCA_thalamic
 
 if __name__ == '__main__':
-    srmr_nr = 1  # Set the experiment number
+    srmr_nr = 2  # Set the experiment number
 
     if srmr_nr == 1:
         n_subjects = 36  # Number of subjects
@@ -43,10 +43,10 @@ if __name__ == '__main__':
     split_bands_flag = False
 
     ######## 5. Run CCA ########
-    CCA_flag = False
+    CCA_flag = True
 
     ######## 6. Run CCA on thalamic activity  ########
-    CCA_thalamic_flag = True
+    CCA_thalamic_flag = False  # Only done for first project
 
     ############################################
     # Import Data from BIDS directory

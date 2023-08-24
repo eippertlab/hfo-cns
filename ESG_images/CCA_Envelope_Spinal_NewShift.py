@@ -140,12 +140,6 @@ if __name__ == '__main__':
                         if inv == 'T':
                             epochs.apply_function(invert, picks=channel)
                         evoked = epochs.copy().average()
-                        if cond_name in median_names:
-                            sep_latency = df_timing.loc[subject, f"N13"]
-                            expected = 13 / 1000
-                        elif cond_name in tibial_names:
-                            sep_latency = df_timing.loc[subject, f"N22"]
-                            expected = 22 / 1000
                         evoked.shift_time(shift, relative=True)
                         evoked.crop(tmin=-0.06, tmax=0.07)
                         envelope = evoked.apply_hilbert(envelope=True)
@@ -170,12 +164,6 @@ if __name__ == '__main__':
                     if inv == 'T':
                         epochs.apply_function(invert, picks=channel)
                     evoked = epochs.copy().average()
-                    if cond_name in median_names:
-                        sep_latency = df_timing.loc[subject, f"N13"]
-                        expected = 13 / 1000
-                    elif cond_name in tibial_names:
-                        sep_latency = df_timing.loc[subject, f"N22"]
-                        expected = 22 / 1000
                     evoked.shift_time(shift, relative=True)
                     evoked.crop(tmin=-0.06, tmax=0.07)
                     envelope = evoked.apply_hilbert(envelope=True)

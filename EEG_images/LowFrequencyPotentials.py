@@ -1,5 +1,5 @@
 # Read in data Birgit has cleaned up in MATLAB for the low-frequency cortical responses for exp 1 and 2
-# Just using this to estimate the timing of the potentials for future shifting
+# Just using this to get the timing of the potentials for future shifting
 
 
 import os

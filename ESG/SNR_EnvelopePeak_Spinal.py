@@ -23,10 +23,10 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
     create_plot = True
-    save_to_excel = False
+    save_to_excel = True
 
     freq_band = 'sigma'
-    srmr_nr = 1
+    srmr_nr = 2
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)  # 1 through 36 to access subject data
@@ -167,9 +167,9 @@ if __name__ == '__main__':
             else:
                 df_vis.at[subject, f'Sigma_{cond_name.capitalize()}_Visible'] = 'T'
 
-        with pd.ExcelWriter(component_fname, mode='a', if_sheet_exists='overlay') as writer:
+        with pd.ExcelWriter(component_fname, mode='a', if_sheet_exists='overlay', engine="openpyxl") as writer:
             df_comp.to_excel(writer, sheet_name=component_sheetname)
-        with pd.ExcelWriter(visibility_fname, mode='a', if_sheet_exists='overlay') as writer:
+        with pd.ExcelWriter(visibility_fname, mode='a', if_sheet_exists='overlay', engine="openpyxl") as writer:
             df_vis.to_excel(writer, sheet_name=visibility_sheetname)
 
         if save_to_excel:
