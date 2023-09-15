@@ -2,6 +2,7 @@
 # Emma Bailey, 18/10/2022
 # Wrapper script for project to investigate high frequency oscillations in the human spinal cord
 ###############################################################################################
+# Can run a bad channel check for data quality purposes, but no channels are excluded before running CCA
 
 import numpy as np
 from Common_Functions.import_data import import_data
@@ -13,7 +14,7 @@ from ESG.run_CCA_spinal import run_CCA
 from ESG.run_CCA_spinal_2 import run_CCA2
 
 if __name__ == '__main__':
-    srmr_nr = 2  # Set the experiment number
+    srmr_nr = 1  # Set the experiment number
 
     if srmr_nr == 1:
         n_subjects = 36  # Number of subjects
@@ -32,17 +33,17 @@ if __name__ == '__main__':
     import_d = False  # Prep work
 
     ######### 2. Clean the heart artefact using SSP ########
-    SSP_flag = False
+    SSP_flag = True
     no_projections = 6
 
-    ######## 3. Bad Channel Check #######
+    # ######## 3. Bad Channel Check #######
     check_channels = False
 
     ######### 4. Bad trial check #############
-    check_trials = False
+    check_trials = True
 
     ######### 5. Split into frequency bands #############
-    split_bands_flag = False
+    split_bands_flag = True
 
     ######### 6. Run CCA on each frequency band ##########
     CCA_flag = True

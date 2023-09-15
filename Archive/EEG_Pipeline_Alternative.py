@@ -30,7 +30,7 @@ if __name__ == '__main__':
     import_d = False  # Prep work
 
     ######### 2. Run OTP #########
-    otp_flag = False
+    otp_flag = True
 
     ######### 3. Bad trial check #############
     check_trials = False

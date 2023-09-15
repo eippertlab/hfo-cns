@@ -2,6 +2,7 @@
 # Emma Bailey, 18/10/2022
 # Wrapper script for project to investigate high frequency oscillations in the human brain
 ###############################################################################################
+# Can run a bad channel check for data quality purposes, but no channels are excluded before running CCA
 
 import numpy as np
 from Common_Functions.import_data import import_data
@@ -36,7 +37,7 @@ if __name__ == '__main__':
     ######## 2. Bad Channel Check ###########
     check_channels = False
 
-    ######## 3. Bad Trial Check ###########
+    # ######## 3. Bad Trial Check ###########
     check_trials = False
 
     ######## 4. Freq band ##########
