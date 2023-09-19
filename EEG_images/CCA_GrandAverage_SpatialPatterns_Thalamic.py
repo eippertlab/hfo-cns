@@ -91,7 +91,7 @@ if __name__ == '__main__':
                 if trigger_name == 'Median - Stimulation':
                     time_point = 15 / 1000
                     cond_name = 'median'
-                    channel = ['Cz']
+                    channel = ['CP4']
                 else:
                     cond_name = 'tibial'
                     time_point = 30 / 1000

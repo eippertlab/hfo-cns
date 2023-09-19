@@ -21,7 +21,7 @@ if __name__ == '__main__':
         print('Error: If use_updated is True, use_visible must be True')
         exit()
 
-    srmr_nr = 2
+    srmr_nr = 1
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)

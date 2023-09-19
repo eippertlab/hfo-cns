@@ -151,7 +151,7 @@ if __name__ == '__main__':
                     ax[c].axhline(y=noise_mean + 3 * noise_std, color='blue', linewidth='1')
                     plt.suptitle(f'Subject {subject}, {trigger_name}')
                     plt.tight_layout()
-                    plt.savefig(figure_path+f'{subject_id}_{cond_name}')
+            plt.savefig(figure_path+f'{subject_id}_{cond_name}')
 
             # Automatically select the best component, insert 0 if no component passes
             chosen_component = 0
@@ -167,9 +167,9 @@ if __name__ == '__main__':
             else:
                 df_vis.at[subject, f'Sigma_{cond_name.capitalize()}_Visible'] = 'T'
 
-        with pd.ExcelWriter(component_fname, mode='a', if_sheet_exists='overlay') as writer:
+        with pd.ExcelWriter(component_fname, mode='a', if_sheet_exists='overlay', engine="openpyxl") as writer:
             df_comp.to_excel(writer, sheet_name=component_sheetname)
-        with pd.ExcelWriter(visibility_fname, mode='a', if_sheet_exists='overlay') as writer:
+        with pd.ExcelWriter(visibility_fname, mode='a', if_sheet_exists='overlay', engine="openpyxl") as writer:
             df_vis.to_excel(writer, sheet_name=visibility_sheetname)
 
         if save_to_excel:

@@ -15,7 +15,7 @@ mpl.rcParams['pdf.fonttype'] = 42
 if __name__ == '__main__':
     subjects = np.arange(1, 37)
     conditions = [2, 3]
-    freq_bands = ['sigma', 'kappa']
+    freq_bands = ['sigma']
     srmr_nr = 1
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
@@ -25,14 +25,14 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epo_cca_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG.xlsx')
+    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG_Updated.xlsx')
     df = pd.read_excel(xls, 'CCA')
     df.set_index('Subject', inplace=True)
 
     figure_path = '/data/p_02718/Images/CCA_eeg/Envelope_SingleSubject/'
     os.makedirs(figure_path, exist_ok=True)
 
-    single_subject = False  # If we want to do subject by subject analysis of envelope
+    single_subject = True  # If we want to do subject by subject (not as subplot grid)
     subject_subplots = True  # If we just want to plot them all and save
 
     if subject_subplots:

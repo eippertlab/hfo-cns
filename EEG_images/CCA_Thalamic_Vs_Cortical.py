@@ -63,7 +63,7 @@ if __name__ == '__main__':
                     df_vis = pd.read_excel(xls, 'CCA_Brain')
                     df_vis.set_index('Subject', inplace=True)
 
-                figure_path = '/data/p_02718/Images/CCA/CorticalVsThalamic/'
+                figure_path = '/data/p_02718/Images/CCA_eeg/CorticalVsThalamic/'
                 os.makedirs(figure_path, exist_ok=True)
 
                 evoked_list = []
@@ -151,7 +151,7 @@ if __name__ == '__main__':
                 # ax1.axvline(sep_latency, color='red')
             fig.legend()
             plt.tight_layout()
-            plt.show()
+            # plt.show()
             plt.savefig(figure_path+f'GA_Envelope_{freq_band}_{cond_name}')
             plt.savefig(figure_path + f'GA_Envelope_{freq_band}_{cond_name}.pdf',
                         bbox_inches='tight', format="pdf")

@@ -24,11 +24,11 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epo_cca_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG.xlsx')
+    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG_Updated.xlsx')
     df = pd.read_excel(xls, 'CCA')
     df.set_index('Subject', inplace=True)
 
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility.xlsx')
+    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility_Updated.xlsx')
     df_vis = pd.read_excel(xls, 'CCA_Brain')
     df_vis.set_index('Subject', inplace=True)
 
