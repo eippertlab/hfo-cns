@@ -43,6 +43,7 @@ if __name__ == '__main__':
 
     # Check the component file is already generated - want to store the flipping info in the same place so easier to
     # do it this way
+    # If fname and sheet exist already - subjects indices will already be in file from initial creation **
     component_sheetname = 'CCA'
     visibility_sheetname = 'CCA_Brain'
     check_excel_exist(srmr_nr, subjects, component_fname, component_sheetname, visibility_fname, visibility_sheetname,
