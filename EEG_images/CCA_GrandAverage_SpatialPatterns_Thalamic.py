@@ -24,11 +24,16 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
     use_visible = True  # Use only subjects with visible bursting
+    srmr_nr = 2
 
-    subjects = np.arange(1, 37)
-    conditions = [2, 3]
-    freq_bands = ['sigma']
-    srmr_nr = 1
+    if srmr_nr == 1:
+        subjects = np.arange(1, 37)
+        conditions = [2, 3]
+        freq_bands = ['sigma']
+    elif srmr_nr == 2:
+        subjects = np.arange(1, 25)
+        conditions = [3, 5]
+        freq_bands = ['sigma']
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)
@@ -49,19 +54,31 @@ if __name__ == '__main__':
     idx_by_type = mne.channel_indices_by_type(raw.info, picks=eeg_chans)
     res = mne.pick_info(raw.info, sel=idx_by_type['eeg'], copy=True, verbose=None)
 
-    figure_path = '//data/p_02718/Images/CCA_eeg_thalamic/GrandAverage_SpatialPatterns/'
-    os.makedirs(figure_path, exist_ok=True)
+    if srmr_nr == 1:
+        figure_path = '/data/p_02718/Images/CCA_eeg_thalamic/GrandAverage_SpatialPatterns/'
+        os.makedirs(figure_path, exist_ok=True)
 
-    # Excel files
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG_Thalamic_Updated.xlsx')
-    df_cortical = pd.read_excel(xls, 'CCA')
-    df_cortical.set_index('Subject', inplace=True)
+        # Excel files
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG_Thalamic_Updated.xlsx')
+        df_cortical = pd.read_excel(xls, 'CCA')
+        df_cortical.set_index('Subject', inplace=True)
 
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility_Thalamic_Updated.xlsx')
-    df_vis_cortical = pd.read_excel(xls, 'CCA_Brain')
-    df_vis_cortical.set_index('Subject', inplace=True)
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility_Thalamic_Updated.xlsx')
+        df_vis_cortical = pd.read_excel(xls, 'CCA_Brain')
+        df_vis_cortical.set_index('Subject', inplace=True)
 
-    brainstem_chans, cervical_chans, lumbar_chans, ref_chan = get_esg_channels()
+    elif srmr_nr == 2:
+        figure_path = '/data/p_02718/Images_2/CCA_eeg_thalamic/GrandAverage_SpatialPatterns/'
+        os.makedirs(figure_path, exist_ok=True)
+
+        # Excel files
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Components_EEG_Thalamic_Updated.xlsx')
+        df_cortical = pd.read_excel(xls, 'CCA')
+        df_cortical.set_index('Subject', inplace=True)
+
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Visibility_Thalamic_Updated.xlsx')
+        df_vis_cortical = pd.read_excel(xls, 'CCA_Brain')
+        df_vis_cortical.set_index('Subject', inplace=True)
 
     for freq_band in freq_bands:
         for condition in conditions:
@@ -78,22 +95,26 @@ if __name__ == '__main__':
 
                 # HFO
                 fname = f"{freq_band}_{cond_name}.fif"
-                input_path = "/data/pt_02718/tmp_data/cca_eeg_thalamic/" + subject_id + "/"
+                if srmr_nr == 1:
+                    input_path = "/data/pt_02718/tmp_data/cca_eeg_thalamic/" + subject_id + "/"
+                elif srmr_nr == 2:
+                    input_path = "/data/pt_02718/tmp_data_2/cca_eeg_thalamic/" + subject_id + "/"
                 df = df_cortical
                 df_vis = df_vis_cortical
 
                 # Low Freq SEP
-                input_path_low = "/data/pt_02068/analysis/final/tmp_data/" + subject_id + "/eeg/prepro/"
+                if srmr_nr == 1:
+                    input_path_low = "/data/pt_02068/analysis/final/tmp_data/" + subject_id + "/eeg/prepro/"
+                elif srmr_nr == 2:
+                    input_path_low = "/data/pt_02151/analysis/final/tmp_data/" + subject_id + "/eeg/prepro/"
                 fname_low = f"cnt_clean_{cond_name}.set"
                 raw = mne.io.read_raw_eeglab(input_path_low + fname_low, preload=True)
                 raw.set_montage(montage, on_missing="ignore")
                 evoked_low = evoked_from_raw(raw, iv_epoch, iv_baseline, trigger_name, False)
-                if trigger_name == 'Median - Stimulation':
+                if cond_name in ['median', 'med_mixed']:
                     time_point = 15 / 1000
-                    cond_name = 'median'
                     channel = ['CP4']
                 else:
-                    cond_name = 'tibial'
                     time_point = 30 / 1000
                     channel = ['Cz']
 

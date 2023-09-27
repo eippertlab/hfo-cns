@@ -15,8 +15,16 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
 
-    data_types = ['Cortical', 'Spinal']  # Can be Cortical or Spinal here or both
+    data_types = ['Cortical', 'Thalamic', 'Spinal']  # Can be Cortical, Thalamic or Spinal here
     freq_band = 'sigma'
+    subjects = np.arange(1, 37)
+    sfreq = 5000
+    cond_names = ['median', 'tibial']
+
+    freqs = np.arange(350., 900., 3.)
+    fmin, fmax = freqs[[0, -1]]
+    fsearch_low = 400
+    fsearch_high = 800
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)
@@ -30,21 +38,15 @@ if __name__ == '__main__':
     df_cortical = pd.read_excel(xls, 'CCA')
     df_cortical.set_index('Subject', inplace=True)
 
+    # Thalamic Excel files
+    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG_Thalamic_Updated.xlsx')
+    df_thalamic = pd.read_excel(xls, 'CCA')
+    df_thalamic.set_index('Subject', inplace=True)
+
     # Spinal Excel files
     xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_Updated.xlsx')
     df_spinal = pd.read_excel(xls, 'CCA')
     df_spinal.set_index('Subject', inplace=True)
-
-    eeg_chans, esg_chans, bipolar_chans = get_channels(1, False, False, 1)
-
-    subjects = np.arange(1, 37)
-    sfreq = 5000
-    cond_names = ['median', 'tibial']
-
-    freqs = np.arange(350., 900., 3.)
-    fmin, fmax = freqs[[0, -1]]
-    fsearch_low = 400
-    fsearch_high = 800
 
     for data_type in data_types:
         # Make sure our excel sheet is in place to store the values
@@ -60,18 +62,22 @@ if __name__ == '__main__':
             if cond_name == 'tibial':
                 full_name = 'Tibial Nerve Stimulation'
                 trigger_name = 'Tibial - Stimulation'
-                time_edge = 0.004
+                time_edge = 0.006
                 if data_type == 'Cortical':
                     time_peak = 0.04
+                elif data_type == 'Thalamic':
+                    time_peak = 0.03
                 elif data_type == 'Spinal':
                     time_peak = 0.022
 
             elif cond_name == 'median':
                 full_name = 'Median Nerve Stimulation'
                 trigger_name = 'Median - Stimulation'
-                time_edge = 0.002
+                time_edge = 0.003
                 if data_type == 'Cortical':
                     time_peak = 0.02
+                elif data_type == 'Thalamic':
+                    time_peak = 0.014
                 elif data_type == 'Spinal':
                     time_peak = 0.013
 
@@ -82,6 +88,10 @@ if __name__ == '__main__':
                     fname = f"{freq_band}_{cond_name}.fif"
                     input_path = "/data/pt_02718/tmp_data/cca_eeg/" + subject_id + "/"
                     df = df_cortical
+                elif data_type == 'Thalamic':
+                    fname = f"{freq_band}_{cond_name}.fif"
+                    input_path = "/data/pt_02718/tmp_data/cca_eeg_thalamic/" + subject_id + "/"
+                    df = df_thalamic
                 elif data_type == 'Spinal':
                     fname = f"{freq_band}_{cond_name}.fif"
                     input_path = "/data/pt_02718/tmp_data/cca/" + subject_id + "/"

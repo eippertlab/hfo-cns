@@ -15,7 +15,7 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
 
-    data_types = ['Spinal']  # Can be Cortical or Spinal here or both
+    data_types = ['Spinal', 'Thalamic', 'Cortical']  # Can be Cortical, Thalamic or Spinal here or both
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)
@@ -30,14 +30,14 @@ if __name__ == '__main__':
     sfreq = 5000
     cond_names = ['median', 'tibial']
 
-    freqs = np.arange(350., 900., 3.)
-    fmin, fmax = freqs[[0, -1]]
     fsearch_low = 400
     fsearch_high = 800
+    freqs = np.arange(fsearch_low-50, fsearch_high+50, 3.)
+    fmin, fmax = freqs[[0, -1]]
 
     for data_type in data_types:
         # Make sure our excel sheet is in place to store the values
-        excel_fname = '/data/pt_02718/tmp_data/Peak_Frequency.xlsx'
+        excel_fname = f'/data/pt_02718/tmp_data/Peak_Frequency_{fsearch_low}_{fsearch_high}.xlsx'
         sheetname = data_type
         # If fname and sheet exist already - subjects indices will already be in file from initial creation **
         check_excel_exist_freq(subjects, excel_fname, sheetname)
@@ -49,10 +49,13 @@ if __name__ == '__main__':
             if cond_name == 'tibial':
                 full_name = 'Tibial Nerve Stimulation'
                 trigger_name = 'Tibial - Stimulation'
-                time_edge = 0.004
+                time_edge = 0.006
                 if data_type == 'Cortical':
                     channel = ['Cz']
                     time_peak = 0.04
+                elif data_type == 'Thalamic':
+                    channel = ['Cz']
+                    time_peak = 0.03
                 elif data_type == 'Spinal':
                     channel = ['L1']
                     time_peak = 0.022
@@ -60,10 +63,13 @@ if __name__ == '__main__':
             elif cond_name == 'median':
                 full_name = 'Median Nerve Stimulation'
                 trigger_name = 'Median - Stimulation'
-                time_edge = 0.002
+                time_edge = 0.003
                 if data_type == 'Cortical':
                     channel = ['CP4']
                     time_peak = 0.02
+                elif data_type == 'Thalamic':
+                    channel = ['CP4']
+                    time_peak = 0.014
                 elif data_type == 'Spinal':
                     channel = ['SC6']
                     time_peak = 0.013
@@ -71,7 +77,7 @@ if __name__ == '__main__':
             for subject in subjects:  # All subjects
                 subject_id = f'sub-{str(subject).zfill(3)}'
 
-                if data_type == 'Cortical':
+                if data_type in ['Cortical', 'Thalamic']:
                     input_path = "/data/pt_02718/tmp_data/imported/" + subject_id + "/"
                     fname = f"noStimart_sr{sfreq}_{cond_name}_withqrs_eeg.fif"
                 elif data_type == 'Spinal':
@@ -94,7 +100,7 @@ if __name__ == '__main__':
                         [raw, raw_1, raw_2]):
                     # Evoked Power - Get evoked and then compute power
                     evoked = evoked_from_raw(raw_data, iv_epoch, iv_baseline, trigger_name, False)
-                    if data_type == 'Cortical':
+                    if data_type in ['Cortical', 'Thalamic']:
                         evoked.reorder_channels(eeg_chans)
                     elif data_type == 'Spinal':
                         evoked.reorder_channels(esg_chans)

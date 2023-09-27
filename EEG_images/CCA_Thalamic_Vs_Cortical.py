@@ -17,11 +17,7 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 
 if __name__ == '__main__':
-    srmr_nr = 1  # NOT IMPLEMENTED FOR SRMR_NR 2
-
-    if srmr_nr != 1:
-        print('Error: Not implemented for srmr_nr 2')
-        exit()
+    srmr_nr = 2
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
@@ -46,25 +42,47 @@ if __name__ == '__main__':
         for condition in conditions:
             fig, ax1 = plt.subplots()
             for data_type in ['Thalamic_CCA', 'Cortical_CCA']:
-                if data_type == 'Thalamic_CCA':
-                    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG_Thalamic_Updated.xlsx')
-                    df = pd.read_excel(xls, 'CCA')
-                    df.set_index('Subject', inplace=True)
+                if srmr_nr == 1:
+                    if data_type == 'Thalamic_CCA':
+                        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG_Thalamic_Updated.xlsx')
+                        df = pd.read_excel(xls, 'CCA')
+                        df.set_index('Subject', inplace=True)
 
-                    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility_Thalamic_Updated.xlsx')
-                    df_vis = pd.read_excel(xls, 'CCA_Brain')
-                    df_vis.set_index('Subject', inplace=True)
-                else:
-                    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG_Updated.xlsx')
-                    df = pd.read_excel(xls, 'CCA')
-                    df.set_index('Subject', inplace=True)
+                        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility_Thalamic_Updated.xlsx')
+                        df_vis = pd.read_excel(xls, 'CCA_Brain')
+                        df_vis.set_index('Subject', inplace=True)
+                    else:
+                        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG_Updated.xlsx')
+                        df = pd.read_excel(xls, 'CCA')
+                        df.set_index('Subject', inplace=True)
 
-                    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility_Updated.xlsx')
-                    df_vis = pd.read_excel(xls, 'CCA_Brain')
-                    df_vis.set_index('Subject', inplace=True)
+                        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility_Updated.xlsx')
+                        df_vis = pd.read_excel(xls, 'CCA_Brain')
+                        df_vis.set_index('Subject', inplace=True)
 
-                figure_path = '/data/p_02718/Images/CCA_eeg/CorticalVsThalamic/'
-                os.makedirs(figure_path, exist_ok=True)
+                    figure_path = '/data/p_02718/Images/CCA_eeg/CorticalVsThalamic/'
+                    os.makedirs(figure_path, exist_ok=True)
+
+                elif srmr_nr == 2:
+                    if data_type == 'Thalamic_CCA':
+                        xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Components_EEG_Thalamic_Updated.xlsx')
+                        df = pd.read_excel(xls, 'CCA')
+                        df.set_index('Subject', inplace=True)
+
+                        xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Visibility_Thalamic_Updated.xlsx')
+                        df_vis = pd.read_excel(xls, 'CCA_Brain')
+                        df_vis.set_index('Subject', inplace=True)
+                    else:
+                        xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Components_EEG_Updated.xlsx')
+                        df = pd.read_excel(xls, 'CCA')
+                        df.set_index('Subject', inplace=True)
+
+                        xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Visibility_Updated.xlsx')
+                        df_vis = pd.read_excel(xls, 'CCA_Brain')
+                        df_vis.set_index('Subject', inplace=True)
+
+                    figure_path = '/data/p_02718/Images_2/CCA_eeg/CorticalVsThalamic/'
+                    os.makedirs(figure_path, exist_ok=True)
 
                 evoked_list = []
 
@@ -89,7 +107,7 @@ if __name__ == '__main__':
                             condition_names = ['med_mixed', 'tib_mixed']
                         if cond_name in median_names:
                             if data_type == 'Thalamic_CCA':
-                                sep_latency = 0.013
+                                sep_latency = 0.014
                             elif data_type == 'Cortical_CCA':
                                 sep_latency = 0.020
                         elif cond_name in tibial_names:
@@ -104,10 +122,16 @@ if __name__ == '__main__':
                         # Select the right filenames and filepaths, read in and get in evoked form
                         ######################################################################################
                         fname = f"{freq_band}_{cond_name}.fif"
-                        if data_type == 'Thalamic_CCA':
-                            input_path = "/data/pt_02718/tmp_data/cca_eeg_thalamic/" + subject_id + "/"
-                        else:
-                            input_path = "/data/pt_02718/tmp_data/cca_eeg/" + subject_id + "/"
+                        if srmr_nr == 1:
+                            if data_type == 'Thalamic_CCA':
+                                input_path = "/data/pt_02718/tmp_data/cca_eeg_thalamic/" + subject_id + "/"
+                            else:
+                                input_path = "/data/pt_02718/tmp_data/cca_eeg/" + subject_id + "/"
+                        elif srmr_nr == 2:
+                            if data_type == 'Thalamic_CCA':
+                                input_path = "/data/pt_02718/tmp_data_2/cca_eeg_thalamic/" + subject_id + "/"
+                            else:
+                                input_path = "/data/pt_02718/tmp_data_2/cca_eeg/" + subject_id + "/"
                         epochs = mne.read_epochs(input_path + fname, preload=True)
                         channel_no = df.loc[subject, f"{freq_band}_{cond_name}_comp"]
                         channels = f'Cor{channel_no}'
