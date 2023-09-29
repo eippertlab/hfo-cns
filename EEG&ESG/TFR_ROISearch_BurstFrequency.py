@@ -1,12 +1,14 @@
 # Script to plot the time-frequency decomposition of the data - we're using raw data before band pass filtering & CCA
 # Data is already concatenated raw data and processed for bad trials
 # Use the TFR to get characteristics of the burst frequency in our ROI
+# Looks at the mixed nerve conditions in dataset 1 and 2
 
 import mne
 import os
 import numpy as np
 from Common_Functions.evoked_from_raw import evoked_from_raw
 from Common_Functions.get_channels import get_channels
+from Common_Functions.get_conditioninfo import get_conditioninfo
 import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib as mpl
@@ -24,31 +26,40 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epoch_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epoch_end', 'var_value'].iloc[0]]
 
-    eeg_chans, esg_chans, bipolar_chans = get_channels(1, False, False, 1)
-
-    subjects = np.arange(1, 37)
+    srmr_nr = 2
     sfreq = 5000
-    cond_names = ['median', 'tibial']
-
     fsearch_low = 400
-    fsearch_high = 800
-    freqs = np.arange(fsearch_low-50, fsearch_high+50, 3.)
+    fsearch_high = 1200
+    freqs = np.arange(fsearch_low - 50, fsearch_high + 50, 3.)
     fmin, fmax = freqs[[0, -1]]
+
+    if srmr_nr == 1:
+        subjects = np.arange(1, 37)
+        conditions = [2, 4]
+    elif srmr_nr == 2:
+        subjects = np.arange(1, 25)
+        conditions = [3, 5]
+
+    eeg_chans, esg_chans, bipolar_chans = get_channels(1, False, False, srmr_nr)
 
     for data_type in data_types:
         # Make sure our excel sheet is in place to store the values
-        excel_fname = f'/data/pt_02718/tmp_data/Peak_Frequency_{fsearch_low}_{fsearch_high}.xlsx'
+        if srmr_nr == 1:
+            excel_fname = f'/data/pt_02718/tmp_data/Peak_Frequency_{fsearch_low}_{fsearch_high}.xlsx'
+        elif srmr_nr == 2:
+            excel_fname = f'/data/pt_02718/tmp_data_2/Peak_Frequency_{fsearch_low}_{fsearch_high}.xlsx'
         sheetname = data_type
         # If fname and sheet exist already - subjects indices will already be in file from initial creation **
-        check_excel_exist_freq(subjects, excel_fname, sheetname)
+        check_excel_exist_freq(subjects, excel_fname, sheetname, srmr_nr)
         df_freq = pd.read_excel(excel_fname, sheetname)
         df_freq.set_index('Subject', inplace=True)
 
         # To use mne grand_average method, need to generate a list of evoked potentials for each subject
-        for cond_name in cond_names:  # Conditions (median, tibial)
-            if cond_name == 'tibial':
-                full_name = 'Tibial Nerve Stimulation'
-                trigger_name = 'Tibial - Stimulation'
+        for condition in conditions:
+            cond_info = get_conditioninfo(condition, srmr_nr)
+            cond_name = cond_info.cond_name
+            trigger_name = cond_info.trigger_name
+            if cond_name in ['tibial', 'tib_mixed']:
                 time_edge = 0.006
                 if data_type == 'Cortical':
                     channel = ['Cz']
@@ -60,9 +71,7 @@ if __name__ == '__main__':
                     channel = ['L1']
                     time_peak = 0.022
 
-            elif cond_name == 'median':
-                full_name = 'Median Nerve Stimulation'
-                trigger_name = 'Median - Stimulation'
+            elif cond_name in ['median', 'med_mixed']:
                 time_edge = 0.003
                 if data_type == 'Cortical':
                     channel = ['CP4']
@@ -78,22 +87,36 @@ if __name__ == '__main__':
                 subject_id = f'sub-{str(subject).zfill(3)}'
 
                 if data_type in ['Cortical', 'Thalamic']:
-                    input_path = "/data/pt_02718/tmp_data/imported/" + subject_id + "/"
                     fname = f"noStimart_sr{sfreq}_{cond_name}_withqrs_eeg.fif"
+                    if srmr_nr == 1:
+                        input_path = "/data/pt_02718/tmp_data/imported/" + subject_id + "/"
+                    elif srmr_nr == 2:
+                        input_path = "/data/pt_02718/tmp_data_2/imported/" + subject_id + "/"
                 elif data_type == 'Spinal':
-                    input_path = "/data/pt_02718/tmp_data/ssp_cleaned/" + subject_id + "/"
                     fname = f"ssp6_cleaned_{cond_name}.fif"
+                    if srmr_nr == 1:
+                        input_path = "/data/pt_02718/tmp_data/ssp_cleaned/" + subject_id + "/"
+                    elif srmr_nr == 2:
+                        input_path = "/data/pt_02718/tmp_data_2/ssp_cleaned/" + subject_id + "/"
+
                 raw = mne.io.read_raw_fif(input_path + fname, preload=True)
 
-                # Get markers of the boundary so we can have epochs for first 2 blocks, versus second 2 blocks
-                time_of_boundaries = []
-                # Duration of boundaries is zero, so add a little to the top and we're in the second half of trials
-                for jsegment in range(len(raw.annotations)):
-                    if raw.annotations.description[jsegment] == 'BAD boundary':  # Find onset time of boundaries
-                        time_of_boundaries.append(raw.annotations.onset[jsegment])
+                if srmr_nr == 1:
+                    # Get markers of the boundary so we can have epochs for first 2 blocks, versus second 2 blocks
+                    time_of_boundaries = []
+                    # Duration of boundaries is zero, so add a little to the top and we're in the second half of trials
+                    for jsegment in range(len(raw.annotations)):
+                        if raw.annotations.description[jsegment] == 'BAD boundary':  # Find onset time of boundaries
+                            time_of_boundaries.append(raw.annotations.onset[jsegment])
 
-                raw_1 = raw.copy().crop(tmin=0.0, tmax=time_of_boundaries[1], include_tmax=False)
-                raw_2 = raw.copy().crop(tmin=time_of_boundaries[1], tmax=None, include_tmax=True)
+                    raw_1 = raw.copy().crop(tmin=0.0, tmax=time_of_boundaries[1], include_tmax=False)
+                    raw_2 = raw.copy().crop(tmin=time_of_boundaries[1], tmax=None, include_tmax=True)
+
+                # Experiment 2 was recorded without block setup - all 2000 trials just done together
+                # Not a true split half this way - may not use results in full analysis
+                elif srmr_nr == 2:
+                    raw_1 = raw.copy().crop(tmin=0.0, tmax=raw.times[int(np.floor(raw.n_times/2))], include_tmax=False)
+                    raw_2 = raw.copy().crop(tmin=raw.times[int(np.floor(raw.n_times/2))+1], tmax=None, include_tmax=True)
 
                 for col, raw_data in zip(
                         [f'Peak_Frequency_{cond_name}', f'Peak_Frequency_1_{cond_name}', f'Peak_Frequency_2_{cond_name}'],

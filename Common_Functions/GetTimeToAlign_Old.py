@@ -9,19 +9,26 @@ def get_time_to_align(data_type, srmr_nr, cond_names, subjects):
     median = []
     tibial = []
 
-    if srmr_nr == 1:
-        xls = pd.ExcelFile('/data/pt_02718/tmp_data/LowFreq_HighFreq_Relation.xlsx')
-    elif srmr_nr == 2:
-        xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/LowFreq_HighFreq_Relation.xlsx')
-
     for cond_name in cond_names:
         if data_type == 'eeg':
-            sheet_name = 'Cortical'
-        elif data_type == 'esg':
-            sheet_name = 'Spinal'
+            if srmr_nr == 1:
+                xls = pd.ExcelFile('/data/pt_02718/tmp_data/Cortical_Timing.xlsx')
+                df_timing = pd.read_excel(xls, 'Timing')
+                df_timing.set_index('Subject', inplace=True)
+            elif srmr_nr == 2:
+                xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Cortical_Timing.xlsx')
+                df_timing = pd.read_excel(xls, 'Timing')
+                df_timing.set_index('Subject', inplace=True)
 
-        df_timing = pd.read_excel(xls, sheet_name)
-        df_timing.set_index('Subject', inplace=True)
+        elif data_type == 'esg':
+            if srmr_nr == 1:
+                xls = pd.ExcelFile('/data/pt_02718/tmp_data/Spinal_Timing.xlsx')
+                df_timing = pd.read_excel(xls, 'Timing')
+                df_timing.set_index('Subject', inplace=True)
+            elif srmr_nr == 2:
+                xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Spinal_Timing.xlsx')
+                df_timing = pd.read_excel(xls, 'Timing')
+                df_timing.set_index('Subject', inplace=True)
 
         for subject in subjects:
             if data_type == 'esg':

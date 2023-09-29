@@ -7,7 +7,7 @@ import os
 import numpy as np
 from scipy.io import loadmat
 from Common_Functions.evoked_from_raw import evoked_from_raw
-from Common_Functions.GetTimeToAlign import get_time_to_align
+from Common_Functions.GetTimeToAlign_Old import get_time_to_align
 import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib as mpl

@@ -10,7 +10,7 @@ from Common_Functions.evoked_from_raw import evoked_from_raw
 import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib as mpl
-from Common_Functions.GetTimeToAlign import get_time_to_align
+from Common_Functions.GetTimeToAlign_Old import get_time_to_align
 mpl.rcParams['pdf.fonttype'] = 42
 
 

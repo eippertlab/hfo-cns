@@ -3,15 +3,15 @@ import xlsxwriter
 from openpyxl import load_workbook
 
 
-def check_excel_exist_freq(subjects, fname, sheetname, srmr_nr):
-    if srmr_nr == 1:
-        col_names = ['Subject', 'Peak_Frequency_median', 'Peak_Time_median', 'Peak_Frequency_1_median',
-                     'Peak_Frequency_2_median', 'Peak_Frequency_tibial', 'Peak_Time_tibial', 'Peak_Frequency_1_tibial',
-                     'Peak_Frequency_2_tibial']
-    elif srmr_nr == 2:
-        col_names = ['Subject', 'Peak_Frequency_med_mixed', 'Peak_Time_med_mixed', 'Peak_Frequency_1_med_mixed',
-                     'Peak_Frequency_2_med_mixed', 'Peak_Frequency_tib_mixed', 'Peak_Time_tib_mixed',
-                     'Peak_Frequency_1_tib_mixed', 'Peak_Frequency_2_tib_mixed']
+def check_excel_exist_relation(subjects, fname, sheetname):
+    if sheetname == 'Cortical':
+        col_names = ['Subject', 'N20', 'N20_amplitude', 'N20_high',
+                     'N20_high_amplitude', 'P39', 'P39_amplitude', 'P39_high',
+                     'P39_high_amplitude']
+    elif sheetname == 'Spinal':
+        col_names = ['Subject', 'N13', 'N13_amplitude', 'N13_high',
+                     'N13_high_amplitude', 'N22', 'N22_amplitude', 'N22_high',
+                     'N22_high_amplitude']
     # If the excel workbook doesn't exist, create it
     if not os.path.isfile(fname):
         workbook = xlsxwriter.Workbook(fname)

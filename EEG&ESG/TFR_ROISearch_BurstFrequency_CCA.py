@@ -1,5 +1,6 @@
 # Script to plot the time-frequency decomposition of the data - we're using the CCA processed data
 # Use the TFR to get characteristics of the burst frequency in our ROI
+# Looks at mixed nerve conditions for dataset 1 and 2
 
 import mne
 import os
@@ -11,20 +12,55 @@ import pandas as pd
 import matplotlib as mpl
 from Common_Functions.check_excel_exist_freq import check_excel_exist_freq
 from Common_Functions.invert import invert
+from Common_Functions.get_conditioninfo import get_conditioninfo
 mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
 
     data_types = ['Cortical', 'Thalamic', 'Spinal']  # Can be Cortical, Thalamic or Spinal here
-    freq_band = 'sigma'
-    subjects = np.arange(1, 37)
-    sfreq = 5000
-    cond_names = ['median', 'tibial']
 
+    srmr_nr = 2
+    freq_band = 'sigma'
+    sfreq = 5000
     freqs = np.arange(350., 900., 3.)
     fmin, fmax = freqs[[0, -1]]
     fsearch_low = 400
     fsearch_high = 800
+
+    if srmr_nr == 1:
+        subjects = np.arange(1, 37)
+        conditions = [2, 4]
+        # Cortical Excel files
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG_Updated.xlsx')
+        df_cortical = pd.read_excel(xls, 'CCA')
+        df_cortical.set_index('Subject', inplace=True)
+
+        # Thalamic Excel files
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG_Thalamic_Updated.xlsx')
+        df_thalamic = pd.read_excel(xls, 'CCA')
+        df_thalamic.set_index('Subject', inplace=True)
+
+        # Spinal Excel files
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_Updated.xlsx')
+        df_spinal = pd.read_excel(xls, 'CCA')
+        df_spinal.set_index('Subject', inplace=True)
+    elif srmr_nr == 2:
+        subjects = np.arange(1, 25)
+        conditions = [3, 5]
+        # Cortical Excel files
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Components_EEG_Updated.xlsx')
+        df_cortical = pd.read_excel(xls, 'CCA')
+        df_cortical.set_index('Subject', inplace=True)
+
+        # Thalamic Excel files
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Components_EEG_Thalamic_Updated.xlsx')
+        df_thalamic = pd.read_excel(xls, 'CCA')
+        df_thalamic.set_index('Subject', inplace=True)
+
+        # Spinal Excel files
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Components_Updated.xlsx')
+        df_spinal = pd.read_excel(xls, 'CCA')
+        df_spinal.set_index('Subject', inplace=True)
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)
@@ -33,24 +69,12 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epoch_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epoch_end', 'var_value'].iloc[0]]
 
-    # Cortical Excel files
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG_Updated.xlsx')
-    df_cortical = pd.read_excel(xls, 'CCA')
-    df_cortical.set_index('Subject', inplace=True)
-
-    # Thalamic Excel files
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG_Thalamic_Updated.xlsx')
-    df_thalamic = pd.read_excel(xls, 'CCA')
-    df_thalamic.set_index('Subject', inplace=True)
-
-    # Spinal Excel files
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_Updated.xlsx')
-    df_spinal = pd.read_excel(xls, 'CCA')
-    df_spinal.set_index('Subject', inplace=True)
-
     for data_type in data_types:
         # Make sure our excel sheet is in place to store the values
-        excel_fname = '/data/pt_02718/tmp_data/Peak_Frequency_CCA.xlsx'
+        if srmr_nr == 1:
+            excel_fname = '/data/pt_02718/tmp_data/Peak_Frequency_CCA.xlsx'
+        elif srmr_nr == 2:
+            excel_fname = '/data/pt_02718/tmp_data_2/Peak_Frequency_CCA.xlsx'
         sheetname = data_type
         # If fname and sheet exist already - subjects indices will already be in file from initial creation **
         check_excel_exist_freq(subjects, excel_fname, sheetname)
@@ -58,10 +82,11 @@ if __name__ == '__main__':
         df_freq.set_index('Subject', inplace=True)
 
         # To use mne grand_average method, need to generate a list of evoked potentials for each subject
-        for cond_name in cond_names:  # Conditions (median, tibial)
-            if cond_name == 'tibial':
-                full_name = 'Tibial Nerve Stimulation'
-                trigger_name = 'Tibial - Stimulation'
+        for condition in conditions:
+            cond_info = get_conditioninfo(condition, srmr_nr)
+            cond_name = cond_info.cond_name
+            trigger_name = cond_info.trigger_name
+            if cond_name in ['tibial', 'tib_mixed']:
                 time_edge = 0.006
                 if data_type == 'Cortical':
                     time_peak = 0.04
@@ -70,9 +95,7 @@ if __name__ == '__main__':
                 elif data_type == 'Spinal':
                     time_peak = 0.022
 
-            elif cond_name == 'median':
-                full_name = 'Median Nerve Stimulation'
-                trigger_name = 'Median - Stimulation'
+            elif cond_name in ['median', 'med_mixed']:
                 time_edge = 0.003
                 if data_type == 'Cortical':
                     time_peak = 0.02
@@ -86,15 +109,24 @@ if __name__ == '__main__':
 
                 if data_type == 'Cortical':
                     fname = f"{freq_band}_{cond_name}.fif"
-                    input_path = "/data/pt_02718/tmp_data/cca_eeg/" + subject_id + "/"
+                    if srmr_nr == 1:
+                        input_path = "/data/pt_02718/tmp_data/cca_eeg/" + subject_id + "/"
+                    elif srmr_nr == 2:
+                        input_path = "/data/pt_02718/tmp_data_2/cca_eeg/" + subject_id + "/"
                     df = df_cortical
                 elif data_type == 'Thalamic':
                     fname = f"{freq_band}_{cond_name}.fif"
-                    input_path = "/data/pt_02718/tmp_data/cca_eeg_thalamic/" + subject_id + "/"
+                    if srmr_nr == 1:
+                        input_path = "/data/pt_02718/tmp_data/cca_eeg_thalamic/" + subject_id + "/"
+                    elif srmr_nr == 2:
+                        input_path = "/data/pt_02718/tmp_data_2/cca_eeg_thalamic/" + subject_id + "/"
                     df = df_thalamic
                 elif data_type == 'Spinal':
                     fname = f"{freq_band}_{cond_name}.fif"
-                    input_path = "/data/pt_02718/tmp_data/cca/" + subject_id + "/"
+                    if srmr_nr == 1:
+                        input_path = "/data/pt_02718/tmp_data/cca/" + subject_id + "/"
+                    elif srmr_nr == 2:
+                        input_path = "/data/pt_02718/tmp_data_2/cca/" + subject_id + "/"
                     df = df_spinal
 
                 channel_no = df.loc[subject, f"{freq_band}_{cond_name}_comp"]
