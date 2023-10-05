@@ -3,26 +3,40 @@
 
 import numpy as np
 import seaborn as sns
-from Common_Functions.evoked_from_raw import evoked_from_raw
-from Common_Functions.get_channels import get_channels
 import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib as mpl
+import os
 mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
-    figure_to_plot = 2  # [1:splithalf, 2:across CNS]
+    figure_to_plot = 1  # [1:splithalf, 2:across CNS]
     before_CCA = True
-    subjects = np.arange(1, 37)
-    cond_names = ['median', 'tibial']
+    srmr_nr = 2
+    fsearch_low = 400
+    fsearch_high = 800
+
+    if srmr_nr == 1:
+        subjects = np.arange(1, 37)
+        cond_names = ['median', 'tibial']
+        figure_path = f'/data/p_02718/Images/BurstFrequencyAnalysis/'
+    elif srmr_nr == 2:
+        subjects = np.arange(1, 25)
+        cond_names = ['med_mixed', 'tib_mixed']
+        figure_path = f'/data/p_02718/Images_2/BurstFrequencyAnalysis/'
+    os.makedirs(figure_path, exist_ok=True)
     data_types = ['Spinal', 'Thalamic', 'Cortical']
 
     if before_CCA:
-        fsearch_low = 400
-        fsearch_high = 800
-        excel_fname = f'/data/pt_02718/tmp_data/Peak_Frequency_{fsearch_low}_{fsearch_high}.xlsx'
+        if srmr_nr == 1:
+            excel_fname = f'/data/pt_02718/tmp_data/Peak_Frequency_{fsearch_low}_{fsearch_high}.xlsx'
+        elif srmr_nr == 2:
+            excel_fname = f'/data/pt_02718/tmp_data_2/Peak_Frequency_{fsearch_low}_{fsearch_high}.xlsx'
     else:
-        excel_fname = '/data/pt_02718/tmp_data/Peak_Frequency_CCA.xlsx'
+        if srmr_nr == 1:
+            excel_fname = '/data/pt_02718/tmp_data/Peak_Frequency_CCA.xlsx'
+        elif srmr_nr == 2:
+            excel_fname = '/data/pt_02718/tmp_data_2/Peak_Frequency_CCA.xlsx'
         if figure_to_plot == 1:
             print('Error: Cannot do split-half with CCA data')
             exit()
@@ -39,11 +53,16 @@ if __name__ == '__main__':
                 df_freq = pd.melt(df_freq, id_vars=['Subject'], value_vars=col_names,
                                   var_name ='Timing', value_name ='Frequency')  # Change to long format
 
-                sns.catplot(kind='point',
+                g = sns.catplot(kind='point',
                             data=df_freq,
                             x='Timing', y='Frequency', hue='Subject')
+                g.fig.set_size_inches(16, 10)
                 plt.title(f"{data_type}, {cond_name}")
-                plt.show()
+                if before_CCA:
+                    plt.savefig(figure_path +f'SplitHalf_{data_type}_{cond_name}_{fsearch_high}.png')
+                else:
+                    plt.savefig(figure_path +f'SplitHalfAfterCCA_{data_type}_{cond_name}.png')
+                # plt.show()
                 plt.close()
 
     elif figure_to_plot == 2:
@@ -59,11 +78,17 @@ if __name__ == '__main__':
             df_combination = pd.melt(df_combination, id_vars=['Subject'], value_vars=[f'Spinal_{col_name}', f'Thalamic_{col_name}', f'Cortical_{col_name}'],
                               var_name='CNS Level', value_name='Frequency')  # Change to long format
 
-            sns.catplot(kind='point',
+            g = sns.catplot(kind='point',
                         data=df_combination,
                         x='CNS Level', y='Frequency', hue='Subject')
+            g.fig.set_size_inches(16, 10)
             plt.title(f"{cond_name}")
-            plt.show()
+            if before_CCA:
+                plt.savefig(figure_path + f'CrossCNS_{cond_name}_{fsearch_high}.png')
+            else:
+                plt.savefig(figure_path + f'CrossCNSAfterCCA_{cond_name}.png')
+
+            # plt.show()
             plt.close()
 
     else:

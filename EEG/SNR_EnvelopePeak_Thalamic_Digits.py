@@ -83,9 +83,9 @@ if __name__ == '__main__':
             epochs = mne.read_epochs(input_path + fname, preload=True)
 
             if cond_name == 'med_digits':
-                sep_latency = 0.013
+                sep_latency = 0.015
             elif cond_name == 'tib_digits':
-                sep_latency = 0.030
+                sep_latency = 0.032
 
             snr_comp = []
             peak_latency_comp = []

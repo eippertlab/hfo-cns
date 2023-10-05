@@ -34,7 +34,7 @@ if __name__ == '__main__':
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
-        conditions = [2, 4]
+        conditions = [2, 3]
 
         # Cortical Excel file
         xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG_Updated.xlsx')
@@ -151,9 +151,10 @@ if __name__ == '__main__':
                         fname_low = f"ssp_cleaned_{cond_name}.fif"
                         raw = mne.io.read_raw_fif(input_path_low + fname_low, preload=True)
                         evoked_low = evoked_from_raw(raw, iv_epoch, iv_baseline, trigger_name, False)
+                        evoked_low.crop(tmin=-0.06, tmax=0.07)
 
-                    evoked_low.crop(tmin=-0.06, tmax=0.07)
-
+                # Select correct channel for raw ESG data and cca corrected data
+                evoked_low = evoked_low.pick_channels(channel)
                 channel_no = df.loc[subject, f"{freq_band}_{cond_name}_comp"]
                 if channel_no != 0:
                     channel_cca = f'Cor{channel_no}'
@@ -169,14 +170,26 @@ if __name__ == '__main__':
                 # Get timing and amplitude of both peaks
                 # Look negative for low freq N20, N22, N13, look positive for P39
                 # Ampitude envelope always look positive
+                # Low Freq
+                # First check there is a negative/positive potential to be found
+                data_low = evoked_low.crop(tmin=time_peak-time_edge, tmax=time_peak+time_edge).get_data().reshape(-1)
                 if data_type == 'Cortical' and cond_name in ['tibial', 'tib_mixed']:
-                    _ , latency_low, amplitude_low = evoked_low.get_peak(tmin=time_peak - time_edge,
-                                                                         tmax=time_peak + time_edge,
-                                                                         mode='pos', return_amplitude=True)
+                    if max(data_low) > 0:
+                        _, latency_low, amplitude_low = evoked_low.get_peak(tmin=time_peak - time_edge,
+                                                                             tmax=time_peak + time_edge,
+                                                                             mode='pos', return_amplitude=True)
+                    else:
+                        latency_low = time_peak
+                        amplitude_low = np.nan
                 else:
-                    _, latency_low, amplitude_low = evoked_low.get_peak(tmin=time_peak - time_edge,
-                                                                        tmax=time_peak + time_edge,
-                                                                        mode='neg', return_amplitude=True)
+                    if min(data_low) < 0:
+                        _, latency_low, amplitude_low = evoked_low.get_peak(tmin=time_peak - time_edge,
+                                                                            tmax=time_peak + time_edge,
+                                                                            mode='neg', return_amplitude=True)
+                    else:
+                        latency_low = time_peak
+                        amplitude_low = np.nan
+                # High Freq
                 _, latency_high, amplitude_high = envelope.get_peak(tmin=time_peak - time_edge,
                                                                     tmax=time_peak + time_edge,
                                                                     mode='pos', return_amplitude=True)

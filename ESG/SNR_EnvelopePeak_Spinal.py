@@ -33,7 +33,8 @@ if __name__ == '__main__':
         conditions = [2, 3]  # Conditions of interest
         figure_path = '/data/p_02718/Images/CCA/SNR&EnvelopePeak/'
         os.makedirs(figure_path, exist_ok=True)
-        xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/Spinal_Timing.xlsx')
+        xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/LowFreq_HighFreq_Relation.xlsx')
+        # xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/Spinal_Timing.xlsx')
         component_fname = '/data/pt_02718/tmp_data/Components_Updated.xlsx'
         visibility_fname = '/data/pt_02718/tmp_data/Visibility_Updated.xlsx'
 
@@ -42,7 +43,8 @@ if __name__ == '__main__':
         conditions = [3, 5]  # Conditions of interest - med_mixed and tib_mixed
         figure_path = '/data/p_02718/Images_2/CCA/SNR&EnvelopePeak/'
         os.makedirs(figure_path, exist_ok=True)
-        xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/Spinal_Timing.xlsx')
+        xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/LowFreq_HighFreq_Relation.xlsx')
+        # xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/Spinal_Timing.xlsx')
         component_fname = '/data/pt_02718/tmp_data_2/Components_Updated.xlsx'
         visibility_fname = '/data/pt_02718/tmp_data_2/Visibility_Updated.xlsx'
 
@@ -53,7 +55,9 @@ if __name__ == '__main__':
     visibility_sheetname = 'CCA_Spinal'
     check_excel_exist(srmr_nr, subjects, component_fname, component_sheetname, visibility_fname, visibility_sheetname)
 
-    df_timing = pd.read_excel(xls_timing, 'Timing')
+    # df_timing = pd.read_excel(xls_timing, 'Timing')
+    # df_timing.set_index('Subject', inplace=True)
+    df_timing = pd.read_excel(xls_timing, 'Spinal')
     df_timing.set_index('Subject', inplace=True)
 
     df_comp = pd.read_excel(component_fname, component_sheetname)

@@ -77,7 +77,7 @@ if __name__ == '__main__':
             excel_fname = '/data/pt_02718/tmp_data_2/Peak_Frequency_CCA.xlsx'
         sheetname = data_type
         # If fname and sheet exist already - subjects indices will already be in file from initial creation **
-        check_excel_exist_freq(subjects, excel_fname, sheetname)
+        check_excel_exist_freq(subjects, excel_fname, sheetname, srmr_nr)
         df_freq = pd.read_excel(excel_fname, sheetname)
         df_freq.set_index('Subject', inplace=True)
 

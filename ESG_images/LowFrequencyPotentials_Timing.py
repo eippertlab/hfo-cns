@@ -31,7 +31,7 @@ if __name__ == '__main__':
 
     elif srmr_nr == 2:
         subjects = np.arange(1, 25)  # (1, 2) # 1 through 24 to access subject data
-        conditions = [5, 3]  # Conditions of interest - med_mixed and tib_mixed
+        conditions = [3, 5]  # Conditions of interest - med_mixed and tib_mixed
         figure_path = '/data/p_02718/Images_2/ESG/LowFrequencyPotentials/'
         os.makedirs(figure_path, exist_ok=True)
 

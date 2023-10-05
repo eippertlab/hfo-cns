@@ -28,9 +28,9 @@ if __name__ == '__main__':
 
     subjects = np.arange(1, 25)  # 1 through 24 to access subject data
     conditions = [2, 4]  # Conditions of interest - med_digits and tib_digits
-    component_fname = '/data/pt_02718/tmp_data_2/Components_EEG_Updated_Digits.xlsx'
-    visibility_fname = '/data/pt_02718/tmp_data_2/Visibility_Updated_Digits.xlsx'
-    figure_path = '/data/p_02718/Images_2/CCA_eeg_digits/ComponentIsopotentialPlots/'
+    component_fname = '/data/pt_02718/tmp_data_2/Components_EEG_Thalamic_Updated_Digits.xlsx'
+    visibility_fname = '/data/pt_02718/tmp_data_2/Visibility_Thalamic_Updated_Digits.xlsx'
+    figure_path = '/data/p_02718/Images_2/CCA_eeg_thalamic_digits/ComponentIsopotentialPlots/'
     os.makedirs(figure_path, exist_ok=True)
 
     # Get a raw file so I can use the montage
@@ -56,7 +56,7 @@ if __name__ == '__main__':
             subject_id = f'sub-{str(subject).zfill(3)}'
             # Spatial pattern
             fname = f"A_st_{freq_band}_{cond_name}.pkl"
-            input_path = "/data/pt_02718/tmp_data_2/cca_eeg/" + subject_id + "/"
+            input_path = "/data/pt_02718/tmp_data_2/cca_eeg_thalamic/" + subject_id + "/"
             with open(f'{input_path}{fname}', 'rb') as f:
                 A_st = pickle.load(f)
 

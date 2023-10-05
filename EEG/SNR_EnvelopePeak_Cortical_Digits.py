@@ -35,7 +35,8 @@ if __name__ == '__main__':
 
     subjects = np.arange(1, 25)  # (1, 2) # 1 through 24 to access subject data
     conditions = [2, 4]  # Conditions of interest - med_digits and tib_digits
-    xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/Cortical_Timing_Digits.xlsx')
+    # xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/Cortical_Timing_Digits.xlsx')
+    xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/LowFreq_HighFreq_Relation.xlsx')
     component_fname = '/data/pt_02718/tmp_data_2/Components_EEG_Updated_Digits.xlsx'
     visibility_fname = '/data/pt_02718/tmp_data_2/Visibility_Updated_Digits.xlsx'
     figure_path = '/data/p_02718/Images_2/CCA_eeg_digits/SNR&EnvelopePeak/'
@@ -49,7 +50,9 @@ if __name__ == '__main__':
     check_excel_exist(srmr_nr, subjects, component_fname, component_sheetname, visibility_fname, visibility_sheetname,
                       True)
 
-    df_timing = pd.read_excel(xls_timing, 'Timing')
+    # df_timing = pd.read_excel(xls_timing, 'Timing')
+    # df_timing.set_index('Subject', inplace=True)
+    df_timing = pd.read_excel(xls_timing, 'Cortical')
     df_timing.set_index('Subject', inplace=True)
 
     df_comp = pd.read_excel(component_fname, component_sheetname)
@@ -89,6 +92,7 @@ if __name__ == '__main__':
                 sep_latency = df_timing.loc[subject, f"N20"]
             elif cond_name == 'tib_digits':
                 sep_latency = df_timing.loc[subject, f"P39"]
+            sep_latency += 0.002  # Add 2ms to account for difference between ankle and toes etc.
 
             snr_comp = []
             peak_latency_comp = []

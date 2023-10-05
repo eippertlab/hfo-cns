@@ -28,15 +28,15 @@ if __name__ == '__main__':
     image_path = "/data/p_02718/Polished/TFRs_SingleChannel/"
     os.makedirs(image_path, exist_ok=True)
 
-    xls_timing_spinal = pd.ExcelFile('/data/pt_02718/tmp_data/Spinal_Timing.xlsx')
-    df_timing_spinal = pd.read_excel(xls_timing_spinal, 'Timing')
+    xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/LowFreq_HighFreq_Relation.xlsx')
+    df_timing_spinal = pd.read_excel(xls_timing, 'Spinal')
     df_timing_spinal.set_index('Subject', inplace=True)
 
     subjects = np.arange(1, 37)
     sfreq = 5000
     cond_names = ['median', 'tibial']
 
-    for freq_type in ['upper']:  #, 'full'
+    for freq_type in ['upper', 'full']:
         if freq_type == 'full':
             freqs = np.arange(0., 1000., 3.)
             fmin, fmax = freqs[[0, -1]]
@@ -83,7 +83,9 @@ if __name__ == '__main__':
 
                 if shift_spinal:
                     # Apply relative time-shift depending on expected latency for spinal data
-                    median_lat, tibial_lat = get_time_to_align('esg', ['median', 'tibial'], np.arange(1, 37))
+                    # median_lat, tibial_lat = get_time_to_align('esg', ['median', 'tibial'], np.arange(1, 37))
+                    median_lat = 0.013
+                    tibial_lat = 0.022
                     for evoked in [evoked_correct, evoked_incorrect]:
                         if cond_name == 'median':
                             sep_latency = round(df_timing_spinal.loc[subject, f"N13"], 3)
