@@ -17,20 +17,15 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 
 if __name__ == '__main__':
-    use_updated = True  # If true use components selected with criteria in mind
-    use_only_good = True  # If true use only the subjects marked as visible
-    # use_only_good must be true if use_updated is true
-    srmr_nr = 2
-
-    if use_updated is True and use_only_good is not True:
-        print('Error: use_only_good must be true if use_updated is true')
-        exit()
+    srmr_nr = 1
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
-        conditions = [2, 3]
+        conditions = [2]  # 4: Don't do for tibial - no surviving subjects
         freq_bands = ['sigma']
     elif srmr_nr == 2:
+        print('Not yet implemented')
+        exit()
         subjects = np.arange(1, 25)
         conditions = [3, 5]
         freq_bands = ['sigma']
@@ -42,43 +37,12 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epo_cca_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
-    if use_updated:
-        if srmr_nr == 1:
-            xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_Updated.xlsx')
-            df = pd.read_excel(xls, 'CCA')
-            df.set_index('Subject', inplace=True)
-
-            xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility_Updated.xlsx')
-            df_vis = pd.read_excel(xls, 'CCA_Spinal')
-            df_vis.set_index('Subject', inplace=True)
-
-            xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/LowFreq_HighFreq_Relation.xlsx')
-            df_timing = pd.read_excel(xls_timing, 'Spinal')
-            df_timing.set_index('Subject', inplace=True)
-
-            figure_path = '/data/p_02718/Images/CCA/Envelope_Updated_Shifted/'
-            os.makedirs(figure_path, exist_ok=True)
-        elif srmr_nr == 2:
-            xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Components_Updated.xlsx')
-            df = pd.read_excel(xls, 'CCA')
-            df.set_index('Subject', inplace=True)
-
-            xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Visibility_Updated.xlsx')
-            df_vis = pd.read_excel(xls, 'CCA_Spinal')
-            df_vis.set_index('Subject', inplace=True)
-
-            xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/LowFreq_HighFreq_Relation.xlsx')
-            df_timing = pd.read_excel(xls_timing, 'Spinal')
-            df_timing.set_index('Subject', inplace=True)
-
-            figure_path = '/data/p_02718/Images_2/CCA/Envelope_Updated_Shifted/'
-            os.makedirs(figure_path, exist_ok=True)
-    else:
-        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components.xlsx')
+    if srmr_nr == 1:
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_Shuffle_Updated.xlsx')
         df = pd.read_excel(xls, 'CCA')
         df.set_index('Subject', inplace=True)
 
-        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility.xlsx')
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility_Shuffle_Updated.xlsx')
         df_vis = pd.read_excel(xls, 'CCA_Spinal')
         df_vis.set_index('Subject', inplace=True)
 
@@ -86,8 +50,25 @@ if __name__ == '__main__':
         df_timing = pd.read_excel(xls_timing, 'Spinal')
         df_timing.set_index('Subject', inplace=True)
 
-        figure_path = '/data/p_02718/Images/CCA/Envelope_Shifted/'
+        figure_path = '/data/p_02718/Images/CCA_shuffle/Envelope_Updated_Shifted/'
         os.makedirs(figure_path, exist_ok=True)
+
+    elif srmr_nr == 2:
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Components_Shuffle_Updated.xlsx')
+        df = pd.read_excel(xls, 'CCA')
+        df.set_index('Subject', inplace=True)
+
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Visibility_Shuffle_Updated.xlsx')
+        df_vis = pd.read_excel(xls, 'CCA_Spinal')
+        df_vis.set_index('Subject', inplace=True)
+
+        xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/LowFreq_HighFreq_Relation.xlsx')
+        df_timing = pd.read_excel(xls_timing, 'Spinal')
+        df_timing.set_index('Subject', inplace=True)
+
+        figure_path = '/data/p_02718/Images_2/CCA_shuffle/Envelope_Updated_Shifted/'
+        os.makedirs(figure_path, exist_ok=True)
+
     brainstem_chans, cervical_chans, lumbar_chans, ref_chan = get_esg_channels()
     median_names = ['median', 'med_mixed']
     tibial_names = ['tibial', 'tib_mixed']
@@ -121,46 +102,22 @@ if __name__ == '__main__':
                     expected = tibial_lat
                 shift = expected - sep_latency
 
-                if use_only_good:
-                    # Only perform if bursts marked as visible
-                    visible = df_vis.loc[subject, f"{freq_band.capitalize()}_{cond_name.capitalize()}_Visible"]
-                    if visible == 'T':
-                        # Select the right files
-                        fname = f"{freq_band}_{cond_name}.fif"
-                        if srmr_nr == 1:
-                            input_path = "/data/pt_02718/tmp_data/cca/" + subject_id + "/"
-                        elif srmr_nr == 2:
-                            input_path = "/data/pt_02718/tmp_data_2/cca/" + subject_id + "/"
-
-                        epochs = mne.read_epochs(input_path + fname, preload=True)
-
-                        # Need to pick channel based on excel sheet
-                        channel_no = df.loc[subject, f"{freq_band}_{cond_name}_comp"]
-                        channel = f'Cor{int(channel_no)}'
-                        inv = df.loc[subject, f"{freq_band}_{cond_name}_flip"]
-                        epochs = epochs.pick_channels([channel])
-                        if inv == 'T':
-                            epochs.apply_function(invert, picks=channel)
-                        evoked = epochs.copy().average()
-                        evoked.shift_time(shift, relative=True)
-                        evoked.crop(tmin=-0.06, tmax=0.07)
-                        envelope = evoked.apply_hilbert(envelope=True)
-                        data = envelope.get_data()
-                        evoked_list.append(data)
-
-                else:
+                # Only perform if bursts marked as visible
+                visible = df_vis.loc[subject, f"{freq_band.capitalize()}_{cond_name.capitalize()}_Visible"]
+                print(visible)
+                if visible == 'T':
                     # Select the right files
                     fname = f"{freq_band}_{cond_name}.fif"
                     if srmr_nr == 1:
-                        input_path = "/data/pt_02718/tmp_data/cca/" + subject_id + "/"
+                        input_path = "/data/pt_02718/tmp_data/cca_shuffle/" + subject_id + "/"
                     elif srmr_nr == 2:
-                        input_path = "/data/pt_02718/tmp_data_2/cca/" + subject_id + "/"
+                        input_path = "/data/pt_02718/tmp_data_2/cca_shuffle/" + subject_id + "/"
 
                     epochs = mne.read_epochs(input_path + fname, preload=True)
 
                     # Need to pick channel based on excel sheet
                     channel_no = df.loc[subject, f"{freq_band}_{cond_name}_comp"]
-                    channel = f'Cor{channel_no}'
+                    channel = f'Cor{int(channel_no)}'
                     inv = df.loc[subject, f"{freq_band}_{cond_name}_flip"]
                     epochs = epochs.pick_channels([channel])
                     if inv == 'T':

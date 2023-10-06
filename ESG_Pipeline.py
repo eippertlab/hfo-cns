@@ -12,6 +12,7 @@ from Common_Functions.bad_trial_check import bad_trial_check
 from Common_Functions.Create_Frequency_Bands import create_frequency_bands
 from ESG.run_CCA_spinal import run_CCA
 from ESG.run_CCA_spinal_2 import run_CCA2
+from ESG.run_CCA_spinal_shuffle import run_CCA_shuffle
 
 if __name__ == '__main__':
     srmr_nr = 1  # Set the experiment number
@@ -33,20 +34,23 @@ if __name__ == '__main__':
     import_d = False  # Prep work
 
     ######### 2. Clean the heart artefact using SSP ########
-    SSP_flag = True
+    SSP_flag = False
     no_projections = 6
 
     # ######## 3. Bad Channel Check #######
     check_channels = False
 
     ######### 4. Bad trial check #############
-    check_trials = True
+    check_trials = False
 
     ######### 5. Split into frequency bands #############
-    split_bands_flag = True
+    split_bands_flag = False
 
     ######### 6. Run CCA on each frequency band ##########
-    CCA_flag = True
+    CCA_flag = False
+
+    ######### 7. Run CCA shuffle on each frequency band ##########
+    CCA_shuffle_flag = True
 
     ############################################
     # Import Data from BIDS directory
@@ -102,6 +106,24 @@ if __name__ == '__main__':
                     for freq_band in ['sigma']:
                         run_CCA(subject, condition, srmr_nr, freq_band)
         elif srmr_nr == 2:
+            conditions_d2 = [2, 4]  # only need to specify digits, takes care of mixed nerve within other script
+            for subject in subjects:
+                for condition in conditions_d2:
+                    for freq_band in ['sigma']:
+                        run_CCA2(subject, condition, srmr_nr, freq_band)
+
+    ###################################################
+    # Run CCA on Freq Bands
+    ###################################################
+    if CCA_shuffle_flag:
+        if srmr_nr == 1:
+            for subject in subjects:
+                for condition in conditions:
+                    for freq_band in ['sigma']:
+                        run_CCA_shuffle(subject, condition, srmr_nr, freq_band)
+        elif srmr_nr == 2:
+            print('Not implemented for dataset 2')
+            exit()
             conditions_d2 = [2, 4]  # only need to specify digits, takes care of mixed nerve within other script
             for subject in subjects:
                 for condition in conditions_d2:
