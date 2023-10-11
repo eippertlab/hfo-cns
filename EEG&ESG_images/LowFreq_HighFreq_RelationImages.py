@@ -10,7 +10,7 @@ import os
 mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
-    srmr_nr = 1
+    srmr_nr = 2
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
@@ -48,12 +48,11 @@ if __name__ == '__main__':
             # var_name no holds half type, value_name holds the actual peak freq
 
             for df, col_names in zip([df_latency, df_amplitude], [col_lat, col_amp]):
-                df = pd.melt(df.abs(), id_vars=['Subject'], value_vars=col_names,
-                                  var_name='Potential', value_name='Value')  # Change to long format
-                g = sns.catplot(kind='point',
-                                data=df,
-                                x='Potential', y='Value', hue='Subject')
-                g.fig.set_size_inches(16, 10)
+                # df = pd.melt(df.abs(), id_vars=['Subject'], value_vars=col_names,
+                #                   var_name='Potential', value_name='Value')  # Change to long format
+                sns.scatterplot(data=df.abs(),
+                                    x=col_names[0], y=col_names[1])
+                # g.fig.set_size_inches(16, 10)
                 plt.title(f"{data_type}, {cond_name}")
                 plt.savefig(figure_path + f'{col_names[0]}_{data_type}_{cond_name}_abs.png')
                 # plt.show()

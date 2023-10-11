@@ -25,7 +25,7 @@ if __name__ == '__main__':
     use_visible = True  # Use only subjects with visible bursting
 
     subjects = np.arange(1, 37)
-    conditions = [2, 3]
+    conditions = [2]  # No surviving subjects for tibial so no need to run
     freq_bands = ['sigma']
     srmr_nr = 1
 

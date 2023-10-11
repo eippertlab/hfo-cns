@@ -14,6 +14,7 @@ from Archive.run_CCA_brain_good import run_CCA_good
 from EEG.run_CCA_brain import run_CCA
 from EEG.run_CCA_brain_2 import run_CCA2
 from EEG.run_CCA_brain_shuffle import run_CCA_shuffle
+from EEG.run_CCA_brain_shufflebyhalf import run_CCA_shufflebyhalf
 from EEG.run_CCA_brain_thalamic import run_CCA_thalamic
 from EEG.run_CCA_brain_thalamic_2 import run_CCA_thalamic2
 
@@ -52,7 +53,10 @@ if __name__ == '__main__':
     CCA_thalamic_flag = False
 
     ######## 5. Run shuffled CCA ########
-    CCA_shuffle_flag = True
+    CCA_shuffle_flag = False
+
+    ######## 6. Run shuffled CCA ########
+    CCA_shufflebyhalf_flag = True
 
     ############################################
     # Import Data from BIDS directory
@@ -131,6 +135,24 @@ if __name__ == '__main__':
                 for condition in conditions:
                     for freq_band in ['sigma']:
                         run_CCA_shuffle(subject, condition, srmr_nr, freq_band, sampling_rate)
+        elif srmr_nr == 2:
+            print('Not implemented yet')
+            exit()
+            conditions_d2 = [2, 4]  # only need to specify digits, takes care of mixed nerve within other script
+            for subject in subjects:
+                for condition in conditions_d2:
+                    for freq_band in ['sigma']:
+                        run_CCA2(subject, condition, srmr_nr, freq_band, sampling_rate)
+
+    ###################################################
+    # Run CCA shuffled on Freq Bands - all trials
+    ###################################################
+    if CCA_shufflebyhalf_flag:
+        if srmr_nr == 1:
+            for subject in subjects:
+                for condition in conditions:
+                    for freq_band in ['sigma']:
+                        run_CCA_shufflebyhalf(subject, condition, srmr_nr, freq_band, sampling_rate)
         elif srmr_nr == 2:
             print('Not implemented yet')
             exit()
