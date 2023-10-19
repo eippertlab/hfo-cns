@@ -48,13 +48,13 @@ if __name__ == '__main__':
     split_bands_flag = False
 
     ######### 6. Run CCA on each frequency band ##########
-    CCA_flag = False
+    CCA_flag = True
 
     ######### 7. Run CCA shuffle on each frequency band ##########
     CCA_shuffle_flag = False
 
     ######### 8. Run CCA shuffle on each frequency band ##########
-    CCA_shufflebyhalf_flag = True
+    CCA_shufflebyhalf_flag = False
 
     ############################################
     # Import Data from BIDS directory

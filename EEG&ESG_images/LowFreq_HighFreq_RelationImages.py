@@ -52,8 +52,9 @@ if __name__ == '__main__':
                 #                   var_name='Potential', value_name='Value')  # Change to long format
                 sns.scatterplot(data=df.abs(),
                                     x=col_names[0], y=col_names[1])
+                pearson_corr = df.abs()[f'{col_names[0]}'].corr(df.abs()[f'{col_names[1]}'])
                 # g.fig.set_size_inches(16, 10)
-                plt.title(f"{data_type}, {cond_name}")
+                plt.title(f"{data_type}, {cond_name}, PearsonCorrelation: {round(pearson_corr, 4)}")
                 plt.savefig(figure_path + f'{col_names[0]}_{data_type}_{cond_name}_abs.png')
                 # plt.show()
                 plt.close()
