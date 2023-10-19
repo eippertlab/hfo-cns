@@ -6,11 +6,12 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib as mpl
+from scipy.stats import pearsonr
 import os
 mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
-    srmr_nr = 2
+    srmr_nr = 1
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
@@ -52,9 +53,11 @@ if __name__ == '__main__':
                 #                   var_name='Potential', value_name='Value')  # Change to long format
                 sns.scatterplot(data=df.abs(),
                                     x=col_names[0], y=col_names[1])
-                pearson_corr = df.abs()[f'{col_names[0]}'].corr(df.abs()[f'{col_names[1]}'])
+                # pearson_corr_og = df.abs()[f'{col_names[0]}'].corr(df.abs()[f'{col_names[1]}'])
+                df.dropna(inplace=True)
+                pearson_corr = pearsonr(df.abs()[f'{col_names[0]}'], df.abs()[f'{col_names[1]}'])
                 # g.fig.set_size_inches(16, 10)
-                plt.title(f"{data_type}, {cond_name}, PearsonCorrelation: {round(pearson_corr, 4)}")
+                plt.title(f"{data_type}, {cond_name}, PearsonCorrelation: {round(pearson_corr.statistic, 4)}, pval: {round(pearson_corr.pvalue, 4)}")
                 plt.savefig(figure_path + f'{col_names[0]}_{data_type}_{cond_name}_abs.png')
                 # plt.show()
                 plt.close()
