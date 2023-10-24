@@ -24,11 +24,11 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
     use_visible = True  # Use only subjects with visible bursting
-    srmr_nr = 1
+    srmr_nr = 2
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
-        conditions = [3, 2]
+        conditions = [2, 3]
         freq_bands = ['sigma']
     elif srmr_nr == 2:
         subjects = np.arange(1, 25)
@@ -55,11 +55,8 @@ if __name__ == '__main__':
     res = mne.pick_info(raw.info, sel=idx_by_type['eeg'], copy=True, verbose=None)
 
     if srmr_nr == 1:
-        figure_path = '/data/p_02718/Images/CCA_eeg_thalamic/GrandAverage_SpatialPatterns/'
+        figure_path = '/data/p_02718/Polished/GrandAverage_SpatialPatterns_Thalamic/'
         os.makedirs(figure_path, exist_ok=True)
-
-        figure_path_ss = '/data/p_02718/Images/CCA_eeg_thalamic/SingleSubject_SpatialPatterns/'
-        os.makedirs(figure_path_ss, exist_ok=True)
 
         # Excel files
         xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG_Thalamic_Updated.xlsx')
@@ -71,11 +68,8 @@ if __name__ == '__main__':
         df_vis_cortical.set_index('Subject', inplace=True)
 
     elif srmr_nr == 2:
-        figure_path = '/data/p_02718/Images_2/CCA_eeg_thalamic/GrandAverage_SpatialPatterns/'
+        figure_path = '/data/p_02718/Polished_2/GrandAverage_SpatialPatterns_Thalamic/'
         os.makedirs(figure_path, exist_ok=True)
-
-        figure_path_ss = '/data/p_02718/Images_2/CCA_eeg_thalamic/SingleSubject_SpatialPatterns/'
-        os.makedirs(figure_path_ss, exist_ok=True)
 
         # Excel files
         xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Components_EEG_Thalamic_Updated.xlsx')
@@ -118,12 +112,10 @@ if __name__ == '__main__':
                 raw.set_montage(montage, on_missing="ignore")
                 evoked_low = evoked_from_raw(raw, iv_epoch, iv_baseline, trigger_name, False)
                 if cond_name in ['median', 'med_mixed']:
-                    time_points = [13/1000, 14/1000, 15 / 1000, 16/1000, 17/1000]
-                    time_point = 15/100
+                    time_point = 15 / 1000
                     channel = ['CP4']
                 else:
-                    time_points = [28/1000, 29/1000, 30 / 1000, 31/1000, 32/1000]
-                    time_point = 30/1000
+                    time_point = 30 / 1000
                     channel = ['Cz']
 
                 # Need to pick channel based on excel sheet
@@ -143,80 +135,23 @@ if __name__ == '__main__':
                     if visible == 'T':
                         if inv == 'T':
                             spatial_pattern.append(A_st[:, channel_no - 1] * -1)
-                            current_pattern = A_st[:, channel_no - 1] * -1
                         else:
                             spatial_pattern.append(A_st[:, channel_no - 1])
-                            current_pattern = A_st[:, channel_no - 1]
                         evoked_list.append(evoked_low)
                 else:
                     if inv == 'T':
                         spatial_pattern.append(A_st[:, channel_no - 1] * -1)
-                        current_pattern = A_st[:, channel_no - 1] * -1
                     else:
                         spatial_pattern.append(A_st[:, channel_no - 1])
-                        current_pattern = A_st[:, channel_no - 1]
 
                     evoked_list.append(evoked_low)
 
-                fig_low, ax_low = plt.subplots(1, len(time_points))
-                evoked_low.plot_topomap(times=time_points, average=None, ch_type=None, scalings=None, proj=False,
-                                    sensors=True, show_names=False, mask=None, mask_params=None, contours=6,
-                                    outlines='head', sphere=None, image_interp='cubic', extrapolate='auto',
-                                    border='mean',
-                                    res=64, size=1, cmap='jet', vlim=(None, None), vmin=None, vmax=None,
-                                    cnorm=None,
-                                    colorbar=False, cbar_fmt='%3.1f', units=None, axes=ax_low, time_unit='s',
-                                    time_format=None,
-                                    nrows=1, ncols='auto', show=False)
-                # plt.title(f'{subject_id}, Spatial Pattern, {cond_name}')
-                # divider = make_axes_locatable(ax_low)
-                # cax = divider.append_axes('right', size='5%', pad=0.05)
-                # cb = fig.colorbar(ax_low.images[-1], cax=cax, shrink=0.6, orientation='vertical')
-                # cb.set_label('Amplitude (\u03BCV)', rotation=90)
-
-                if use_visible is True:
-                    fig_low.savefig(figure_path_ss + f'{subject_id}_LowSpatial_{cond_name}_visible')
-                    fig_low.savefig(figure_path_ss + f'{subject_id}_LowSpatial_{cond_name}_visible.pdf',
-                                    bbox_inches='tight', format="pdf")
-                else:
-                    fig_low.savefig(figure_path_ss + f'{subject_id}_LowSpatial_{cond_name}')
-                    fig_low.savefig(figure_path_ss + f'{subject_id}_LowSpatial_{cond_name}.pdf',
-                                    bbox_inches='tight', format="pdf")
-                plt.close()
-
-                #################################################################################################
-                # HFO Single Subject
-                #################################################################################################
-                fig, ax = plt.subplots(1, 1)
-                chan_labels = evoked_low.ch_names
-                mne.viz.plot_topomap(data=current_pattern * 10 ** 6, pos=res, ch_type='eeg', sensors=True,
-                                     names=None,
-                                     contours=6, outlines='head', sphere=None, image_interp='cubic',
-                                     extrapolate='head', border='mean', res=64, size=1, cmap='jet', vlim=(None, None),
-                                     cnorm=None, axes=ax, show=False)
-                ax.set_title(f'{subject_id} Spatial Pattern, {cond_name}')
-                # divider = make_axes_locatable(ax)
-                # cax = divider.append_axes('right', size='5%', pad=0.05)
-                # cb = fig.colorbar(ax.images[-1], cax=cax, shrink=0.6, orientation='vertical')
-                # cb.set_label('Amplitude (AU)', rotation=90)
-
-                if use_visible is True:
-                    fig.savefig(figure_path_ss + f'{subject_id}_HighSpatial_{cond_name}_visible')
-                    fig.savefig(figure_path_ss + f'{subject_id}_HighSpatial_{cond_name}_visible.pdf',
-                                bbox_inches='tight', format="pdf")
-                else:
-                    fig.savefig(figure_path_ss + f'{subject_id}_HighSpatial_{cond_name}')
-                    fig.savefig(figure_path_ss + f'{subject_id}_HighSpatial_{cond_name}.pdf',
-                                bbox_inches='tight', format="pdf")
-
-            ##################################################################################################
-            # GRAND AVERAGE
-            ##################################################################################################
+            # Get grand average
             grand_average_spatial = np.mean(spatial_pattern, axis=0)  # HFO
             averaged = mne.grand_average(evoked_list, interpolate_bads=False, drop_bads=False)  # SEP for eeg
 
             #################################################################################################
-            # HFO grand average plot
+            # HFO
             #################################################################################################
             fig, ax = plt.subplots(1, 1)
             chan_labels = evoked_low.ch_names
@@ -232,9 +167,15 @@ if __name__ == '__main__':
             cb.set_label('Amplitude (AU)', rotation=90)
 
             ###############################################################################################
-            # Low Freq SEP average plot
+            # Low Freq SEP
             ###############################################################################################
             fig_low, ax_low = plt.subplots(1, 1)
+            # divider = make_axes_locatable(plt.gca())
+            # cax = divider.append_axes("right", "5%", pad="3%")
+
+            # fig_low = plt.figure()
+            # ax_low = plt.subplot2grid(shape=(10, 25), loc=(0, 0), colspan=24, rowspan=10)
+            # cax = plt.subplot2grid(shape=(10, 25), loc=(1, 24), colspan=1, rowspan=8)
             averaged.plot_topomap(times=time_point, average=None, ch_type=None, scalings=None, proj=False,
                                   sensors=True, show_names=False, mask=None, mask_params=None, contours=6,
                                   outlines='head', sphere=None, image_interp='cubic', extrapolate='auto',
@@ -243,7 +184,7 @@ if __name__ == '__main__':
                                   cnorm=None,
                                   colorbar=False, cbar_fmt='%3.1f', units=None, axes=ax_low, time_unit='s',
                                   time_format=None,
-                                  nrows=1, ncols='auto', show=False)
+                                  nrows=1, ncols='auto', show=True)
             ax_low.set_title(f'Grand Average Spatial Pattern, n={len(spatial_pattern)}')
             divider = make_axes_locatable(ax_low)
             cax = divider.append_axes('right', size='5%', pad=0.05)
