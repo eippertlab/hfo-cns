@@ -11,7 +11,6 @@ from Common_Functions.invert import invert
 import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib as mpl
-from Common_Functions.GetTimeToAlign_Old import get_time_to_align
 from scipy.stats import sem
 mpl.rcParams['pdf.fonttype'] = 42
 
@@ -95,17 +94,16 @@ if __name__ == '__main__':
                             condition_names = ['median', 'tibial']
                         elif srmr_nr == 2:
                             condition_names = ['med_mixed', 'tib_mixed']
-                        median_lat, tibial_lat = get_time_to_align('esg', srmr_nr, condition_names, subjects)
                         if cond_name in median_names:
                             sep_latency = round(df_timing.loc[subject, f"N13"], 3)
-                            expected = median_lat
+                            expected = 0.013
                             if data_type == 'cluster_electrodes':
                                 channels = ['S6', 'SC6', 'S14']
                             elif data_type == 'single_electrode':
                                 channels = ['SC6']
                         elif cond_name in tibial_names:
                             sep_latency = round(df_timing.loc[subject, f"N22"], 3)
-                            expected = tibial_lat
+                            expected = 0.022
                             if data_type == 'cluster_electrodes':
                                 channels = ['S23', 'L1', 'S31']
                             elif data_type == 'single_electrode':

@@ -1,5 +1,6 @@
 # Want to plot envelope from CCA when trained for thalamic versus cortical time windows
 # Want to add error bands to show standard error of the mean in same
+# No shifting as we don't have info for thalamic
 
 import os
 import mne
@@ -11,7 +12,6 @@ from Common_Functions.invert import invert
 import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib as mpl
-from Common_Functions.GetTimeToAlign_Old import get_time_to_align
 from scipy.stats import sem
 mpl.rcParams['pdf.fonttype'] = 42
 

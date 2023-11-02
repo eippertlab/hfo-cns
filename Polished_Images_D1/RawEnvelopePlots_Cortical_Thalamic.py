@@ -7,11 +7,11 @@ import numpy as np
 from Common_Functions.get_conditioninfo import get_conditioninfo
 from Common_Functions.get_esg_channels import get_esg_channels
 from Common_Functions.evoked_from_raw import evoked_from_raw
+from Common_Functions.GetTimeToAlign import get_time_to_align
 from Common_Functions.invert import invert
 import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib as mpl
-from Common_Functions.GetTimeToAlign_Old import get_time_to_align
 from scipy.stats import sem
 mpl.rcParams['pdf.fonttype'] = 42
 
@@ -92,14 +92,14 @@ if __name__ == '__main__':
                         condition_names = ['median', 'tibial']
                     elif srmr_nr == 2:
                         condition_names = ['med_mixed', 'tib_mixed']
-                    median_lat, tibial_lat = get_time_to_align('eeg', srmr_nr, condition_names, subjects)
+                    # median_lat, tibial_lat = get_time_to_align('eeg', srmr_nr, condition_names, subjects)
                     if cond_name in median_names:
                         sep_latency = round(df_timing.loc[subject, f"N20"], 3)
-                        expected = median_lat
+                        expected = 0.02
                         channels = ['CP4']
                     elif cond_name in tibial_names:
                         sep_latency = round(df_timing.loc[subject, f"P39"], 3)
-                        expected = tibial_lat
+                        expected = 0.04
                         channels = ['Cz']
                     shift = expected - sep_latency
 
@@ -136,16 +136,26 @@ if __name__ == '__main__':
             # Plot Time Course
             #################################################################################################
             ax1.plot(evoked.times, grand_average[0, :]*10**6, color='green', label='Single')
-            ax1.fill_between(evoked.times, lower, upper, alpha=0.3, color='green')
+            ax1.fill_between(evoked.times, lower*10**6, upper*10**6, alpha=0.3, color='green')
 
             ax1.set_xlabel('Time (s)')
             ax1.set_title(f'Grand Average Envelope, n={len(evoked_list)}')
             ax1.set_ylabel('Amplitude (\u03BCV)')
             if cond_name in median_names:
                 ax1.set_xlim([0.0, 0.05])
+                # Add coloured boxes to mark time zones of interest
+                # [10 / 1000, 16 / 1000]
+                plt.axvspan(10/1000, 16/1000, color='tab:cyan', alpha=0.3)
+                # window_times = [15.4 / 1000, 24.8 / 1000]
+                plt.axvspan(15.4 / 1000, 24.8 / 1000, color='tab:purple', alpha=0.3)
                 # ax1.axvline(expected, color='red')
             else:
                 ax1.set_xlim([0.0, 0.07])
+                # [24 / 1000, 36 / 1000]
+                plt.axvspan(24 / 1000, 36 / 1000, color='tab:cyan', alpha=0.3)
+                # window_times = [32 / 1000, 44 / 1000]
+                plt.axvspan(32 / 1000, 44 / 1000, color='tab:purple', alpha=0.3)
+
                 # ax1.axvline(expected, color='red')
 
             plt.tight_layout()

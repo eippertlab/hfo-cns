@@ -170,7 +170,8 @@ if __name__ == '__main__':
                     ##########################################################
                     # Select the right files
                     if data_type == 'eeg':
-                        color = 'tab:purple'
+                        color_env = 'tab:purple'
+                        color = 'indigo'
                         color_low = 'tab:red'
                         # HFO
                         fname = f"{freq_band}_{cond_name}.fif"
@@ -186,7 +187,8 @@ if __name__ == '__main__':
                         evoked_low = evoked_from_raw(raw, iv_epoch, iv_baseline, trigger_name, False)
 
                     else:
-                        color = 'tab:blue'
+                        color_env = 'tab:blue'
+                        color = 'royalblue'
                         color_low = 'deeppink'
                         # HFO
                         fname = f"{freq_band}_{cond_name}.fif"
@@ -212,13 +214,21 @@ if __name__ == '__main__':
                     evoked = epochs.copy().average()
                     data = evoked.data
 
+                    # Get envelope to add to high frequency plot
+                    evoked.crop(tmin=-0.06, tmax=0.07)
+                    envelope = evoked.copy().apply_hilbert(envelope=True)
+                    data_envelope = envelope.get_data()
+
                     # Plot Time Course as YY plot
-                    fig = plt.figure()
-                    ax1 = plt.subplot(211)
-                    ax10 = plt.subplot(212)
+                    fig, axes = plt.subplots(2, 1)
+                    ax1 = axes[0]
+                    ax10 = axes[1]
+                    # ax1 = plt.subplot(211)
+                    # ax10 = plt.subplot(212)
 
                     # HFO
                     ax1.plot(evoked.times, evoked.data.reshape(-1), color=color)
+                    ax1.plot(evoked.times, data_envelope[0, :], color=color_env)
                     ax1.set_ylabel('HFO Amplitude (AU)')
                     ax1.set_xticks([])
                     ax1.spines['bottom'].set_visible(False)

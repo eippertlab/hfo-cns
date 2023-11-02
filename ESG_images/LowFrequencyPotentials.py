@@ -11,7 +11,6 @@ from scipy.io import loadmat
 from Common_Functions.get_conditioninfo import get_conditioninfo
 from Common_Functions.get_channels import get_channels
 from Common_Functions.invert import invert
-from Common_Functions.GetTimeToAlign_Old import get_time_to_align
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from Common_Functions.evoked_from_raw import evoked_from_raw
@@ -92,20 +91,19 @@ if __name__ == '__main__':
                            evoked_low.copy().crop(tmin=tstart, tmax=tend).get_data().reshape(-1))
 
                 # Apply relative time-shift depending on expected latency
-                median_lat, tibial_lat = get_time_to_align('esg', ['median', 'tibial'], np.arange(1, 37))
                 if cond_name == 'median':
                     if use_birgitstiming:
                         sep_latency = matdata['med_potlatency']
                     else:
                         sep_latency = df_timing.loc[subject, f"N13"]
-                    expected = median_lat
+                    expected = 0.013
                     # expected = 13/1000
                 elif cond_name == 'tibial':
                     if use_birgitstiming:
                         sep_latency = matdata['tib_potlatency']
                     else:
                         sep_latency = df_timing.loc[subject, f"N22"]
-                    expected = tibial_lat
+                    expected = 0.022
                     # expected = 22/1000
                 if use_birgitstiming:
                     shift = expected - sep_latency[0][0] / 1000

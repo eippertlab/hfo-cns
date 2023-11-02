@@ -24,6 +24,7 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
     use_visible = True  # Use only subjects with visible bursting
+    reref_flag = False  # If true, rereference to FPz
     srmr_nr = 1
 
     if srmr_nr == 1:
@@ -117,6 +118,11 @@ if __name__ == '__main__':
                 raw = mne.io.read_raw_eeglab(input_path_low + fname_low, preload=True)
                 raw.set_montage(montage, on_missing="ignore")
                 evoked_low = evoked_from_raw(raw, iv_epoch, iv_baseline, trigger_name, False)
+                if reref_flag:
+                    if srmr_nr == 2:
+                        evoked_low = evoked_low.add_rereference_channels('FPz')
+                    evoked_low = evoked_low.set_eeg_reference(['FPz'])
+
                 if cond_name in ['median', 'med_mixed']:
                     time_points = [13/1000, 14/1000, 15 / 1000, 16/1000, 17/1000]
                     time_point = 15/100
@@ -175,13 +181,23 @@ if __name__ == '__main__':
                 # cb.set_label('Amplitude (\u03BCV)', rotation=90)
 
                 if use_visible is True:
-                    fig_low.savefig(figure_path_ss + f'{subject_id}_LowSpatial_{cond_name}_visible')
-                    fig_low.savefig(figure_path_ss + f'{subject_id}_LowSpatial_{cond_name}_visible.pdf',
-                                    bbox_inches='tight', format="pdf")
+                    if reref_flag:
+                        fig_low.savefig(figure_path_ss + f'{subject_id}_LowSpatial_{cond_name}_visible_FPz')
+                        fig_low.savefig(figure_path_ss + f'{subject_id}_LowSpatial_{cond_name}_visible_FPz.pdf',
+                                        bbox_inches='tight', format="pdf")
+                    else:
+                        fig_low.savefig(figure_path_ss + f'{subject_id}_LowSpatial_{cond_name}_visible')
+                        fig_low.savefig(figure_path_ss + f'{subject_id}_LowSpatial_{cond_name}_visible.pdf',
+                                        bbox_inches='tight', format="pdf")
                 else:
-                    fig_low.savefig(figure_path_ss + f'{subject_id}_LowSpatial_{cond_name}')
-                    fig_low.savefig(figure_path_ss + f'{subject_id}_LowSpatial_{cond_name}.pdf',
-                                    bbox_inches='tight', format="pdf")
+                    if reref_flag:
+                        fig_low.savefig(figure_path_ss + f'{subject_id}_LowSpatial_{cond_name}_FPz')
+                        fig_low.savefig(figure_path_ss + f'{subject_id}_LowSpatial_{cond_name}_FPz.pdf',
+                                        bbox_inches='tight', format="pdf")
+                    else:
+                        fig_low.savefig(figure_path_ss + f'{subject_id}_LowSpatial_{cond_name}')
+                        fig_low.savefig(figure_path_ss + f'{subject_id}_LowSpatial_{cond_name}.pdf',
+                                        bbox_inches='tight', format="pdf")
                 plt.close()
 
                 #################################################################################################
@@ -255,14 +271,70 @@ if __name__ == '__main__':
                 fig.savefig(figure_path + f'HFO_GA_Spatial_{freq_band}_{cond_name}_visible.pdf',
                             bbox_inches='tight', format="pdf")
 
-                fig_low.savefig(figure_path + f'SEP_GA_Spatial_{cond_name}_visible')
-                fig_low.savefig(figure_path + f'SEP_GA_Spatial_{cond_name}_visible.pdf',
-                                bbox_inches='tight', format="pdf")
+                if reref_flag:
+                    fig_low.savefig(figure_path + f'SEP_GA_Spatial_{cond_name}_visible_FPz')
+                    fig_low.savefig(figure_path + f'SEP_GA_Spatial_{cond_name}_visible_FPz.pdf',
+                                    bbox_inches='tight', format="pdf")
+                else:
+                    fig_low.savefig(figure_path + f'SEP_GA_Spatial_{cond_name}_visible')
+                    fig_low.savefig(figure_path + f'SEP_GA_Spatial_{cond_name}_visible.pdf',
+                                    bbox_inches='tight', format="pdf")
             else:
                 fig.savefig(figure_path + f'HFO_GA_Spatial_{freq_band}_{cond_name}')
                 fig.savefig(figure_path + f'HFO_GA_Spatial_{freq_band}_{cond_name}.pdf',
                             bbox_inches='tight', format="pdf")
 
-                fig_low.savefig(figure_path + f'SEP_GA_Spatial_{cond_name}')
-                fig_low.savefig(figure_path + f'SEP_GA_Spatial_{cond_name}.pdf',
-                                bbox_inches='tight', format="pdf")
+                if reref_flag:
+                    fig_low.savefig(figure_path + f'SEP_GA_Spatial_{cond_name}_FPz')
+                    fig_low.savefig(figure_path + f'SEP_GA_Spatial_{cond_name}_FPz.pdf',
+                                    bbox_inches='tight', format="pdf")
+                else:
+                    fig_low.savefig(figure_path + f'SEP_GA_Spatial_{cond_name}')
+                    fig_low.savefig(figure_path + f'SEP_GA_Spatial_{cond_name}.pdf',
+                                    bbox_inches='tight', format="pdf")
+
+            ###############################################################################################
+            # Low Freq SEP average plot - more time points
+            ###############################################################################################
+            if cond_name in ['median', 'med_mixed']:
+                time_points = [13 / 1000, 14 / 1000, 15 / 1000, 16 / 1000, 17 / 1000]
+                time_point = 15 / 100
+                channel = ['CP4']
+            else:
+                time_points = [23/1000, 24/1000, 25/1000, 26/1000, 27/1000, 28 / 1000, 29 / 1000, 30 / 1000]
+                time_point = 30 / 1000
+                channel = ['Cz']
+            fig_low, ax_low = plt.subplots(1, len(time_points))
+            averaged.plot_topomap(times=time_points, average=None, ch_type=None, scalings=None, proj=False,
+                                  sensors=True, show_names=False, mask=None, mask_params=None, contours=6,
+                                  outlines='head', sphere=None, image_interp='cubic', extrapolate='auto',
+                                  border='mean',
+                                  res=64, size=1, cmap='jet', vlim=(None, None), vmin=None, vmax=None,
+                                  cnorm=None,
+                                  colorbar=False, cbar_fmt='%3.1f', units=None, axes=ax_low, time_unit='s',
+                                  time_format=None,
+                                  nrows=1, ncols='auto', show=False)
+            # ax_low.set_title(f'Grand Average Spatial Pattern, n={len(spatial_pattern)}')
+            # divider = make_axes_locatable(ax_low)
+            # cax = divider.append_axes('right', size='5%', pad=0.05)
+            # cb = fig.colorbar(ax_low.images[-1], cax=cax, shrink=0.6, orientation='vertical')
+            # cb.set_label('Amplitude (\u03BCV)', rotation=90)
+
+            if use_visible is True:
+                if reref_flag:
+                    fig_low.savefig(figure_path + f'SEP_GA_Spatial_{cond_name}_visible_FPz_more')
+                    fig_low.savefig(figure_path + f'SEP_GA_Spatial_{cond_name}_visible_FPz_more.pdf',
+                                    bbox_inches='tight', format="pdf")
+                else:
+                    fig_low.savefig(figure_path + f'SEP_GA_Spatial_{cond_name}_visible_more')
+                    fig_low.savefig(figure_path + f'SEP_GA_Spatial_{cond_name}_visible_more.pdf',
+                                    bbox_inches='tight', format="pdf")
+            else:
+                if reref_flag:
+                    fig_low.savefig(figure_path + f'SEP_GA_Spatial_{cond_name}_FPz_more')
+                    fig_low.savefig(figure_path + f'SEP_GA_Spatial_{cond_name}_FPz_more.pdf',
+                                    bbox_inches='tight', format="pdf")
+                else:
+                    fig_low.savefig(figure_path + f'SEP_GA_Spatial_{cond_name}_more')
+                    fig_low.savefig(figure_path + f'SEP_GA_Spatial_{cond_name}_more.pdf',
+                                    bbox_inches='tight', format="pdf")

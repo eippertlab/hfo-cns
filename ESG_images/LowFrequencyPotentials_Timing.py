@@ -10,7 +10,6 @@ from scipy.io import loadmat
 from Common_Functions.get_conditioninfo import get_conditioninfo
 from Common_Functions.get_channels import get_channels
 from Common_Functions.invert import invert
-from Common_Functions.GetTimeToAlign_Old import get_time_to_align
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from Common_Functions.evoked_from_raw import evoked_from_raw

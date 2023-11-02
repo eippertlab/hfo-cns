@@ -12,7 +12,6 @@ from Common_Functions.invert import invert
 import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib as mpl
-from Common_Functions.GetTimeToAlign_Old import get_time_to_align
 mpl.rcParams['pdf.fonttype'] = 42
 
 

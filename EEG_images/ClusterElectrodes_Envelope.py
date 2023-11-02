@@ -11,7 +11,6 @@ from Common_Functions.evoked_from_raw import evoked_from_raw
 import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib as mpl
-from Common_Functions.GetTimeToAlign_Old import get_time_to_align
 mpl.rcParams['pdf.fonttype'] = 42
 
 
@@ -72,17 +71,16 @@ if __name__ == '__main__':
                     condition_names = ['median', 'tibial']
                 elif srmr_nr == 2:
                     condition_names = ['med_mixed', 'tib_mixed']
-                median_lat, tibial_lat = get_time_to_align('eeg', srmr_nr, condition_names, subjects)
                 if cond_name in median_names:
                     sep_latency = round(df_timing.loc[subject, f"N20"], 3)
-                    expected = median_lat
+                    expected = 0.02
                     if cluster_electrodes:
                         cluster_channels = ['CP4', 'C4', 'CP6', 'P4', 'CP2']
                     else:
                         cluster_channels = ['CP4']
                 elif cond_name in tibial_names:
                     sep_latency = round(df_timing.loc[subject, f"P39"], 3)
-                    expected = tibial_lat
+                    expected = 0.04
                     if cluster_electrodes:
                         cluster_channels = ['Cz', 'FCz', 'C2', 'CPz', 'C1']
                     else:
