@@ -6,7 +6,6 @@ import mne
 import numpy as np
 from Common_Functions.get_conditioninfo import get_conditioninfo
 from Common_Functions.get_esg_channels import get_esg_channels
-from Common_Functions.IsopotentialFunctions import mrmr_esg_isopotentialplot
 from Common_Functions.invert import invert
 import matplotlib.pyplot as plt
 import pandas as pd

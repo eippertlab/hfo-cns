@@ -13,14 +13,17 @@ import matplotlib as mpl
 # Grid Pos is a electrodesx2 array containing position of each electrode - some weird combo Birgit devised
 # Grid Size is a 2x array containing the size of the grid to plot
 # Some of these dimensions are opposite to the matlab code so be careful
-def get_gridparameters(subjects):
+def get_gridparameters(subjects, srmr_nr):
     # Electrode positions in mm
     # import electrode positions
     x_pos = []
     z_pos = []
     for subj in np.arange(1, len(subjects) + 1):
         subject_id = f'sub-{str(subj).zfill(3)}'
-        raw_path = '/data/p_02068/SRMR1_experiment/bids/' + subject_id + '/eeg/'
+        if srmr_nr == 1:
+            raw_path = '/data/p_02068/SRMR1_experiment/bids/' + subject_id + '/eeg/'
+        elif srmr_nr == 2:
+            raw_path = '/data/p_02151/SRMR2_experiment/bids/' + subject_id + '/eeg/'
         fname = raw_path + subject_id + '_space-Other_electrodes.tsv'
         electrode_pos = pd.read_csv(fname, sep='\t')
         electrode_pos = electrode_pos[electrode_pos.name != 'TH6']  # Remove reference channel
@@ -110,13 +113,14 @@ def plot_esg_isopotential(chanvalues, colorbar_axes, gridsize, chan_pos_grid, la
     return
 
 
-def mrmr_esg_isopotentialplot(subjects, chanvalues, colorbar_axes, chan_labels, colorbar, time, axis, colorbar_label):
+def mrmr_esg_isopotentialplot(subjects, chanvalues, colorbar_axes, chan_labels, colorbar, time, axis, colorbar_label,
+                              srmr_nr):
 
     # Isopotential maps
     potential_window = np.array([[13, 15], [22, 24]])
 
     # Get grid parameters
-    labels, elec_pos, grid_size, grid_pos = get_gridparameters(subjects)
+    labels, elec_pos, grid_size, grid_pos = get_gridparameters(subjects, srmr_nr)
 
     # Sort channels
     ordered_chanvalues = np.zeros((1, np.size(labels)))

@@ -14,10 +14,22 @@ import pandas as pd
 import matplotlib as mpl
 from scipy.stats import sem
 mpl.rcParams['pdf.fonttype'] = 42
+SMALL_SIZE = 12
+MEDIUM_SIZE = 14
+BIGGER_SIZE = 16
+
+mpl.rc('font', size=SMALL_SIZE)          # controls default text sizes
+mpl.rc('axes', titlesize=MEDIUM_SIZE)    # fontsize of the axes title
+mpl.rc('axes', labelsize=SMALL_SIZE)    # fontsize of the x and y labels
+mpl.rc('xtick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
+mpl.rc('ytick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
+mpl.rc('legend', fontsize=10)    # legend fontsize
+mpl.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
+
 
 
 if __name__ == '__main__':
-    srmr_nr = 1
+    srmr_nr = 2
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
@@ -175,9 +187,11 @@ if __name__ == '__main__':
             if cond_name in median_names:
                 ax1.set_xlim([0.0, 0.05])
                 # ax1.axvline(sep_latency, color='red')
+
             else:
                 ax1.set_xlim([0.0, 0.07])
                 # ax1.axvline(sep_latency, color='red')
+
             plt.legend(loc='upper right')
             plt.tight_layout()
             # plt.show()

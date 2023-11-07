@@ -226,7 +226,7 @@ def run_CCA_highlow(subject, condition, srmr_nr, freq_band):
                 colorbar = True
                 time = 0.0
                 mrmr_esg_isopotentialplot([subject], pattern[:, icomp], colorbar_axes, chan_labels,
-                                          colorbar, time, axes[icomp])
+                                          colorbar, time, axes[icomp], srmr_nr)
                 axes[icomp].set_title(f'Component {icomp + 1}')
                 axes[icomp].set_yticklabels([])
                 axes[icomp].set_ylabel(None)

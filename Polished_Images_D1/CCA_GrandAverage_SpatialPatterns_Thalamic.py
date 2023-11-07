@@ -6,25 +6,31 @@
 import os
 import mne
 import numpy as np
-from meet import spatfilt
-from scipy.io import loadmat
 from Common_Functions.get_conditioninfo import get_conditioninfo
 from Common_Functions.get_channels import get_channels
-from Common_Functions.get_esg_channels import get_esg_channels
 import matplotlib.pyplot as plt
-from Common_Functions.IsopotentialFunctions_CbarLabel import mrmr_esg_isopotentialplot
-import matplotlib as mpl
 from Common_Functions.evoked_from_raw import evoked_from_raw
 import pandas as pd
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import pickle
 import matplotlib as mpl
 mpl.rcParams['pdf.fonttype'] = 42
+SMALL_SIZE = 12
+MEDIUM_SIZE = 14
+BIGGER_SIZE = 16
+
+plt.rc('font', size=SMALL_SIZE)          # controls default text sizes
+plt.rc('axes', titlesize=MEDIUM_SIZE)    # fontsize of the axes title
+plt.rc('axes', labelsize=MEDIUM_SIZE)    # fontsize of the x and y labels
+plt.rc('xtick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
+plt.rc('ytick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
+plt.rc('legend', fontsize=SMALL_SIZE)    # legend fontsize
+plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
 
 
 if __name__ == '__main__':
     use_visible = True  # Use only subjects with visible bursting
-    srmr_nr = 2
+    srmr_nr = 1
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
@@ -153,14 +159,14 @@ if __name__ == '__main__':
             #################################################################################################
             # HFO
             #################################################################################################
-            fig, ax = plt.subplots(1, 1)
+            fig, ax = plt.subplots(1, 1, figsize=(10, 10))
             chan_labels = evoked_low.ch_names
             mne.viz.plot_topomap(data=grand_average_spatial * 10 ** 6, pos=res, ch_type='eeg', sensors=True,
                                  names=None,
                                  contours=6, outlines='head', sphere=None, image_interp='cubic',
                                  extrapolate='head', border='mean', res=64, size=1, cmap='jet', vlim=(None, None),
                                  cnorm=None, axes=ax, show=False)
-            ax.set_title(f'Grand Average Spatial Pattern, n={len(spatial_pattern)}')
+            # ax.set_title(f'Grand Average Spatial Pattern, n={len(spatial_pattern)}')
             divider = make_axes_locatable(ax)
             cax = divider.append_axes('right', size='5%', pad=0.05)
             cb = fig.colorbar(ax.images[-1], cax=cax, shrink=0.6, orientation='vertical')
@@ -169,7 +175,7 @@ if __name__ == '__main__':
             ###############################################################################################
             # Low Freq SEP
             ###############################################################################################
-            fig_low, ax_low = plt.subplots(1, 1)
+            fig_low, ax_low = plt.subplots(1, 1, figsize=(10, 10))
             # divider = make_axes_locatable(plt.gca())
             # cax = divider.append_axes("right", "5%", pad="3%")
 
@@ -185,7 +191,7 @@ if __name__ == '__main__':
                                   colorbar=False, cbar_fmt='%3.1f', units=None, axes=ax_low, time_unit='s',
                                   time_format=None,
                                   nrows=1, ncols='auto', show=True)
-            ax_low.set_title(f'Grand Average Spatial Pattern, n={len(spatial_pattern)}')
+            # ax_low.set_title(f'Grand Average Spatial Pattern, n={len(spatial_pattern)}')
             divider = make_axes_locatable(ax_low)
             cax = divider.append_axes('right', size='5%', pad=0.05)
             cb = fig.colorbar(ax_low.images[-1], cax=cax, shrink=0.6, orientation='vertical')

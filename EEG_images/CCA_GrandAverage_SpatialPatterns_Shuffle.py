@@ -10,10 +10,7 @@ from meet import spatfilt
 from scipy.io import loadmat
 from Common_Functions.get_conditioninfo import get_conditioninfo
 from Common_Functions.get_channels import get_channels
-from Common_Functions.get_esg_channels import get_esg_channels
 import matplotlib.pyplot as plt
-from Common_Functions.IsopotentialFunctions_CbarLabel import mrmr_esg_isopotentialplot
-import matplotlib as mpl
 from Common_Functions.evoked_from_raw import evoked_from_raw
 import pandas as pd
 from mpl_toolkits.axes_grid1 import make_axes_locatable

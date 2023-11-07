@@ -10,7 +10,6 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 import matplotlib as mpl
 import pickle
 import matplotlib.pyplot as plt
-from Common_Functions.IsopotentialFunctions import mrmr_esg_isopotentialplot
 
 # if __name__ == '__main__':
 

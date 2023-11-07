@@ -13,7 +13,7 @@ import mne
 import numpy as np
 from meet import spatfilt
 from Common_Functions.get_conditioninfo import get_conditioninfo
-from Common_Functions.calculate_snr import calculate_snr
+from Common_Functions.calculate_snr_hfo import calculate_snr
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import pandas as pd

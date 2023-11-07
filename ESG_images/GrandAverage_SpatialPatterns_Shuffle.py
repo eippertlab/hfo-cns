@@ -5,17 +5,12 @@
 import os
 import mne
 import numpy as np
-from meet import spatfilt
-from scipy.io import loadmat
 from Common_Functions.get_conditioninfo import get_conditioninfo
 from Common_Functions.get_channels import get_channels
 from Common_Functions.get_esg_channels import get_esg_channels
 import matplotlib.pyplot as plt
 from Common_Functions.IsopotentialFunctions_CbarLabel import mrmr_esg_isopotentialplot
-import matplotlib as mpl
-from Common_Functions.evoked_from_raw import evoked_from_raw
 import pandas as pd
-from mpl_toolkits.axes_grid1 import make_axes_locatable
 import pickle
 import matplotlib as mpl
 mpl.rcParams['pdf.fonttype'] = 42
@@ -137,7 +132,7 @@ if __name__ == '__main__':
             time = 0.0
             colorbar = True
             mrmr_esg_isopotentialplot(subjects_4grid, grand_average_spatial, colorbar_axes, chan_labels,
-                                      colorbar, time, ax, colorbar_label='Amplitude (AU)')
+                                      colorbar, time, ax, colorbar_label='Amplitude (AU)', srmr_nr=srmr_nr)
             ax.set_yticklabels([])
             ax.set_ylabel(None)
             ax.set_xticklabels([])
@@ -161,7 +156,7 @@ if __name__ == '__main__':
             # then the function takes the average over the channel positions of all those subjects
             colorbar = True
             mrmr_esg_isopotentialplot(subjects_4grid, chanvalues, colorbar_axes, chan_labels, colorbar,
-                                      time_point, ax_low, colorbar_label='Amplitude (\u03BCV)')
+                                      time_point, ax_low, colorbar_label='Amplitude (\u03BCV)', srmr_nr=srmr_nr)
             ax_low.set_yticklabels([])
             ax_low.set_ylabel(None)
             ax_low.set_xticklabels([])

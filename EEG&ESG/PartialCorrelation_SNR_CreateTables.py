@@ -10,14 +10,18 @@ from Common_Functions.evoked_from_raw import evoked_from_raw
 from Common_Functions.get_channels import get_channels
 from Common_Functions.invert import invert
 from Common_Functions.get_conditioninfo import get_conditioninfo
+from Common_Functions.calculate_snr_hfo import calculate_snr
+from Common_Functions.calculate_snr_lowfreq import calculate_snr_lowfreq
 import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib as mpl
-from Common_Functions.check_excel_exist_relation import check_excel_exist_relation
+from Common_Functions.check_excel_exist_partialcorr import check_excel_exist_partialcorr
 mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
-
+    ##############################################################################################################
+    # Set paths and variables
+    ##############################################################################################################
     data_types = ['Spinal', 'Cortical']  # Can be Cortical or Spinal here or both
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
@@ -27,10 +31,10 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epoch_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epoch_end', 'var_value'].iloc[0]]
 
-    eeg_chans, esg_chans, bipolar_chans = get_channels(1, False, False, 1)
-    srmr_nr = 1
+    srmr_nr = 2
     sfreq = 5000
     freq_band = 'sigma'
+    eeg_chans, esg_chans, bipolar_chans = get_channels(1, False, False, srmr_nr)
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
@@ -60,20 +64,22 @@ if __name__ == '__main__':
         df_spinal = pd.read_excel(xls, 'CCA')
         df_spinal.set_index('Subject', inplace=True)
 
+    ##############################################################################################################
+    # Run scipt to get values and snrs of interest
+    ##############################################################################################################
     for data_type in data_types:
         # Make sure our excel sheet is in place to store the values
         if srmr_nr == 1:
-            excel_fname = f'/data/pt_02718/tmp_data/LowFreq_HighFreq_Relation.xlsx'
+            excel_fname = f'/data/pt_02718/tmp_data/LowFreq_HighFreq_Amp_SNR.xlsx'
         elif srmr_nr == 2:
-            excel_fname = f'/data/pt_02718/tmp_data_2/LowFreq_HighFreq_Relation.xlsx'
+            excel_fname = f'/data/pt_02718/tmp_data_2/LowFreq_HighFreq_Amp_SNR.xlsx'
         sheetname = data_type
         # If fname and sheet exist already - subjects indices will already be in file from initial creation **
-        check_excel_exist_relation(subjects, excel_fname, sheetname)
+        check_excel_exist_partialcorr(subjects, excel_fname, sheetname)
         df_rel = pd.read_excel(excel_fname, sheetname)
         df_rel.set_index('Subject', inplace=True)
 
-        # To use mne grand_average method, need to generate a list of evoked potentials for each subject
-        for condition in conditions:  # Conditions (median, tibial)
+        for condition in conditions:  # Conditions (median, tibial) or (med_mixed, tib_mixed)
             cond_info = get_conditioninfo(condition, srmr_nr)
             cond_name = cond_info.cond_name
             trigger_name = cond_info.trigger_name
@@ -102,7 +108,11 @@ if __name__ == '__main__':
 
             for subject in subjects:  # All subjects
                 subject_id = f'sub-{str(subject).zfill(3)}'
+                noise_window = [-100 / 1000, -10 / 1000]
 
+                ##################################################################################################
+                # Select correct files for cortical and spinal data
+                #################################################################################################
                 if data_type == 'Cortical':
                     if srmr_nr == 1:
                         # HFO
@@ -125,7 +135,7 @@ if __name__ == '__main__':
 
                     raw = mne.io.read_raw_eeglab(input_path_low + fname_low, preload=True)
                     evoked_low = evoked_from_raw(raw, iv_epoch, iv_baseline, trigger_name, False)
-                    evoked_low.crop(tmin=-0.06, tmax=0.07)
+                    evoked_low.crop(tmin=-0.1, tmax=0.07)
 
                 elif data_type == 'Spinal':
                     if srmr_nr == 1:
@@ -151,9 +161,12 @@ if __name__ == '__main__':
                         fname_low = f"ssp_cleaned_{cond_name}.fif"
                         raw = mne.io.read_raw_fif(input_path_low + fname_low, preload=True)
                         evoked_low = evoked_from_raw(raw, iv_epoch, iv_baseline, trigger_name, False)
-                        evoked_low.crop(tmin=-0.06, tmax=0.07)
+                        evoked_low.crop(tmin=-0.1, tmax=0.07)
 
-                # Select correct channel for raw ESG data and cca corrected data
+                ##################################################################################################
+                # Select correct channels for raw data and cca filtered data
+                # Compute the envelope for the high frequency data
+                #################################################################################################
                 evoked_low = evoked_low.pick_channels(channel)
                 channel_no = df.loc[subject, f"{freq_band}_{cond_name}_comp"]
                 if channel_no != 0:
@@ -163,45 +176,69 @@ if __name__ == '__main__':
                     epochs = epochs.pick_channels([channel_cca])
                     if inv == 'T':
                         epochs.apply_function(invert, picks=channel_cca)
-                    evoked = epochs.copy().average()
-                    evoked.crop(tmin=-0.06, tmax=0.07)
-                    envelope = evoked.apply_hilbert(envelope=True)
+                    evoked = epochs.average()
+                    evoked.crop(tmin=-0.1, tmax=0.07)
+                    envelope = evoked.copy().apply_hilbert(envelope=True)
 
                 # Get timing and amplitude of both peaks
                 # Look negative for low freq N20, N22, N13, look positive for P39
+                # Get SNR of high and low frequency data
                 # Ampitude envelope always look positive
+                ####################################################################################################
                 # Low Freq
+                ####################################################################################################
                 # First check there is a negative/positive potential to be found
-                data_low = evoked_low.crop(tmin=time_peak-time_edge, tmax=time_peak+time_edge).get_data().reshape(-1)
+                data_low = evoked_low.copy().crop(tmin=time_peak-time_edge, tmax=time_peak+time_edge).get_data().reshape(-1)
                 if data_type == 'Cortical' and cond_name in ['tibial', 'tib_mixed']:
                     if max(data_low) > 0:
                         _, latency_low, amplitude_low = evoked_low.get_peak(tmin=time_peak - time_edge,
                                                                              tmax=time_peak + time_edge,
                                                                              mode='pos', return_amplitude=True)
+                        snr_low = calculate_snr_lowfreq(evoked_low, noise_window, time_edge, time_peak, 'pos')
+
                     else:
                         latency_low = time_peak
                         amplitude_low = np.nan
+                        snr_low = np.nan
                 else:
                     if min(data_low) < 0:
                         _, latency_low, amplitude_low = evoked_low.get_peak(tmin=time_peak - time_edge,
                                                                             tmax=time_peak + time_edge,
                                                                             mode='neg', return_amplitude=True)
+                        snr_low = calculate_snr_lowfreq(evoked_low, noise_window, time_edge, time_peak, 'neg')
+
                     else:
                         latency_low = time_peak
                         amplitude_low = np.nan
+                        snr_low = np.nan
+
+                ####################################################################################################
                 # High Freq
-                if channel_no != 0:
-                    _, latency_high, amplitude_high = envelope.get_peak(tmin=time_peak - time_edge,
+                ####################################################################################################
+                if channel_no != 0:  # Only do it if there is a component chosen, otherwise insert nans
+                    # Look for positivity for envelope, look for either for actual HFOs
+                    _, latency_high_env, amplitude_high_env = envelope.get_peak(tmin=time_peak - time_edge,
                                                                         tmax=time_peak + time_edge,
                                                                         mode='pos', return_amplitude=True)
+                    _, latency_high, amplitude_high = evoked.get_peak(tmin=time_peak - time_edge,
+                                                                      tmax=time_peak + time_edge,
+                                                                      mode='abs', return_amplitude=True)
+                    snr_high = calculate_snr(evoked, noise_window, time_edge, time_peak)
                 else:
                     latency_high = time_peak
                     amplitude_high = np.nan
+                    latency_high_env = time_peak
+                    amplitude_high_env = np.nan
+                    snr_high = np.nan
 
                 df_rel.at[subject, f'{pot_name}'] = latency_low
                 df_rel.at[subject, f'{pot_name}_amplitude'] = amplitude_low*10**6
                 df_rel.at[subject, f'{pot_name}_high'] = latency_high
                 df_rel.at[subject, f'{pot_name}_high_amplitude'] = amplitude_high
+                df_rel.at[subject, f'{pot_name}_high_env'] = latency_high_env
+                df_rel.at[subject, f'{pot_name}_high_amplitude_env'] = amplitude_high_env
+                df_rel.at[subject, f'{pot_name}_SNR'] = snr_low
+                df_rel.at[subject, f'{pot_name}_high_SNR'] = snr_high
 
         # Write the dataframe to the excel file
         with pd.ExcelWriter(excel_fname, mode='a', if_sheet_exists='overlay', engine="openpyxl") as writer:

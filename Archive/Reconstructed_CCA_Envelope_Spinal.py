@@ -10,11 +10,8 @@ from Common_Functions.get_channels import get_channels
 from Common_Functions.invert import invert
 from Common_Functions.get_esg_channels import get_esg_channels
 import matplotlib.pyplot as plt
-import matplotlib as mpl
 import pandas as pd
-from mpl_toolkits.axes_grid1 import make_axes_locatable
 import pickle
-from Common_Functions.IsopotentialFunctions import mrmr_esg_isopotentialplot
 
 
 if __name__ == '__main__':

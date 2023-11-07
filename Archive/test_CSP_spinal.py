@@ -9,7 +9,6 @@ from meet.spatfilt import CSP
 import matplotlib as mpl
 import pickle
 import matplotlib.pyplot as plt
-from Common_Functions.IsopotentialFunctions import mrmr_esg_isopotentialplot
 
 if __name__ == '__main__':
     # For testing

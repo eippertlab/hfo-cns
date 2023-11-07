@@ -176,7 +176,7 @@ if __name__ == '__main__':
                 axes[count].set_xticklabels([])
                 axes[count].set_xlabel(None)
                 mrmr_esg_isopotentialplot(subjects, chanvalues, colorbar_axes, chan_labels, colorbar, time_point,
-                                          axes[count])
+                                          axes[count], srmr_nr)
             plt.suptitle(f'Grand Average Spatial Pattern, n={len(subjects)}')
             plt.savefig(figure_path + f'GA_Spatial_{freq_band}_{cond_name}')
             plt.close()

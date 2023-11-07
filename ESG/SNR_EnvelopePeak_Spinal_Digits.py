@@ -11,7 +11,7 @@ import os
 import mne
 import numpy as np
 from Common_Functions.get_conditioninfo import get_conditioninfo
-from Common_Functions.calculate_snr import calculate_snr
+from Common_Functions.calculate_snr_hfo import calculate_snr
 import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib as mpl

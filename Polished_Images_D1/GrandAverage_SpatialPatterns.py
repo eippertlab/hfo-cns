@@ -12,14 +12,23 @@ from Common_Functions.get_channels import get_channels
 from Common_Functions.get_esg_channels import get_esg_channels
 import matplotlib.pyplot as plt
 from Common_Functions.IsopotentialFunctions_CbarLabel import mrmr_esg_isopotentialplot
-import matplotlib as mpl
 from Common_Functions.evoked_from_raw import evoked_from_raw
 import pandas as pd
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import pickle
 import matplotlib as mpl
 mpl.rcParams['pdf.fonttype'] = 42
+SMALL_SIZE = 12
+MEDIUM_SIZE = 14
+BIGGER_SIZE = 16
 
+plt.rc('font', size=SMALL_SIZE)          # controls default text sizes
+plt.rc('axes', titlesize=MEDIUM_SIZE)    # fontsize of the axes title
+plt.rc('axes', labelsize=MEDIUM_SIZE)    # fontsize of the x and y labels
+plt.rc('xtick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
+plt.rc('ytick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
+plt.rc('legend', fontsize=SMALL_SIZE)    # legend fontsize
+plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
 
 if __name__ == '__main__':
     use_visible = True  # Use only subjects with visible bursting
@@ -174,14 +183,14 @@ if __name__ == '__main__':
                     #################################################################################################
                     # HFO
                     #################################################################################################
-                    fig, ax = plt.subplots(1, 1)
+                    fig, ax = plt.subplots(1, 1, figsize=(10, 10))
                     chan_labels = evoked_low.ch_names
                     mne.viz.plot_topomap(data=grand_average_spatial * 10 ** 6, pos=res, ch_type='eeg', sensors=True,
                                          names=None,
                                          contours=6, outlines='head', sphere=None, image_interp='cubic',
                                          extrapolate='head', border='mean', res=64, size=1, cmap='jet', vlim=(None, None),
                                          cnorm=None, axes=ax, show=False)
-                    ax.set_title(f'Grand Average Spatial Pattern, n={len(spatial_pattern)}')
+                    # ax.set_title(f'Grand Average Spatial Pattern, n={len(spatial_pattern)}')
                     divider = make_axes_locatable(ax)
                     cax = divider.append_axes('right', size='5%', pad=0.05)
                     cb = fig.colorbar(ax.images[-1], cax=cax, shrink=0.6, orientation='vertical')
@@ -190,7 +199,7 @@ if __name__ == '__main__':
                     ###############################################################################################
                     # Low Freq SEP
                     ###############################################################################################
-                    fig_low, ax_low = plt.subplots(1, 1)
+                    fig_low, ax_low = plt.subplots(1, 1, figsize=(10, 10))
                     # divider = make_axes_locatable(plt.gca())
                     # cax = divider.append_axes("right", "5%", pad="3%")
 
@@ -206,7 +215,7 @@ if __name__ == '__main__':
                                           colorbar=False, cbar_fmt='%3.1f', units=None, axes=ax_low, time_unit='s',
                                           time_format=None,
                                           nrows=1, ncols='auto', show=True)
-                    ax_low.set_title(f'Grand Average Spatial Pattern, n={len(spatial_pattern)}')
+                    # ax_low.set_title(f'Grand Average Spatial Pattern, n={len(spatial_pattern)}')
                     divider = make_axes_locatable(ax_low)
                     cax = divider.append_axes('right', size='5%', pad=0.05)
                     cb = fig.colorbar(ax_low.images[-1], cax=cax, shrink=0.6, orientation='vertical')
@@ -216,7 +225,7 @@ if __name__ == '__main__':
                     ##########################################################################################
                     # HFO
                     ##########################################################################################
-                    fig, ax = plt.subplots()
+                    fig, ax = plt.subplots(figsize=(10, 10))
                     if cond_name == 'median':
                         chan_labels = cervical_chans
                         colorbar_axes = [-0.15, 0.15]
@@ -229,17 +238,17 @@ if __name__ == '__main__':
                     time = 0.0
                     colorbar = True
                     mrmr_esg_isopotentialplot(subjects_4grid, grand_average_spatial, colorbar_axes, chan_labels,
-                                              colorbar, time, ax, colorbar_label='Amplitude (AU)')
+                                              colorbar, time, ax, colorbar_label='Amplitude (AU)', srmr_nr=srmr_nr)
                     ax.set_yticklabels([])
                     ax.set_ylabel(None)
                     ax.set_xticklabels([])
                     ax.set_xlabel(None)
-                    ax.set_title(f'Grand Average Spatial Pattern, n={len(spatial_pattern)}')
+                    # ax.set_title(f'Grand Average Spatial Pattern, n={len(spatial_pattern)}')
 
                     ############################################################################################
                     # Low Freq SEP
                     ############################################################################################
-                    fig_low, ax_low = plt.subplots(1, 1)
+                    fig_low, ax_low = plt.subplots(1, 1, figsize=(10, 10))
                     arrays = [np.array(x) for x in data_list]
                     chanvalues = np.array([np.nanmean(k) for k in zip(*arrays)])
 
@@ -253,12 +262,12 @@ if __name__ == '__main__':
                     # then the function takes the average over the channel positions of all those subjects
                     colorbar = True
                     mrmr_esg_isopotentialplot(subjects_4grid, chanvalues, colorbar_axes, chan_labels, colorbar,
-                                              time_point, ax_low, colorbar_label='Amplitude (\u03BCV)')
+                                              time_point, ax_low, colorbar_label='Amplitude (\u03BCV)', srmr_nr=srmr_nr)
                     ax_low.set_yticklabels([])
                     ax_low.set_ylabel(None)
                     ax_low.set_xticklabels([])
                     ax_low.set_xlabel(None)
-                    ax_low.set_title(f'Grand Average Spatial Pattern, n={len(spatial_pattern)}')
+                    # ax_low.set_title(f'Grand Average Spatial Pattern, n={len(spatial_pattern)}')
 
                 if use_visible is True:
                     fig.savefig(figure_path + f'{data_type}_HFO_GA_Spatial_{freq_band}_{cond_name}_visible')

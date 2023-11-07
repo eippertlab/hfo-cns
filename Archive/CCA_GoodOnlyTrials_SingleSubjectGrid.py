@@ -134,7 +134,7 @@ if __name__ == '__main__':
                     time = 0.0
                     colorbar = True
                     mrmr_esg_isopotentialplot(subjects_4grid, spatial_pattern, colorbar_axes, chan_labels,
-                                              colorbar, time, axes[n])
+                                              colorbar, time, axes[n], srmr_nr)
                     axes[n].set_yticklabels([])
                     axes[n].set_ylabel(None)
                     axes[n].set_xticklabels([])
