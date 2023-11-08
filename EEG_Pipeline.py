@@ -9,18 +9,16 @@ from Common_Functions.import_data import import_data
 from Common_Functions.bad_trial_check import bad_trial_check
 from Common_Functions.bad_channel_check import bad_channel_check
 from Common_Functions.Create_Frequency_Bands import create_frequency_bands
-from Common_Functions.keep_good_trials import keep_good_trials
-from Archive.run_CCA_brain_good import run_CCA_good
 from EEG.run_CCA_brain import run_CCA
 from EEG.run_CCA_brain_2 import run_CCA2
-from EEG.run_CCA_brain_shuffle import run_CCA_shuffle
-from EEG.run_CCA_brain_shufflebyhalf import run_CCA_shufflebyhalf
+from Archive.run_CCA_brain_shuffle import run_CCA_shuffle
+from Archive.run_CCA_brain_shufflebyhalf import run_CCA_shufflebyhalf
 from EEG.run_CCA_brain_thalamic import run_CCA_thalamic
 from EEG.run_CCA_brain_thalamic_2 import run_CCA_thalamic2
-from EEG.run_CCA_brain_crossval import run_CCA_crossval
+from Archive.run_CCA_brain_crossval import run_CCA_crossval
 
 if __name__ == '__main__':
-    srmr_nr = 1  # Set the experiment number
+    srmr_nr = 2  # Set the experiment number
 
     if srmr_nr == 1:
         n_subjects = 36  # Number of subjects
@@ -48,10 +46,10 @@ if __name__ == '__main__':
     split_bands_flag = False
 
     ######## 5. Run CCA ########
-    CCA_flag = False
+    CCA_flag = True
 
     ######## 6. Run CCA on thalamic activity  ########
-    CCA_thalamic_flag = False
+    CCA_thalamic_flag = True
 
     ######## 5. Run shuffled CCA ########
     CCA_shuffle_flag = False
@@ -60,7 +58,7 @@ if __name__ == '__main__':
     CCA_shufflebyhalf_flag = False
 
     ######## 7. Run cross val CCA ########
-    CCA_crossval_flag = True
+    CCA_crossval_flag = False
 
     ############################################
     # Import Data from BIDS directory

@@ -12,11 +12,11 @@ from Common_Functions.bad_trial_check import bad_trial_check
 from Common_Functions.Create_Frequency_Bands import create_frequency_bands
 from ESG.run_CCA_spinal import run_CCA
 from ESG.run_CCA_spinal_2 import run_CCA2
-from ESG.run_CCA_spinal_shuffle import run_CCA_shuffle
-from ESG.run_CCA_spinal_shufflebyhalf import run_CCA_shufflebyhalf
+from Archive.run_CCA_spinal_shuffle import run_CCA_shuffle
+from Archive.run_CCA_spinal_shufflebyhalf import run_CCA_shufflebyhalf
 
 if __name__ == '__main__':
-    srmr_nr = 1  # Set the experiment number
+    srmr_nr = 2  # Set the experiment number
 
     if srmr_nr == 1:
         n_subjects = 36  # Number of subjects

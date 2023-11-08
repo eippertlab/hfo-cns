@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
-        conditions = [2, 4]
+        conditions = [2, 3]
     elif srmr_nr == 2:
         subjects = np.arange(1, 25)
         conditions = [3, 5]

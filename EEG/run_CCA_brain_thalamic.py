@@ -158,6 +158,11 @@ def run_CCA_thalamic(subject, condition, srmr_nr, freq_band, sfreq):
     pickle.dump(A_st, afile)
     afile.close()
 
+    # Save single trial weights
+    rfile = open(save_path + f'W_st_{freq_band}_{cond_name}.pkl', 'wb')
+    pickle.dump(W_st, rfile)
+    rfile.close()
+
     ################################ Plotting Graphs #######################################
     figure_path_spatial = f'/data/p_02718/Images/CCA_eeg_thalamic/ComponentIsopotentialPlots/{subject_id}/'
     os.makedirs(figure_path_spatial, exist_ok=True)

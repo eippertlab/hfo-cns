@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
-        conditions = [2, 4]
+        conditions = [2, 3]
         # Cortical Excel files
         xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG_Updated.xlsx')
         df_cortical = pd.read_excel(xls, 'CCA')

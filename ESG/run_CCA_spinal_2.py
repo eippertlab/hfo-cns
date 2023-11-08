@@ -198,6 +198,11 @@ def run_CCA2(subject, condition, srmr_nr, freq_band):
     pickle.dump(A_st, afile)
     afile.close()
 
+    # Save single trial weights
+    rfile = open(save_path + f'W_st_{freq_band}_{cond_name_mixed}.pkl', 'wb')
+    pickle.dump(W_st, rfile)
+    rfile.close()
+
     ################################ Plotting Graphs #######################################
     figure_path_spatial = f'/data/p_02718/Images_2/CCA/ComponentIsopotentialPlots/{subject_id}/'
     os.makedirs(figure_path_spatial, exist_ok=True)
