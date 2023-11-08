@@ -7,9 +7,11 @@ import mne
 import numpy as np
 from Common_Functions.get_conditioninfo import get_conditioninfo
 from Common_Functions.invert import invert
+from Common_Functions.envelope_noise_reduction import envelope_noise_reduction
 import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib as mpl
+from scipy.interpolate import PchipInterpolator as pchip
 mpl.rcParams['pdf.fonttype'] = 42
 
 
@@ -74,7 +76,25 @@ if __name__ == '__main__':
                     evoked = epochs.copy().average()
                     envelope = evoked.apply_hilbert(envelope=True)
                     data = envelope.get_data()
-                    evoked_list.append(data)
+
+                    # Want to subtract mean noise in noise period (-100ms to -10ms) from each data point in the envelope
+                    interpol_indices = evoked.time_as_index([-7/1000, 7/1000])
+                    noise_data = envelope.copy().crop(-100/1000, -10/1000).get_data()
+                    cleaned_data = envelope_noise_reduction(data, noise_data)
+                    # Data is interpolated from -7ms to 7ms for stim artefact - do this again to combat subtraction
+                    # x is all values EXCEPT those in the interpolation window
+                    x_total = np.arange(0, len(evoked.times))
+                    x_before = x_total[0:interpol_indices[0]]
+                    x_interpol = x_total[interpol_indices[0]:interpol_indices[1]]
+                    x_after = x_total[interpol_indices[1]:]
+                    x = np.concatenate((x_before, x_after))
+                    # # Data is just a string of values
+                    y = cleaned_data[0][x]  # y values to be fitted
+                    y_interpol_before = y[x_interpol]
+                    y_interpol = pchip(x, y)(x_interpol)  # perform interpolation
+                    cleaned_data[0][x_interpol] = y_interpol  # replace in data
+
+                    evoked_list.append(cleaned_data)
 
         # Get grand average across chosen epochs, and spatial patterns
         grand_average_1 = np.mean(evoked_list_1, axis=0)
