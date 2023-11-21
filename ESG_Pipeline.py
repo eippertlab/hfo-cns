@@ -16,7 +16,7 @@ from Archive.run_CCA_spinal_shuffle import run_CCA_shuffle
 from Archive.run_CCA_spinal_shufflebyhalf import run_CCA_shufflebyhalf
 
 if __name__ == '__main__':
-    srmr_nr = 2  # Set the experiment number
+    srmr_nr = 1  # Set the experiment number
 
     if srmr_nr == 1:
         n_subjects = 36  # Number of subjects

@@ -9,13 +9,21 @@ import pandas as pd
 from Common_Functions.get_conditioninfo import get_conditioninfo
 
 if __name__ == '__main__':
-    srmr_nr = 1
+    srmr_nr = 2
     fsearch_low = 400
-    fsearch_high = 800  # 800 or 1200
+    fsearch_high = 1200  # 800 or 1200
+    cca_broadband = True  # If True, use the broadband data that has been spatially filtered
     freq_band = 'Sigma'
 
+    if cca_broadband:
+        if fsearch_high is not 1200:
+            raise RuntimeError('If cca_broadband is true, fsearch_high must be 1200')
+
     if srmr_nr == 1:
-        burst_frequency_path = f'/data/pt_02718/tmp_data/Peak_Frequency_{fsearch_low}_{fsearch_high}.xlsx'
+        if cca_broadband:
+            burst_frequency_path = f'/data/pt_02718/tmp_data/Peak_Frequency_{fsearch_low}_{fsearch_high}_ccabroadband.xlsx'
+        else:
+            burst_frequency_path = f'/data/pt_02718/tmp_data/Peak_Frequency_{fsearch_low}_{fsearch_high}.xlsx'
         thalamic_visibility_path = f'/data/pt_02718/tmp_data/Visibility_Thalamic_Updated.xlsx'
         visibility_path = f'/data/pt_02718/tmp_data/Visibility_Updated.xlsx'
         subjects = np.arange(1, 37)
@@ -23,7 +31,10 @@ if __name__ == '__main__':
         conditions = [2, 3]
 
     elif srmr_nr == 2:
-        burst_frequency_path = f'/data/pt_02718/tmp_data_2/Peak_Frequency_{fsearch_low}_{fsearch_high}.xlsx'
+        if cca_broadband:
+            burst_frequency_path = f'/data/pt_02718/tmp_data_2/Peak_Frequency_{fsearch_low}_{fsearch_high}_ccabroadband.xlsx'
+        else:
+            burst_frequency_path = f'/data/pt_02718/tmp_data_2/Peak_Frequency_{fsearch_low}_{fsearch_high}.xlsx'
         thalamic_visibility_path = f'/data/pt_02718/tmp_data_2/Visibility_Thalamic_Updated.xlsx'
         visibility_path = f'/data/pt_02718/tmp_data_2/Visibility_Updated.xlsx'
         subjects = np.arange(1, 25)
@@ -83,6 +94,6 @@ if __name__ == '__main__':
             kept_cort = np.mean([values_cort[i] for i in keepers])
 
             print(f'{column_base}_{cond_name}')
-            print(kept_spin)
-            print(kept_thal)
-            print(kept_cort)
+            print(f'spinal: {kept_spin}')
+            print(f'thalamic: {kept_thal}')
+            print(f'cortical: {kept_cort}')
