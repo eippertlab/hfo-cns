@@ -9,7 +9,7 @@ import pickle
 from Common_Functions.get_esg_channels import get_esg_channels
 from Common_Functions.appy_cca_weights import apply_cca_weights
 from Common_Functions.get_channels import get_channels
-from Common_Functions.evoked_from_raw import evoked_from_raw
+from Common_Functions.get_conditioninfo import get_conditioninfo
 import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib as mpl
@@ -27,17 +27,34 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epo_cca_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
-    image_path = "/data/p_02718/Images/TFRs_SingleChannel_CCAtoBroadband/"
-    os.makedirs(image_path, exist_ok=True)
-
-    image_path_ss = "/data/p_02718/Images/TFRs_SingleChannel_CCAtoBroadband/SingleSubjects/"
-    os.makedirs(image_path_ss, exist_ok=True)
-
     srmr_nr = 2
+    if srmr_nr == 1:
+        image_path = "/data/p_02718/Images/TFRs_SingleChannel_CCAtoBroadband/"
+        os.makedirs(image_path, exist_ok=True)
+
+        image_path_ss = "/data/p_02718/Images/TFRs_SingleChannel_CCAtoBroadband/SingleSubjects/"
+        os.makedirs(image_path_ss, exist_ok=True)
+
+        folder = 'tmp_data'
+        subjects = np.arange(1, 37)
+        sfreq = 5000
+        conditions = [2, 3]
+
+    elif srmr_nr == 2:
+        image_path = "/data/p_02718/Images_2/TFRs_SingleChannel_CCAtoBroadband/"
+        os.makedirs(image_path, exist_ok=True)
+
+        image_path_ss = "/data/p_02718/Images_2/TFRs_SingleChannel_CCAtoBroadband/SingleSubjects/"
+        os.makedirs(image_path_ss, exist_ok=True)
+
+        folder = 'tmp_data_2'
+        subjects = np.arange(1, 25)
+        sfreq = 5000
+        conditions = [3, 5]
+
     eeg_chans, esg_chans, bipolar_chans = get_channels(1, False, False, srmr_nr)
     brainstem_chans, cervical_chans, lumbar_chans, ref_chan = get_esg_channels()
 
-    folder = 'tmp_data'
     freq_band = 'sigma'
 
     # Spinal Timing Excel File
@@ -60,10 +77,6 @@ if __name__ == '__main__':
     df_spinal = pd.read_excel(xls, 'CCA')
     df_spinal.set_index('Subject', inplace=True)
 
-    subjects = np.arange(1, 37)
-    sfreq = 5000
-    cond_names = ['median', 'tibial']
-
     for freq_type in ['upper', 'full']:
         if freq_type == 'full':
             freqs = np.arange(0., 1200., 3.)
@@ -73,18 +86,13 @@ if __name__ == '__main__':
             fmin, fmax = freqs[[0, -1]]
 
         # To use mne grand_average method, need to generate a list of evoked potentials for each subject
-        for cond_name in cond_names:  # Conditions (median, tibial)
+        for condition in conditions:
+            cond_info = get_conditioninfo(condition, srmr_nr)
+            cond_name = cond_info.cond_name
+            trigger_name = cond_info.trigger_name
             evoked_list_cortical = []
             evoked_list_thalamic = []
             evoked_list_spinal = []
-
-            if cond_name == 'tibial':
-                full_name = 'Tibial Nerve Stimulation'
-                trigger_name = 'Tibial - Stimulation'
-
-            elif cond_name == 'median':
-                full_name = 'Median Nerve Stimulation'
-                trigger_name = 'Median - Stimulation'
 
             for data_type, evoked_list in zip(['Spinal', 'Thalamic', 'Cortical'],
                                               [evoked_list_spinal, evoked_list_thalamic, evoked_list_cortical]):
@@ -158,10 +166,10 @@ if __name__ == '__main__':
                         # median_lat, tibial_lat = get_time_to_align('esg', ['median', 'tibial'], np.arange(1, 37))
                         median_lat = 0.013
                         tibial_lat = 0.022
-                        if cond_name == 'median':
+                        if cond_name in ['median', 'med_mixed']:
                             sep_latency = round(df_timing_spinal.loc[subject, f"N13"], 3)
                             expected = median_lat
-                        elif cond_name == 'tibial':
+                        elif cond_name in ['tibial', 'tib_mixed']:
                             sep_latency = round(df_timing_spinal.loc[subject, f"N22"], 3)
                             expected = tibial_lat
                         shift = expected - sep_latency
@@ -217,12 +225,12 @@ if __name__ == '__main__':
             ax = ax.flatten()
             tmin = 0.0
             tmax = 0.06
-            if cond_name == 'median':
+            if cond_name in ['median', 'med_mixed']:
                 vmax_cortical = 300
                 vmax_thalamic = 150
                 vmax_spinal = 150
                 vmin = 0
-            elif cond_name == 'tibial':
+            elif cond_name in ['tibial', 'tib_mixed']:
                 vmax_cortical = 40
                 vmax_thalamic = 20
                 vmax_spinal = 10

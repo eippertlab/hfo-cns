@@ -4,7 +4,7 @@ import numpy as np
 def apply_cca_weights(epochs_data, **kwargs):
     # Check all necessary arguments sent in
     required_kws = ["weights"]
-    assert all([kw in kwargs.keys() for kw in required_kws]), "Error. Some KWs not passed into PCA_OBS."
+    assert all([kw in kwargs.keys() for kw in required_kws]), "Error. Some KWs not passed into apply_cca_weights."
 
     # Extract all kwargs - more elegant ways to do this
     weights = kwargs['weights']
