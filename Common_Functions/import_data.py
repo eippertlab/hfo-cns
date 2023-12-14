@@ -178,7 +178,8 @@ def import_data(subject, condition, srmr_nr, sampling_rate, esg_flag):
     # High pass filter at 1Hz
     ##############################################################################################
     # make sure recording reference is included
-    mne.add_reference_channels(raw_concat, ref_channels=['TH6'], copy=False)  # Modifying in place
+    mne.add_reference_channels(raw_concat, ref_channels=['TH6'], copy=False)  # Modifying in place, adds the channel but
+    # doesn't do any actual rereferencing
 
     raw_concat.notch_filter(freqs=[notch_low, notch_high], n_jobs=len(raw_concat.ch_names), method='fir', phase='zero')
 

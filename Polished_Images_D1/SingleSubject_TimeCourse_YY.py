@@ -148,7 +148,7 @@ if __name__ == '__main__':
     df_vis_spinal = pd.read_excel(xls, 'CCA_Spinal')
     df_vis_spinal.set_index('Subject', inplace=True)
 
-    subjects_cortical = [15, 21, 29]
+    subjects_cortical = [15, 21, 29, 31]
     subjects_spinal = [6, 21, 31, 36]
 
     for data_type, subjects in zip(['eeg', 'esg'], [subjects_cortical, subjects_spinal]):

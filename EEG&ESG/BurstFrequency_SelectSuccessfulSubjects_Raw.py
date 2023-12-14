@@ -1,4 +1,4 @@
-# We have all of the freuqencies computed already
+# We have all of the frequencies computed already
 # Read in these values and then remove those who don't have a valid CCA component chosen in the finish on either the
 # spinal level, thalamic level OR cortical level  - - if they fail ANY of these levels, remove them
 

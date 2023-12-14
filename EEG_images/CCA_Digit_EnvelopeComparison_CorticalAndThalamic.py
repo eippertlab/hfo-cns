@@ -20,6 +20,7 @@ if __name__ == '__main__':
     srmr_nr = 2  # Always 2 for digit information
     data_types = ['Cortical', 'Thalamic']  # 'Thalamic',
     exclude_outlier = False  # If true, exclude subj 1 in case of cortical
+    shorter_time = True  # If true, crop the epoch before testing
 
     subjects = np.arange(1, 25)
     conditions = [2]  # med_digits
@@ -95,6 +96,8 @@ if __name__ == '__main__':
                         if inv == 'T':
                             epochs.apply_function(invert, picks=channel)
                         evoked = epochs.copy().average()
+                        if shorter_time:
+                            evoked.crop(tmin=-0.1, tmax=0.07)
                         envelope = evoked.apply_hilbert(envelope=True)
                         data = envelope.get_data()
 
@@ -145,10 +148,10 @@ if __name__ == '__main__':
 
             # Plot Time Course
             fig, ax = plt.subplots()
-            ax.plot(epochs.times, grand_average_1[0, :], label='med1')
-            ax.plot(epochs.times, grand_average_2[0, :], label='med2')
-            ax.plot(epochs.times, grand_average_12[0, :], label='med12')
-            ax.plot(epochs.times, grand_average_1plus2[0, :], label='med1+med2')
+            ax.plot(evoked.times, grand_average_1[0, :], label='med1')
+            ax.plot(evoked.times, grand_average_2[0, :], label='med2')
+            ax.plot(evoked.times, grand_average_12[0, :], label='med12')
+            ax.plot(evoked.times, grand_average_1plus2[0, :], label='med1+med2')
             for lower, upper in zip(lower_list, upper_list):
                 ax.fill_between(evoked.times, lower, upper, alpha=0.3)
             ax.set_xlabel('Time (s)')
@@ -185,9 +188,6 @@ if __name__ == '__main__':
                 n_jobs=None,
                 out_type="mask", )
 
-            print(clusters)
-            print(np.shape(clusters))
-
             grand_average_difference = np.mean(difference_list, axis=0).reshape(-1, 1).T
             error = sem(difference_list, axis=0)
             upper = (grand_average_difference[0, :] + error).reshape(-1)
@@ -218,6 +218,10 @@ if __name__ == '__main__':
             ax2.set_ylabel("f-values")
             ax2.set_xlim([0, 0.07])
 
+            plt.savefig(figure_path + f'GA_Clusters_{freq_band}_{cond_name}_n={len(evoked_list)}.png')
+            plt.savefig(figure_path + f'GA_Clusters_{freq_band}_{cond_name}_n={len(evoked_list)}.pdf',
+                        bbox_inches='tight', format="pdf")
+
             # Plot each individuals difference line instead of ga
             fig, (ax, ax2) = plt.subplots(2, 1, figsize=(8, 4))
             ax.set_title(f"{data_type}, Difference")
@@ -243,5 +247,9 @@ if __name__ == '__main__':
             ax2.set_xlabel("time (ms)")
             ax2.set_ylabel("f-values")
             ax2.set_xlim([0, 0.07])
+
+            plt.savefig(figure_path + f'SingleSubj_Clusters_{freq_band}_{cond_name}_n={len(evoked_list)}.png')
+            plt.savefig(figure_path + f'SingleSubj_Clusters_{freq_band}_{cond_name}_n={len(evoked_list)}.pdf',
+                        bbox_inches='tight', format="pdf")
 
             plt.show()

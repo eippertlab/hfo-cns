@@ -18,7 +18,7 @@ from EEG.run_CCA_brain_thalamic_2 import run_CCA_thalamic2
 from Archive.run_CCA_brain_crossval import run_CCA_crossval
 
 if __name__ == '__main__':
-    srmr_nr = 2  # Set the experiment number
+    srmr_nr = 1  # Set the experiment number
 
     if srmr_nr == 1:
         n_subjects = 36  # Number of subjects
@@ -37,13 +37,13 @@ if __name__ == '__main__':
     import_d = False  # Prep work
 
     ######## 2. Bad Channel Check ###########
-    check_channels = False
+    check_channels = False  # No longer drop channels before CCA is run
 
     # ######## 3. Bad Trial Check ###########
-    check_trials = False
+    check_trials = True
 
     ######## 4. Freq band ##########
-    split_bands_flag = False
+    split_bands_flag = True
 
     ######## 5. Run CCA ########
     CCA_flag = True

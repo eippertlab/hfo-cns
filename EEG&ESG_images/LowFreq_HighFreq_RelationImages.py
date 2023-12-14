@@ -11,7 +11,7 @@ import os
 mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
-    srmr_nr = 1
+    srmr_nr = 2
     envelope = False  # If envelope is True, plut high freq env, otherwise the actual peak of the HFO time trace
 
     if srmr_nr == 1:

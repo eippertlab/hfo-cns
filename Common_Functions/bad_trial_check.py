@@ -41,10 +41,10 @@ def bad_trial_check(subject, condition, srmr_nr, sampling_rate, channel_type):
     # Need to get data in frequency zone of interest to compute mean and standard deviation
     # (n_channels, n_times)
     if channel_type == 'esg':
-        data = raw.filter(l_freq=400, h_freq=1400, n_jobs=len(raw.ch_names), method='iir',
+        data = raw.copy().filter(l_freq=400, h_freq=1400, n_jobs=len(raw.ch_names), method='iir',
                           iir_params={'order': 2, 'ftype': 'butter'}, phase='zero').get_data(picks=esg_chans)
     elif channel_type == 'eeg':
-        data = raw.filter(l_freq=400, h_freq=1400, n_jobs=len(raw.ch_names), method='iir',
+        data = raw.copy().filter(l_freq=400, h_freq=1400, n_jobs=len(raw.ch_names), method='iir',
                           iir_params={'order': 2, 'ftype': 'butter'}, phase='zero').get_data(picks=eeg_chans)
 
     meanAllChan = np.mean(data, axis=0)

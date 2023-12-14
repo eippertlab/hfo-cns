@@ -27,12 +27,12 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epo_cca_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
-    srmr_nr = 2
+    srmr_nr = 1
     if srmr_nr == 1:
-        image_path = "/data/p_02718/Images/TFRs_SingleChannel_CCAtoBroadband/"
+        image_path = "/data/p_02718/Polished/TFRs_SingleChannel_CCAtoBroadband_Filter/"
         os.makedirs(image_path, exist_ok=True)
 
-        image_path_ss = "/data/p_02718/Images/TFRs_SingleChannel_CCAtoBroadband/SingleSubjects/"
+        image_path_ss = "/data/p_02718/Polished/TFRs_SingleChannel_CCAtoBroadband_Filter/SingleSubjects/"
         os.makedirs(image_path_ss, exist_ok=True)
 
         folder = 'tmp_data'
@@ -41,10 +41,10 @@ if __name__ == '__main__':
         conditions = [2, 3]
 
     elif srmr_nr == 2:
-        image_path = "/data/p_02718/Images_2/TFRs_SingleChannel_CCAtoBroadband/"
+        image_path = "/data/p_02718/Polished_2/TFRs_SingleChannel_CCAtoBroadband_Filter/"
         os.makedirs(image_path, exist_ok=True)
 
-        image_path_ss = "/data/p_02718/Images_2/TFRs_SingleChannel_CCAtoBroadband/SingleSubjects/"
+        image_path_ss = "/data/p_02718/Polished_2/TFRs_SingleChannel_CCAtoBroadband_Filter/SingleSubjects/"
         os.makedirs(image_path_ss, exist_ok=True)
 
         folder = 'tmp_data_2'
@@ -129,6 +129,7 @@ if __name__ == '__main__':
 
                     raw_data = mne.io.read_raw_fif(input_path + fname, preload=True)
 
+
                     events, event_ids = mne.events_from_annotations(raw_data)
                     event_id_dict = {key: value for key, value in event_ids.items() if key == trigger_name}
                     epochs = mne.Epochs(raw_data, events, event_id=event_id_dict, tmin=iv_epoch[0], tmax=iv_epoch[1],
@@ -140,7 +141,7 @@ if __name__ == '__main__':
                     cor_names = [f'Cor{i}' for i in np.arange(1, len(W_st) + 1)]
                     if data_type == 'Spinal':
                         if cond_name in ['median', 'med_mixed']:
-                            epochs.pick(cervical_chans).reorder_channels(cervical_chans)
+                            epochs = epochs.pick(cervical_chans).reorder_channels(cervical_chans)
                             epochs_ccafiltered = epochs.apply_function(apply_cca_weights, channel_wise=False,
                                                                        **apply_weights_kwargs)
                             # Remap names to match Cor 1, Cor2 etc
@@ -175,6 +176,9 @@ if __name__ == '__main__':
                         shift = expected - sep_latency
                         evoked_ccafiltered.shift_time(shift, relative=True)
 
+                    evoked_ccafiltered.filter(l_freq=400, h_freq=1200,
+                                              method='iir',
+                                              iir_params={'order': 2, 'ftype': 'butter'}, phase='zero')
                     evoked_ccafiltered.crop(tmin=-0.06, tmax=0.1)
                     channel_no = df.loc[subject, f"{freq_band}_{cond_name}_comp"]
                     channel = f'Cor{channel_no}'
@@ -226,14 +230,14 @@ if __name__ == '__main__':
             tmin = 0.0
             tmax = 0.06
             if cond_name in ['median', 'med_mixed']:
-                vmax_cortical = 300
-                vmax_thalamic = 150
+                vmax_cortical = 260
+                vmax_thalamic = 120
                 vmax_spinal = 150
                 vmin = 0
             elif cond_name in ['tibial', 'tib_mixed']:
-                vmax_cortical = 40
+                vmax_cortical = 35
                 vmax_thalamic = 20
-                vmax_spinal = 10
+                vmax_spinal = 15
                 vmin = 0
             # Because combine = 'mean', the data in all channels is averaged as picks = 'eeg'
             averaged_cortical.plot(picks='eeg', baseline=iv_baseline, mode='ratio', cmap='jet',

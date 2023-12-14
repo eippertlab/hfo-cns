@@ -11,10 +11,10 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
     figure_to_plot = 1  # [1:splithalf, 2:across CNS]
-    before_CCA = True
+    before_CCA = False
     srmr_nr = 2
     fsearch_low = 400
-    fsearch_high = 800
+    fsearch_high = 1200
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)

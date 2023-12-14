@@ -26,9 +26,9 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epoch_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epoch_end', 'var_value'].iloc[0]]
 
-    srmr_nr = 2
+    srmr_nr = 1
     sfreq = 5000
-    fsearch_low = 400
+    fsearch_low = 450
     fsearch_high = 1200
     freqs = np.arange(fsearch_low - 50, fsearch_high + 50, 3.)
     fmin, fmax = freqs[[0, -1]]

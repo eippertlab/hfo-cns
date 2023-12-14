@@ -13,11 +13,14 @@ from Common_Functions.envelope_noise_reduction import envelope_noise_reduction
 from scipy.interpolate import PchipInterpolator as pchip
 from Common_Functions.invert import invert
 from Common_Functions.get_conditioninfo import get_conditioninfo
+import pingouin as pg
 from Common_Functions.calculate_snr_hfo import calculate_snr
 from Common_Functions.calculate_snr_lowfreq import calculate_snr_lowfreq
 import matplotlib.pyplot as plt
+import seaborn as sns
 import pandas as pd
 import matplotlib as mpl
+from scipy.stats import pearsonr
 from Common_Functions.check_excel_exist_partialcorr import check_excel_exist_partialcorr
 mpl.rcParams['pdf.fonttype'] = 42
 
@@ -160,11 +163,59 @@ if __name__ == '__main__':
         IR_low_list.append(ir_low)
         IR_high_list.append(ir_high)
 
-    print('IR Low')
-    print(IR_low_list)
-    print(np.mean(IR_low_list))
+    # print('IR Low')
+    # print(IR_low_list)
+    # print(np.mean(IR_low_list))
+    #
+    # print('IR High')
+    # print(IR_high_list)
+    # print(np.mean(IR_high_list))
 
-    print('IR High')
-    print(IR_high_list)
-    print(np.mean(IR_high_list))
+    df = pd.DataFrame()
+    df['Subject'] = subj_list
+    df['Low Frequency'] = IR_low_list
+    df['High Frequency'] = IR_high_list
+    print(df)
+    df_longform = pd.melt(df, id_vars=['Subject'],
+                          value_vars=[f'Low Frequency', f'High Frequency'],
+                          var_name='Frequency Level', value_name='Interaction Ratio')  # Change to long format
+    # print(df_longform)
 
+    plt.figure()
+    g = sns.catplot(kind='point', data=df_longform, x='Frequency Level', y='Interaction Ratio', hue='Subject', color='gray')
+    for ax in g.axes.flat:
+        for line in ax.lines:
+            line.set_alpha(0.3)
+        for dots in ax.collections:
+            color = dots.get_facecolor()
+            dots.set_color(sns.set_hls_values(color, l=0.5))
+            dots.set_alpha(0.3)
+    g.map_dataframe(sns.boxplot, data=df_longform, x='Frequency Level', y='Interaction Ratio', hue='Frequency Level',
+                    dodge=False, palette=['tab:red', 'tab:purple'])
+    g.fig.set_size_inches(16, 10)
+    g._legend.remove()
+    plt.ylabel('IR (%)')
+    # plt.show()
+
+    plt.figure()
+    # Scatter plot with correlation coeff
+    sns.scatterplot(data=df, x='Low Frequency', y='High Frequency')
+    # pearson_corr_og = df.abs()[f'{col_names[0]}'].corr(df.abs()[f'{col_names[1]}'])
+    df.dropna(inplace=True)
+    pearson_corr = pearsonr(df[f'Low Frequency'], df[f'High Frequency'])
+    # g.fig.set_size_inches(16, 10)
+    plt.title(f"PearsonCorrelation: {round(pearson_corr.statistic, 4)}, pval: {round(pearson_corr.pvalue, 4)}")
+
+    # Quick ttest
+    stats_high = pg.ttest(x=IR_high_list, y=0)
+    stats_low = pg.ttest(x=IR_low_list, y=0)
+    stats_diff = pg.ttest(x=IR_low_list, y=IR_high_list, paired=True)
+
+    pd.set_option('display.max_rows', 500)
+    pd.set_option('display.max_columns', 500)
+    pd.set_option('display.width', 150)
+    print(stats_high)
+    print(stats_low)
+    print(stats_diff)
+
+    plt.show()

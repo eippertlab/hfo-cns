@@ -39,13 +39,13 @@ if __name__ == '__main__':
     no_projections = 6
 
     # ######## 3. Bad Channel Check #######
-    check_channels = False
+    check_channels = False  # No longer drop channels during CCA
 
     ######### 4. Bad trial check #############
-    check_trials = False
+    check_trials = True
 
     ######### 5. Split into frequency bands #############
-    split_bands_flag = False
+    split_bands_flag = True
 
     ######### 6. Run CCA on each frequency band ##########
     CCA_flag = True

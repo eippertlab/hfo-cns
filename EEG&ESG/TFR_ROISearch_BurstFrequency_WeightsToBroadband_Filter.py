@@ -29,9 +29,9 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epoch_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epoch_end', 'var_value'].iloc[0]]
 
-    srmr_nr = 1
+    srmr_nr = 2
     sfreq = 5000
-    fsearch_low = 450
+    fsearch_low = 400
     fsearch_high = 1200
     freq_band = 'sigma'
     freqs = np.arange(fsearch_low - 50, fsearch_high + 50, 3.)
@@ -70,7 +70,7 @@ if __name__ == '__main__':
         df_spinal.set_index('Subject', inplace=True)
 
         # Make sure our excel sheet is in place to store the values, and get the correct weights we need to apply
-        excel_fname = f'/data/pt_02718/{folder}/Peak_Frequency_{fsearch_low}_{fsearch_high}_ccabroadband.xlsx'
+        excel_fname = f'/data/pt_02718/{folder}/Peak_Frequency_{fsearch_low}_{fsearch_high}_ccabroadband_filter.xlsx'
 
         sheetname = data_type
         # If fname and sheet exist already - subjects indices will already be in file from initial creation **
@@ -189,6 +189,9 @@ if __name__ == '__main__':
 
                     #  evoked = evoked_from_raw(raw_data, iv_epoch, iv_baseline, trigger_name, False)
                     evoked = epochs_ccafiltered.average()
+                    evoked.filter(l_freq=400, h_freq=1200,
+                                              method='iir',
+                                              iir_params={'order': 2, 'ftype': 'butter'}, phase='zero')
                     channel_no = df.loc[subject, f"{freq_band}_{cond_name}_comp"]
                     channel = f'Cor{channel_no}'
                     inv = df.loc[subject, f"{freq_band}_{cond_name}_flip"]
