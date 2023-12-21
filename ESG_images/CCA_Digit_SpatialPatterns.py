@@ -7,7 +7,8 @@ import mne
 import numpy as np
 from meet import spatfilt
 from Common_Functions.get_conditioninfo import get_conditioninfo
-from Common_Functions.get_channels import get_channels
+from Common_Functions.get_esg_channels import get_esg_channels
+from Common_Functions.IsopotentialFunctions_CbarLabel import mrmr_esg_isopotentialplot
 import matplotlib.pyplot as plt
 import pickle
 import matplotlib as mpl
@@ -29,21 +30,11 @@ if __name__ == '__main__':
 
     subjects = np.arange(1, 25)  # 1 through 24 to access subject data
     conditions = [2, 4]  # Conditions of interest - med_digits and tib_digits
-    component_fname = '/data/pt_02718/tmp_data_2/Components_EEG_Updated_Digits.xlsx'
+    component_fname = '/data/pt_02718/tmp_data_2/Components_Updated_Digits.xlsx'
     visibility_fname = '/data/pt_02718/tmp_data_2/Visibility_Updated_Digits.xlsx'
-    figure_path = '/data/p_02718/Images_2/CCA_eeg_digits/ComponentIsopotentialPlots/'
+    figure_path = '/data/p_02718/Images_2/CCA_digits/ComponentIsopotentialPlots/'
     os.makedirs(figure_path, exist_ok=True)
-
-    # Get a raw file so I can use the montage
-    raw = mne.io.read_raw_fif("/data/pt_02718/tmp_data_2/freq_banded_eeg/sub-001/sigma_med_mixed.fif", preload=True)
-    montage_path = '/data/pt_02718/'
-    montage_name = 'electrode_montage_eeg_10_5.elp'
-    montage = mne.channels.read_custom_montage(montage_path + montage_name)
-    raw.set_montage(montage, on_missing="ignore")
-    eeg_chans, esg_chans, bipolar_chans = get_channels(1, False, False, srmr_nr)
-    idx_by_type = mne.channel_indices_by_type(raw.info, picks=eeg_chans)
-    res = mne.pick_info(raw.info, sel=idx_by_type['eeg'], copy=True, verbose=None)
-
+    brainstem_chans, cervical_chans, lumbar_chans, ref_chan = get_esg_channels()
 
     for condition in conditions:
         # Set variables
@@ -53,11 +44,10 @@ if __name__ == '__main__':
         trigger_name = trigger_names[2]
 
         for subject in subjects:
-            eeg_chans, esg_chans, bipolar_chans = get_channels(subject, False, False, srmr_nr)
             subject_id = f'sub-{str(subject).zfill(3)}'
             # Spatial pattern
             fname = f"A_st_{freq_band}_{cond_name}.pkl"
-            input_path = "/data/pt_02718/tmp_data_2/cca_eeg/" + subject_id + "/"
+            input_path = "/data/pt_02718/tmp_data_2/cca/" + subject_id + "/"
             with open(f'{input_path}{fname}', 'rb') as f:
                 A_st = pickle.load(f)
 
@@ -65,17 +55,25 @@ if __name__ == '__main__':
             # fig, axes = plt.figure()
             fig, axes = plt.subplots(2, 2)
             axes = axes.flatten()
+            if cond_name == 'med_digits':
+                chan_labels = cervical_chans
+                colorbar_axes = [-0.25, 0.25]
+            elif cond_name == 'tib_digits':
+                chan_labels = lumbar_chans
+                colorbar_axes = [-0.2, 0.2]
             for icomp in np.arange(0, 4):  # Plot for each of four components
-                # plt.subplot(2, 2, icomp + 1, title=f'Component {icomp + 1}')
-                chan_labels = raw.pick_channels(eeg_chans).ch_names
-                mne.viz.plot_topomap(data=A_st[:, icomp], pos=res, ch_type='eeg', sensors=True, names=None,
-                                     contours=6, outlines='head', sphere=None, image_interp='cubic',
-                                     extrapolate='head', border='mean', res=64, size=1, cmap='jet', vlim=(None, None),
-                                     cnorm=None, axes=axes[icomp], show=False)
+                subjects_4grid = np.arange(1, 25)  # subj  # Pass this instead of (1, 37) for 1 subjects
+                # you can also base the grid on an several subjects
+                # then the function takes the average over the channel positions of all those subjects
+                time = 0.0
+                colorbar = True
+                mrmr_esg_isopotentialplot(subjects_4grid, A_st[:, icomp], colorbar_axes, chan_labels,
+                                          colorbar, time, axes[icomp], colorbar_label='Amplitude (AU)', srmr_nr=srmr_nr)
+                axes[icomp].set_yticklabels([])
+                axes[icomp].set_ylabel(None)
+                axes[icomp].set_xticklabels([])
+                axes[icomp].set_xlabel(None)
                 axes[icomp].set_title(f'Component {icomp + 1}')
-                divider = make_axes_locatable(axes[icomp])
-                cax = divider.append_axes('right', size='5%', pad=0.05)
-                cb = fig.colorbar(axes[icomp].images[-1], cax=cax, shrink=0.6, orientation='vertical')
 
             plt.savefig(figure_path + f'{subject_id}_{freq_band}_{cond_name}.png')
             plt.close(fig)

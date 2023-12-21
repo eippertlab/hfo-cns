@@ -4,9 +4,8 @@
 # For bipolar electrodes
 ###############################################################################################
 
-import numpy as np
-from Bipolar.ImportBipolar_CNAP import import_data
-from Bipolar.ImportBipolar_SequentialFit import import_dataepochs
+from Archive.Bipolar.ImportBipolar_CNAP import import_data
+from Archive.Bipolar.ImportBipolar_SequentialFit import import_dataepochs
 
 
 if __name__ == '__main__':

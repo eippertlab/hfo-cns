@@ -30,7 +30,7 @@ plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
 
 if __name__ == '__main__':
     use_visible = True  # Use only subjects with visible bursting
-    srmr_nr = 2
+    srmr_nr = 1
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)

@@ -25,6 +25,7 @@ if __name__ == '__main__':
 
     if srmr_nr != 2:
         print('Error: This script is only designed to work for experiment 2 (digit stimulation)')
+        exit()
 
     subjects = np.arange(1, 25)  # 1 through 24 to access subject data
     conditions = [2, 4]  # Conditions of interest - med_digits and tib_digits

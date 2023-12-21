@@ -11,7 +11,8 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
     figure_to_plot = 2  # [1:splithalf, 2:across CNS]
-    srmr_nr = 2
+    srmr_nr = 1
+    high_freq = 800
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
@@ -19,14 +20,14 @@ if __name__ == '__main__':
         figure_path = f'/data/p_02718/Images/BurstFrequencyAnalysis_CCAtoBroadband_Filter/'
         os.makedirs(figure_path, exist_ok=True)
         data_types = ['Spinal', 'Thalamic', 'Cortical']
-        excel_fname = '/data/pt_02718/tmp_data/Peak_Frequency_400_1200_ccabroadband_filter.xlsx'
+        excel_fname = f'/data/pt_02718/tmp_data/Peak_Frequency_400_{high_freq}_ccabroadband_filter.xlsx'
     elif srmr_nr == 2:
         subjects = np.arange(1, 25)
         cond_names = ['med_mixed', 'tib_mixed']
         figure_path = f'/data/p_02718/Images_2/BurstFrequencyAnalysis_CCAtoBroadband_Filter/'
         os.makedirs(figure_path, exist_ok=True)
         data_types = ['Spinal', 'Thalamic', 'Cortical']
-        excel_fname = '/data/pt_02718/tmp_data_2/Peak_Frequency_400_1200_ccabroadband_filter.xlsx'
+        excel_fname = f'/data/pt_02718/tmp_data_2/Peak_Frequency_400_{high_freq}_ccabroadband_filter.xlsx'
 
     if figure_to_plot == 1:
         for cond_name in cond_names:
@@ -45,7 +46,7 @@ if __name__ == '__main__':
                             x='Timing', y='Frequency', hue='Subject')
                 g.fig.set_size_inches(16, 10)
                 plt.title(f"{data_type}, {cond_name}")
-                plt.savefig(figure_path +f'SplitHalf_{data_type}_{cond_name}.png')
+                plt.savefig(figure_path +f'SplitHalf_{data_type}_{cond_name}_{high_freq}.png')
                 # plt.show()
                 plt.close()
 
@@ -86,7 +87,7 @@ if __name__ == '__main__':
             plt.title(f"{cond_name}")
             plt.xlabel('CNS Level')
             plt.ylabel('Frequency (Hz)')
-            plt.savefig(figure_path + f'CrossCNS_{cond_name}.png')
+            plt.savefig(figure_path + f'CrossCNS_{cond_name}_{high_freq}.png')
 
             plt.show()
             plt.close()

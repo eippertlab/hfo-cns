@@ -138,6 +138,7 @@ def run_CCA2(subject, condition, srmr_nr, freq_band):
 
     # Spatial Patterns
     A_st = np.cov(st_matrix) @ W_st
+    A_st_digits = np.cov(st_matrix_digits) @ W_st
 
     # Reshape - (900, 2000, 9)
     no_times_long = np.shape(epochs_m.get_data())[2]
@@ -196,6 +197,10 @@ def run_CCA2(subject, condition, srmr_nr, freq_band):
     ################################ Save Spatial Pattern #################################
     afile = open(save_path + f'A_st_{freq_band}_{cond_name_mixed}.pkl', 'wb')
     pickle.dump(A_st, afile)
+    afile.close()
+
+    afile = open(save_path + f'A_st_{freq_band}_{cond_name_dig}.pkl', 'wb')
+    pickle.dump(A_st_digits, afile)
     afile.close()
 
     # Save single trial weights

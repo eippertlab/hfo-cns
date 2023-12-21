@@ -16,7 +16,7 @@ from Archive.run_CCA_spinal_shuffle import run_CCA_shuffle
 from Archive.run_CCA_spinal_shufflebyhalf import run_CCA_shufflebyhalf
 
 if __name__ == '__main__':
-    srmr_nr = 1  # Set the experiment number
+    srmr_nr = 2  # Set the experiment number
 
     if srmr_nr == 1:
         n_subjects = 36  # Number of subjects
@@ -42,10 +42,10 @@ if __name__ == '__main__':
     check_channels = False  # No longer drop channels during CCA
 
     ######### 4. Bad trial check #############
-    check_trials = True
+    check_trials = False
 
     ######### 5. Split into frequency bands #############
-    split_bands_flag = True
+    split_bands_flag = False
 
     ######### 6. Run CCA on each frequency band ##########
     CCA_flag = True

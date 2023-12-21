@@ -2,14 +2,12 @@
 import mne
 from Common_Functions.get_conditioninfo import *
 from Common_Functions.get_channels import *
-from scipy.io import loadmat
 from scipy.optimize import curve_fit
 import os
 import glob
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from Bipolar.subtract_fit import subtract_fit
 
 
 # if __name__ == '__main__':
