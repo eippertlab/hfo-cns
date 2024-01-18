@@ -48,7 +48,7 @@ if __name__ == '__main__':
     trigger_names = cond_info.trigger_name
 
     time_edge = 0.004
-    time_peak = 0.02
+    time_peak = 0.022
     channel_low = ['CP4']
 
     # Cortical Excel files and image path
@@ -195,6 +195,7 @@ if __name__ == '__main__':
     g.fig.set_size_inches(16, 10)
     g._legend.remove()
     plt.ylabel('IR (%)')
+    plt.savefig(figure_path+f'Boxplot_IR_HighvLow_{cond_name}')
     # plt.show()
 
     plt.figure()
@@ -205,6 +206,7 @@ if __name__ == '__main__':
     pearson_corr = pearsonr(df[f'Low Frequency'], df[f'High Frequency'])
     # g.fig.set_size_inches(16, 10)
     plt.title(f"PearsonCorrelation: {round(pearson_corr.statistic, 4)}, pval: {round(pearson_corr.pvalue, 4)}")
+    plt.savefig(figure_path+f'Scatterplot_IR_HighvLow_{cond_name}')
 
     # Quick ttest
     stats_high = pg.ttest(x=IR_high_list, y=0)
