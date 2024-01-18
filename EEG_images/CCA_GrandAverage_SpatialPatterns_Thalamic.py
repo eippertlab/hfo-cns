@@ -106,11 +106,14 @@ if __name__ == '__main__':
 
                 # Low Freq SEP
                 if srmr_nr == 1:
-                    input_path_low = "/data/pt_02068/analysis/final/tmp_data/" + subject_id + "/eeg/prepro/"
+                    input_path_low = f"/data/pt_02718/tmp_data/imported/{subject_id}/"
+                    # input_path_low = "/data/pt_02068/analysis/final/tmp_data/" + subject_id + "/eeg/prepro/"
                 elif srmr_nr == 2:
-                    input_path_low = "/data/pt_02151/analysis/final/tmp_data/" + subject_id + "/eeg/prepro/"
-                fname_low = f"cnt_clean_{cond_name}.set"
-                raw = mne.io.read_raw_eeglab(input_path_low + fname_low, preload=True)
+                    input_path_low = f"/data/pt_02718/tmp_data_2/imported/{subject_id}/"
+                    # input_path_low = "/data/pt_02151/analysis/final/tmp_data/" + subject_id + "/eeg/prepro/"
+                # fname_low = f"cnt_clean_{cond_name}.set"
+                fname_low = f"noStimart_sr5000_{cond_name}_withqrs_eeg.fif"
+                raw = mne.io.read_raw_fif(input_path_low + fname_low, preload=True)
                 raw.set_montage(montage, on_missing="ignore")
                 evoked_low = evoked_from_raw(raw, iv_epoch, iv_baseline, trigger_name, False)
                 if reref_flag:

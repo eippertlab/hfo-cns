@@ -24,8 +24,7 @@ if __name__ == '__main__':
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)
-    notch_low = df.loc[df['var_name'] == 'notch_freq_low', 'var_value'].iloc[0]
-    notch_high = df.loc[df['var_name'] == 'notch_freq_high', 'var_value'].iloc[0]
+    notch_freq = df.loc[df['var_name'] == 'notch_freq', 'var_value'].iloc[0]
 
     iv_baseline = [df.loc[df['var_name'] == 'baseline_start', 'var_value'].iloc[0],
                    df.loc[df['var_name'] == 'baseline_end', 'var_value'].iloc[0]]

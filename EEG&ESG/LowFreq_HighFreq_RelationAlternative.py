@@ -2,6 +2,10 @@
 # envelopes
 # Looking at both spinal and cortical peaks
 # Mixed nerve condition for both dataset 1 and 2
+# Here we're using a different method to calculate the peak latnecy of the HFOs:
+# Get the peak latency of the envelope, go to the time before and after where 1/2 this amplitude is achieved
+# Take the middle point of these two latencies as the peak latency for the HFO
+
 
 import mne
 import os
@@ -14,6 +18,11 @@ import pandas as pd
 import matplotlib as mpl
 from Common_Functions.check_excel_exist_relation import check_excel_exist_relation
 mpl.rcParams['pdf.fonttype'] = 42
+
+def find_nearest(array, value):
+    array = np.asarray(array)
+    idx = (np.abs(array - value)).argmin()
+    return idx, array[idx]
 
 if __name__ == '__main__':
 
@@ -45,6 +54,8 @@ if __name__ == '__main__':
         df_spinal = pd.read_excel(xls, 'CCA')
         df_spinal.set_index('Subject', inplace=True)
 
+        excel_fname = f'/data/pt_02718/tmp_data/LowFreq_HighFreq_RelationAlternative.xlsx'
+
     elif srmr_nr == 2:
         subjects = np.arange(1, 25)
         conditions = [3, 5]
@@ -59,14 +70,11 @@ if __name__ == '__main__':
         df_spinal = pd.read_excel(xls, 'CCA')
         df_spinal.set_index('Subject', inplace=True)
 
+        excel_fname = f'/data/pt_02718/tmp_data_2/LowFreq_HighFreq_RelationAlternative.xlsx'
+
     for data_type in data_types:
-        # Make sure our excel sheet is in place to store the values
-        if srmr_nr == 1:
-            excel_fname = f'/data/pt_02718/tmp_data/LowFreq_HighFreq_Relation.xlsx'
-        elif srmr_nr == 2:
-            excel_fname = f'/data/pt_02718/tmp_data_2/LowFreq_HighFreq_Relation.xlsx'
+        # Check all is well for writing results
         sheetname = data_type
-        # If fname and sheet exist already - subjects indices will already be in file from initial creation **
         check_excel_exist_relation(subjects, excel_fname, sheetname)
         df_rel = pd.read_excel(excel_fname, sheetname)
         df_rel.set_index('Subject', inplace=True)
@@ -164,7 +172,7 @@ if __name__ == '__main__':
                         epochs.apply_function(invert, picks=channel_cca)
                     evoked = epochs.copy().average()
                     evoked.crop(tmin=-0.06, tmax=0.07)
-                    envelope = evoked.apply_hilbert(envelope=True)
+                    envelope = evoked.copy().apply_hilbert(envelope=True)
 
                 # Get timing and amplitude of both peaks
                 # Look negative for low freq N20, N22, N13, look positive for P39
@@ -188,18 +196,37 @@ if __name__ == '__main__':
                     else:
                         latency_low = time_peak
                         amplitude_low = np.nan
-                # High Freq
+
+                # High Freq - changing this to new method
                 if channel_no != 0:
                     _, latency_high, amplitude_high = envelope.get_peak(tmin=time_peak - time_edge,
                                                                         tmax=time_peak + time_edge,
                                                                         mode='pos', return_amplitude=True)
+                    half_amp = amplitude_high/2
+                    # Split envelope based on time_peak
+                    env_before = envelope.copy().crop(tmin=time_peak-10/1000, tmax=time_peak)
+                    env_after = envelope.copy().crop(tmin=time_peak, tmax=time_peak+10/1000)
+                    data_before = env_before.get_data().reshape(-1)
+                    data_after = env_after.get_data().reshape(-1)
+
+                    idx_before, val_before = find_nearest(data_before, half_amp)
+                    idx_after, val_after = find_nearest(data_after, half_amp)
+
+                    lat_before = time_peak - 10/1000 + idx_before/sfreq
+                    lat_after = time_peak + idx_after/sfreq
+                    lat_high = (lat_before+lat_after)/2
+                    # import matplotlib.pyplot as plt
+                    # plt.figure()
+                    # plt.plot(envelope.times, envelope.get_data().reshape(-1))
+                    # plt.plot(evoked.times, evoked.get_data().reshape(-1))
+                    # plt.show()
                 else:
-                    latency_high = time_peak
+                    lat_high = time_peak
                     amplitude_high = np.nan
 
                 df_rel.at[subject, f'{pot_name}'] = latency_low
                 df_rel.at[subject, f'{pot_name}_amplitude'] = amplitude_low*10**6
-                df_rel.at[subject, f'{pot_name}_high'] = latency_high
+                df_rel.at[subject, f'{pot_name}_high'] = lat_high
                 df_rel.at[subject, f'{pot_name}_high_amplitude'] = amplitude_high
 
         # Write the dataframe to the excel file

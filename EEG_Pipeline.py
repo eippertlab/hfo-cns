@@ -34,22 +34,22 @@ if __name__ == '__main__':
         sampling_rate = 5000  # Frequency to downsample to from original of 10kHz
 
     ######## 1. Import ############
-    import_d = False  # Prep work
+    import_d = True  # Prep work
 
     ######## 2. Bad Channel Check ###########
     check_channels = False  # No longer drop channels before CCA is run
 
     # ######## 3. Bad Trial Check ###########
-    check_trials = True
+    check_trials = False
 
     ######## 4. Freq band ##########
-    split_bands_flag = True
+    split_bands_flag = False
 
     ######## 5. Run CCA ########
-    CCA_flag = True
+    CCA_flag = False
 
     ######## 6. Run CCA on thalamic activity  ########
-    CCA_thalamic_flag = True
+    CCA_thalamic_flag = False
 
     ######## 5. Run shuffled CCA ########
     CCA_shuffle_flag = False

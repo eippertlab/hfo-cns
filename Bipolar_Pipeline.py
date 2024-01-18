@@ -10,10 +10,10 @@ from Archive.Bipolar.ImportBipolar_SequentialFit import import_dataepochs
 
 if __name__ == '__main__':
     ######## 1. Import ############
-    import_d = False  # Prep work
+    import_d = True  # Prep work
 
     ######## 1. Import ############
-    import_depochs = True  # Removes stim artefact with sequential fitting method - have epochs saved after this
+    import_depochs = False  # Removes stim artefact with sequential fitting method - have epochs saved after this
 
     n_subjects = 36  # Number of subjects
     # subjects = np.arange(1, 37)  # 1 through 36 to access subject data

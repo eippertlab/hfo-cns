@@ -15,7 +15,7 @@ def evoked_from_raw(raw, iv_epoch, iv_baseline, trigger_name, reduced_epochs):
     elif reduced_epochs and trigger_name == 'Tibial - Stimulation':
         epochs = epochs[800:1200]
 
-    # evoked = epochs.average()  # This line as is drops the ECG channel
-    evoked = epochs.average(picks='all')  # Keeps ECG channel
+    evoked = epochs.average()  # This line as is drops the ECG channel
+    # evoked = epochs.average(picks='all')  # Keeps ECG channel
 
     return evoked

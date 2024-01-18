@@ -23,8 +23,7 @@ def import_dataepochs(subject, condition, srmr_nr, sampling_rate):
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)
-    notch_low = df.loc[df['var_name'] == 'notch_freq_low', 'var_value'].iloc[0]
-    notch_high = df.loc[df['var_name'] == 'notch_freq_high', 'var_value'].iloc[0]
+    notch_freq = df.loc[df['var_name'] == 'notch_freq', 'var_value'].iloc[0]
     iv_baseline = [df.loc[df['var_name'] == 'baseline_start', 'var_value'].iloc[0],
                    df.loc[df['var_name'] == 'baseline_end', 'var_value'].iloc[0]]
     iv_epoch = [df.loc[df['var_name'] == 'epo_long_start', 'var_value'].iloc[0],
@@ -73,7 +72,7 @@ def import_dataepochs(subject, condition, srmr_nr, sampling_rate):
     # Reference and Remove Powerline Noise
     # High pass filter at 1Hz
     ##############################################################################################
-    # raw_concat.notch_filter(freqs=[notch_low, notch_high], n_jobs=len(raw_concat.ch_names), method='fir', phase='zero')
+    # raw_concat.notch_filter(freqs=notch_freq, n_jobs=len(raw_concat.ch_names), method='fir', phase='zero')
     #
     # raw_concat.filter(l_freq=1, h_freq=None, n_jobs=len(raw.ch_names), method='iir', iir_params={'order': 2, 'ftype': 'butter'}, phase='zero')
 

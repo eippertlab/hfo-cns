@@ -48,8 +48,7 @@ def import_data(subject, condition, srmr_nr, sampling_rate, esg_flag):
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)
-    notch_low = df.loc[df['var_name'] == 'notch_freq_low', 'var_value'].iloc[0]
-    notch_high = df.loc[df['var_name'] == 'notch_freq_high', 'var_value'].iloc[0]
+    notch_freq = df.loc[df['var_name'] == 'notch_freq', 'var_value'].iloc[0]
 
     sampling_rate_og = 10000
 
@@ -146,7 +145,6 @@ def import_data(subject, condition, srmr_nr, sampling_rate, esg_flag):
             mne.concatenate_raws([raw_concat, raw])
 
     # Read .mat file with QRS events - don't use these anymore since we use SSP but adding for completeness
-    # Would have to rerun prior to doing this to get the correct times for dataset 2
     if srmr_nr == 1:
         input_path_m = "/data/pt_02718/Rpeaks/" + subject_id + "/"
         fname_m = f"raw_{sampling_rate}_spinal_{cond_name}"
@@ -174,16 +172,16 @@ def import_data(subject, condition, srmr_nr, sampling_rate, esg_flag):
         fname_save = f'noStimart_sr{sampling_rate}_{cond_name}_withqrs_eeg.fif'
 
     ##############################################################################################
-    # Reference and Remove Powerline Noise
+    # Add reference channel in case not in channel list and Remove Powerline Noise
     # High pass filter at 1Hz
     ##############################################################################################
+    raw_concat.notch_filter(freqs=notch_freq, picks=raw_concat.ch_names, n_jobs=len(raw_concat.ch_names), method='fir', phase='zero')
+
+    raw_concat.filter(l_freq=1, h_freq=None, n_jobs=len(raw.ch_names), method='iir', iir_params={'order': 2, 'ftype': 'butter'}, phase='zero')
+
     # make sure recording reference is included
     mne.add_reference_channels(raw_concat, ref_channels=['TH6'], copy=False)  # Modifying in place, adds the channel but
     # doesn't do any actual rereferencing
-
-    raw_concat.notch_filter(freqs=[notch_low, notch_high], n_jobs=len(raw_concat.ch_names), method='fir', phase='zero')
-
-    raw_concat.filter(l_freq=1, h_freq=None, n_jobs=len(raw.ch_names), method='iir', iir_params={'order': 2, 'ftype': 'butter'}, phase='zero')
 
     # Save data without stim artefact and downsampled to 1000
     raw_concat.save(os.path.join(save_path, fname_save), fmt='double', overwrite=True)

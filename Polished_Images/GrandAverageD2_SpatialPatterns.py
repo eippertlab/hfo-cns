@@ -49,16 +49,6 @@ if __name__ == '__main__':
     iv_crop = [df.loc[df['var_name'] == 'epoch_start', 'var_value'].iloc[0],
                df.loc[df['var_name'] == 'epoch_end', 'var_value'].iloc[0]]
 
-    # Get a raw file so I can use the montage
-    raw = mne.io.read_raw_fif("/data/pt_02718/tmp_data_2/freq_banded_eeg/sub-001/sigma_med_mixed.fif", preload=True)
-    montage_path = '/data/pt_02718/'
-    montage_name = 'electrode_montage_eeg_10_5.elp'
-    montage = mne.channels.read_custom_montage(montage_path + montage_name)
-    raw.set_montage(montage, on_missing="ignore")
-    eeg_chans, esg_chans, bipolar_chans = get_channels(1, False, False, srmr_nr)
-    idx_by_type = mne.channel_indices_by_type(raw.info, picks=eeg_chans)
-    res = mne.pick_info(raw.info, sel=idx_by_type['eeg'], copy=True, verbose=None)
-
     figure_path = '/data/p_02718/Polished_2/GrandAverage_SpatialPatterns/'
     os.makedirs(figure_path, exist_ok=True)
 
@@ -92,6 +82,7 @@ if __name__ == '__main__':
                 epochs_hfo = []
 
                 for subject in subjects:
+                    eeg_chans, esg_chans, bipolar_chans = get_channels(subject, False, False, srmr_nr)
                     # Set variables
                     cond_info = get_conditioninfo(condition, srmr_nr)
                     cond_name = cond_info.cond_name
@@ -111,7 +102,15 @@ if __name__ == '__main__':
                         input_path_low = "/data/pt_02151/analysis/final/tmp_data/" + subject_id + "/eeg/prepro/"
                         fname_low = f"cnt_clean_{cond_name}.set"
                         raw = mne.io.read_raw_eeglab(input_path_low + fname_low, preload=True)
+
+                        # Set montage
+                        montage_path = '/data/pt_02718/'
+                        montage_name = 'electrode_montage_eeg_10_5.elp'
+                        montage = mne.channels.read_custom_montage(montage_path + montage_name)
                         raw.set_montage(montage, on_missing="ignore")
+                        idx_by_type = mne.channel_indices_by_type(raw.info, picks=eeg_chans)
+                        res = mne.pick_info(raw.info, sel=idx_by_type['eeg'], copy=True, verbose=None)
+
                         evoked_low = evoked_from_raw(raw, iv_epoch, iv_baseline, trigger_name, False)
                         if trigger_name == 'medMixed':
                             time_point = 18.8 / 1000

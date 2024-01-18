@@ -23,8 +23,7 @@ def import_data(subject, condition, srmr_nr, sampling_rate_og, repair_stim_art):
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)
-    notch_low = df.loc[df['var_name'] == 'notch_freq_low', 'var_value'].iloc[0]
-    notch_high = df.loc[df['var_name'] == 'notch_freq_high', 'var_value'].iloc[0]
+    notch_freq = df.loc[df['var_name'] == 'notch_freq', 'var_value'].iloc[0]
 
     # Process ESG channels and then EEG channels separately
     # for esg_flag in [True, False]:  # True for esg, false for eeg
@@ -109,7 +108,7 @@ def import_data(subject, condition, srmr_nr, sampling_rate_og, repair_stim_art):
     # Reference and Remove Powerline Noise
     # High pass filter at 1Hz
     ##############################################################################################
-    raw_concat.notch_filter(freqs=[notch_low, notch_high], n_jobs=len(raw_concat.ch_names), method='fir', phase='zero')
+    raw_concat.notch_filter(freqs=[notch_freq], n_jobs=len(raw_concat.ch_names), method='fir', phase='zero')
 
     raw_concat.filter(l_freq=1, h_freq=None, n_jobs=len(raw.ch_names), method='iir', iir_params={'order': 2, 'ftype': 'butter'}, phase='zero')
 

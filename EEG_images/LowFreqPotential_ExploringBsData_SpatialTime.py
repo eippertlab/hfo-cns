@@ -25,9 +25,10 @@ if __name__ == '__main__':
     df = pd.read_excel(cfg_path)
     iv_baseline = [df.loc[df['var_name'] == 'baseline_start', 'var_value'].iloc[0],
                    df.loc[df['var_name'] == 'baseline_end', 'var_value'].iloc[0]]
-    iv_epoch = [df.loc[df['var_name'] == 'epo_long_start', 'var_value'].iloc[0],
-                df.loc[df['var_name'] == 'epo_long_end', 'var_value'].iloc[0]]
-
+    iv_epoch = [df.loc[df['var_name'] == 'epo_cca_start', 'var_value'].iloc[0],
+                df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
+    # iv_epoch = [df.loc[df['var_name'] == 'epo_long_start', 'var_value'].iloc[0],
+    #                 df.loc[df['var_name'] == 'epo_long_end', 'var_value'].iloc[0]]
     for condition in conditions:
         evoked_list = []
         for subject in subjects:
@@ -45,7 +46,7 @@ if __name__ == '__main__':
                 os.makedirs(figure_path, exist_ok=True)
 
             elif srmr_nr == 2:
-                input_path = f"/data/pt_02718/tmp_data/imported/{subject_id}/"
+                input_path = f"/data/pt_02718/tmp_data_2/imported/{subject_id}/"
                 fname = f"noStimart_sr5000_{cond_name}_withqrs_eeg.fif"
                 figure_path = '/data/p_02718/Images_2/EEG/LowFrequency_BeforeCleaning/'
                 os.makedirs(figure_path, exist_ok=True)
