@@ -19,7 +19,7 @@ if __name__ == '__main__':
     srmr_nr = 2
     sfreq = 5000
     freq_band = 'sigma'
-    alternative_flag = False
+    alternative_flag = True
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
@@ -77,6 +77,7 @@ if __name__ == '__main__':
 
     for df, col_names in zip([df_med, df_tib, df_med, df_tib],
                              [col_med, col_tib, col_med_high, col_tib_high]):
+        plt.figure()
         df = df[col_names]
         # stats = df.drop(labels='Subject', axis=1).ptests(paired=True, alternative='greater', stars=False, padjust='bonf')
         # print(stats)
@@ -101,8 +102,37 @@ if __name__ == '__main__':
 
         if alternative_flag:
             plt.savefig(figure_path + fname + '_alternative.png')
+            plt.close()
         else:
             plt.savefig(figure_path + fname + '.png')
+            plt.close()
+
+    for df, col_names in zip([df_med, df_tib, df_med, df_tib],
+                             [col_med, col_tib, col_med_high, col_tib_high]):
+        plt.figure()
+        df = df[col_names]
+        # stats = df.drop(labels='Subject', axis=1).ptests(paired=True, alternative='greater', stars=False, padjust='bonf')
+        # print(stats)
+        sns.scatterplot(data=df, x=col_names[1], y=col_names[2])
+        if col_names == col_med:
+            plt.title(f"Median, Low Frequency")
+            fname = 'median_lowfreq'
+        elif col_names == col_med_high:
+            plt.title(f"Median, High Frequency")
+            fname = 'median_highfreq'
+        elif col_names == col_tib:
+            plt.title(f"Tibial, Low Frequency")
+            fname = 'tibial_lowfreq'
+        elif col_names == col_tib_high:
+            plt.title(f"Tibial, High Frequency")
+            fname = 'tibial_highfreq'
+
+        if alternative_flag:
+            plt.savefig(figure_path + fname + 'scatter_alternative.png')
+            plt.close()
+        else:
+            plt.savefig(figure_path + fname + 'scatter.png')
+            plt.close()
 
     # plt.show()
     # exit()

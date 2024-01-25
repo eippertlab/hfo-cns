@@ -64,10 +64,10 @@ def get_conditioninfo(condition, srmr_nr):
             nerve = 0
             stimulation = 0
             trigger_name = []
-            str_stimulation = 'rest'
-            str_nerve = []
-            str_cond1 = []
-            str_cond2 = 'rest'
+            str_stimulation = ''
+            str_nerve = 'rest'
+            str_cond1 = 'rest'
+            str_cond2 = ''
 
         elif condition == 2:
             nblocks = 4
@@ -113,8 +113,8 @@ def get_conditioninfo(condition, srmr_nr):
                 stimulation = 2
                 trigger_name = str_nerve + '1', str_nerve + '2', str_nerve + '12'
 
-            cond_name = str_nerve + str_stimulation
-            cond_name2 = str_cond1 + str_cond2
+        cond_name = str_nerve + str_stimulation
+        cond_name2 = str_cond1 + str_cond2
 
     cond_info = CondInfo()
     cond_info.nblocks = nblocks

@@ -39,8 +39,12 @@ def import_data(subject, condition, srmr_nr, sampling_rate, esg_flag):
         save_path = "../tmp_data_2/imported/" + subject_id
         input_path = "/data/p_02151/SRMR2_experiment/bids/" + subject_id + "/eeg/"  # Taking data from the bids folder
         os.makedirs(save_path, exist_ok=True)
-        cond_name = cond_info.cond_name   # med_digits/mixed and tib_digits/mixed
-        cond_name2 = cond_info.cond_name2  # mediansensory/mixed or tibialsensory/mixed
+        if condition == 1:
+            cond_name = cond_info.cond_name
+            cond_name2 = cond_info.cond_name  # rest
+        else:
+            cond_name = cond_info.cond_name   # med_digits/mixed and tib_digits/mixed
+            cond_name2 = cond_info.cond_name2  # mediansensory/mixed or tibialsensory/mixed
         stimulation = condition - 1
     else:
         print('Error: Experiment 1 or experiment 2 must be specified')
@@ -144,31 +148,34 @@ def import_data(subject, condition, srmr_nr, sampling_rate, esg_flag):
         else:
             mne.concatenate_raws([raw_concat, raw])
 
-    # Read .mat file with QRS events - don't use these anymore since we use SSP but adding for completeness
-    if srmr_nr == 1:
-        input_path_m = "/data/pt_02718/Rpeaks/" + subject_id + "/"
-        fname_m = f"raw_{sampling_rate}_spinal_{cond_name}"
-    elif srmr_nr == 2:
-        input_path_m = "/data/pt_02718/Rpeaks_2/" + subject_id + "/"
-        fname_m = f"raw_{sampling_rate}_spinal_{cond_name}"
-    else:
-        print('Error: Experiment 1 or 2 must be specified')
-        exit()
+    if stimulation != 0:
+        # Read .mat file with QRS events - don't use these anymore since we use SSP but adding for completeness
+        if srmr_nr == 1:
+            input_path_m = "/data/pt_02718/Rpeaks/" + subject_id + "/"
+            fname_m = f"raw_{sampling_rate}_spinal_{cond_name}"
+        elif srmr_nr == 2:
+            input_path_m = "/data/pt_02718/Rpeaks_2/" + subject_id + "/"
+            fname_m = f"raw_{sampling_rate}_spinal_{cond_name}"
+        else:
+            print('Error: Experiment 1 or 2 must be specified')
+            exit()
 
-    matdata = loadmat(input_path_m + fname_m + '.mat')
-    QRSevents_m = matdata['QRSevents'][0]
+        matdata = loadmat(input_path_m + fname_m + '.mat')
+        QRSevents_m = matdata['QRSevents'][0]
 
-    # Add qrs events as annotations
-    qrs_event = [x / sampling_rate for x in QRSevents_m]  # Divide by sampling rate to make times
-    duration = np.repeat(0.0, len(QRSevents_m))
-    description = ['qrs'] * len(QRSevents_m)
+        # Add qrs events as annotations
+        qrs_event = [x / sampling_rate for x in QRSevents_m]  # Divide by sampling rate to make times
+        duration = np.repeat(0.0, len(QRSevents_m))
+        description = ['qrs'] * len(QRSevents_m)
 
     # Set filenames and append QRS annotations
     if esg_flag:
-        raw_concat.annotations.append(qrs_event, duration, description, ch_names=[esg_chans] * len(QRSevents_m))
+        if stimulation != 0:
+            raw_concat.annotations.append(qrs_event, duration, description, ch_names=[esg_chans] * len(QRSevents_m))
         fname_save = f'noStimart_sr{sampling_rate}_{cond_name}_withqrs.fif'
     else:
-        raw_concat.annotations.append(qrs_event, duration, description, ch_names=[eeg_chans] * len(QRSevents_m))
+        if stimulation != 0:
+            raw_concat.annotations.append(qrs_event, duration, description, ch_names=[eeg_chans] * len(QRSevents_m))
         fname_save = f'noStimart_sr{sampling_rate}_{cond_name}_withqrs_eeg.fif'
 
     ##############################################################################################
