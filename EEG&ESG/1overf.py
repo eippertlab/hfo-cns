@@ -32,8 +32,11 @@ def check_nans(data, nan_policy='zero'):
 
 if __name__ == '__main__':
     srmr_nr = 2
-    fmin = 450
-    fmax = 750
+    # Want to compute PSD for 50Hz further than range of interest to avoid edge effects impacting slope fit
+    fmin_comp = 350
+    fmax_comp = 850
+    fmin_slope = 400
+    fmax_slope = 800
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
@@ -79,7 +82,7 @@ if __name__ == '__main__':
                 raw = raw.pick(ch)
 
                 # Calculate power spectra across the continuous data
-                psd = raw.compute_psd(method="welch", fmin=fmin, fmax=fmax,
+                psd = raw.compute_psd(method="welch", fmin=fmin_comp, fmax=fmax_comp,
                                       n_overlap=150, n_fft=300)
                 spectra, freqs = psd.get_data(return_freqs=True)
 
@@ -88,7 +91,7 @@ if __name__ == '__main__':
                                 peak_threshold=2., verbose=False, aperiodic_mode='fixed')  # All default values
 
                 # Define the frequency range to fit
-                freq_range = [fmin, fmax]
+                freq_range = [fmin_slope, fmax_slope]
 
                 # Fit the power spectrum model across all channels
                 fg.fit(freqs, spectra, freq_range)

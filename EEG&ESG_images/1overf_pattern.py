@@ -36,40 +36,42 @@ if __name__ == '__main__':
         df_vis.set_index('Subject', inplace=True)
 
         df = df_coeff.join(df_vis)
-        df = df.iloc[:-1]
-        print(df.describe())
 
         # Check change based on visible/not
         if srmr_nr == 1:
-            df_med_vis = df[df[f'{freq_band}_Median_Visible'] == 'T']['median_exponent']
-            df_med_not = df[df[f'{freq_band}_Median_Visible'] == 'F']['median_exponent']
-            print('Median, Visible')
-            print(df_med_vis.describe())
-            print('Median, Not Visible')
-            print(df_med_not.describe())
-            df_tib_vis = df[df[f'{freq_band}_Tibial_Visible'] == 'T']['tibial_exponent']
-            df_tib_not = df[df[f'{freq_band}_Tibial_Visible'] == 'F']['tibial_exponent']
-            print('Tibial, Visible')
-            print(df_tib_vis.describe())
-            print('Tibial, Not Visible')
-            print(df_tib_not.describe())
+            df = df.iloc[0:36]
+            print(df.describe())
+            for labels in zip(['median_exponent', 'median_offset'],
+                              ['tibial_exponent', 'tibial_offset']):
+                df_med_vis = df[df[f'{freq_band}_Median_Visible'] == 'T'][labels[0]]
+                df_med_not = df[df[f'{freq_band}_Median_Visible'] == 'F'][labels[0]]
+                print('Median, Visible')
+                print(df_med_vis.describe())
+                print('Median, Not Visible')
+                print(df_med_not.describe())
+                df_tib_vis = df[df[f'{freq_band}_Tibial_Visible'] == 'T'][labels[1]]
+                df_tib_not = df[df[f'{freq_band}_Tibial_Visible'] == 'F'][labels[1]]
+                print('Tibial, Visible')
+                print(df_tib_vis.describe())
+                print('Tibial, Not Visible')
+                print(df_tib_not.describe())
         elif srmr_nr == 2:
-            df_med_vis = df[df[f'{freq_band}_Med_mixed_Visible'] == 'T']['med_mixed_exponent']
-            df_med_not = df[df[f'{freq_band}_Med_mixed_Visible'] == 'F']['med_mixed_exponent']
-            print('Median, Visible')
-            print(df_med_vis.describe())
-            print('Median, Not Visible')
-            print(df_med_not.describe())
-            df_tib_vis = df[df[f'{freq_band}_Tib_mixed_Visible'] == 'T']['tib_mixed_exponent']
-            df_tib_not = df[df[f'{freq_band}_Tib_mixed_Visible'] == 'F']['tib_mixed_exponent']
-            print('Tibial, Visible')
-            print(df_tib_vis.describe())
-            print('Tibial, Not Visible')
-            print(df_tib_not.describe())
-
-        # for condition in conditions:
-        #     cond_info = get_conditioninfo(condition, srmr_nr)
-        #     cond_name = cond_info.cond_name
+            df = df.iloc[0:24]
+            print(df.describe())
+            for labels in zip(['med_mixed_exponent', 'med_mixed_offset'],
+                              ['tib_mixed_exponent', 'tib_mixed_offset']):
+                df_med_vis = df[df[f'{freq_band}_Med_mixed_Visible'] == 'T'][labels[0]]
+                df_med_not = df[df[f'{freq_band}_Med_mixed_Visible'] == 'F'][labels[0]]
+                print('Median, Visible')
+                print(df_med_vis.describe())
+                print('Median, Not Visible')
+                print(df_med_not.describe())
+                df_tib_vis = df[df[f'{freq_band}_Tib_mixed_Visible'] == 'T'][labels[1]]
+                df_tib_not = df[df[f'{freq_band}_Tib_mixed_Visible'] == 'F'][labels[1]]
+                print('Tibial, Visible')
+                print(df_tib_vis.describe())
+                print('Tibial, Not Visible')
+                print(df_tib_not.describe())
 
 
 
