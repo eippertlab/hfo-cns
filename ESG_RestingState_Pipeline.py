@@ -5,7 +5,7 @@
 # Can run a bad channel check for data quality purposes, but no channels are excluded before running CCA
 
 import numpy as np
-from Common_Functions.import_data import import_data
+from Common_Functions.import_data_rs import import_data
 from ESG.SSP import apply_SSP
 from Common_Functions.Create_Frequency_Bands import create_frequency_bands
 

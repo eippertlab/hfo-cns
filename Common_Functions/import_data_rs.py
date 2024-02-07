@@ -29,8 +29,12 @@ def import_data(subject, condition, srmr_nr, sampling_rate, esg_flag):
     if srmr_nr == 1:
         save_path = "../tmp_data/imported/" + subject_id
         input_path = "/data/p_02068/SRMR1_experiment/bids/" + subject_id + "/eeg/"  # Taking data from the bids folder
-        montage_path = '/data/pt_02068/cfg/'
-        montage_name = 'standard-10-5-cap385_added_mastoids.elp'
+        if esg_flag:
+            input_path_trig = f"/data/pt_02718/tmp_data/freq_banded_esg/{subject_id}/"
+        else:
+            input_path_trig = f"/data/pt_02718/tmp_data/freq_banded_eeg/{subject_id}/"
+        fname_trig = f"sigma_median.fif"
+        trigger_name_trig = 'Median - Stimulation'
         os.makedirs(save_path, exist_ok=True)
         cond_name = cond_info.cond_name
         stimulation = condition - 1
@@ -45,6 +49,12 @@ def import_data(subject, condition, srmr_nr, sampling_rate, esg_flag):
         else:
             cond_name = cond_info.cond_name   # med_digits/mixed and tib_digits/mixed
             cond_name2 = cond_info.cond_name2  # mediansensory/mixed or tibialsensory/mixed
+        if esg_flag:
+            input_path_trig = f"/data/pt_02718/tmp_data_2/freq_banded_esg/{subject_id}/"
+        else:
+            input_path_trig = f"/data/pt_02718/tmp_data_2/freq_banded_eeg/{subject_id}/"
+        fname_trig = f"sigma_med_mixed.fif"
+        trigger_name_trig = 'medMixed'
         stimulation = condition - 1
     else:
         print('Error: Experiment 1 or experiment 2 must be specified')
@@ -96,87 +106,55 @@ def import_data(subject, condition, srmr_nr, sampling_rate, esg_flag):
         else:
             raw.pick_channels(eeg_chans)
 
-        # Interpolate required channels
-        # Only interpolate tibial, medial and alternating (conditions 2, 3, 4 ; stimulation 1, 2, 3)
-        if stimulation != 0:
-
-            # events contains timestamps with corresponding event_id
-            # event_dict returns the event/trigger names with their corresponding event_id
-            events, event_dict = mne.events_from_annotations(raw)
-
-            # Fetch the event_id based on whether it was tibial/medial stimulation (trigger name)
-            trigger_name = set(raw.annotations.description)
-
-            # Acts in place to edit raw via linear interpolation to remove stimulus artefact
-            # Loop is not really necessary - won't work for alternating stimulation
-            for j in trigger_name:
-                # Need to get indices of events linked to this trigger
-                trigger_points = events[:, np.where(event_dict[j])]
-                trigger_points = trigger_points.reshape(-1).reshape(-1)
-
-                if esg_flag:
-                    interpol_window = [tstart_esg, tmax_esg]
-                    PCHIP_kwargs = dict(
-                        debug_mode=False, interpol_window_sec=interpol_window,
-                        trigger_indices=trigger_points, fs=sampling_rate_og
-                    )
-                    raw.apply_function(PCHIP_interpolation, picks=esg_chans, **PCHIP_kwargs,
-                                       n_jobs=len(esg_chans))
-                    # mne.preprocessing.fix_stim_artifact(raw, events=events, event_id=event_dict[j], tmin=tstart_esg,
-                    #                                     tmax=tmax_esg, mode='linear', stim_channel=None)
-
-                elif not esg_flag:
-                    interpol_window = [tstart_eeg, tmax_eeg]
-                    PCHIP_kwargs = dict(
-                        debug_mode=False, interpol_window_sec=interpol_window,
-                        trigger_indices=trigger_points, fs=sampling_rate_og
-                    )
-                    raw.apply_function(PCHIP_interpolation, picks=eeg_chans, **PCHIP_kwargs,
-                                       n_jobs=len(eeg_chans))
-                    # mne.preprocessing.fix_stim_artifact(raw, events=events, event_id=event_dict[j], tmin=tstart_eeg,
-                    #                                     tmax=tmax_eeg, mode='linear', stim_channel=None)
-
-                else:
-                    print('Flag has not been set - indicate if you are working with eeg or esg channels')
-
         # Downsample the data
         raw.resample(sampling_rate)  # resamples to desired
 
-        # Append blocks of the same condition
-        if iblock == 0:
-            raw_concat = raw
-        else:
-            mne.concatenate_raws([raw_concat, raw])
+    raw_concat = raw  # Only one file for raw in these bids data
 
-    if stimulation != 0:
-        # Read .mat file with QRS events - don't use these anymore since we use SSP but adding for completeness
-        if srmr_nr == 1:
-            input_path_m = "/data/pt_02718/Rpeaks/" + subject_id + "/"
-            fname_m = f"raw_{sampling_rate}_spinal_{cond_name}"
-        elif srmr_nr == 2:
-            input_path_m = "/data/pt_02718/Rpeaks_2/" + subject_id + "/"
-            fname_m = f"raw_{sampling_rate}_spinal_{cond_name}"
-        else:
-            print('Error: Experiment 1 or 2 must be specified')
-            exit()
+    # Resting state files are WAY shorter than median files, going to replicate resting state *7
+    for i in np.arange(0, 3):
+        mne.concatenate_raws([raw_concat, raw])
 
-        matdata = loadmat(input_path_m + fname_m + '.mat')
-        QRSevents_m = matdata['QRSevents'][0]
+    # # Interpolate based on the median triggers
+    # # events contains timestamps with corresponding event_id
+    raw_trig = mne.io.read_raw_fif(input_path_trig + fname_trig, preload=True)
 
-        # Add qrs events as annotations
-        qrs_event = [x / sampling_rate for x in QRSevents_m]  # Divide by sampling rate to make times
-        duration = np.repeat(0.0, len(QRSevents_m))
-        description = ['qrs'] * len(QRSevents_m)
+    # event_dict returns the event/trigger names with their corresponding event_id
+    events, event_dict = mne.events_from_annotations(raw_trig)
 
-    # Set filenames and append QRS annotations
+    # Acts in place to edit raw via linear interpolation to remove stimulus artefact
+    # Since the median files already have qrs triggers added, we need to be sure we isolate only the stimulation triggers
+    relevant_events = [list(event) for event in events if event[2]==event_dict[trigger_name_trig]]
+    # Need to get indices of events linked to this trigger
+    trigger_points = [event[0] for event in relevant_events]
+
     if esg_flag:
-        if stimulation != 0:
-            raw_concat.annotations.append(qrs_event, duration, description, ch_names=[esg_chans] * len(QRSevents_m))
+        interpol_window = [tstart_esg, tmax_esg]
+        PCHIP_kwargs = dict(
+            debug_mode=False, interpol_window_sec=interpol_window,
+            trigger_indices=trigger_points, fs=sampling_rate_og
+        )
+        raw_concat.apply_function(PCHIP_interpolation, picks=esg_chans, **PCHIP_kwargs,
+                           n_jobs=len(esg_chans))
+        raw_concat.annotations.append([x / sampling_rate for x in trigger_points], 0.0, trigger_name_trig,
+                                      ch_names=[esg_chans] * len(trigger_points))  # Add annotation
         fname_save = f'noStimart_sr{sampling_rate}_{cond_name}_withqrs.fif'
-    else:
-        if stimulation != 0:
-            raw_concat.annotations.append(qrs_event, duration, description, ch_names=[eeg_chans] * len(QRSevents_m))
+
+
+    elif not esg_flag:
+        interpol_window = [tstart_eeg, tmax_eeg]
+        PCHIP_kwargs = dict(
+            debug_mode=False, interpol_window_sec=interpol_window,
+            trigger_indices=trigger_points, fs=sampling_rate_og
+        )
+        raw_concat.apply_function(PCHIP_interpolation, picks=eeg_chans, **PCHIP_kwargs,
+                           n_jobs=len(eeg_chans))
+        raw_concat.annotations.append([x / sampling_rate for x in trigger_points], 0.0, trigger_name_trig,
+                                      ch_names=[eeg_chans] * len(trigger_points))  # Add annotation
         fname_save = f'noStimart_sr{sampling_rate}_{cond_name}_withqrs_eeg.fif'
+
+    else:
+        print('Flag has not been set - indicate if you are working with eeg or esg channels')
 
     ##############################################################################################
     # Add reference channel in case not in channel list and Remove Powerline Noise
@@ -184,12 +162,11 @@ def import_data(subject, condition, srmr_nr, sampling_rate, esg_flag):
     ##############################################################################################
     raw_concat.notch_filter(freqs=notch_freq, picks=raw_concat.ch_names, n_jobs=len(raw_concat.ch_names), method='fir', phase='zero')
 
-    raw_concat.filter(l_freq=1, h_freq=None, n_jobs=len(raw.ch_names), method='iir', iir_params={'order': 2, 'ftype': 'butter'}, phase='zero')
+    raw_concat.filter(l_freq=1, h_freq=None, n_jobs=len(raw_concat.ch_names), method='iir', iir_params={'order': 2, 'ftype': 'butter'}, phase='zero')
 
     # make sure recording reference is included
     mne.add_reference_channels(raw_concat, ref_channels=['TH6'], copy=False)  # Modifying in place, adds the channel but
     # doesn't do any actual rereferencing
 
-    # Save data without stim artefact and downsampled to 1000
+    # Save data without stim artefact and downsampled to 5000
     raw_concat.save(os.path.join(save_path, fname_save), fmt='double', overwrite=True)
-

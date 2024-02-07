@@ -17,7 +17,7 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epoch_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epoch_end', 'var_value'].iloc[0]]
 
-    srmr_nr = 1
+    srmr_nr = 2
     if srmr_nr == 1:
         sfreq = 5000
         cond_names = ['rest']
@@ -65,12 +65,20 @@ if __name__ == '__main__':
 
             fname = f"sigma_{cond_name_trig}.fif"
             raw_trig = mne.io.read_raw_fif(input_path + fname, preload=True)
-            events, event_ids = mne.events_from_annotations(raw_trig)
-            event_id_dict = {key: value for key, value in event_ids.items() if key == trigger_name}
-            epochs_trig = mne.Epochs(raw_trig, events, event_id=event_id_dict, tmin=iv_epoch[0], tmax=iv_epoch[1],
-                                baseline=tuple(iv_baseline))
-            epochs_rest = mne.Epochs(raw_rest, events, event_id=event_id_dict, tmin=iv_epoch[0], tmax=iv_epoch[1],
-                                baseline=tuple(iv_baseline))
+
+            # Get events
+            events_trig, event_ids_trig = mne.events_from_annotations(raw_trig)
+            event_id_dict_trig = {key: value for key, value in event_ids_trig.items() if key == trigger_name}
+            events_rest, event_ids_rest = mne.events_from_annotations(raw_rest)
+            event_id_dict_rest = {key: value for key, value in event_ids_rest.items() if key == trigger_name}
+
+            # Split to epochs
+            epochs_trig = mne.Epochs(raw_trig, events_trig, event_id=event_id_dict_trig, tmin=iv_epoch[0],
+                                     tmax=iv_epoch[1],
+                                     baseline=tuple(iv_baseline), reject_by_annotation=False)
+            epochs_rest = mne.Epochs(raw_rest, events_rest, event_id=event_id_dict_rest, tmin=iv_epoch[0],
+                                     tmax=iv_epoch[1],
+                                     baseline=tuple(iv_baseline), reject_by_annotation=False)
 
             fig, ax = plt.subplots(1, 1)
             for epochs, evoked_list in zip([epochs_rest, epochs_trig],

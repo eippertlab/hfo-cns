@@ -60,17 +60,24 @@ if __name__ == '__main__':
                 input_path = f"/data/pt_02718/tmp_data{add}/freq_banded_esg/{subject_id}/"
             else:
                 input_path = f"/data/pt_02718/tmp_data{add}/freq_banded_eeg/{subject_id}/"
+
+            # Read raw file
             fname_rest = f"sigma_{cond_name}.fif"
             raw_rest = mne.io.read_raw_fif(input_path + fname_rest, preload=True)
-
             fname = f"sigma_{cond_name_trig}.fif"
             raw_trig = mne.io.read_raw_fif(input_path + fname, preload=True)
-            events, event_ids = mne.events_from_annotations(raw_trig)
-            event_id_dict = {key: value for key, value in event_ids.items() if key == trigger_name}
-            epochs_trig = mne.Epochs(raw_trig, events, event_id=event_id_dict, tmin=iv_epoch[0], tmax=iv_epoch[1],
-                                baseline=tuple(iv_baseline))
-            epochs_rest = mne.Epochs(raw_rest, events, event_id=event_id_dict, tmin=iv_epoch[0], tmax=iv_epoch[1],
-                                baseline=tuple(iv_baseline))
+
+            # Get events
+            events_trig, event_ids_trig = mne.events_from_annotations(raw_trig)
+            event_id_dict_trig = {key: value for key, value in event_ids_trig.items() if key == trigger_name}
+            events_rest, event_ids_rest = mne.events_from_annotations(raw_rest)
+            event_id_dict_rest = {key: value for key, value in event_ids_rest.items() if key == trigger_name}
+
+            # Split to epochs
+            epochs_trig = mne.Epochs(raw_trig, events_trig, event_id=event_id_dict_trig, tmin=iv_epoch[0], tmax=iv_epoch[1],
+                                baseline=tuple(iv_baseline), reject_by_annotation=False)
+            epochs_rest = mne.Epochs(raw_rest, events_rest, event_id=event_id_dict_rest, tmin=iv_epoch[0], tmax=iv_epoch[1],
+                                baseline=tuple(iv_baseline), reject_by_annotation=False)
 
             fig, ax = plt.subplots(1, 1)
             for epochs, evoked_list in zip([epochs_rest, epochs_trig],
@@ -102,6 +109,7 @@ if __name__ == '__main__':
         plt.title(f"Grand Average, n = {len(evoked_list_rest)}")
         plt.legend(['Resting', 'Median'])
         fname = f"{trigger_name}_n={len(evoked_list_rest)}"
+        # plt.show()
         fig.savefig(image_path_grandaverage+fname+'.png')
         plt.savefig(image_path_grandaverage+fname+'.pdf', bbox_inches='tight', format="pdf")
         plt.close(fig)
