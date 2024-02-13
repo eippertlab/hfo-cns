@@ -14,12 +14,14 @@ from Common_Functions.pchip_interpolation import PCHIP_interpolation
 def import_data(subject, condition, srmr_nr, sampling_rate_og, repair_stim_art):
     # Set paths
     subject_id = f'sub-{str(subject).zfill(3)}'
-    save_path = "../tmp_data/imported/" + subject_id  # Saving to prepared_py
-    input_path = "/data/p_02068/SRMR1_experiment/bids/" + subject_id + "/eeg/"  # Taking data from the bids folder
-    # cfg_path = "/data/pt_02569/"  # Contains important info about experiment
-    montage_path = '/data/pt_02068/cfg/'
-    montage_name = 'standard-10-5-cap385_added_mastoids.elp'
-    os.makedirs(save_path, exist_ok=True)
+    if srmr_nr == 1:
+        save_path = "../tmp_data/imported/" + subject_id  # Saving to prepared_py
+        input_path = "/data/p_02068/SRMR1_experiment/bids/" + subject_id + "/eeg/"  # Taking data from the bids folder
+        os.makedirs(save_path, exist_ok=True)
+    elif srmr_nr == 2:
+        save_path = "../tmp_data_2/imported/" + subject_id  # Saving to prepared_py
+        input_path = "/data/p_02151/SRMR2_experiment/bids/" + subject_id + "/eeg/"  # Taking data from the bids folder
+        os.makedirs(save_path, exist_ok=True)
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)
@@ -29,7 +31,11 @@ def import_data(subject, condition, srmr_nr, sampling_rate_og, repair_stim_art):
     # for esg_flag in [True, False]:  # True for esg, false for eeg
     # Get the condition information based on the condition read in
     cond_info = get_conditioninfo(condition, srmr_nr)
-    cond_name = cond_info.cond_name
+    if srmr_nr == 1:
+        cond_name = cond_info.cond_name
+    elif srmr_nr == 2:
+        cond_name = cond_info.cond_name
+        cond_name2 = cond_info.cond_name2
     stimulation = condition - 1
 
     # Set interpolation window
@@ -38,7 +44,10 @@ def import_data(subject, condition, srmr_nr, sampling_rate_og, repair_stim_art):
     tmax_eng = 4/1000
 
     # Get file names that match pattern
-    search = input_path + subject_id + '*' + cond_name + '*.set'
+    if srmr_nr == 1:
+        search = input_path + subject_id + '*' + cond_name + '*.set'
+    else:
+        search = input_path + subject_id + '*' + cond_name2 + '*.set'
     cond_files = glob.glob(search)
     cond_files = sorted(cond_files)  # Arrange in order from lowest to highest value
     nblocks = len(cond_files)

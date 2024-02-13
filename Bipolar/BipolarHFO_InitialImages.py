@@ -12,15 +12,17 @@ import matplotlib.pyplot as plt
 from Common_Functions.pchip_interpolation import PCHIP_interpolation
 
 if __name__ == '__main__':
-    srmr_nr = 1
-    subjects = np.arange(1, 37)
-    # subjects = [1]
-    conditions = [2, 3]
+    srmr_nr = 2
+    if srmr_nr == 1:
+        subjects = np.arange(1, 37)
+        conditions = [2, 3]
+    elif srmr_nr == 2:
+        subjects = np.arange(1, 25)
+        conditions = [3, 5]
+
     use_repaired = True
 
     sampling_rate_og = 10000
-    montage_path = '/data/pt_02068/cfg/'
-    montage_name = 'standard-10-5-cap385_added_mastoids.elp'
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)
@@ -35,18 +37,22 @@ if __name__ == '__main__':
         for condition in conditions:
             # Set paths
             subject_id = f'sub-{str(subject).zfill(3)}'
-            input_path = f"/data/pt_02718/tmp_data/imported/{subject_id}/"
-
-            save_path = f"/data/p_02718/Images/Bipolar_InitialImages/{subject_id}/"
-            os.makedirs(save_path, exist_ok=True)
+            if srmr_nr == 1:
+                input_path = f"/data/pt_02718/tmp_data/imported/{subject_id}/"
+                save_path = f"/data/p_02718/Images/Bipolar_Images/TimeCourse_wide_HFO/{subject_id}/"
+                os.makedirs(save_path, exist_ok=True)
+            elif srmr_nr == 2:
+                input_path = f"/data/pt_02718/tmp_data_2/imported/{subject_id}/"
+                save_path = f"/data/p_02718/Images_2/Bipolar_Images/TimeCourse_wide_HFO/{subject_id}/"
+                os.makedirs(save_path, exist_ok=True)
             cond_info = get_conditioninfo(condition, srmr_nr)
             cond_name = cond_info.cond_name
             trigger_name = cond_info.trigger_name
             stimulation = condition - 1
 
-            if condition == 2:
+            if cond_name in ['median', 'med_mixed']:
                 channel_names = ['Biceps', 'EP']
-            elif condition == 3:
+            elif cond_name in ['tibial', 'tib_mixed']:
                 channel_names = ['KneeM']
 
             if use_repaired:

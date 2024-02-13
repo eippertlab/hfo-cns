@@ -41,6 +41,16 @@ def create_frequency_bands(subject, condition, srmr_nr, sampling_rate, channel_t
             save_path = "/data/pt_02718/tmp_data_2/freq_banded_eeg/" + subject_id + "/"
             fname = f'noStimart_sr{sampling_rate}_{cond_name}_withqrs_eeg.fif'
 
+    elif channel_type == 'bipolar':
+        if srmr_nr == 1:
+            load_path = "/data/pt_02718/tmp_data/imported/" + subject_id + "/"
+            save_path = "/data/pt_02718/tmp_data/freq_banded_bipolar/" + subject_id + "/"
+            fname = f'bipolar_repaired_{cond_name}.fif'
+        elif srmr_nr == 2:
+            load_path = "/data/pt_02718/tmp_data_2/imported/" + subject_id + "/"
+            save_path = "/data/pt_02718/tmp_data_2/freq_banded_bipolar/" + subject_id + "/"
+            fname = f'bipolar_repaired_{cond_name}.fif'
+
     os.makedirs(save_path, exist_ok=True)
     raw = mne.io.read_raw_fif(load_path + fname, preload=True)
 
