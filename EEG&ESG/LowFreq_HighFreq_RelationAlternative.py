@@ -38,7 +38,6 @@ if __name__ == '__main__':
     srmr_nr = 2
     sfreq = 5000
     freq_band = 'sigma'
-    eeg_chans, esg_chans, bipolar_chans = get_channels(1, False, False, srmr_nr)
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
@@ -108,6 +107,7 @@ if __name__ == '__main__':
                     pot_name = 'N13'
 
             for subject in subjects:  # All subjects
+                eeg_chans, esg_chans, bipolar_chans = get_channels(subject, False, False, srmr_nr)
                 subject_id = f'sub-{str(subject).zfill(3)}'
 
                 if data_type == 'Cortical':
@@ -186,7 +186,7 @@ if __name__ == '__main__':
                                                                              tmax=time_peak + time_edge,
                                                                              mode='pos', return_amplitude=True)
                     else:
-                        latency_low = time_peak
+                        latency_low = np.nan
                         amplitude_low = np.nan
                 else:
                     if min(data_low) < 0:
@@ -194,7 +194,7 @@ if __name__ == '__main__':
                                                                             tmax=time_peak + time_edge,
                                                                             mode='neg', return_amplitude=True)
                     else:
-                        latency_low = time_peak
+                        latency_low = np.nan
                         amplitude_low = np.nan
 
                 # High Freq - changing this to new method
@@ -221,7 +221,7 @@ if __name__ == '__main__':
                     # plt.plot(evoked.times, evoked.get_data().reshape(-1))
                     # plt.show()
                 else:
-                    lat_high = time_peak
+                    lat_high = np.nan
                     amplitude_high = np.nan
 
                 df_rel.at[subject, f'{pot_name}'] = latency_low
