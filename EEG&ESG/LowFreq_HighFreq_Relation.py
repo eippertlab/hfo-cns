@@ -16,8 +16,7 @@ from Common_Functions.check_excel_exist_relation import check_excel_exist_relati
 mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
-
-    data_types = ['Spinal', 'Cortical']  # Can be Cortical or Spinal here or both
+    data_types = ['Spinal', 'Cortical']  # Can be Cortical, Thalamic, Spinal here or all
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)
@@ -26,7 +25,7 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epoch_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epoch_end', 'var_value'].iloc[0]]
 
-    srmr_nr = 2
+    srmr_nr = 1
     sfreq = 5000
     freq_band = 'sigma'
 
@@ -38,6 +37,11 @@ if __name__ == '__main__':
         xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG_Updated.xlsx')
         df_cortical = pd.read_excel(xls, 'CCA')
         df_cortical.set_index('Subject', inplace=True)
+
+        # Thalamic Excel file
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG_Thalamic_Updated.xlsx')
+        df_thal = pd.read_excel(xls, 'CCA')
+        df_thal.set_index('Subject', inplace=True)
 
         # Spinal Excel file
         xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_Updated.xlsx')
@@ -53,6 +57,11 @@ if __name__ == '__main__':
         df_cortical = pd.read_excel(xls, 'CCA')
         df_cortical.set_index('Subject', inplace=True)
 
+        # Thalamic Excel file
+        xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Components_EEG_Thalamic_Updated.xlsx')
+        df_thal = pd.read_excel(xls, 'CCA')
+        df_thal.set_index('Subject', inplace=True)
+
         # Spinal Excel file
         xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Components_Updated.xlsx')
         df_spinal = pd.read_excel(xls, 'CCA')
@@ -65,7 +74,7 @@ if __name__ == '__main__':
         elif srmr_nr == 2:
             excel_fname = f'/data/pt_02718/tmp_data_2/LowFreq_HighFreq_Relation.xlsx'
         sheetname = data_type
-        # If fname and sheet exist already - subjects indices will already be in file from initial creation **
+        # If fname and sheet exist already
         check_excel_exist_relation(subjects, excel_fname, sheetname)
         df_rel = pd.read_excel(excel_fname, sheetname)
         df_rel.set_index('Subject', inplace=True)
@@ -76,31 +85,39 @@ if __name__ == '__main__':
             cond_name = cond_info.cond_name
             trigger_name = cond_info.trigger_name
 
-            if cond_name in ['tibial', 'tib_mixed']:
-                time_edge = 0.006
-                if data_type == 'Cortical':
-                    channel = ['Cz']
-                    time_peak = 0.04
-                    pot_name = 'P39'
-                elif data_type == 'Spinal':
-                    pot_name = 'N22'
-                    channel = ['L1']
-                    time_peak = 0.022
-
-            elif cond_name in ['median', 'med_mixed']:
-                time_edge = 0.004
-                if data_type == 'Cortical':
-                    channel = ['CP4']
-                    time_peak = 0.02
-                    pot_name = 'N20'
-                elif data_type == 'Spinal':
-                    channel = ['SC6']
-                    time_peak = 0.013
-                    pot_name = 'N13'
-
             for subject in subjects:  # All subjects
                 eeg_chans, esg_chans, bipolar_chans = get_channels(subject, False, False, srmr_nr)
                 subject_id = f'sub-{str(subject).zfill(3)}'
+
+                if cond_name in ['tibial', 'tib_mixed']:
+                    time_edge = 0.006
+                    if data_type == 'Cortical':
+                        channel = ['Cz']
+                        time_peak = 0.04
+                        pot_name = 'P39'
+                    elif data_type == 'Thalamic':
+                        channel = ['Cz']
+                        time_peak = 0.03
+                        pot_name = 'P30'
+                    elif data_type == 'Spinal':
+                        pot_name = 'N22'
+                        channel = ['L1']
+                        time_peak = 0.022
+
+                elif cond_name in ['median', 'med_mixed']:
+                    time_edge = 0.004
+                    if data_type == 'Cortical':
+                        channel = ['CP4']
+                        time_peak = 0.02
+                        pot_name = 'N20'
+                    elif data_type == 'Thalamic':
+                        channel = ['CP4']
+                        time_peak = 0.014
+                        pot_name = 'P14'
+                    elif data_type == 'Spinal':
+                        channel = ['SC6']
+                        time_peak = 0.013
+                        pot_name = 'N13'
 
                 if data_type == 'Cortical':
                     if srmr_nr == 1:
@@ -123,6 +140,30 @@ if __name__ == '__main__':
                         fname_low = f"cnt_clean_{cond_name}.set"
 
                     raw = mne.io.read_raw_eeglab(input_path_low + fname_low, preload=True)
+                    evoked_low = evoked_from_raw(raw, iv_epoch, iv_baseline, trigger_name, False)
+                    evoked_low.crop(tmin=-0.06, tmax=0.07)
+
+                elif data_type == 'Thalamic':
+                    if srmr_nr == 1:
+                        # HFO
+                        fname = f"{freq_band}_{cond_name}.fif"
+                        input_path = "/data/pt_02718/tmp_data/cca_eeg_thalamic/" + subject_id + "/"
+                        df = df_thal
+
+                        # Low Freq SEP
+                        input_path_low = f"/data/pt_02718/tmp_data/imported/{subject_id}/"
+                        fname_low = f"noStimart_sr5000_{cond_name}_withqrs_eeg.fif"
+                    elif srmr_nr == 2:
+                        # HFO
+                        fname = f"{freq_band}_{cond_name}.fif"
+                        input_path = "/data/pt_02718/tmp_data_2/cca_eeg_thalamic/" + subject_id + "/"
+                        df = df_thal
+
+                        # Low Freq SEP
+                        input_path_low = f"/data/pt_02718/tmp_data_2/imported/{subject_id}/"
+                        fname_low = f"noStimart_sr5000_{cond_name}_withqrs_eeg.fif"
+
+                    raw = mne.io.read_raw_fif(input_path_low + fname_low, preload=True)
                     evoked_low = evoked_from_raw(raw, iv_epoch, iv_baseline, trigger_name, False)
                     evoked_low.crop(tmin=-0.06, tmax=0.07)
 
@@ -167,18 +208,18 @@ if __name__ == '__main__':
                     envelope = evoked.apply_hilbert(envelope=True)
 
                 # Get timing and amplitude of both peaks
-                # Look negative for low freq N20, N22, N13, look positive for P39
+                # Look negative for low freq N20, N22, N13, look positive for P39, P14 and P30
                 # Ampitude envelope always look positive
                 # Low Freq
                 # First check there is a negative/positive potential to be found
-                data_low = evoked_low.crop(tmin=time_peak-time_edge, tmax=time_peak+time_edge).get_data().reshape(-1)
-                if data_type == 'Cortical' and cond_name in ['tibial', 'tib_mixed']:
+                data_low = evoked_low.copy().crop(tmin=time_peak-time_edge, tmax=time_peak+time_edge).get_data().reshape(-1)
+                if (data_type == 'Cortical' and cond_name in ['tibial', 'tib_mixed']) or data_type == 'Thalamic':
                     if max(data_low) > 0:
                         _, latency_low, amplitude_low = evoked_low.get_peak(tmin=time_peak - time_edge,
                                                                              tmax=time_peak + time_edge,
                                                                              mode='pos', return_amplitude=True)
                     else:
-                        latency_low = np.nan
+                        latency_low = time_peak
                         amplitude_low = np.nan
                 else:
                     if min(data_low) < 0:
@@ -186,7 +227,7 @@ if __name__ == '__main__':
                                                                             tmax=time_peak + time_edge,
                                                                             mode='neg', return_amplitude=True)
                     else:
-                        latency_low = np.nan
+                        latency_low = time_peak
                         amplitude_low = np.nan
                 # High Freq
                 if channel_no != 0:

@@ -8,6 +8,10 @@ def check_excel_exist_relation(subjects, fname, sheetname):
         col_names = ['Subject', 'N20', 'N20_amplitude', 'N20_high',
                      'N20_high_amplitude', 'P39', 'P39_amplitude', 'P39_high',
                      'P39_high_amplitude']
+    elif sheetname == 'Thalamic':
+        col_names = ['Subject', 'P14', 'P14_amplitude', 'P14_high',
+                     'P14_high_amplitude', 'P30', 'P30_amplitude', 'P30_high',
+                     'P30_high_amplitude']
     elif sheetname == 'Spinal':
         col_names = ['Subject', 'N13', 'N13_amplitude', 'N13_high',
                      'N13_high_amplitude', 'N22', 'N22_amplitude', 'N22_high',

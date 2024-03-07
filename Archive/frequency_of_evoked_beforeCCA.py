@@ -13,8 +13,11 @@ from Common_Functions.get_conditioninfo import get_conditioninfo
 
 # Want this to return the frequency of that subjects evoked HFO after CCA
 def frequency_of_evoked(srmr_nr, subject, cond_name, freq_band, data_type):
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Cortical_Timing.xlsx')
-    df_timing = pd.read_excel(xls, 'Timing')
+    if srmr_nr == 1:
+        xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/LowFreq_HighFreq_Relation.xlsx')
+    elif srmr_nr == 2:
+        xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/LowFreq_HighFreq_Relation.xlsx')
+    df_timing = pd.read_excel(xls_timing, 'Cortical')
     df_timing.set_index('Subject', inplace=True)
 
     # Set variables

@@ -2,7 +2,7 @@
 # Read in these values and then remove those who don't have a valid CCA component chosen in the finish on either the
 # spinal level, thalamic level OR cortical level  - - if they fail ANY of these levels, remove them
 
-# Then recompute the average burst frequency at each level and save
+# Then recompute the average burst frequency at each level
 
 import numpy as np
 import pandas as pd

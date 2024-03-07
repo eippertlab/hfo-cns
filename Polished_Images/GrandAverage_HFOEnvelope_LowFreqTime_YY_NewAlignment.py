@@ -12,7 +12,6 @@ from scipy.io import loadmat
 from Common_Functions.get_conditioninfo import get_conditioninfo
 from Common_Functions.get_channels import get_channels
 from Common_Functions.invert import invert
-from Common_Functions.GetTimeToAlign import get_time_to_align
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from Common_Functions.evoked_from_raw import evoked_from_raw
@@ -108,7 +107,7 @@ def alignYaxes(axes, align_values=None):
 
 if __name__ == '__main__':
     use_visible = True  # Use only subjects with visible bursting
-    shift_spinal = True  # If true shift spinal HFO and SEP based on timing of low frequency potential
+    shift_spinal = False  # If true shift spinal HFO and SEP based on timing of low frequency potential
 
     subjects = np.arange(1, 37)
     conditions = [2, 3]

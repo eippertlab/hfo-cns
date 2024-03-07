@@ -84,31 +84,31 @@ if __name__ == '__main__':
             cond_name = cond_info.cond_name
             trigger_name = cond_info.trigger_name
 
-            if cond_name in ['tibial', 'tib_mixed']:
-                time_edge = 0.006
-                if data_type == 'Cortical':
-                    channel = ['Cz']
-                    time_peak = 0.04
-                    pot_name = 'P39'
-                elif data_type == 'Spinal':
-                    pot_name = 'N22'
-                    channel = ['L1']
-                    time_peak = 0.022
-
-            elif cond_name in ['median', 'med_mixed']:
-                time_edge = 0.004
-                if data_type == 'Cortical':
-                    channel = ['CP4']
-                    time_peak = 0.02
-                    pot_name = 'N20'
-                elif data_type == 'Spinal':
-                    channel = ['SC6']
-                    time_peak = 0.013
-                    pot_name = 'N13'
-
             for subject in subjects:  # All subjects
                 eeg_chans, esg_chans, bipolar_chans = get_channels(subject, False, False, srmr_nr)
                 subject_id = f'sub-{str(subject).zfill(3)}'
+
+                if cond_name in ['tibial', 'tib_mixed']:
+                    time_edge = 0.006
+                    if data_type == 'Cortical':
+                        channel = ['Cz']
+                        time_peak = 0.04
+                        pot_name = 'P39'
+                    elif data_type == 'Spinal':
+                        pot_name = 'N22'
+                        channel = ['L1']
+                        time_peak = 0.022
+
+                elif cond_name in ['median', 'med_mixed']:
+                    time_edge = 0.004
+                    if data_type == 'Cortical':
+                        channel = ['CP4']
+                        time_peak = 0.02
+                        pot_name = 'N20'
+                    elif data_type == 'Spinal':
+                        channel = ['SC6']
+                        time_peak = 0.013
+                        pot_name = 'N13'
 
                 if data_type == 'Cortical':
                     if srmr_nr == 1:
@@ -186,7 +186,7 @@ if __name__ == '__main__':
                                                                              tmax=time_peak + time_edge,
                                                                              mode='pos', return_amplitude=True)
                     else:
-                        latency_low = np.nan
+                        latency_low = time_peak
                         amplitude_low = np.nan
                 else:
                     if min(data_low) < 0:
@@ -194,7 +194,7 @@ if __name__ == '__main__':
                                                                             tmax=time_peak + time_edge,
                                                                             mode='neg', return_amplitude=True)
                     else:
-                        latency_low = np.nan
+                        latency_low = time_peak
                         amplitude_low = np.nan
 
                 # High Freq - changing this to new method

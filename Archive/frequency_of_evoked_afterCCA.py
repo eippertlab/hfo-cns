@@ -25,8 +25,8 @@ def frequency_of_evoked(srmr_nr, subject, cond_name, freq_band, data_type):
     df_cortical = pd.read_excel(xls, 'CCA')
     df_cortical.set_index('Subject', inplace=True)
 
-    xls = pd.ExcelFile(f'/data/pt_02718/{p}/Cortical_Timing.xlsx')
-    df_timing = pd.read_excel(xls, 'Timing')
+    xls_timing = pd.ExcelFile(f'/data/pt_02718/{p}/LowFreq_HighFreq_Relation.xlsx')
+    df_timing = pd.read_excel(xls_timing, 'Cortical')
     df_timing.set_index('Subject', inplace=True)
 
     # Spinal Excel files

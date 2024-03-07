@@ -26,7 +26,7 @@ if __name__ == '__main__':
     save_to_excel = True
 
     freq_band = 'sigma'
-    srmr_nr = 2
+    srmr_nr = 1
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)  # 1 through 36 to access subject data
@@ -34,7 +34,6 @@ if __name__ == '__main__':
         figure_path = '/data/p_02718/Images/CCA/SNR&EnvelopePeak/'
         os.makedirs(figure_path, exist_ok=True)
         xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/LowFreq_HighFreq_Relation.xlsx')
-        # xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/Spinal_Timing.xlsx')
         component_fname = '/data/pt_02718/tmp_data/Components_Updated.xlsx'
         visibility_fname = '/data/pt_02718/tmp_data/Visibility_Updated.xlsx'
 
@@ -44,7 +43,6 @@ if __name__ == '__main__':
         figure_path = '/data/p_02718/Images_2/CCA/SNR&EnvelopePeak/'
         os.makedirs(figure_path, exist_ok=True)
         xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/LowFreq_HighFreq_Relation.xlsx')
-        # xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/Spinal_Timing.xlsx')
         component_fname = '/data/pt_02718/tmp_data_2/Components_Updated.xlsx'
         visibility_fname = '/data/pt_02718/tmp_data_2/Visibility_Updated.xlsx'
 

@@ -49,8 +49,8 @@ if __name__ == '__main__':
     df_vis = pd.read_excel(xls, 'CCA_Spinal')
     df_vis.set_index('Subject', inplace=True)
 
-    xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/Spinal_Timing.xlsx')
-    df_timing = pd.read_excel(xls_timing, 'Timing')
+    xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/LowFreq_HighFreq_Relation.xlsx')
+    df_timing = pd.read_excel(xls_timing, 'Spinal')
     df_timing.set_index('Subject', inplace=True)
 
     for freq_band in freq_bands:

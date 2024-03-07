@@ -30,7 +30,6 @@ if __name__ == '__main__':
     if srmr_nr == 1:
         subjects = np.arange(1, 37)  # 1 through 36 to access subject data
         conditions = [2, 3]  # Conditions of interest
-        # xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/Cortical_Timing.xlsx')
         xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/LowFreq_HighFreq_Relation.xlsx')
         component_fname = '/data/pt_02718/tmp_data/Components_EEG_Updated.xlsx'
         visibility_fname = '/data/pt_02718/tmp_data/Visibility_Updated.xlsx'
@@ -40,7 +39,6 @@ if __name__ == '__main__':
     elif srmr_nr == 2:
         subjects = np.arange(1, 25)  # (1, 2) # 1 through 24 to access subject data
         conditions = [3, 5]  # Conditions of interest - med_mixed and tib_mixed [3, 5]
-        # xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/Cortical_Timing.xlsx')
         xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/LowFreq_HighFreq_Relation.xlsx')
         component_fname = '/data/pt_02718/tmp_data_2/Components_EEG_Updated.xlsx'
         visibility_fname = '/data/pt_02718/tmp_data_2/Visibility_Updated.xlsx'

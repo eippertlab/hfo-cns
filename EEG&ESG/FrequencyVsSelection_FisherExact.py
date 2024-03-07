@@ -17,13 +17,13 @@ if __name__ == '__main__':
         subjects = np.arange(1, 37)
         conditions = [3, 2]
         excel_path = '/data/pt_02718/tmp_data/'
-        excel_fname = 'FreqVsSelection_ManualUpdate.xlsx'
+        excel_fname = 'FreqVsSelection.xlsx'
 
     elif srmr_nr == 2:
         subjects = np.arange(1, 25)
         conditions = [3, 5]
         excel_path = '/data/pt_02718/tmp_data_2/'
-        excel_fname = 'FreqVsSelection_ManualUpdate.xlsx'
+        excel_fname = 'FreqVsSelection.xlsx'
 
     for data_type in data_types:
         for condition in conditions:

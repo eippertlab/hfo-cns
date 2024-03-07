@@ -34,7 +34,6 @@ if __name__ == '__main__':
     srmr_nr = 2
     sfreq = 5000
     freq_band = 'sigma'
-    eeg_chans, esg_chans, bipolar_chans = get_channels(1, False, False, srmr_nr)
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
@@ -84,31 +83,32 @@ if __name__ == '__main__':
             cond_name = cond_info.cond_name
             trigger_name = cond_info.trigger_name
 
-            if cond_name in ['tibial', 'tib_mixed']:
-                time_edge = 0.006
-                if data_type == 'Cortical':
-                    channel = ['Cz']
-                    time_peak = 0.04
-                    pot_name = 'P39'
-                elif data_type == 'Spinal':
-                    pot_name = 'N22'
-                    channel = ['L1']
-                    time_peak = 0.022
-
-            elif cond_name in ['median', 'med_mixed']:
-                time_edge = 0.004
-                if data_type == 'Cortical':
-                    channel = ['CP4']
-                    time_peak = 0.02
-                    pot_name = 'N20'
-                elif data_type == 'Spinal':
-                    channel = ['SC6']
-                    time_peak = 0.013
-                    pot_name = 'N13'
-
             for subject in subjects:  # All subjects
                 subject_id = f'sub-{str(subject).zfill(3)}'
                 noise_window = [-100 / 1000, -10 / 1000]
+                eeg_chans, esg_chans, bipolar_chans = get_channels(subject, False, False, srmr_nr)
+
+                if cond_name in ['tibial', 'tib_mixed']:
+                    time_edge = 0.006
+                    if data_type == 'Cortical':
+                        channel = ['Cz']
+                        time_peak = 0.04
+                        pot_name = 'P39'
+                    elif data_type == 'Spinal':
+                        pot_name = 'N22'
+                        channel = ['L1']
+                        time_peak = 0.022
+
+                elif cond_name in ['median', 'med_mixed']:
+                    time_edge = 0.004
+                    if data_type == 'Cortical':
+                        channel = ['CP4']
+                        time_peak = 0.02
+                        pot_name = 'N20'
+                    elif data_type == 'Spinal':
+                        channel = ['SC6']
+                        time_peak = 0.013
+                        pot_name = 'N13'
 
                 ##################################################################################################
                 # Select correct files for cortical and spinal data

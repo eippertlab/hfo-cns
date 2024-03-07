@@ -34,7 +34,6 @@ if __name__ == '__main__':
         figure_path = '/data/p_02718/Images/CCA_shuffle/SNR&EnvelopePeak/'
         os.makedirs(figure_path, exist_ok=True)
         xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/LowFreq_HighFreq_Relation.xlsx')
-        # xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/Spinal_Timing.xlsx')
         component_fname = '/data/pt_02718/tmp_data/Components_Shuffle_Updated.xlsx'
         visibility_fname = '/data/pt_02718/tmp_data/Visibility_Shuffle_Updated.xlsx'
 
@@ -46,7 +45,6 @@ if __name__ == '__main__':
         figure_path = '/data/p_02718/Images_2/CCA_shuffle/SNR&EnvelopePeak/'
         os.makedirs(figure_path, exist_ok=True)
         xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/LowFreq_HighFreq_Relation.xlsx')
-        # xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/Spinal_Timing.xlsx')
         component_fname = '/data/pt_02718/tmp_data_2/Components_Shuffle_Updated.xlsx'
         visibility_fname = '/data/pt_02718/tmp_data_2/Visibility_Shuffle_Updated.xlsx'
 

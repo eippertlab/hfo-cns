@@ -33,15 +33,15 @@ if __name__ == '__main__':
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
     if srmr_nr == 1:
-        xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/Spinal_Timing.xlsx')
-        df_timing = pd.read_excel(xls_timing, 'Timing')
+        xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/LowFreq_HighFreq_Relation.xlsx')
+        df_timing = pd.read_excel(xls_timing, 'Spinal')
         df_timing.set_index('Subject', inplace=True)
 
         figure_path = '/data/p_02718/Images/ESG/Evoked_SingleSubject/'
         os.makedirs(figure_path, exist_ok=True)
     elif srmr_nr == 2:
-        xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/Spinal_Timing.xlsx')
-        df_timing = pd.read_excel(xls_timing, 'Timing')
+        xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/LowFreq_HighFreq_Relation.xlsx')
+        df_timing = pd.read_excel(xls_timing, 'Spinal')
         df_timing.set_index('Subject', inplace=True)
 
         figure_path = '/data/p_02718/Images_2/ESG/Evoked_SingleSubject/'

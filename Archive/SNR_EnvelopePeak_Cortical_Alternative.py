@@ -28,8 +28,8 @@ if __name__ == '__main__':
         # subjects = np.arange(1, 37)  # 1 through 36 to access subject data
         subjects = [6, 15, 18, 25, 26]
         conditions = [2, 3]  # Conditions of interest
-        xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/Cortical_Timing.xlsx')
-        df_timing = pd.read_excel(xls_timing, 'Timing')
+        xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/LowFreq_HighFreq_Relation.xlsx')
+        df_timing = pd.read_excel(xls_timing, 'Cortical')
         df_timing.set_index('Subject', inplace=True)
         figure_path = '/data/p_02718/Images_OTP/CCA_eeg/SNR&EnvelopePeak/'
         os.makedirs(figure_path, exist_ok=True)
@@ -37,8 +37,8 @@ if __name__ == '__main__':
     elif srmr_nr == 2:
         subjects = np.arange(1, 25)  # (1, 2) # 1 through 24 to access subject data
         conditions = [3, 5]  # Conditions of interest - med_mixed and tib_mixed [3, 5]
-        xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/Cortical_Timing.xlsx')
-        df_timing = pd.read_excel(xls_timing, 'Timing')
+        xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/LowFreq_HighFreq_Relation.xlsx')
+        df_timing = pd.read_excel(xls_timing, 'Cortical')
         df_timing.set_index('Subject', inplace=True)
         figure_path = '/data/p_02718/Images_2_OTP/CCA_eeg/SNR&EnvelopePeak/'
         os.makedirs(figure_path, exist_ok=True)

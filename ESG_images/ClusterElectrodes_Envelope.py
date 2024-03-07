@@ -16,8 +16,8 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 
 if __name__ == '__main__':
-    srmr_nr = 2
-    cluster_electrodes = False
+    srmr_nr = 1
+    cluster_electrodes = True
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
@@ -36,23 +36,19 @@ if __name__ == '__main__':
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
     if srmr_nr == 1:
-        xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/Spinal_Timing.xlsx')
-        df_timing = pd.read_excel(xls_timing, 'Timing')
-        df_timing.set_index('Subject', inplace=True)
-
+        xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/LowFreq_HighFreq_Relation.xlsx')
         figure_path = '/data/p_02718/Images/ESG/ClusterElectrode_Envelopes/'
         os.makedirs(figure_path, exist_ok=True)
     elif srmr_nr == 2:
-        xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/Spinal_Timing.xlsx')
-        df_timing = pd.read_excel(xls_timing, 'Timing')
-        df_timing.set_index('Subject', inplace=True)
-
+        xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/LowFreq_HighFreq_Relation.xlsx')
         figure_path = '/data/p_02718/Images_2/ESG/ClusterElectrode_Envelopes/'
         os.makedirs(figure_path, exist_ok=True)
 
     brainstem_chans, cervical_chans, lumbar_chans, ref_chan = get_esg_channels()
     median_names = ['median', 'med_mixed']
     tibial_names = ['tibial', 'tib_mixed']
+    df_timing = pd.read_excel(xls_timing, 'Spinal')
+    df_timing.set_index('Subject', inplace=True)
 
     for freq_band in freq_bands:
         for condition in conditions:

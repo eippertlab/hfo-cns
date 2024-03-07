@@ -107,7 +107,7 @@ def alignYaxes(axes, align_values=None):
 
 if __name__ == '__main__':
     use_visible = True  # Use only subjects with visible bursting
-    shift_spinal = True  # If true shift spinal HFO and SEP based on timing of low frequency potential
+    shift_spinal = False  # If true shift spinal HFO and SEP based on timing of low frequency potential
 
     subjects = np.arange(1, 25)
     conditions = [3, 5]

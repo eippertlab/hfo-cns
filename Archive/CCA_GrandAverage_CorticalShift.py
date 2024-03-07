@@ -34,8 +34,8 @@ if __name__ == '__main__':
     df = pd.read_excel(xls, 'CCA')
     df.set_index('Subject', inplace=True)
 
-    xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/Cortical_Timing.xlsx')
-    df_timing = pd.read_excel(xls_timing, 'Timing')
+    xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/LowFreq_HighFreq_Relation.xlsx')
+    df_timing = pd.read_excel(xls_timing, 'Cortical')
     df_timing.set_index('Subject', inplace=True)
 
     # Get a raw file so I can use the montage
