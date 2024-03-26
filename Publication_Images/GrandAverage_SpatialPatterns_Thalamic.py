@@ -143,9 +143,6 @@ if __name__ == '__main__':
                 grand_average_spatial = np.mean(spatial_pattern, axis=0)  # HFO
                 averaged = mne.grand_average(evoked_list, interpolate_bads=False, drop_bads=False)  # SEP for eeg
 
-                print('HERE')
-                print(len(evoked_list))
-
                 #################################################################################################
                 # HFO
                 #################################################################################################
@@ -160,7 +157,7 @@ if __name__ == '__main__':
                         vmax = 0.40
                 elif srmr_nr == 2:
                     if cond_name == 'tib_mixed':
-                        vmin = -0.150
+                        vmin = 0.000
                         vmax = 0.150
                     elif cond_name == 'med_mixed':
                         vmin = 0.000

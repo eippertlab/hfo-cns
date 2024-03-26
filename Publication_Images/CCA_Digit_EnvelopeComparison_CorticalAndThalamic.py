@@ -39,7 +39,7 @@ if __name__ == '__main__':
             df = pd.read_excel(xls, 'CCA')
             df.set_index('Subject', inplace=True)
 
-            figure_path = '/data/p_02718/Images_2/CCA_eeg_digits/Envelope_Comparison/'
+            figure_path = '/data/p_02718/Polished_2/Digits_Envelope_Comparison/'
             os.makedirs(figure_path, exist_ok=True)
 
             xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Visibility_Updated_Digits.xlsx')
@@ -51,7 +51,7 @@ if __name__ == '__main__':
             df = pd.read_excel(xls, 'CCA')
             df.set_index('Subject', inplace=True)
 
-            figure_path = '/data/p_02718/Images_2/CCA_eeg_thalamic_digits/Envelope_Comparison/'
+            figure_path = '/data/p_02718/Polished_2/Digits_Envelope_Comparison/'
             os.makedirs(figure_path, exist_ok=True)
 
             xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Visibility_Thalamic_Updated_Digits.xlsx')
@@ -164,8 +164,8 @@ if __name__ == '__main__':
 
             plt.legend()
             plt.tight_layout()
-            plt.savefig(figure_path+f'GA_Envelope_{freq_band}_{cond_name}_n={len(evoked_list)}.png')
-            plt.savefig(figure_path+f'GA_Envelope_{freq_band}_{cond_name}_n={len(evoked_list)}.pdf',
+            plt.savefig(figure_path+f'GA_Envelope_{data_type}_{freq_band}_{cond_name}_n={len(evoked_list)}.png')
+            plt.savefig(figure_path+f'GA_Envelope_{data_type}_{freq_band}_{cond_name}_n={len(evoked_list)}.pdf',
                         bbox_inches='tight', format="pdf")
 
             # Run permutation cluster test
@@ -218,8 +218,8 @@ if __name__ == '__main__':
             ax2.set_ylabel("f-values")
             ax2.set_xlim([0, 0.07])
 
-            plt.savefig(figure_path + f'GA_Clusters_{freq_band}_{cond_name}_n={len(evoked_list)}.png')
-            plt.savefig(figure_path + f'GA_Clusters_{freq_band}_{cond_name}_n={len(evoked_list)}.pdf',
+            plt.savefig(figure_path + f'GA_Clusters_{data_type}_{freq_band}_{cond_name}_n={len(evoked_list)}.png')
+            plt.savefig(figure_path + f'GA_Clusters_{data_type}_{freq_band}_{cond_name}_n={len(evoked_list)}.pdf',
                         bbox_inches='tight', format="pdf")
 
             # Plot each individuals difference line instead of ga
@@ -233,7 +233,6 @@ if __name__ == '__main__':
                 )
             ax.set_ylabel("Amplitude")
             ax.set_xlim([0, 0.07])
-            ax.legend()
 
             for i_c, c in enumerate(clusters):
                 c = c[0]
@@ -248,8 +247,8 @@ if __name__ == '__main__':
             ax2.set_ylabel("f-values")
             ax2.set_xlim([0, 0.07])
 
-            plt.savefig(figure_path + f'SingleSubj_Clusters_{freq_band}_{cond_name}_n={len(evoked_list)}.png')
-            plt.savefig(figure_path + f'SingleSubj_Clusters_{freq_band}_{cond_name}_n={len(evoked_list)}.pdf',
+            plt.savefig(figure_path + f'SingleSubj_Clusters_{data_type}_{freq_band}_{cond_name}_n={len(evoked_list)}.png')
+            plt.savefig(figure_path + f'SingleSubj_Clusters_{data_type}_{freq_band}_{cond_name}_n={len(evoked_list)}.pdf',
                         bbox_inches='tight', format="pdf")
 
             plt.show()

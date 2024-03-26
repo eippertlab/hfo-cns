@@ -11,7 +11,7 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
     figure_to_plot = 2  # [1:splithalf, 2:across CNS]
-    srmr_nr = 1
+    srmr_nr = 2
     high_freq = 800
 
     if srmr_nr == 1:
@@ -65,14 +65,16 @@ if __name__ == '__main__':
                     df_combination.at[index, 'Expected Pattern'] = True
                 else:
                     df_combination.at[index, 'Expected Pattern'] = False
-            print(df_combination)
+            print(cond_name)
+            print(df_combination.describe())
+            print(df_combination.sem())
 
             df_combination.dropna(inplace=True)
             df_combination = pd.melt(df_combination, id_vars=['Subject'],
                                      value_vars=[f'Spinal', f'Thalamic', f'Cortical'],
                                      var_name='CNS Level', value_name='Frequency')  # Change to long format
 
-            g = sns.catplot(kind='point', data=df_combination, x='CNS Level', y='Frequency', hue='Subject', color='gray')
+            g = sns.catplot(kind='point', data=df_combination, x='CNS Level', y='Frequency', hue='Subject', palette='dark:gray')
             for ax in g.axes.flat:
                 for line in ax.lines:
                     line.set_alpha(0.3)
@@ -89,7 +91,7 @@ if __name__ == '__main__':
             plt.ylabel('Frequency (Hz)')
             plt.savefig(figure_path + f'CrossCNS_{cond_name}_{high_freq}.png')
 
-            plt.show()
+            # plt.show()
             plt.close()
 
     else:
