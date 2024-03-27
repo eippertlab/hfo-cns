@@ -238,8 +238,16 @@ if __name__ == '__main__':
                 c = c[0]
                 if cluster_p_values[i_c] <= 0.05:
                     h = ax2.axvspan(times[c.start], times[c.stop - 1], color="r", alpha=0.3)
+                    print(data_type)
+                    print('Significant Cluster')
+                    print(times[c.start])
+                    print(times[c.stop])
                 else:
                     ax2.axvspan(times[c.start], times[c.stop - 1], color=(0.3, 0.3, 0.3), alpha=0.3)
+                    print(data_type)
+                    print('Insignificant Cluster')
+                    print(times[c.start])
+                    print(times[c.stop])
 
             hf = plt.plot(times, T_obs, "g")
             # ax2.legend((h,), ("cluster p-value < 0.05",))

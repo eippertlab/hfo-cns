@@ -17,7 +17,7 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epoch_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epoch_end', 'var_value'].iloc[0]]
 
-    srmr_nr = 2
+    srmr_nr = 1
     if srmr_nr == 1:
         sfreq = 5000
         cond_names = ['rest']
@@ -62,7 +62,7 @@ if __name__ == '__main__':
                 input_path = f"/data/pt_02718/tmp_data{add}/freq_banded_eeg/{subject_id}/"
 
             # Read raw file
-            fname_rest = f"sigma_{cond_name}.fif"
+            fname_rest = f"sigma_{cond_name}_{cond_name_trig}.fif"
             raw_rest = mne.io.read_raw_fif(input_path + fname_rest, preload=True)
             fname = f"sigma_{cond_name_trig}.fif"
             raw_trig = mne.io.read_raw_fif(input_path + fname, preload=True)

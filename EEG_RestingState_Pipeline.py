@@ -9,14 +9,11 @@ from Common_Functions.import_data_rs import import_data
 from Common_Functions.Create_Frequency_Bands import create_frequency_bands
 
 if __name__ == '__main__':
-    srmr_nr = 2  # Set the experiment number
-
-    # if srmr_nr != 1:
-    #     raise RuntimeError('import_data is not set to work with dataset 2 yet')
+    srmr_nr = 1  # Set the experiment number
 
     if srmr_nr == 1:
         n_subjects = 36  # Number of subjects
-        subjects = np.arange(1, 7)  # (1, 37) # 1 through 36 to access subject data
+        subjects = np.arange(1, 11)  # (1, 37) # 1 through 36 to access subject data
         conditions = [1]  # Conditions of interest
         sampling_rate = 5000  # Frequency to downsample to from original of 10kHz
 

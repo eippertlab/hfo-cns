@@ -39,7 +39,7 @@ if __name__ == '__main__':
     ######## 2. Bad Channel Check ###########
     check_channels = False  # No longer drop channels before CCA is run
 
-    # ######## 3. Bad Trial Check ###########
+    ######## 3. Bad Trial Check ###########
     check_trials = False
 
     ######## 4. Freq band ##########

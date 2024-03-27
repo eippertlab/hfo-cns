@@ -33,11 +33,11 @@ def import_data(subject, condition, srmr_nr, sampling_rate, esg_flag):
             input_path_trig = f"/data/pt_02718/tmp_data/freq_banded_esg/{subject_id}/"
         else:
             input_path_trig = f"/data/pt_02718/tmp_data/freq_banded_eeg/{subject_id}/"
-        fname_trig = f"sigma_median.fif"
-        trigger_name_trig = 'Median - Stimulation'
+        cond_names_trig = ['median', 'tibial']
+        fnames_trig = [f"sigma_median.fif", 'sigma_tibial.fif']
+        trigger_names_trig = ['Median - Stimulation', 'Tibial - Stimulation']
         os.makedirs(save_path, exist_ok=True)
         cond_name = cond_info.cond_name
-        stimulation = condition - 1
 
     elif srmr_nr == 2:
         save_path = "../tmp_data_2/imported/" + subject_id
@@ -53,9 +53,9 @@ def import_data(subject, condition, srmr_nr, sampling_rate, esg_flag):
             input_path_trig = f"/data/pt_02718/tmp_data_2/freq_banded_esg/{subject_id}/"
         else:
             input_path_trig = f"/data/pt_02718/tmp_data_2/freq_banded_eeg/{subject_id}/"
-        fname_trig = f"sigma_med_mixed.fif"
-        trigger_name_trig = 'medMixed'
-        stimulation = condition - 1
+        cond_names_trig = ['med_mixed', 'tib_mixed']
+        fnames_trig = [f"sigma_med_mixed.fif", 'sigma_tib_mixed.fif']
+        trigger_names_trig = ['medMixed', 'tibMixed']
     else:
         print('Error: Experiment 1 or experiment 2 must be specified')
         exit()
@@ -89,84 +89,93 @@ def import_data(subject, condition, srmr_nr, sampling_rate, esg_flag):
     eeg_chans, esg_chans, bipolar_chans = get_channels(subject_nr=subject, includesEcg=True, includesEog=True,
                                                        study_nr=srmr_nr)
 
-    ####################################################################
-    # Extract the raw data for each block, remove stimulus artefact, down-sample, concatenate, detect ecg,
-    # and then save
-    ####################################################################
-    # Looping through each condition and each subject in ESG_Pipeline.py
-    # Only dealing with one condition at a time, loop through however many blocks of said condition
-    for iblock in np.arange(0, nblocks):
-        # load data - need to read in files from EEGLAB format in bids folder
-        fname = cond_files[iblock]
-        raw = mne.io.read_raw_eeglab(fname, eog=(), preload=True, uint16_codec=None, verbose=None)
+    # Repeat for median and tibial conditions
+    for fname_trig, cond_name_trig, trigger_name_trig in zip(fnames_trig, cond_names_trig, trigger_names_trig):
+        ####################################################################
+        # Extract the raw data for each block, remove stimulus artefact, down-sample, concatenate, detect ecg,
+        # and then save
+        ####################################################################
+        # Looping through each condition and each subject in ESG_Pipeline.py
+        # Only dealing with one condition at a time, loop through however many blocks of said condition
+        for iblock in np.arange(0, nblocks):
+            # load data - need to read in files from EEGLAB format in bids folder
+            fname = cond_files[iblock]
+            raw = mne.io.read_raw_eeglab(fname, eog=(), preload=True, uint16_codec=None, verbose=None)
 
-        # If you only want to look at esg channels, drop the rest
+            # If you only want to look at esg channels, drop the rest
+            if esg_flag:
+                raw.pick_channels(esg_chans)
+            else:
+                raw.pick_channels(eeg_chans)
+
+            # Downsample the data
+            raw.resample(sampling_rate)  # resamples to desired
+
+        raw_concat = raw  # Only one file for raw in these bids data
+
+        # Resting state files are WAY shorter than median files, going to replicate resting state *7
+        for i in np.arange(0, 3):
+            mne.concatenate_raws([raw_concat, raw])
+
+        # # Interpolate based on the median triggers
+        # # events contains timestamps with corresponding event_id
+        raw_trig = mne.io.read_raw_fif(input_path_trig + fname_trig, preload=True)
+
+        # event_dict returns the event/trigger names with their corresponding event_id
+        events, event_dict = mne.events_from_annotations(raw_trig)
+
+        # Acts in place to edit raw via linear interpolation to remove stimulus artefact
+        # Since the median files already have qrs triggers added, we need to be sure we isolate only the stimulation triggers
+        relevant_events = [list(event) for event in events if event[2]==event_dict[trigger_name_trig]]
+        # Need to get indices of events linked to this trigger
+        trigger_points = [event[0] for event in relevant_events]
+
         if esg_flag:
-            raw.pick_channels(esg_chans)
+            interpol_window = [tstart_esg, tmax_esg]
+            PCHIP_kwargs = dict(
+                debug_mode=False, interpol_window_sec=interpol_window,
+                trigger_indices=trigger_points, fs=sampling_rate_og
+            )
+            raw_concat.apply_function(PCHIP_interpolation, picks=esg_chans, **PCHIP_kwargs,
+                               n_jobs=len(esg_chans))
+            raw_concat.annotations.append([x / sampling_rate for x in trigger_points], 0.0, trigger_name_trig,
+                                          ch_names=[esg_chans] * len(trigger_points))  # Add annotation
+            fname_save = f'noStimart_sr{sampling_rate}_{cond_name}_{cond_name_trig}_withqrs.fif'
+
+
+        elif not esg_flag:
+            interpol_window = [tstart_eeg, tmax_eeg]
+            PCHIP_kwargs = dict(
+                debug_mode=False, interpol_window_sec=interpol_window,
+                trigger_indices=trigger_points, fs=sampling_rate_og
+            )
+            raw_concat.apply_function(PCHIP_interpolation, picks=eeg_chans, **PCHIP_kwargs,
+                               n_jobs=len(eeg_chans))
+            raw_concat.annotations.append([x / sampling_rate for x in trigger_points], 0.0, trigger_name_trig,
+                                          ch_names=[eeg_chans] * len(trigger_points))  # Add annotation
+            fname_save = f'noStimart_sr{sampling_rate}_{cond_name}_{cond_name_trig}_withqrs_eeg.fif'
+
         else:
-            raw.pick_channels(eeg_chans)
+            print('Flag has not been set - indicate if you are working with eeg or esg channels')
 
-        # Downsample the data
-        raw.resample(sampling_rate)  # resamples to desired
+        ##############################################################################################
+        # Add reference channel in case not in channel list and Remove Powerline Noise
+        # High pass filter at 1Hz
+        ##############################################################################################
+        raw_concat.notch_filter(freqs=notch_freq, picks=raw_concat.ch_names, n_jobs=len(raw_concat.ch_names), method='fir', phase='zero')
 
-    raw_concat = raw  # Only one file for raw in these bids data
+        raw_concat.filter(l_freq=1, h_freq=None, n_jobs=len(raw_concat.ch_names), method='iir', iir_params={'order': 2, 'ftype': 'butter'}, phase='zero')
 
-    # Resting state files are WAY shorter than median files, going to replicate resting state *7
-    for i in np.arange(0, 3):
-        mne.concatenate_raws([raw_concat, raw])
+        # make sure recording reference is included
+        mne.add_reference_channels(raw_concat, ref_channels=['TH6'], copy=False)  # Modifying in place, adds the channel but
+        # doesn't do any actual rereferencing
 
-    # # Interpolate based on the median triggers
-    # # events contains timestamps with corresponding event_id
-    raw_trig = mne.io.read_raw_fif(input_path_trig + fname_trig, preload=True)
+        # Crop 5s after last relevant event
+        t_event = trigger_points[-1] / sampling_rate
+        raw_concat.crop(tmin= 0, tmax=t_event + 5)
 
-    # event_dict returns the event/trigger names with their corresponding event_id
-    events, event_dict = mne.events_from_annotations(raw_trig)
+        # Save data without stim artefact and downsampled to 5000
+        raw_concat.save(os.path.join(save_path, fname_save), fmt='double', overwrite=True)
 
-    # Acts in place to edit raw via linear interpolation to remove stimulus artefact
-    # Since the median files already have qrs triggers added, we need to be sure we isolate only the stimulation triggers
-    relevant_events = [list(event) for event in events if event[2]==event_dict[trigger_name_trig]]
-    # Need to get indices of events linked to this trigger
-    trigger_points = [event[0] for event in relevant_events]
-
-    if esg_flag:
-        interpol_window = [tstart_esg, tmax_esg]
-        PCHIP_kwargs = dict(
-            debug_mode=False, interpol_window_sec=interpol_window,
-            trigger_indices=trigger_points, fs=sampling_rate_og
-        )
-        raw_concat.apply_function(PCHIP_interpolation, picks=esg_chans, **PCHIP_kwargs,
-                           n_jobs=len(esg_chans))
-        raw_concat.annotations.append([x / sampling_rate for x in trigger_points], 0.0, trigger_name_trig,
-                                      ch_names=[esg_chans] * len(trigger_points))  # Add annotation
-        fname_save = f'noStimart_sr{sampling_rate}_{cond_name}_withqrs.fif'
-
-
-    elif not esg_flag:
-        interpol_window = [tstart_eeg, tmax_eeg]
-        PCHIP_kwargs = dict(
-            debug_mode=False, interpol_window_sec=interpol_window,
-            trigger_indices=trigger_points, fs=sampling_rate_og
-        )
-        raw_concat.apply_function(PCHIP_interpolation, picks=eeg_chans, **PCHIP_kwargs,
-                           n_jobs=len(eeg_chans))
-        raw_concat.annotations.append([x / sampling_rate for x in trigger_points], 0.0, trigger_name_trig,
-                                      ch_names=[eeg_chans] * len(trigger_points))  # Add annotation
-        fname_save = f'noStimart_sr{sampling_rate}_{cond_name}_withqrs_eeg.fif'
-
-    else:
-        print('Flag has not been set - indicate if you are working with eeg or esg channels')
-
-    ##############################################################################################
-    # Add reference channel in case not in channel list and Remove Powerline Noise
-    # High pass filter at 1Hz
-    ##############################################################################################
-    raw_concat.notch_filter(freqs=notch_freq, picks=raw_concat.ch_names, n_jobs=len(raw_concat.ch_names), method='fir', phase='zero')
-
-    raw_concat.filter(l_freq=1, h_freq=None, n_jobs=len(raw_concat.ch_names), method='iir', iir_params={'order': 2, 'ftype': 'butter'}, phase='zero')
-
-    # make sure recording reference is included
-    mne.add_reference_channels(raw_concat, ref_channels=['TH6'], copy=False)  # Modifying in place, adds the channel but
-    # doesn't do any actual rereferencing
-
-    # Save data without stim artefact and downsampled to 5000
-    raw_concat.save(os.path.join(save_path, fname_save), fmt='double', overwrite=True)
+        # Just deleting to be extra sure no crossover
+        del raw, raw_concat
