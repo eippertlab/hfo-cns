@@ -60,7 +60,7 @@ if __name__ == '__main__':
                 input_path = f"/data/pt_02718/tmp_data{add}/freq_banded_esg/{subject_id}/"
             else:
                 input_path = f"/data/pt_02718/tmp_data/freq_banded_eeg/{subject_id}/"
-            fname_rest = f"sigma_{cond_name}.fif"
+            fname_rest = f"sigma_{cond_name}_{cond_name_trig}.fif"
             raw_rest = mne.io.read_raw_fif(input_path + fname_rest, preload=True)
 
             fname = f"sigma_{cond_name_trig}.fif"
