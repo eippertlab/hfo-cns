@@ -17,7 +17,7 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epoch_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epoch_end', 'var_value'].iloc[0]]
 
-    srmr_nr = 2
+    srmr_nr = 1
     if srmr_nr == 1:
         sfreq = 5000
         cond_names = ['rest']

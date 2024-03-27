@@ -6,7 +6,7 @@
 
 import numpy as np
 from Common_Functions.import_data_rs import import_data
-from Common_Functions.Create_Frequency_Bands import create_frequency_bands
+from Common_Functions.Create_Frequency_Bands_RS import create_frequency_bands_rs
 
 if __name__ == '__main__':
     srmr_nr = 1  # Set the experiment number
@@ -24,7 +24,7 @@ if __name__ == '__main__':
         sampling_rate = 5000  # Frequency to downsample to from original of 10kHz
 
     ######## 1. Import ############
-    import_d = True  # Prep work
+    import_d = False  # Prep work
 
     ######## 2. Freq band ##########
     split_bands_flag = True
@@ -47,4 +47,4 @@ if __name__ == '__main__':
     if split_bands_flag:
         for subject in subjects:
             for condition in conditions:
-                create_frequency_bands(subject, condition, srmr_nr, sampling_rate, channel_type='eeg')
+                create_frequency_bands_rs(subject, condition, srmr_nr, sampling_rate, channel_type='eeg')

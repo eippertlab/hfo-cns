@@ -17,6 +17,7 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
     data_types = ['Spinal', 'Cortical']  # Can be Cortical, Thalamic, Spinal here or all
+    # Difficulties with LF-SEP timings in Thalamic - leave out
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)

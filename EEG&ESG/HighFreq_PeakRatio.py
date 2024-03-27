@@ -21,7 +21,7 @@ def find_nearest(array, value):
 
 
 if __name__ == '__main__':
-    srmr_nr = 1
+    srmr_nr = 2
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
@@ -57,6 +57,9 @@ if __name__ == '__main__':
     save_path = f"/data/pt_02718/tmp_data{add}/"
     figure_path = f'/data/p_02718/Images{add}/HFO_TimeCourse_Peaks/'
     os.makedirs(figure_path, exist_ok=True)
+
+    time_edge_med = 3/1000
+    time_edge_tib = 6/1000
 
     for data_type in ['spinal', 'cortical']:
         # Excel for saving result
@@ -115,8 +118,10 @@ if __name__ == '__main__':
 
                     if cond_name in ['median', 'med_mixed']:
                         ref_lat = low_latency_med[subject-1]
+                        time_edge = time_edge_med
                     else:
                         ref_lat = low_latency_tib[subject-1]
+                        time_edge = time_edge_tib
 
                     epochs = mne.read_epochs(input_path + fname, preload=True)
                     channel_no = df.loc[subject, f"sigma_{cond_name}_comp"]
@@ -134,9 +139,9 @@ if __name__ == '__main__':
 
                     # Find pos and neg peaks that are within time window of interest
                     # Convert time window to sample numbers
-                    edge_before = find_nearest(evoked_ch.times, ref_lat-3/1000)
+                    edge_before = find_nearest(evoked_ch.times, ref_lat-time_edge)
                     index_edge_before = list(evoked_ch.times).index(edge_before)
-                    edge_after = find_nearest(evoked_ch.times, ref_lat+3/1000)
+                    edge_after = find_nearest(evoked_ch.times, ref_lat+time_edge)
                     index_edge_after = list(evoked_ch.times).index(edge_after)
 
                     # Convert allowed peak latencies to their indices
