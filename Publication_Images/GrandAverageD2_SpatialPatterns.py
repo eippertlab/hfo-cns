@@ -270,7 +270,7 @@ if __name__ == '__main__':
                                          contours=6, outlines='head', sphere=None, image_interp='cubic',
                                          extrapolate='head', border='mean', res=64, size=1, cmap='jet', vlim=(None, None),
                                          cnorm=None, axes=ax, show=False)
-                    ax.set_title(f'Grand Average Spatial Pattern, n={len(spatial_pattern)}')
+                    # ax.set_title(f'Grand Average Spatial Pattern, n={len(spatial_pattern)}')
                     divider = make_axes_locatable(ax)
                     cax = divider.append_axes('right', size='5%', pad=0.05)
                     cb = fig.colorbar(ax.images[-1], cax=cax, shrink=0.6, orientation='vertical')
@@ -295,7 +295,7 @@ if __name__ == '__main__':
                                           colorbar=False, cbar_fmt='%3.1f', units=None, axes=ax_low, time_unit='s',
                                           time_format=None,
                                           nrows=1, ncols='auto', show=True)
-                    ax_low.set_title(f'Grand Average Spatial Pattern, n={len(spatial_pattern)}')
+                    # ax_low.set_title(f'Grand Average Spatial Pattern, n={len(spatial_pattern)}')
                     divider = make_axes_locatable(ax_low)
                     cax = divider.append_axes('right', size='5%', pad=0.05)
                     cb = fig.colorbar(ax_low.images[-1], cax=cax, shrink=0.6, orientation='vertical')
@@ -323,7 +323,7 @@ if __name__ == '__main__':
                     ax.set_ylabel(None)
                     ax.set_xticklabels([])
                     ax.set_xlabel(None)
-                    ax.set_title(f'Grand Average Spatial Pattern, n={len(spatial_pattern)}')
+                    # ax.set_title(f'Grand Average Spatial Pattern, n={len(spatial_pattern)}')
 
                     ############################################################################################
                     # Low Freq SEP
@@ -347,7 +347,7 @@ if __name__ == '__main__':
                     ax_low.set_ylabel(None)
                     ax_low.set_xticklabels([])
                     ax_low.set_xlabel(None)
-                    ax_low.set_title(f'Grand Average Spatial Pattern, n={len(spatial_pattern)}')
+                    # ax_low.set_title(f'Grand Average Spatial Pattern, n={len(spatial_pattern)}')
 
                 if use_visible is True:
                     fig.savefig(figure_path + f'{data_type}_HFO_GA_Spatial_{freq_band}_{cond_name}_visible')

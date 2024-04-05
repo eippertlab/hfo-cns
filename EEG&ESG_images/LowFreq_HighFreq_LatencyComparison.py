@@ -26,7 +26,8 @@ if __name__ == '__main__':
         cond_names = ['median', 'tibial']
         figure_path = f'/data/p_02718/Images/LowFreq_HighFreq_LatencyRelation/'
         if alternative_flag:
-            excel_fname = f'/data/pt_02718/tmp_data/LowFreq_HighFreq_RelationAlternative.xlsx'
+            raise RuntimeError('Alternative is no longer in use, change flag and restart')
+            # excel_fname = f'/data/pt_02718/tmp_data/LowFreq_HighFreq_RelationAlternative.xlsx'
         else:
             excel_fname = f'/data/pt_02718/tmp_data/LowFreq_HighFreq_Relation.xlsx'
 

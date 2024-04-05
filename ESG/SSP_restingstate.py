@@ -52,3 +52,7 @@ def apply_SSP_restingstate(subject, condition, srmr_nr, sampling_rate, n_p):
         ##############################################################################################
         # Save the SSP cleaned data for future comparison
         clean_raw.save(f"{save_path}ssp{n_p}_cleaned_{cond_name}_{cond_name_trig}.fif", fmt='double', overwrite=True)
+
+        # To save space - delete imported file after we have the SSP cleaned version
+        if os.path.exists(load_path+fname):
+            os.remove(load_path+fname)

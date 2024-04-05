@@ -14,7 +14,7 @@ import matplotlib as mpl
 import pandas as pd
 import matplotlib as mpl
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-from Common_Functions.check_excel_exist import check_excel_exist
+from Common_Functions.check_excel_exist_component import check_excel_exist
 mpl.rcParams['pdf.fonttype'] = 42
 
 

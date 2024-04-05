@@ -20,7 +20,7 @@ import pandas as pd
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import pickle
 import matplotlib as mpl
-from Common_Functions.check_excel_exist import check_excel_exist
+from Common_Functions.check_excel_exist_component import check_excel_exist
 mpl.rcParams['pdf.fonttype'] = 42
 
 

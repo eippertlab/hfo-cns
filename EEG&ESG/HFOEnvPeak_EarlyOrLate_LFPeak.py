@@ -1,15 +1,10 @@
 # Want to count how many times the HFO amplitude envelope peak is before versus after the low frequency potential peak
 
-import mne
-import os
+
 import numpy as np
-from Common_Functions.evoked_from_raw import evoked_from_raw
-from Common_Functions.get_channels import get_channels
-from Common_Functions.invert import invert
 from Common_Functions.get_conditioninfo import get_conditioninfo
 import pandas as pd
 import matplotlib as mpl
-from Common_Functions.check_excel_exist_relation import check_excel_exist_relation
 mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':

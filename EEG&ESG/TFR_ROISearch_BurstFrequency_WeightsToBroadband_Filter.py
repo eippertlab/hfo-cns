@@ -4,17 +4,14 @@
 # Looks at the mixed nerve conditions in dataset 1 and 2
 
 import mne
-import os
 import pickle
 import numpy as np
-from Common_Functions.evoked_from_raw import evoked_from_raw
 from Common_Functions.get_channels import get_channels
 from Common_Functions.get_esg_channels import get_esg_channels
 from Common_Functions.get_conditioninfo import get_conditioninfo
-import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib as mpl
-from Common_Functions.check_excel_exist_freq import check_excel_exist_freq
+from Common_Functions.check_excel_exist_general import check_excel_exist_general
 from Common_Functions.appy_cca_weights import apply_cca_weights
 mpl.rcParams['pdf.fonttype'] = 42
 
@@ -51,8 +48,15 @@ if __name__ == '__main__':
         for data_type in data_types:
             if srmr_nr == 1:
                 folder = 'tmp_data'
+                col_names = ['Subject', 'Peak_Frequency_median', 'Peak_Time_median', 'Peak_Frequency_1_median',
+                             'Peak_Frequency_2_median', 'Peak_Frequency_tibial', 'Peak_Time_tibial',
+                             'Peak_Frequency_1_tibial',
+                             'Peak_Frequency_2_tibial']
             elif srmr_nr == 2:
                 folder = 'tmp_data_2'
+                col_names = ['Subject', 'Peak_Frequency_med_mixed', 'Peak_Time_med_mixed', 'Peak_Frequency_1_med_mixed',
+                             'Peak_Frequency_2_med_mixed', 'Peak_Frequency_tib_mixed', 'Peak_Time_tib_mixed',
+                             'Peak_Frequency_1_tib_mixed', 'Peak_Frequency_2_tib_mixed']
 
             # Cortical Excel files
             xls = pd.ExcelFile(f'/data/pt_02718/{folder}/Components_EEG_Updated.xlsx')
@@ -74,7 +78,7 @@ if __name__ == '__main__':
 
             sheetname = data_type
             # If fname and sheet exist already - subjects indices will already be in file from initial creation **
-            check_excel_exist_freq(subjects, excel_fname, sheetname, srmr_nr)
+            check_excel_exist_general(subjects, excel_fname, sheetname, col_names)
             df_freq = pd.read_excel(excel_fname, sheetname)
             df_freq.set_index('Subject', inplace=True)
 

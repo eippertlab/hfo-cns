@@ -11,11 +11,8 @@ from Common_Functions.bad_channel_check import bad_channel_check
 from Common_Functions.Create_Frequency_Bands import create_frequency_bands
 from EEG.run_CCA_brain import run_CCA
 from EEG.run_CCA_brain_2 import run_CCA2
-from Archive.run_CCA_brain_shuffle import run_CCA_shuffle
-from Archive.run_CCA_brain_shufflebyhalf import run_CCA_shufflebyhalf
 from EEG.run_CCA_brain_thalamic import run_CCA_thalamic
 from EEG.run_CCA_brain_thalamic_2 import run_CCA_thalamic2
-from Archive.run_CCA_brain_crossval import run_CCA_crossval
 
 if __name__ == '__main__':
     srmr_nr = 1  # Set the experiment number
@@ -23,7 +20,6 @@ if __name__ == '__main__':
     if srmr_nr == 1:
         n_subjects = 36  # Number of subjects
         subjects = np.arange(1, 37)  # 1 through 36 to access subject data
-        # subjects = [1]
         conditions = [2, 3]  # Conditions of interest
         sampling_rate = 5000  # Frequency to downsample to from original of 10kHz
 
@@ -48,17 +44,8 @@ if __name__ == '__main__':
     ######## 5. Run CCA ########
     CCA_flag = False
 
-    ######## 6. Run CCA on thalamic activity  ########
+    ######## 6. Run CCA on subcortical activity  ########
     CCA_thalamic_flag = False
-
-    ######## 5. Run shuffled CCA ########
-    CCA_shuffle_flag = False
-
-    ######## 6. Run shuffled CCA ########
-    CCA_shufflebyhalf_flag = False
-
-    ######## 7. Run cross val CCA ########
-    CCA_crossval_flag = False
 
     ############################################
     # Import Data from BIDS directory
@@ -113,7 +100,7 @@ if __name__ == '__main__':
                         run_CCA2(subject, condition, srmr_nr, freq_band, sampling_rate)
 
     ###################################################
-    # Run CCA on thalamic activity - all trials
+    # Run CCA on subcortical activity - all trials
     ###################################################
     if CCA_thalamic_flag:
         if srmr_nr == 1:
@@ -127,110 +114,3 @@ if __name__ == '__main__':
                 for condition in conditions_d2:
                     for freq_band in ['sigma']:
                         run_CCA_thalamic2(subject, condition, srmr_nr, freq_band, sampling_rate)
-
-    ###################################################
-    # Run CCA shuffled on Freq Bands - all trials
-    ###################################################
-    if CCA_shuffle_flag:
-        if srmr_nr == 1:
-            for subject in subjects:
-                for condition in conditions:
-                    for freq_band in ['sigma']:
-                        run_CCA_shuffle(subject, condition, srmr_nr, freq_band, sampling_rate)
-        elif srmr_nr == 2:
-            print('Not implemented yet')
-            exit()
-            conditions_d2 = [2, 4]  # only need to specify digits, takes care of mixed nerve within other script
-            for subject in subjects:
-                for condition in conditions_d2:
-                    for freq_band in ['sigma']:
-                        run_CCA2(subject, condition, srmr_nr, freq_band, sampling_rate)
-
-    ###################################################
-    # Run CCA shuffled on Freq Bands - all trials
-    ###################################################
-    if CCA_shufflebyhalf_flag:
-        if srmr_nr == 1:
-            for subject in subjects:
-                for condition in conditions:
-                    for freq_band in ['sigma']:
-                        run_CCA_shufflebyhalf(subject, condition, srmr_nr, freq_band, sampling_rate)
-        elif srmr_nr == 2:
-            print('Not implemented yet')
-            exit()
-            conditions_d2 = [2, 4]  # only need to specify digits, takes care of mixed nerve within other script
-            for subject in subjects:
-                for condition in conditions_d2:
-                    for freq_band in ['sigma']:
-                        run_CCA2(subject, condition, srmr_nr, freq_band, sampling_rate)
-
-    ###################################################
-    # Run CCA shuffled on Freq Bands - all trials
-    ###################################################
-    if CCA_crossval_flag:
-        if srmr_nr == 1:
-            for subject in subjects:
-                for condition in conditions:
-                    for freq_band in ['sigma']:
-                        run_CCA_crossval(subject, condition, srmr_nr, freq_band, sampling_rate)
-        elif srmr_nr == 2:
-            print('Not implemented yet')
-            exit()
-            conditions_d2 = [2, 4]  # only need to specify digits, takes care of mixed nerve within other script
-            for subject in subjects:
-                for condition in conditions_d2:
-                    for freq_band in ['sigma']:
-                        run_CCA2(subject, condition, srmr_nr, freq_band, sampling_rate)
-
-    ###################################################################################################################
-    # GRAVEYARD
-    ###################################################################################################################
-    # ####### 6. Keep Good Trials #######
-    # CCA_good_flag = False
-    #
-    # ###################################################
-    # # Run CCA on Freq Bands - good trials only
-    # ###################################################
-    # if CCA_good_flag:
-    #     for subject in subjects:
-    #         for condition in conditions:
-    #             for freq_band in ['sigma']:
-    #                 run_CCA_good(subject, condition, srmr_nr, freq_band, sampling_rate)
-
-
-    # ####### 5. Keep Good Trials #######
-    # keep_good = False
-    ###################################################
-    # Keep Good
-    ###################################################
-    # if keep_good:
-    #     for subject in subjects:
-    #         for condition in conditions:
-    #             for freq_band in ['sigma']:
-    #                 keep_good_trials(subject, condition, srmr_nr, freq_band, 'eeg')
-    #
-
-    # ######## Old. Run CSP ########
-    # CSP_flag = False
-    #
-    # ######## Old. Run bCSTP #######
-    # bCSTP_flag = False
-    # ###################################################
-    # # Old: Run CSP on Freq Bands
-    # ###################################################
-    # if CSP_flag:
-    #     for subject in subjects:
-    #         for condition in conditions:
-    #             for freq_band in ['sigma', 'kappa']:
-    #                 run_CSP(subject, condition, srmr_nr, freq_band, sampling_rate)
-    #
-    # ###################################################
-    # # Old: Run bCSTP on Freq Bands
-    # ###################################################
-    # if bCSTP_flag:
-    #     for subject in subjects:
-    #         for condition in conditions:
-    #             for freq_band in ['sigma', 'kappa']:
-    #                 run_bCSTP(subject, condition, srmr_nr, freq_band, sampling_rate)
-
-

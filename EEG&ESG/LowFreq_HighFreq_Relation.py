@@ -12,7 +12,7 @@ from Common_Functions.invert import invert
 from Common_Functions.get_conditioninfo import get_conditioninfo
 import pandas as pd
 import matplotlib as mpl
-from Common_Functions.check_excel_exist_relation import check_excel_exist_relation
+from Common_Functions.check_excel_exist_general import check_excel_exist_general
 mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
@@ -76,7 +76,19 @@ if __name__ == '__main__':
             excel_fname = f'/data/pt_02718/tmp_data_2/LowFreq_HighFreq_Relation.xlsx'
         sheetname = data_type
         # If fname and sheet exist already
-        check_excel_exist_relation(subjects, excel_fname, sheetname)
+        if sheetname == 'Cortical':
+            col_names = ['Subject', 'N20', 'N20_amplitude', 'N20_high',
+                         'N20_high_amplitude', 'P39', 'P39_amplitude', 'P39_high',
+                         'P39_high_amplitude']
+        elif sheetname == 'Thalamic':
+            col_names = ['Subject', 'P14', 'P14_amplitude', 'P14_high',
+                         'P14_high_amplitude', 'P30', 'P30_amplitude', 'P30_high',
+                         'P30_high_amplitude']
+        elif sheetname == 'Spinal':
+            col_names = ['Subject', 'N13', 'N13_amplitude', 'N13_high',
+                         'N13_high_amplitude', 'N22', 'N22_amplitude', 'N22_high',
+                         'N22_high_amplitude']
+        check_excel_exist_general(subjects, excel_fname, sheetname, col_names)
         df_rel = pd.read_excel(excel_fname, sheetname)
         df_rel.set_index('Subject', inplace=True)
 

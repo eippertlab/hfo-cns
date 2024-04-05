@@ -60,3 +60,7 @@ def create_frequency_bands_rs(subject, condition, srmr_nr, sampling_rate, channe
             raw.filter(l_freq=band_dict[band_name][0], h_freq=band_dict[band_name][1], n_jobs=len(raw.ch_names), method='iir',
                        iir_params={'order': 5, 'ftype': 'butter'}, phase='zero')
             raw.save(f"{save_path}{band_name}_{cond_name}_{cond_name_trig}.fif", fmt='double', overwrite=True)
+
+        # To save space - delete imported file after we have the freq banded version
+        if os.path.exists(load_path+fname):
+            os.remove(load_path + fname)

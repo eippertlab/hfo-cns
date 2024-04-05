@@ -1,21 +1,21 @@
 # Want to extract timing and amplitude of low frequency potentials, versus peak of high frequency amplitude
 # envelopes
+# Also includes the same, but for the actual HFO peak (not the envelope)
 # Looking at both spinal and cortical peaks
 # Mixed nerve condition for both dataset 1 and 2
 
 import mne
 import os
 import numpy as np
+import pandas as pd
+import matplotlib as mpl
 from Common_Functions.evoked_from_raw import evoked_from_raw
 from Common_Functions.get_channels import get_channels
 from Common_Functions.invert import invert
 from Common_Functions.get_conditioninfo import get_conditioninfo
 from Common_Functions.calculate_snr_hfo import calculate_snr
 from Common_Functions.calculate_snr_lowfreq import calculate_snr_lowfreq
-import matplotlib.pyplot as plt
-import pandas as pd
-import matplotlib as mpl
-from Common_Functions.check_excel_exist_partialcorr import check_excel_exist_partialcorr
+from Common_Functions.check_excel_exist_general import check_excel_exist_general
 mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
@@ -73,8 +73,18 @@ if __name__ == '__main__':
         elif srmr_nr == 2:
             excel_fname = f'/data/pt_02718/tmp_data_2/LowFreq_HighFreq_Amp_SNR.xlsx'
         sheetname = data_type
+        if sheetname == 'Cortical':
+            col_names = ['Subject', 'N20', 'N20_amplitude', 'N20_high', 'N20_high_amplitude',
+                         'N20_high_env', 'N20_high_amplitude_env', 'N20_SNR', 'N20_high_SNR',
+                         'P39', 'P39_amplitude', 'P39_high', 'P39_high_amplitude',
+                         'P39_high_env', 'P39_high_amplitude_env', 'P39_SNR', 'P39_high_SNR']
+        elif sheetname == 'Spinal':
+            col_names = ['Subject', 'N13', 'N13_amplitude', 'N13_high', 'N13_high_amplitude',
+                         'N13_high_env', 'N13_high_amplitude_env', 'N13_SNR', 'N13_high_SNR',
+                         'N22', 'N22_amplitude', 'N22_high', 'N22_high_amplitude',
+                         'N22_high_env', 'N22_high_amplitude_env', 'N22_SNR', 'N22_high_SNR']
         # If fname and sheet exist already - subjects indices will already be in file from initial creation **
-        check_excel_exist_partialcorr(subjects, excel_fname, sheetname)
+        check_excel_exist_general(subjects, excel_fname, sheetname, col_names)
         df_rel = pd.read_excel(excel_fname, sheetname)
         df_rel.set_index('Subject', inplace=True)
 
