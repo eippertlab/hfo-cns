@@ -6,8 +6,16 @@ def calculate_snr(evoked_channel, noise_window, signal_window, sep_latency):
     # signal_window is used to determine bounds around sep_latency where signal should be (in seconds)
     # sep_latency is the time in s where that subjects low frequency SEP peaks
 
-    ch_name, latency, amplitude = evoked_channel.get_peak(tmin=sep_latency-signal_window, tmax=sep_latency+signal_window,
-                                                  mode='abs', return_amplitude=True)  # Don't care about sign
+    if sep_latency == 15/1000 or sep_latency == 30/1000:
+        # Subcortical time window is now asymmetric - using sep_latency to define this now
+        ch_name, latency, amplitude = evoked_channel.get_peak(tmin=sep_latency - signal_window,
+                                                              tmax=sep_latency + signal_window/2,
+                                                              mode='abs',
+                                                              return_amplitude=True)  # Don't care about sign
+    else:
+        ch_name, latency, amplitude = evoked_channel.get_peak(tmin=sep_latency-signal_window, tmax=sep_latency+signal_window,
+                                                              mode='abs', return_amplitude=True)  # Don't care about sign
+
     data = evoked_channel.copy().crop(tmin=noise_window[0], tmax=noise_window[1]).get_data()
     sd = data.std()
 

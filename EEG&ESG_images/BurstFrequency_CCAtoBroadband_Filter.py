@@ -90,6 +90,9 @@ if __name__ == '__main__':
             plt.xlabel('CNS Level')
             plt.ylabel('Frequency (Hz)')
             plt.savefig(figure_path + f'CrossCNS_{cond_name}_{high_freq}.png')
+            plt.savefig(
+                figure_path + f'CrossCNS_{cond_name}_{high_freq}.pdf',
+                bbox_inches='tight', format="pdf")
 
             # plt.show()
             plt.close()

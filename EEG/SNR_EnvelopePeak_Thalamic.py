@@ -52,6 +52,8 @@ if __name__ == '__main__':
 
     # df_timing = pd.read_excel(xls_timing, 'Timing')
     # df_timing.set_index('Subject', inplace=True)
+    timing_path = "/data/pt_02718/Time_Windows.xlsx"  # Contains important info about experiment
+    df_timing = pd.read_excel(timing_path)
 
     df_comp = pd.read_excel(component_fname, component_sheetname)
     df_comp.set_index('Subject', inplace=True)
@@ -90,9 +92,11 @@ if __name__ == '__main__':
             epochs = mne.read_epochs(input_path + fname, preload=True)
 
             if cond_name in ['median', 'med_mixed']:
-                sep_latency = 0.013
+                sep_latency = df_timing.loc[df_timing['Name'] == 'centre_sub_med', 'Time'].iloc[0] / 1000
+                signal_window = df_timing.loc[df_timing['Name'] == 'edge_sub_med', 'Time'].iloc[0] / 1000
             elif cond_name in ['tibial', 'tib_mixed']:
-                sep_latency = 0.030
+                sep_latency = df_timing.loc[df_timing['Name'] == 'centre_sub_tib', 'Time'].iloc[0] / 1000
+                signal_window = df_timing.loc[df_timing['Name'] == 'edge_sub_tib', 'Time'].iloc[0] / 1000
 
             snr_comp = []
             peak_latency_comp = []
@@ -109,7 +113,7 @@ if __name__ == '__main__':
 
                 # # Get SNR of HFO
                 noise_window = [-100/1000, -10/1000]
-                signal_window = 3/1000
+                # Signal window is divided by 2 inside this function for subcortical data to ensure asymmetric window
                 snr = calculate_snr(evoked.copy(), noise_window, signal_window, sep_latency)
                 snr_comp.append(snr)
                 snr_cond[subject-1][c] = snr
@@ -132,7 +136,7 @@ if __name__ == '__main__':
                     ax[c].set_ylabel('Amplitude')
                     ax[c].axvline(x=sep_latency-signal_window, color='r', linewidth='1')
                     ax[c].axvline(x=sep_latency, color='green', linewidth='1')
-                    ax[c].axvline(x=sep_latency+signal_window, color='r', linewidth='1')
+                    ax[c].axvline(x=sep_latency+signal_window/2, color='r', linewidth='1')
                     ax[c].set_title(f'Component {c+1}, SNR: {snr:.2f}')
                     if cond_name in ['median', 'med_mixed']:
                         ax[c].set_xlim([0.0, 0.05])
@@ -151,7 +155,7 @@ if __name__ == '__main__':
             # Automatically select the best component, insert 0 if no component passes
             chosen_component = 0
             for sig, lat in sorted(zip(snr_comp, peak_latency_comp), reverse=True):
-                if (sig > snr_threshold) and (sep_latency - signal_window <= lat <= sep_latency + signal_window):
+                if (sig > snr_threshold) and (sep_latency - signal_window <= lat <= sep_latency + signal_window/2):
                     chosen_component = snr_comp.index(sig) + 1
                     break
 

@@ -18,7 +18,7 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
 
-    shift_spinal = False  # If true, shift the spinal based on time of underlying low freq SEP
+    shift_spinal = True  # If true, shift the spinal based on time of underlying low freq SEP
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)
@@ -77,7 +77,7 @@ if __name__ == '__main__':
         df_spinal = pd.read_excel(xls, 'CCA')
         df_spinal.set_index('Subject', inplace=True)
 
-        for freq_type in ['upper', 'full']:
+        for freq_type in ['full']:  # 'upper',
             if freq_type == 'full':
                 freqs = np.arange(0., 1200., 3.)
                 fmin, fmax = freqs[[0, -1]]
@@ -230,29 +230,34 @@ if __name__ == '__main__':
                     vmax_thalamic = 120
                     vmax_spinal = 150
                     vmin = 0
-                elif cond_name in ['tibial', 'tib_mixed']:
+                elif cond_name == 'tibial':
                     vmax_cortical = 35
                     vmax_thalamic = 20
                     vmax_spinal = 15
                     vmin = 0
+                elif cond_name == 'tib_mixed':
+                    vmax_cortical = 25
+                    vmax_thalamic = 15
+                    vmax_spinal = 12
+                    vmin = 0
                 # Because combine = 'mean', the data in all channels is averaged as picks = 'eeg'
                 averaged_cortical.plot(picks='eeg', baseline=iv_baseline, mode='ratio', cmap='jet',
-                                      axes=ax[0], show=False, colorbar=True, dB=False,
+                                      axes=ax[2], show=False, colorbar=True, dB=False,
                                       tmin=tmin, tmax=tmax, vmin=vmin, vmax=vmax_cortical, combine='mean')
                 averaged_thalamic.plot(picks='eeg', baseline=iv_baseline, mode='ratio', cmap='jet',
                                       axes=ax[1], show=False, colorbar=True, dB=False,
                                       tmin=tmin, tmax=tmax, vmin=vmin, vmax=vmax_thalamic, combine='mean')
                 averaged_spinal.plot(picks='eeg', baseline=iv_baseline, mode='ratio', cmap='jet',
-                                        axes=ax[2], show=False, colorbar=True, dB=False,
+                                        axes=ax[0], show=False, colorbar=True, dB=False,
                                         tmin=tmin, tmax=tmax, vmin=vmin, vmax=vmax_spinal, combine='mean')
                 for axes in [ax[0], ax[1], ax[2]]:
                     im = axes.images
                     cb = im[-1].colorbar
                     cb.set_label('Amplitude (AU)')
 
-                ax[0].set_title(f"Grand average cortical")
+                ax[2].set_title(f"Grand average cortical")
                 ax[1].set_title(f"Grand average thalamic")
-                ax[2].set_title(f"Grand average spinal")
+                ax[0].set_title(f"Grand average spinal")
                 if freq_type == 'full':
                     fname = f"{trigger_name}_full_ratio"
                 elif freq_type == 'upper':

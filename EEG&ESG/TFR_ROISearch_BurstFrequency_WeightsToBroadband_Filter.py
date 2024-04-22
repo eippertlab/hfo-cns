@@ -16,7 +16,7 @@ from Common_Functions.appy_cca_weights import apply_cca_weights
 mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
-
+    srmr_nr_list = [2]  # Can include 1 and 2
     data_types = ['Spinal', 'Thalamic', 'Cortical']  # Can be Cortical, Thalamic or Spinal here or both
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
@@ -25,6 +25,8 @@ if __name__ == '__main__':
                    df.loc[df['var_name'] == 'baseline_end', 'var_value'].iloc[0]]
     iv_epoch = [df.loc[df['var_name'] == 'epoch_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epoch_end', 'var_value'].iloc[0]]
+    timing_path = "/data/pt_02718/Time_Windows.xlsx"  # Contains important info about experiment
+    df_timing = pd.read_excel(timing_path)
 
     sfreq = 5000
     fsearch_low = 400
@@ -33,7 +35,7 @@ if __name__ == '__main__':
     freqs = np.arange(fsearch_low - 50, fsearch_high + 50, 3.)
     fmin, fmax = freqs[[0, -1]]
 
-    for srmr_nr in [1, 2]:
+    for srmr_nr in srmr_nr_list:
         if srmr_nr == 1:
             subjects = np.arange(1, 37)
             conditions = [2, 3]
@@ -88,28 +90,40 @@ if __name__ == '__main__':
                 cond_name = cond_info.cond_name
                 trigger_name = cond_info.trigger_name
                 if cond_name in ['tibial', 'tib_mixed']:
-                    time_edge = 0.006
                     if data_type == 'Cortical':
                         channel = ['Cz']
-                        time_peak = 0.04
+                        time_peak = int(df_timing.loc[df_timing['Name'] == 'centre_cort_tib', 'Time'].iloc[0])
+                        time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_cort_tib', 'Time'].iloc[0])
                     elif data_type == 'Thalamic':
                         channel = ['Cz']
-                        time_peak = 0.03
+                        time_peak = int(df_timing.loc[df_timing['Name'] == 'centre_sub_tib', 'Time'].iloc[0])
+                        time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_sub_tib', 'Time'].iloc[0])
                     elif data_type == 'Spinal':
                         channel = ['L1']
-                        time_peak = 0.022
+                        time_peak = int(df_timing.loc[df_timing['Name'] == 'centre_spinal_tib', 'Time'].iloc[0])
+                        time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_spinal_tib', 'Time'].iloc[0])
 
                 elif cond_name in ['median', 'med_mixed']:
-                    time_edge = 0.003
                     if data_type == 'Cortical':
                         channel = ['CP4']
-                        time_peak = 0.02
+                        time_peak = int(df_timing.loc[df_timing['Name'] == 'centre_cort_med', 'Time'].iloc[0])
+                        time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_cort_med', 'Time'].iloc[0])
                     elif data_type == 'Thalamic':
                         channel = ['CP4']
-                        time_peak = 0.014
+                        time_peak = int(df_timing.loc[df_timing['Name'] == 'centre_sub_med', 'Time'].iloc[0])
+                        time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_sub_med', 'Time'].iloc[0])
                     elif data_type == 'Spinal':
                         channel = ['SC6']
-                        time_peak = 0.013
+                        time_peak = int(df_timing.loc[df_timing['Name'] == 'centre_spinal_med', 'Time'].iloc[0])
+                        time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_spinal_med', 'Time'].iloc[0])
+
+                # Need in seconds
+                time_peak /= 1000
+                time_edge_neg = time_edge/1000
+                if data_type == 'Thalamic':
+                    time_edge_pos = (time_edge/2)/1000
+                else:
+                    time_edge_pos = time_edge/1000
 
                 for subject in subjects:  # All subjects
                     subject_id = f'sub-{str(subject).zfill(3)}'
@@ -206,7 +220,7 @@ if __name__ == '__main__':
                             power_evoked = mne.time_frequency.tfr_stockwell(evoked, fmin=fmin, fmax=fmax, width=3.0, n_jobs=5)
 
                             # Get our ROI and find the peak frequency and associated time of peak
-                            power_cropped = power_evoked.crop(tmin=time_peak-time_edge, tmax=time_peak+time_edge, fmin=fsearch_low,
+                            power_cropped = power_evoked.crop(tmin=time_peak-time_edge_neg, tmax=time_peak+time_edge_pos, fmin=fsearch_low,
                                                               fmax=fsearch_high, include_tmax=True)
                             roi = np.squeeze(power_cropped.data, 0) # n_freqs, n_times - dropped channel dim as we keep just 1
                             index_of_max = np.unravel_index(np.argmax(roi),roi.shape)

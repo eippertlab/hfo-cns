@@ -55,6 +55,9 @@ if __name__ == '__main__':
     df_vis = pd.read_excel(visibility_fname, visibility_sheetname)
     df_vis.set_index('Subject', inplace=True)
 
+    timing_path = "/data/pt_02718/Time_Windows.xlsx"  # Contains important info about experiment
+    df_timing = pd.read_excel(timing_path)
+
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)
     iv_baseline = [df.loc[df['var_name'] == 'baseline_start', 'var_value'].iloc[0],
@@ -83,9 +86,12 @@ if __name__ == '__main__':
             epochs = mne.read_epochs(input_path + fname, preload=True)
 
             if cond_name == 'med_digits':
-                sep_latency = 0.015
+                sep_latency = df_timing.loc[df_timing['Name'] == 'centre_sub_med', 'Time'].iloc[0] / 1000
+                signal_window = df_timing.loc[df_timing['Name'] == 'edge_sub_med', 'Time'].iloc[0] / 1000
             elif cond_name == 'tib_digits':
-                sep_latency = 0.032
+                sep_latency = df_timing.loc[df_timing['Name'] == 'centre_sub_tib', 'Time'].iloc[0] / 1000
+                signal_window = df_timing.loc[df_timing['Name'] == 'edge_sub_tib', 'Time'].iloc[0] / 1000
+            sep_latency += 0.002  # Add 2ms to account for difference between ankle and toes etc.
 
             snr_comp = []
             peak_latency_comp = []
@@ -102,7 +108,6 @@ if __name__ == '__main__':
 
                 # # Get SNR of HFO
                 noise_window = [-100/1000, -10/1000]
-                signal_window = 3/1000
                 snr = calculate_snr(evoked.copy(), noise_window, signal_window, sep_latency)
                 snr_comp.append(snr)
                 snr_cond[subject-1][c] = snr

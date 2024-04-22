@@ -137,6 +137,13 @@ if __name__ == '__main__':
             grand_average_12 = np.mean(evoked_list_12, axis=0)
             grand_average_1plus2 = np.mean(combined_list, axis=0).reshape(-1, 1).T
 
+            # If we want to plot single subject envelopes
+            # for env_12, env_1plus2 in zip(evoked_list_12, combined_list):
+            #     fig, ax = plt.subplots()
+            #     ax.plot(evoked.times, env_12.reshape(-1), label='finger12')
+            #     ax.plot(evoked.times, env_1plus2, label='finger1 + finger2')
+            #     plt.legend()
+
             # Get error bands across subjects
             upper_list = []
             lower_list =[]
@@ -148,10 +155,10 @@ if __name__ == '__main__':
 
             # Plot Time Course
             fig, ax = plt.subplots()
-            ax.plot(evoked.times, grand_average_1[0, :], label='med1')
-            ax.plot(evoked.times, grand_average_2[0, :], label='med2')
-            ax.plot(evoked.times, grand_average_12[0, :], label='med12')
-            ax.plot(evoked.times, grand_average_1plus2[0, :], label='med1+med2')
+            ax.plot(evoked.times, grand_average_1[0, :], label='finger1')
+            ax.plot(evoked.times, grand_average_2[0, :], label='finger2')
+            ax.plot(evoked.times, grand_average_12[0, :], label='finger12')
+            ax.plot(evoked.times, grand_average_1plus2[0, :], label='finger1+finger2')
             for lower, upper in zip(lower_list, upper_list):
                 ax.fill_between(evoked.times, lower, upper, alpha=0.3)
             ax.set_xlabel('Time (s)')
@@ -169,22 +176,11 @@ if __name__ == '__main__':
                         bbox_inches='tight', format="pdf")
 
             # Run permutation cluster test
-            # combined_array = np.array(combined_list)
-            # [combined_array[:, np.newaxis, :], np.array(evoked_list_12)]
-            # T_obs, clusters, cluster_p_values, H0 = mne.stats.permutation_cluster_test(
-            #     [np.array(np.squeeze(evoked_list_12)), np.array(combined_list)],
-            #     n_permutations=2000,
-            #     tail=1,
-            #     n_jobs=None,
-            #     out_type="mask",)
-            # Run permutation cluster test
-            # combined_array = np.array(combined_list)
-            # [combined_array[:, np.newaxis, :], np.array(evoked_list_12)]
-            difference_list = [i[0] - j[0] for i, j in zip(evoked_list_12, combined_list)]
+            difference_list = [i[0] - j[0] for i, j in zip(combined_list, evoked_list_12)]
             T_obs, clusters, cluster_p_values, H0 = mne.stats.permutation_cluster_1samp_test(
                 X=np.array(difference_list),
                 n_permutations=2000,
-                tail=1,
+                tail=0,
                 n_jobs=None,
                 out_type="mask", )
 
@@ -198,7 +194,7 @@ if __name__ == '__main__':
             ax.plot(
                 times,
                 grand_average_difference[0, :],
-                label="Envelopes med12 - (med1+med2)",
+                label="Envelopes (finger1+finger2) - finger12",
             )
             ax.fill_between(evoked.times, lower, upper, alpha=0.3)
             ax.set_ylabel("Amplitude")
@@ -215,7 +211,7 @@ if __name__ == '__main__':
             hf = plt.plot(times, T_obs, "g")
             # ax2.legend((h,), ("cluster p-value < 0.05",))
             ax2.set_xlabel("time (ms)")
-            ax2.set_ylabel("f-values")
+            ax2.set_ylabel("t-values")
             ax2.set_xlim([0, 0.07])
 
             plt.savefig(figure_path + f'GA_Clusters_{data_type}_{freq_band}_{cond_name}_n={len(evoked_list)}.png')
@@ -252,7 +248,7 @@ if __name__ == '__main__':
             hf = plt.plot(times, T_obs, "g")
             # ax2.legend((h,), ("cluster p-value < 0.05",))
             ax2.set_xlabel("time (ms)")
-            ax2.set_ylabel("f-values")
+            ax2.set_ylabel("t-values")
             ax2.set_xlim([0, 0.07])
 
             plt.savefig(figure_path + f'SingleSubj_Clusters_{data_type}_{freq_band}_{cond_name}_n={len(evoked_list)}.png')
@@ -260,3 +256,4 @@ if __name__ == '__main__':
                         bbox_inches='tight', format="pdf")
 
             plt.show()
+            plt.close()

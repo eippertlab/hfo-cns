@@ -38,18 +38,15 @@ def run_CCA2(subject, condition, srmr_nr, freq_band):
     iv_epoch = [df.loc[df['var_name'] == 'epo_cca_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
+    timing_path = "/data/pt_02718/Time_Windows.xlsx"  # Contains important info about experiment
+    df_timing = pd.read_excel(timing_path)
+
     # Select the right files based on the data_string
     input_path = "/data/pt_02718/tmp_data_2/freq_banded_esg/" + subject_id + "/"
     fname_dig = f"{freq_band}_{cond_name_dig}.fif"
     fname_mixed = f"{freq_band}_{cond_name_mixed}.fif"
     save_path = "/data/pt_02718/tmp_data_2/cca/" + subject_id + "/"
     os.makedirs(save_path, exist_ok=True)
-
-    esg_chans = ['S35', 'S24', 'S36', 'Iz', 'S17', 'S15', 'S32', 'S22',
-                 'S19', 'S26', 'S28', 'S9', 'S13', 'S11', 'S7', 'SC1', 'S4', 'S18',
-                 'S8', 'S31', 'SC6', 'S12', 'S16', 'S5', 'S30', 'S20', 'S34', 'AC',
-                 'S21', 'S25', 'L1', 'S29', 'S14', 'S33', 'S3', 'AL', 'L4', 'S6',
-                 'S23', 'TH6']
 
     brainstem_chans, cervical_chans, lumbar_chans, ref_chan = get_esg_channels()
 
@@ -73,12 +70,17 @@ def run_CCA2(subject, condition, srmr_nr, freq_band):
         epochs_d = epochs_d.pick_channels(cervical_chans, ordered=True)
         epochs_m = epochs_m.pick_channels(cervical_chans, ordered=True)
         esg_chans = cervical_chans
-        window_times = [7/1000, 22/1000]
+        window_times = [df_timing.loc[df_timing['Name'] == 'tsart_ccaspinal_med', 'Time'].iloc[0] / 1000,
+                        df_timing.loc[df_timing['Name'] == 'tend_ccaspinal_med', 'Time'].iloc[0] / 1000]
+        sep_latency = int(df_timing.loc[df_timing['Name'] == 'centre_spinal_med', 'Time'].iloc[0])
     elif 'tib1' in trigger_name_dig:
         epochs_d = epochs_d.pick_channels(lumbar_chans, ordered=True)
         epochs_m = epochs_m.pick_channels(lumbar_chans, ordered=True)
         esg_chans = lumbar_chans
-        window_times = [15/1000, 30/1000]
+        window_times = [df_timing.loc[df_timing['Name'] == 'tsart_ccaspinal_tib', 'Time'].iloc[0] / 1000,
+                        df_timing.loc[df_timing['Name'] == 'tend_ccaspinal_tib', 'Time'].iloc[0] / 1000]
+        sep_latency = int(df_timing.loc[df_timing['Name'] == 'centre_spinal_tib', 'Time'].iloc[0])
+
     else:
         print('Invalid condition name attempted for use')
         exit()
@@ -253,13 +255,8 @@ def run_CCA2(subject, condition, srmr_nr, freq_band):
             to_plot = np.mean(data[:, 0, :], axis=0)
             plt.plot(cca_epochs.times, to_plot)
             plt.xlim([-0.025, 0.065])
-            # plt.xlim([0.0, 0.05])
-            if cond_name_mixed == 'med_mixed':
-                line_label = f"{0.013}s"
-                plt.axvline(x=0.013, color='r', linewidth='0.6', label=line_label)
-            elif cond_name_mixed == 'tib_mixed':
-                line_label = f"{0.022}s"
-                plt.axvline(x=0.022, color='r', linewidth='0.6', label=line_label)
+            line_label = f"{sep_latency / 1000}s"
+            plt.axvline(x=sep_latency / 1000, color='r', linewidth='0.6', label=line_label)
             plt.xlabel('Time [s]')
             plt.ylabel('Amplitude [A.U.]')
             plt.legend()

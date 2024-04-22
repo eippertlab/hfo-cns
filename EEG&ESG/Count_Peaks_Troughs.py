@@ -19,8 +19,9 @@ pd.set_option('display.width', 150)
 
 if __name__ == '__main__':
     freq_band = 'sigma'
+    srmr_nr_list = [2]  # Can be 1 and 2
 
-    for srmr_nr in [1, 2]:
+    for srmr_nr in srmr_nr_list:
         if srmr_nr == 1:
             subjects = np.arange(1, 37)
             conditions = [2, 3]
@@ -51,8 +52,10 @@ if __name__ == '__main__':
 
         # Set up the dataframe to store results
         save_path = f"/data/pt_02718/tmp_data{base}/"
-
         excel_fname = f'{save_path}Peaks_Troughs.xlsx'
+
+        timing_path = "/data/pt_02718/Time_Windows.xlsx"  # Contains important info about experiment
+        df_timing = pd.read_excel(timing_path)
 
         for excel_sheetname, divisor in zip(['10%', '20%', '25%', '33%', '50%'], [10, 5, 4, 3, 2]):
             check_excel_exist_general(subjects, fname=excel_fname, sheetname=excel_sheetname, col_names=col_names)
@@ -72,24 +75,27 @@ if __name__ == '__main__':
                     for subject in subjects:
                         flag = False
                         subject_id = f'sub-{str(subject).zfill(3)}'
-                        time_edge = 5/1000
                         if data_type == 'bipolar':
                             input_path = f"/data/pt_02718/tmp_data{base}/freq_banded_bipolar/{subject_id}/"
                             fname = f'sigma_{cond_name}.fif'
                             if cond_name in ['median', 'med_mixed']:
                                 channel = ['Biceps']
-                                ref_lat = 6 / 1000
+                                ref_lat = 6
+                                time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_cort_med', 'Time'].iloc[0])
                             elif cond_name in ['tibial', 'tib_mixed']:
                                 channel = ['KneeM']
-                                ref_lat = 9 / 1000
+                                ref_lat = 9
+                                time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_cort_tib', 'Time'].iloc[0])
 
                         elif data_type == 'spinal':
                             input_path = f"/data/pt_02718/tmp_data{base}/cca/{subject_id}/"
                             fname = f'sigma_{cond_name}.fif'
                             if cond_name in ['median', 'med_mixed']:
-                                ref_lat = 13 / 1000
+                                ref_lat = int(df_timing.loc[df_timing['Name'] == 'centre_spinal_med', 'Time'].iloc[0])
+                                time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_spinal_med', 'Time'].iloc[0])
                             elif cond_name in ['tibial', 'tib_mixed']:
-                                ref_lat = 22 / 1000
+                                ref_lat = int(df_timing.loc[df_timing['Name'] == 'centre_spinal_tib', 'Time'].iloc[0])
+                                time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_spinal_tib', 'Time'].iloc[0])
                             xls = pd.ExcelFile(f'/data/pt_02718/tmp_data{base}/Components_Updated.xlsx')
                             df_comp = pd.read_excel(xls, 'CCA')
                             df_comp.set_index('Subject', inplace=True)
@@ -98,9 +104,11 @@ if __name__ == '__main__':
                             input_path = f"/data/pt_02718/tmp_data{base}/cca_eeg_thalamic/{subject_id}/"
                             fname = f'sigma_{cond_name}.fif'
                             if cond_name in ['median', 'med_mixed']:
-                                ref_lat = 14 / 1000
+                                ref_lat = int(df_timing.loc[df_timing['Name'] == 'centre_sub_med', 'Time'].iloc[0])
+                                time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_sub_med', 'Time'].iloc[0])
                             elif cond_name in ['tibial', 'tib_mixed']:
-                                ref_lat = 30 / 1000
+                                ref_lat = int(df_timing.loc[df_timing['Name'] == 'centre_sub_tib', 'Time'].iloc[0])
+                                time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_sub_tib', 'Time'].iloc[0])
                             xls = pd.ExcelFile(f'/data/pt_02718/tmp_data{base}/Components_EEG_Thalamic_Updated.xlsx')
                             df_comp = pd.read_excel(xls, 'CCA')
                             df_comp.set_index('Subject', inplace=True)
@@ -109,12 +117,19 @@ if __name__ == '__main__':
                             input_path = f"/data/pt_02718/tmp_data{base}/cca_eeg/{subject_id}/"
                             fname = f'sigma_{cond_name}.fif'
                             if cond_name in ['median', 'med_mixed']:
-                                ref_lat = 20 / 1000
+                                ref_lat = int(df_timing.loc[df_timing['Name'] == 'centre_cort_med', 'Time'].iloc[0])
+                                time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_cort_med', 'Time'].iloc[0])
                             elif cond_name in ['tibial', 'tib_mixed']:
-                                ref_lat = 40 / 1000
+                                ref_lat = int(df_timing.loc[df_timing['Name'] == 'centre_cort_tib', 'Time'].iloc[0])
+                                time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_cort_tib', 'Time'].iloc[0])
                             xls = pd.ExcelFile(f'/data/pt_02718/tmp_data{base}/Components_EEG_Updated.xlsx')
                             df_comp = pd.read_excel(xls, 'CCA')
                             df_comp.set_index('Subject', inplace=True)
+
+                        # Need in seconds
+                        ref_lat /= 1000
+                        time_edge_neg = time_edge/1000
+                        time_edge_pos = time_edge/1000 # Using full time window for all conditions here
 
                         if data_type == 'bipolar':
                             raw = mne.io.read_raw_fif(input_path + fname, preload=True)
@@ -123,7 +138,7 @@ if __name__ == '__main__':
                             epochs = mne.Epochs(raw, events, event_id=event_id_dict, tmin=iv_epoch[0], tmax=iv_epoch[1],
                                                 baseline=tuple(iv_baseline))
                             evoked = epochs.average(picks='all')
-                            evoked_ch = evoked.pick(channel).crop(ref_lat-time_edge, ref_lat+time_edge)
+                            evoked_ch = evoked.pick(channel).crop(ref_lat-time_edge_neg, ref_lat+time_edge_pos)
 
                         else:
                             channel_no = df_comp.loc[subject, f"{freq_band}_{cond_name}_comp"]
@@ -134,14 +149,14 @@ if __name__ == '__main__':
                                 epochs = epochs.pick_channels([channel])
                                 if inv == 'T':
                                     epochs.apply_function(invert, picks=channel)
-                                evoked_ch = epochs.average().crop(ref_lat-time_edge, ref_lat+time_edge)
+                                evoked_ch = epochs.average().crop(ref_lat-time_edge_neg, ref_lat+time_edge_pos)
                             else:
                                 flag = True  # Won't write to dataframe if the flag is True, since theres no real component
                                 epochs = mne.read_epochs(input_path + fname, preload=True)
                                 epochs = epochs.pick_channels(['Cor5'])
                                 if inv == 'T':
                                     epochs.apply_function(invert, picks=channel)
-                                evoked_ch = epochs.average().crop(ref_lat-time_edge, ref_lat+time_edge)
+                                evoked_ch = epochs.average().crop(ref_lat-time_edge_neg, ref_lat+time_edge_pos)
 
                         data_ch = evoked_ch.get_data().reshape(-1)
 

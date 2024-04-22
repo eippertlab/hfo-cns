@@ -18,7 +18,7 @@ if __name__ == '__main__':
                 df.loc[df['var_name'] == 'epoch_end', 'var_value'].iloc[0]]
 
     srmr_nr = 2
-    hfo_type = 'actual'  # Can be 'env' - to use HFO envelope peak or 'actual' - to use biggest peak irrespective of polarity
+    hfo_type = 'env'  # Can be 'env' - to use HFO envelope peak or 'actual' - to use biggest peak irrespective of polarity
     # of actual HFOs
     sfreq = 5000
     freq_band = 'sigma'

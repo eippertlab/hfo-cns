@@ -26,14 +26,14 @@ if __name__ == '__main__':
     save_to_excel = True
 
     freq_band = 'sigma'
-    srmr_nr = 1
+    srmr_nr = 2
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)  # 1 through 36 to access subject data
         conditions = [2, 3]  # Conditions of interest
         figure_path = '/data/p_02718/Images/CCA/SNR&EnvelopePeak/'
         os.makedirs(figure_path, exist_ok=True)
-        xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/LowFreq_HighFreq_Relation.xlsx')
+        # xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/LowFreq_HighFreq_Relation.xlsx')
         component_fname = '/data/pt_02718/tmp_data/Components_Updated.xlsx'
         visibility_fname = '/data/pt_02718/tmp_data/Visibility_Updated.xlsx'
 
@@ -42,7 +42,7 @@ if __name__ == '__main__':
         conditions = [3, 5]  # Conditions of interest - med_mixed and tib_mixed
         figure_path = '/data/p_02718/Images_2/CCA/SNR&EnvelopePeak/'
         os.makedirs(figure_path, exist_ok=True)
-        xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/LowFreq_HighFreq_Relation.xlsx')
+        # xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/LowFreq_HighFreq_Relation.xlsx')
         component_fname = '/data/pt_02718/tmp_data_2/Components_Updated.xlsx'
         visibility_fname = '/data/pt_02718/tmp_data_2/Visibility_Updated.xlsx'
 
@@ -55,8 +55,8 @@ if __name__ == '__main__':
 
     # df_timing = pd.read_excel(xls_timing, 'Timing')
     # df_timing.set_index('Subject', inplace=True)
-    df_timing = pd.read_excel(xls_timing, 'Spinal')
-    df_timing.set_index('Subject', inplace=True)
+    timing_path = "/data/pt_02718/Time_Windows.xlsx"  # Contains important info about experiment
+    df_timing = pd.read_excel(timing_path)
 
     df_comp = pd.read_excel(component_fname, component_sheetname)
     df_comp.set_index('Subject', inplace=True)
@@ -96,9 +96,11 @@ if __name__ == '__main__':
             epochs = mne.read_epochs(input_path + fname, preload=True)
 
             if cond_name in ['median', 'med_mixed']:
-                sep_latency = df_timing.loc[subject, f"N13"]
+                sep_latency = df_timing.loc[df_timing['Name'] == 'centre_spinal_med', 'Time'].iloc[0] / 1000
+                signal_window = df_timing.loc[df_timing['Name'] == 'edge_spinal_med', 'Time'].iloc[0] / 1000
             elif cond_name in ['tibial', 'tib_mixed']:
-                sep_latency = df_timing.loc[subject, f"N22"]
+                sep_latency = df_timing.loc[df_timing['Name'] == 'centre_spinal_tib', 'Time'].iloc[0] / 1000
+                signal_window = df_timing.loc[df_timing['Name'] == 'edge_spinal_tib', 'Time'].iloc[0] / 1000
 
             snr_comp = []
             peak_latency_comp = []
@@ -114,7 +116,6 @@ if __name__ == '__main__':
 
                 # # Get SNR of HFO
                 noise_window = [-100/1000, -10/1000]
-                signal_window = 5/1000
                 snr = calculate_snr(evoked.copy(), noise_window, signal_window, sep_latency)
                 snr_comp.append(snr)
                 snr_cond[subject-1][c] = snr

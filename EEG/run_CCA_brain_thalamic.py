@@ -16,9 +16,11 @@ import pickle
 
 
 def run_CCA_thalamic(subject, condition, srmr_nr, freq_band, sfreq):
+    if freq_band != 'sigma':
+        raise RuntimeError('Frequency band must be set to sigma, kappa is depreciated')
+
     if srmr_nr != 1:
-        print('Error: Not implemented for srmr_nr 2')
-        exit()
+        raise RuntimeError('Error: Not implemented for srmr_nr 2')
     # Read in locations of channels
     plot_graphs = True
 
@@ -34,6 +36,9 @@ def run_CCA_thalamic(subject, condition, srmr_nr, freq_band, sfreq):
                    df.loc[df['var_name'] == 'baseline_end', 'var_value'].iloc[0]]
     iv_epoch = [df.loc[df['var_name'] == 'epo_cca_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
+
+    timing_path = "/data/pt_02718/Time_Windows.xlsx"  # Contains important info about experiment
+    df_timing = pd.read_excel(timing_path)
 
     # Select the right files based on the data_string
     input_path = "/data/pt_02718/tmp_data/freq_banded_eeg/" + subject_id + "/"
@@ -59,15 +64,16 @@ def run_CCA_thalamic(subject, condition, srmr_nr, freq_band, sfreq):
 
     if cond_name == 'median':
         epochs = epochs.pick_channels(eeg_chans, ordered=True)
-        window_times = [10/1000, 16/1000]
-        sep_latency = 20
+        window_times = [df_timing.loc[df_timing['Name'] == 'tsart_ccasub_med', 'Time'].iloc[0] / 1000,
+                        df_timing.loc[df_timing['Name'] == 'tend_ccasub_med', 'Time'].iloc[0] / 1000]
+        sep_latency = int(df_timing.loc[df_timing['Name'] == 'centre_sub_med', 'Time'].iloc[0])
     elif cond_name == 'tibial':
         epochs = epochs.pick_channels(eeg_chans, ordered=True)
-        window_times = [24/1000, 36/1000]
-        sep_latency = 40
+        window_times = [df_timing.loc[df_timing['Name'] == 'tsart_ccasub_tib', 'Time'].iloc[0] / 1000,
+                        df_timing.loc[df_timing['Name'] == 'tend_ccasub_tib', 'Time'].iloc[0] / 1000]
+        sep_latency = int(df_timing.loc[df_timing['Name'] == 'centre_sub_tib', 'Time'].iloc[0])
     else:
-        print('Invalid condition name attempted for use')
-        exit()
+        raise RuntimeError('Invalid condition name attempted for use')
 
     # Drop bad channels
     # if raw.info['bads']:

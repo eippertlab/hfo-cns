@@ -85,9 +85,9 @@ if __name__ == '__main__':
     df_vis_spinal = pd.read_excel(xls, 'CCA_Spinal')
     df_vis_spinal.set_index('Subject', inplace=True)
 
-    subjects_cortical = [3, 6, 21, 31, 36]
-    subjects_subcortical = [3, 6, 21, 31, 36]
-    subjects_spinal = [3, 6, 21, 31, 36]
+    subjects_cortical = [3, 6, 31, 36]
+    subjects_subcortical = [3, 6, 31, 36]
+    subjects_spinal = [3, 6, 31, 36]
 
     for data_type, subjects in zip(['eeg', 'esg', 'eeg_sub'], [subjects_cortical, subjects_spinal, subjects_subcortical]):
         for freq_band in freq_bands:

@@ -10,7 +10,7 @@ import os
 mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
-    srmr_nr = 1
+    srmr_nr = 2
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
@@ -60,4 +60,7 @@ if __name__ == '__main__':
                         hue='CNS Level', legend=False, linewidth=3)
             plt.title(f"{cond_name}, {sheetname}")
             plt.savefig(figure_path + f'CrossCNS_PeaksTroughs_{cond_name}_{sheetname}.png')
+            plt.savefig(
+                figure_path + f'CrossCNS_PeaksTroughs_{cond_name}_{sheetname}.pdf',
+                bbox_inches='tight', format="pdf")
             plt.close()

@@ -15,7 +15,7 @@ from EEG.run_CCA_brain_thalamic import run_CCA_thalamic
 from EEG.run_CCA_brain_thalamic_2 import run_CCA_thalamic2
 
 if __name__ == '__main__':
-    srmr_nr = 1  # Set the experiment number
+    srmr_nr = 2  # Set the experiment number
 
     if srmr_nr == 1:
         n_subjects = 36  # Number of subjects
@@ -30,7 +30,7 @@ if __name__ == '__main__':
         sampling_rate = 5000  # Frequency to downsample to from original of 10kHz
 
     ######## 1. Import ############
-    import_d = True  # Prep work
+    import_d = False  # Prep work
 
     ######## 2. Bad Channel Check ###########
     check_channels = False  # No longer drop channels before CCA is run
@@ -41,11 +41,11 @@ if __name__ == '__main__':
     ######## 4. Freq band ##########
     split_bands_flag = False
 
-    ######## 5. Run CCA ########
-    CCA_flag = False
+    ######## 5. Run CCA on cortical activity ########
+    CCA_flag = True
 
     ######## 6. Run CCA on subcortical activity  ########
-    CCA_thalamic_flag = False
+    CCA_thalamic_flag = True
 
     ############################################
     # Import Data from BIDS directory

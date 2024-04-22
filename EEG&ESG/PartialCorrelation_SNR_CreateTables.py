@@ -19,6 +19,10 @@ from Common_Functions.check_excel_exist_general import check_excel_exist_general
 mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
+    srmr_nr = 2
+    sfreq = 5000
+    freq_band = 'sigma'
+
     ##############################################################################################################
     # Set paths and variables
     ##############################################################################################################
@@ -31,9 +35,8 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epoch_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epoch_end', 'var_value'].iloc[0]]
 
-    srmr_nr = 2
-    sfreq = 5000
-    freq_band = 'sigma'
+    timing_path = "/data/pt_02718/Time_Windows.xlsx"  # Contains important info about experiment
+    df_timing = pd.read_excel(timing_path)
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
@@ -99,26 +102,32 @@ if __name__ == '__main__':
                 eeg_chans, esg_chans, bipolar_chans = get_channels(subject, False, False, srmr_nr)
 
                 if cond_name in ['tibial', 'tib_mixed']:
-                    time_edge = 0.006
                     if data_type == 'Cortical':
                         channel = ['Cz']
-                        time_peak = 0.04
+                        time_peak = int(df_timing.loc[df_timing['Name'] == 'centre_cort_tib', 'Time'].iloc[0])
+                        time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_cort_tib', 'Time'].iloc[0])
                         pot_name = 'P39'
                     elif data_type == 'Spinal':
                         pot_name = 'N22'
                         channel = ['L1']
-                        time_peak = 0.022
+                        time_peak = int(df_timing.loc[df_timing['Name'] == 'centre_spinal_tib', 'Time'].iloc[0])
+                        time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_spinal_tib', 'Time'].iloc[0])
 
                 elif cond_name in ['median', 'med_mixed']:
-                    time_edge = 0.004
                     if data_type == 'Cortical':
                         channel = ['CP4']
-                        time_peak = 0.02
+                        time_peak = int(df_timing.loc[df_timing['Name'] == 'centre_cort_med', 'Time'].iloc[0])
+                        time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_cort_med', 'Time'].iloc[0])
                         pot_name = 'N20'
                     elif data_type == 'Spinal':
                         channel = ['SC6']
-                        time_peak = 0.013
+                        time_peak = int(df_timing.loc[df_timing['Name'] == 'centre_spinal_med', 'Time'].iloc[0])
+                        time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_spinal_med', 'Time'].iloc[0])
                         pot_name = 'N13'
+
+                # Need in seconds
+                time_edge /= 1000
+                time_peak /= 1000
 
                 ##################################################################################################
                 # Select correct files for cortical and spinal data

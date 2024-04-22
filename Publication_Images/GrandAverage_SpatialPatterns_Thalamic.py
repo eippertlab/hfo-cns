@@ -113,10 +113,10 @@ if __name__ == '__main__':
                     evoked_low.reorder_channels(eeg_chans)
 
                     if cond_name in ['median', 'med_mixed']:
-                        time_point = 14 / 1000
+                        time_point = 15 / 1000
                         channel = ['CP4']
                     else:
-                        time_point = 31 / 1000
+                        time_point = 30 / 1000
                         channel = ['Cz']
 
                     # Need to pick channel based on excel sheet
@@ -151,14 +151,14 @@ if __name__ == '__main__':
                 if srmr_nr == 1:
                     if cond_name == 'tibial':
                         vmin = 0.000
-                        vmax = 0.150
+                        vmax = 0.120
                     elif cond_name == 'median':
                         vmin = 0.000
                         vmax = 0.40
                 elif srmr_nr == 2:
                     if cond_name == 'tib_mixed':
                         vmin = 0.000
-                        vmax = 0.150
+                        vmax = 0.20
                     elif cond_name == 'med_mixed':
                         vmin = 0.000
                         vmax = 0.50
@@ -202,6 +202,7 @@ if __name__ == '__main__':
                                       nrows=1, ncols='auto', show=False)
                 # ax_low.set_title(f'Grand Average Spatial Pattern, n={len(spatial_pattern)}')
                 divider = make_axes_locatable(ax_low)
+                ax_low.set_title('')
                 cax = divider.append_axes('right', size='5%', pad=0.05)
                 cb = fig.colorbar(ax_low.images[-1], cax=cax, shrink=0.6, orientation='vertical')
                 cb.set_label('Amplitude (\u03BCV)', rotation=90)

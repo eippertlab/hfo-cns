@@ -11,7 +11,7 @@ import os
 mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
-    srmr_nr = 2
+    srmr_nr = 1
     envelope = False  # If envelope is True, plut high freq env, otherwise the actual peak of the HFO time trace
 
     if srmr_nr == 1:
@@ -67,7 +67,11 @@ if __name__ == '__main__':
                 plt.title(f"{data_type}, {cond_name}, PearsonCorrelation: {round(pearson_corr.statistic, 4)}, pval: {round(pearson_corr.pvalue, 4)}")
                 if envelope:
                     plt.savefig(figure_path + f'{col_names[0]}_{data_type}_{cond_name}_abs_env.png')
+                    plt.savefig(figure_path + f'{col_names[0]}_{data_type}_{cond_name}_abs_env.pdf',
+                                    bbox_inches='tight', format="pdf")
                 else:
                     plt.savefig(figure_path + f'{col_names[0]}_{data_type}_{cond_name}_abs.png')
+                    plt.savefig(figure_path + f'{col_names[0]}_{data_type}_{cond_name}_abs.pdf',
+                                bbox_inches='tight', format="pdf")
                 # plt.show()
                 plt.close()

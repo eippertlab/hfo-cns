@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
     subjects = np.arange(1, 25)  # (1, 2) # 1 through 24 to access subject data
     conditions = [2, 4]  # Conditions of interest - med_digits and tib_digits
-    xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/LowFreq_HighFreq_Relation.xlsx')
+    # xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/LowFreq_HighFreq_Relation.xlsx')
     component_fname = '/data/pt_02718/tmp_data_2/Components_EEG_Updated_Digits.xlsx'
     visibility_fname = '/data/pt_02718/tmp_data_2/Visibility_Updated_Digits.xlsx'
     figure_path = '/data/p_02718/Images_2/CCA_eeg_digits/SNR&EnvelopePeak/'
@@ -49,8 +49,10 @@ if __name__ == '__main__':
     check_excel_exist(srmr_nr, subjects, component_fname, component_sheetname, visibility_fname, visibility_sheetname,
                       True)
 
-    df_timing = pd.read_excel(xls_timing, 'Cortical')
-    df_timing.set_index('Subject', inplace=True)
+    timing_path = "/data/pt_02718/Time_Windows.xlsx"  # Contains important info about experiment
+    df_timing = pd.read_excel(timing_path)
+    # df_timing = pd.read_excel(xls_timing, 'Cortical')
+    # df_timing.set_index('Subject', inplace=True)
 
     df_comp = pd.read_excel(component_fname, component_sheetname)
     df_comp.set_index('Subject', inplace=True)
@@ -86,9 +88,11 @@ if __name__ == '__main__':
             epochs = mne.read_epochs(input_path + fname, preload=True)
 
             if cond_name == 'med_digits':
-                sep_latency = df_timing.loc[subject, f"N20"]
+                sep_latency = df_timing.loc[df_timing['Name'] == 'centre_cort_med', 'Time'].iloc[0] / 1000
+                signal_window = df_timing.loc[df_timing['Name'] == 'edge_cort_med', 'Time'].iloc[0] / 1000
             elif cond_name == 'tib_digits':
-                sep_latency = df_timing.loc[subject, f"P39"]
+                sep_latency = df_timing.loc[df_timing['Name'] == 'centre_cort_med', 'Time'].iloc[0] / 1000
+                signal_window = df_timing.loc[df_timing['Name'] == 'edge_cort_med', 'Time'].iloc[0] / 1000
             sep_latency += 0.002  # Add 2ms to account for difference between ankle and toes etc.
 
             snr_comp = []
@@ -106,7 +110,6 @@ if __name__ == '__main__':
 
                 # # Get SNR of HFO
                 noise_window = [-100/1000, -10/1000]
-                signal_window = 7.5/1000
                 snr = calculate_snr(evoked.copy(), noise_window, signal_window, sep_latency)
                 snr_comp.append(snr)
                 snr_cond[subject-1][c] = snr

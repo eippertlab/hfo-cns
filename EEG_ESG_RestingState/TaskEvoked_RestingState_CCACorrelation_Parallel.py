@@ -7,11 +7,9 @@
 import numpy as np
 import pandas as pd
 import mne
-import pickle
 import matplotlib.pyplot as plt
 import multiprocessing as mp
-from itertools import repeat
-from mpl_toolkits.axes_grid1 import make_axes_locatable
+import pickle
 import os
 import random
 from Common_Functions.get_channels import get_channels
@@ -20,23 +18,14 @@ from Common_Functions.get_conditioninfo import get_conditioninfo
 from EEG_ESG_RestingState.run_CCA_restingstate import run_CCA_restingstate
 
 
-def get_comp1_evoked(condition_name, dtype, epochs_full):
-    # For come reason once I get in here, epochs_full is no longer mne.Epochs class, but rather np.array
-    print(epochs_full)
-    print(dtype)
-    print(condition_name)
-    stacked = np.empty((iterations, 1996))  # Iterations by timepoints
-    for iteration in np.arange(0, iterations):
-        res = random.sample(range(0, 1999), 1000)
-        # Select relevant channels and trials
-        if dtype == 'spinal':
-            epochs = epochs_full.copy().pick_channels(esg_chans, ordered=True)[res]
-        elif dtype in ['subcortical', 'cortical']:
-            epochs = epochs_full.copy().pick_channels(eeg_chans, ordered=True)[res]
+def get_comp1_evoked(iterable, time_window, epochs_full):
+    # print(f'Worker: {iterable}')
+    np.random.seed(iterable)
+    res = random.sample(range(0, 1999), 1000)
+    epochs = epochs_full.copy()[res]
+    time_course = run_CCA_restingstate(time_window, epochs)
 
-        stacked[iteration, :] = run_CCA_restingstate(condition_name, data_type, epochs)
-
-    return stacked
+    return time_course
 
 
 if __name__ == '__main__':
@@ -45,7 +34,7 @@ if __name__ == '__main__':
     iterations = 1000
 
     if srmr_nr == 1:
-        subjects = np.arange(1, 11)  # Haven't generated all RS data yet
+        subjects = np.arange(1, 37)
         conditions = [2, 3]
     else:
         raise RuntimeError('Only implemented for srmr_nr 1')
@@ -57,15 +46,46 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epo_cca_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
+    timing_path = "/data/pt_02718/Time_Windows.xlsx"  # Contains important info about experiment
+    df_timing = pd.read_excel(timing_path)
+
     brainstem_chans, cervical_chans, lumbar_chans, ref_chan = get_esg_channels()
 
     for data_type in ['spinal', 'subcortical', 'cortical']:
         for condition in conditions:
+            cond_info = get_conditioninfo(condition, srmr_nr)
+            cond_name = cond_info.cond_name
+            trigger_name = cond_info.trigger_name
+
+            if cond_name in ['median', 'med_mixed']:
+                if data_type == 'cortical':
+                    window_times = [df_timing.loc[df_timing['Name'] == 'tsart_ccacort_med', 'Time'].iloc[0] / 1000,
+                                    df_timing.loc[df_timing['Name'] == 'tend_ccacort_med', 'Time'].iloc[0] / 1000]
+                elif data_type == 'subcortical':
+                    window_times = [df_timing.loc[df_timing['Name'] == 'tsart_ccasub_med', 'Time'].iloc[0] / 1000,
+                                    df_timing.loc[df_timing['Name'] == 'tend_ccasub_med', 'Time'].iloc[0] / 1000]
+                elif data_type == 'spinal':
+                    window_times = [df_timing.loc[df_timing['Name'] == 'tsart_ccaspinal_med', 'Time'].iloc[0] / 1000,
+                                    df_timing.loc[df_timing['Name'] == 'tend_ccaspinal_med', 'Time'].iloc[0] / 1000]
+                else:
+                    raise RuntimeError('Datatype must be cortical, subcortical or spinal')
+            elif cond_name in ['tibial', 'tib_mixed']:
+                if data_type == 'cortical':
+                    window_times = [df_timing.loc[df_timing['Name'] == 'tsart_ccacort_tib', 'Time'].iloc[0] / 1000,
+                                    df_timing.loc[df_timing['Name'] == 'tend_ccacort_tib', 'Time'].iloc[0] / 1000]
+                elif data_type == 'subcortical':
+                    window_times = [df_timing.loc[df_timing['Name'] == 'tsart_ccasub_tib', 'Time'].iloc[0] / 1000,
+                                    df_timing.loc[df_timing['Name'] == 'tend_ccasub_tib', 'Time'].iloc[0] / 1000]
+                elif data_type == 'spinal':
+                    window_times = [df_timing.loc[df_timing['Name'] == 'tsart_ccaspinal_tib', 'Time'].iloc[0] / 1000,
+                                    df_timing.loc[df_timing['Name'] == 'tend_ccaspinal_tib', 'Time'].iloc[0] / 1000]
+                else:
+                    raise RuntimeError('Datatype must be cortical, subcortical or spinal')
+            else:
+                raise RuntimeError('Invalid condition name attempted for use')
+
             for subject in subjects:
                 # Set variables
-                cond_info = get_conditioninfo(condition, srmr_nr)
-                cond_name = cond_info.cond_name
-                trigger_name = cond_info.trigger_name
                 subject_id = f'sub-{str(subject).zfill(3)}'
                 eeg_chans, spin_chans, bipolar_chans = get_channels(subject, False, False, srmr_nr)
                 if cond_name in ['median', 'med_mixed']:
@@ -106,34 +126,55 @@ if __name__ == '__main__':
                                          tmax=iv_epoch[1] - 1 / 1000,
                                          baseline=tuple(iv_baseline), preload=True, reject_by_annotation=False)
 
-                print(type(epochs_rest_full))
-                print(type(epochs_trig_full))
-                N = mp.cpu_count()
+                if data_type == 'spinal':
+                    channels = esg_chans
+                elif data_type in ['subcortical', 'cortical']:
+                    channels = eeg_chans
+                epochs_trig_full = epochs_trig_full.pick_channels(channels, ordered=True)
+                epochs_rest_full = epochs_rest_full.pick_channels(channels, ordered=True)
+
+                ind_rest = epochs_rest_full.time_as_index(window_times)
+                ind_trig = epochs_trig_full.time_as_index(window_times)
+
+                N = 32  # Too many cores is actually slower
+                # N = len(os.sched_getaffinity(0))  # Gives number of available cores
                 with mp.Pool(processes=N) as pool:
-                    print(epochs_rest_full)
-                    stacked_rest = pool.starmap(get_comp1_evoked, zip(repeat(cond_name), repeat(data_type), epochs_rest_full))
+                    stacked_rest = pool.starmap(get_comp1_evoked, ((iterable, window_times, epochs_rest_full) for iterable in range(iterations)))
+                    # Returns list of arrays of size (iterations, time_points)
 
                 with mp.Pool(processes=N) as pool:
-                    stacked_trig = pool.starmap(get_comp1_evoked, zip(repeat(cond_name), repeat(data_type), epochs_trig_full))
+                    stacked_trig = pool.starmap(get_comp1_evoked, ((iterable, window_times, epochs_trig_full) for iterable in range(iterations)))
 
+                ############################################################
+                # Full epoch correlation
+                ############################################################
                 R1 = np.corrcoef(stacked_trig)
                 fig, ax = plt.subplots(1, 2, figsize=(21, 7))
-                c = ax[0].pcolor(R1, vmin=-1, vmax=1)
+                c = ax[0].pcolor(abs(R1), vmin=0, vmax=1)
                 ax[0].set_title('Task Evoked')
                 fig.colorbar(c, ax=ax[0])
                 R2 = np.corrcoef(stacked_rest)
-                c = ax[1].pcolor(R2, vmin=-1, vmax=1)
+                c = ax[1].pcolor(abs(R2), vmin=0, vmax=1)
                 ax[1].set_title('Resting State')
                 fig.colorbar(c, ax=ax[1])
                 plt.suptitle(f'{subject_id}, {data_type}, {cond_name}')
-                plt.savefig(figure_path+f'{subject_id}_{cond_name}_parallel')
+                plt.savefig(figure_path+f'{subject_id}_{cond_name}')
                 plt.close()
 
-                # # Save correlation matrices and image
-                # afile = open(save_path + f'{data_type}_corr_task_{cond_name}.pkl', 'wb')
-                # pickle.dump(R1, afile)
-                # afile.close()
-                #
-                # afile = open(save_path + f'{data_type}_corr_rs_{cond_name}.pkl', 'wb')
-                # pickle.dump(R2, afile)
-                # afile.close()
+                # Save correlation matrices
+                afile = open(save_path + f'{data_type}_corr_task_{cond_name}.pkl', 'wb')
+                pickle.dump(abs(R1), afile)
+                afile.close()
+
+                afile = open(save_path + f'{data_type}_corr_rs_{cond_name}.pkl', 'wb')
+                pickle.dump(abs(R2), afile)
+                afile.close()
+
+                # Save stacked matrix of time courses
+                afile = open(save_path + f'{data_type}_stacked_task_{cond_name}.pkl', 'wb')
+                pickle.dump(stacked_rest, afile)
+                afile.close()
+
+                afile = open(save_path + f'{data_type}_stacked_rs_{cond_name}.pkl', 'wb')
+                pickle.dump(stacked_trig, afile)
+                afile.close()

@@ -51,7 +51,6 @@ if __name__ == '__main__':
                     ax=ax, fill=False, palette=sns.color_palette(['tab:blue', 'tab:cyan', 'tab:purple']),
                     legend=False, linewidth=3, gap=0.1)
         plt.title(f"{cond_name}")
-        plt.show()
         plt.savefig(figure_path + f'CrossCNS_CombinedThreshold_PeaksTroughs_{cond_name}_{sheetname}.png')
         plt.close()
 
@@ -61,6 +60,8 @@ if __name__ == '__main__':
         sns.boxplot(x=df_merged['CNS Level'], y=df_merged['Wavelets'], hue=df_merged['Threshold'],
                     ax=ax, fill=False, legend=True, linewidth=3, gap=0.1)
         plt.title(f"{cond_name}")
-        plt.show()
         plt.savefig(figure_path + f'CrossCNS_MergedPeaksTroughs_{cond_name}_{sheetname}.png')
+        plt.savefig(
+            figure_path + f'CrossCNS_MergedPeaksTroughs_{cond_name}_{sheetname}.pdf',
+            bbox_inches='tight', format="pdf")
         plt.close()

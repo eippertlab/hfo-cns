@@ -37,6 +37,9 @@ def run_CCA_thalamic2(subject, condition, srmr_nr, freq_band, sfreq):
     iv_epoch = [df.loc[df['var_name'] == 'epo_cca_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
+    timing_path = "/data/pt_02718/Time_Windows.xlsx"  # Contains important info about experiment
+    df_timing = pd.read_excel(timing_path)
+
     # Select the right files based on the data_string
     input_path = "/data/pt_02718/tmp_data_2/freq_banded_eeg/" + subject_id + "/"
     fname_dig = f"{freq_band}_{cond_name_dig}.fif"
@@ -74,13 +77,15 @@ def run_CCA_thalamic2(subject, condition, srmr_nr, freq_band, sfreq):
     if 'med1' in trigger_name_dig:  # Using list of triggers to check if this is tibial/median
         epochs_d = epochs_d.pick_channels(eeg_chans, ordered=True)
         epochs_m = epochs_m.pick_channels(eeg_chans, ordered=True)
-        window_times = [10/1000, 16/1000]
-        sep_latency = 20
+        window_times = [df_timing.loc[df_timing['Name'] == 'tsart_ccasub_med', 'Time'].iloc[0] / 1000,
+                        df_timing.loc[df_timing['Name'] == 'tend_ccasub_med', 'Time'].iloc[0] / 1000]
+        sep_latency = int(df_timing.loc[df_timing['Name'] == 'centre_sub_med', 'Time'].iloc[0])
     elif 'tib1' in trigger_name_dig:
         epochs_d = epochs_d.pick_channels(eeg_chans, ordered=True)
         epochs_m = epochs_m.pick_channels(eeg_chans, ordered=True)
-        window_times = [24/1000, 36/1000]
-        sep_latency = 40
+        window_times = [df_timing.loc[df_timing['Name'] == 'tsart_ccasub_tib', 'Time'].iloc[0] / 1000,
+                        df_timing.loc[df_timing['Name'] == 'tend_ccasub_tib', 'Time'].iloc[0] / 1000]
+        sep_latency = int(df_timing.loc[df_timing['Name'] == 'centre_sub_tib', 'Time'].iloc[0])
     else:
         print('Invalid condition name attempted for use')
         exit()

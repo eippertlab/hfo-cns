@@ -2,40 +2,12 @@
 # Using the meet package https://github.com/neurophysics/meet.git to run the CCA
 
 
-import os
-import mne
 import numpy as np
 from meet import spatfilt
-from Common_Functions.get_conditioninfo import get_conditioninfo
-from Common_Functions.get_channels import get_channels
-import matplotlib.pyplot as plt
-import matplotlib as mpl
 import pandas as pd
-from mpl_toolkits.axes_grid1 import make_axes_locatable
-import pickle
 
 
-def run_CCA_restingstate(cond_name, data_type, epochs):
-    if cond_name == 'median':
-        if data_type == 'cortical':
-            window_times = [15.4/1000, 24.8/1000]
-        elif data_type == 'subcortical':
-            window_times = [10/1000, 16/1000]
-        elif data_type == 'spinal':
-            window_times = [7/1000, 22/1000]
-        else:
-            raise RuntimeError('Datatype must be cortical, subcortical or spinal')
-    elif cond_name == 'tibial':
-        if data_type == 'cortical':
-            window_times = [32/1000, 44/1000]
-        elif data_type == 'subcortical':
-            window_times = [24/ 1000, 36/1000]
-        elif data_type == 'spinal':
-            window_times = [15/1000, 30/1000]
-        else:
-            raise RuntimeError('Datatype must be cortical, subcortical or spinal')
-    else:
-        raise RuntimeError('Invalid condition name attempted for use')
+def run_CCA_restingstate(window_times, epochs):
 
     # Crop the epochs
     window = epochs.time_as_index(window_times)
@@ -84,7 +56,6 @@ def run_CCA_restingstate(cond_name, data_type, epochs):
     # Now we have CCA comps, get the data in the axes format MNE likes (n_epochs, n_channels, n_times)
     CCA_comps = np.swapaxes(CCA_comps, 0, 2)
     CCA_comps = np.swapaxes(CCA_comps, 1, 2)
-    selected_components = 4
 
     #######################  Want to return datapoints from evoked time course of first component ####################
     data = CCA_comps[:, 0, :]

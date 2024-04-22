@@ -26,9 +26,11 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epoch_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epoch_end', 'var_value'].iloc[0]]
 
-    srmr_nr = 1
+    srmr_nr = 2
     sfreq = 5000
     freq_band = 'sigma'
+    timing_path = "/data/pt_02718/Time_Windows.xlsx"  # Contains important info about experiment
+    df_timing = pd.read_excel(timing_path)
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
@@ -103,34 +105,46 @@ if __name__ == '__main__':
                 subject_id = f'sub-{str(subject).zfill(3)}'
 
                 if cond_name in ['tibial', 'tib_mixed']:
-                    time_edge = 0.006
                     if data_type == 'Cortical':
                         channel = ['Cz']
-                        time_peak = 0.04
+                        time_peak = int(df_timing.loc[df_timing['Name'] == 'centre_cort_tib', 'Time'].iloc[0])
+                        time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_cort_tib', 'Time'].iloc[0])
                         pot_name = 'P39'
                     elif data_type == 'Thalamic':
                         channel = ['Cz']
-                        time_peak = 0.03
+                        time_peak = int(df_timing.loc[df_timing['Name'] == 'centre_sub_tib', 'Time'].iloc[0])
+                        time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_sub_tib', 'Time'].iloc[0])
                         pot_name = 'P30'
                     elif data_type == 'Spinal':
                         pot_name = 'N22'
                         channel = ['L1']
-                        time_peak = 0.022
+                        time_peak = int(df_timing.loc[df_timing['Name'] == 'centre_spinal_tib', 'Time'].iloc[0])
+                        time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_spinal_tib', 'Time'].iloc[0])
 
                 elif cond_name in ['median', 'med_mixed']:
-                    time_edge = 0.004
                     if data_type == 'Cortical':
                         channel = ['CP4']
-                        time_peak = 0.02
+                        time_peak = int(df_timing.loc[df_timing['Name'] == 'centre_cort_med', 'Time'].iloc[0])
+                        time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_cort_med', 'Time'].iloc[0])
                         pot_name = 'N20'
                     elif data_type == 'Thalamic':
                         channel = ['CP4']
-                        time_peak = 0.014
+                        time_peak = int(df_timing.loc[df_timing['Name'] == 'centre_sub_med', 'Time'].iloc[0])
+                        time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_sub_med', 'Time'].iloc[0])
                         pot_name = 'P14'
                     elif data_type == 'Spinal':
                         channel = ['SC6']
-                        time_peak = 0.013
+                        time_peak = int(df_timing.loc[df_timing['Name'] == 'centre_spinal_med', 'Time'].iloc[0])
+                        time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_spinal_med', 'Time'].iloc[0])
                         pot_name = 'N13'
+
+                # Need in seconds
+                time_peak /= 1000
+                time_edge_neg = time_edge/1000
+                if data_type == 'Thalamic':
+                    time_edge_pos = (time_edge/2)/1000
+                else:
+                    time_edge_pos = time_edge/1000
 
                 if data_type == 'Cortical':
                     if srmr_nr == 1:
@@ -225,27 +239,27 @@ if __name__ == '__main__':
                 # Ampitude envelope always look positive
                 # Low Freq
                 # First check there is a negative/positive potential to be found
-                data_low = evoked_low.copy().crop(tmin=time_peak-time_edge, tmax=time_peak+time_edge).get_data().reshape(-1)
+                data_low = evoked_low.copy().crop(tmin=time_peak-time_edge_neg, tmax=time_peak+time_edge_pos).get_data().reshape(-1)
                 if (data_type == 'Cortical' and cond_name in ['tibial', 'tib_mixed']) or data_type == 'Thalamic':
                     if max(data_low) > 0:
-                        _, latency_low, amplitude_low = evoked_low.get_peak(tmin=time_peak - time_edge,
-                                                                             tmax=time_peak + time_edge,
+                        _, latency_low, amplitude_low = evoked_low.get_peak(tmin=time_peak - time_edge_neg,
+                                                                             tmax=time_peak + time_edge_pos,
                                                                              mode='pos', return_amplitude=True)
                     else:
                         latency_low = time_peak
                         amplitude_low = np.nan
                 else:
                     if min(data_low) < 0:
-                        _, latency_low, amplitude_low = evoked_low.get_peak(tmin=time_peak - time_edge,
-                                                                            tmax=time_peak + time_edge,
+                        _, latency_low, amplitude_low = evoked_low.get_peak(tmin=time_peak - time_edge_neg,
+                                                                            tmax=time_peak + time_edge_pos,
                                                                             mode='neg', return_amplitude=True)
                     else:
                         latency_low = time_peak
                         amplitude_low = np.nan
                 # High Freq
                 if channel_no != 0:
-                    _, latency_high, amplitude_high = envelope.get_peak(tmin=time_peak - time_edge,
-                                                                        tmax=time_peak + time_edge,
+                    _, latency_high, amplitude_high = envelope.get_peak(tmin=time_peak - time_edge_neg,
+                                                                        tmax=time_peak + time_edge_pos,
                                                                         mode='pos', return_amplitude=True)
                 else:
                     latency_high = np.nan
