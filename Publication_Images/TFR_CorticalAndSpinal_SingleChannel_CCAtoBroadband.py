@@ -18,7 +18,7 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
 
-    shift_spinal = True  # If true, shift the spinal based on time of underlying low freq SEP
+    shift_spinal = False  # If true, shift the spinal based on time of underlying low freq SEP
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)

@@ -176,11 +176,11 @@ if __name__ == '__main__':
                         bbox_inches='tight', format="pdf")
 
             # Run permutation cluster test
-            difference_list = [i[0] - j[0] for i, j in zip(combined_list, evoked_list_12)]
+            difference_list = [i - j[0] for i, j in zip(combined_list, evoked_list_12)]
             T_obs, clusters, cluster_p_values, H0 = mne.stats.permutation_cluster_1samp_test(
                 X=np.array(difference_list),
                 n_permutations=2000,
-                tail=0,
+                tail=1,
                 n_jobs=None,
                 out_type="mask", )
 
@@ -194,7 +194,7 @@ if __name__ == '__main__':
             ax.plot(
                 times,
                 grand_average_difference[0, :],
-                label="Envelopes (finger1+finger2) - finger12",
+                label="(finger1+finger2) - finger12",
             )
             ax.fill_between(evoked.times, lower, upper, alpha=0.3)
             ax.set_ylabel("Amplitude")
@@ -210,7 +210,7 @@ if __name__ == '__main__':
 
             hf = plt.plot(times, T_obs, "g")
             # ax2.legend((h,), ("cluster p-value < 0.05",))
-            ax2.set_xlabel("time (ms)")
+            ax2.set_xlabel("Time (s)")
             ax2.set_ylabel("t-values")
             ax2.set_xlim([0, 0.07])
 
@@ -236,18 +236,20 @@ if __name__ == '__main__':
                     h = ax2.axvspan(times[c.start], times[c.stop - 1], color="r", alpha=0.3)
                     print(data_type)
                     print('Significant Cluster')
+                    print(f'p-val: {cluster_p_values[i_c]}')
                     print(times[c.start])
                     print(times[c.stop])
                 else:
                     ax2.axvspan(times[c.start], times[c.stop - 1], color=(0.3, 0.3, 0.3), alpha=0.3)
                     print(data_type)
                     print('Insignificant Cluster')
+                    print(f'p-val: {cluster_p_values[i_c]}')
                     print(times[c.start])
                     print(times[c.stop])
 
             hf = plt.plot(times, T_obs, "g")
             # ax2.legend((h,), ("cluster p-value < 0.05",))
-            ax2.set_xlabel("time (ms)")
+            ax2.set_xlabel("Time (s)")
             ax2.set_ylabel("t-values")
             ax2.set_xlim([0, 0.07])
 

@@ -12,18 +12,18 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 
 if __name__ == '__main__':
-    srmr_nr = 2
+    srmr_nr = 1
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
         cond_names = ['median', 'tibial']
-        excel_fname = '/data/pt_02718/tmp_data/Peaks_Troughs.xlsx'
-        figure_path = f'/data/p_02718/Images/Peak_Trough_Images/CrossCNS_Change/'
+        excel_fname = '/data/pt_02718/tmp_data/Peaks_Troughs_EqualWindow.xlsx'
+        figure_path = f'/data/p_02718/Images/Peak_Trough_Images_EqualWindow/CrossCNS_Change/'
     elif srmr_nr == 2:
         subjects = np.arange(1, 25)
         cond_names = ['med_mixed', 'tib_mixed']
-        excel_fname = '/data/pt_02718/tmp_data_2/Peaks_Troughs.xlsx'
-        figure_path = '/data/p_02718/Images_2/Peak_Trough_Images/CrossCNS_Change/'
+        excel_fname = '/data/pt_02718/tmp_data_2/Peaks_Troughs_EqualWindow.xlsx'
+        figure_path = '/data/p_02718/Images_2/Peak_Trough_Images_EqualWindow/CrossCNS_Change/'
     os.makedirs(figure_path, exist_ok=True)
     data_types = ['spinal', 'subcortical', 'cortical']
 
