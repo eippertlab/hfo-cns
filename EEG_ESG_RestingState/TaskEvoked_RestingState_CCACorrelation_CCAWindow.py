@@ -1,4 +1,4 @@
-#############################################################################################
+############################################################################################
 # Take the 1000 CCA attempts in the task evoked and resting state (with fake triggers) data
 # Crop eah evoked array of the 1000 to the time window used for CCA training
 # Compute the correlation matrix, saving the image (heatmap) and the actual correlation
@@ -83,7 +83,7 @@ if __name__ == '__main__':
                     input_path = f"/data/pt_02718/{folder}/cca_eeg_rs/{subject_id}/"
                 elif data_type == 'subcortical':
                     input_path = f"/data/pt_02718/{folder}/cca_eeg_thalamic_rs/{subject_id}/"
-                figure_path = f"/data/p_02718/{figure_folder}/CCA_RS_Task_ShorterWindow/{data_type}/"
+                figure_path = f"/data/p_02718/{figure_folder}/CCA_RS_Task_CCAWindow/{data_type}/"
                 os.makedirs(figure_path, exist_ok=True)
 
                 fname_trig = f"{data_type}_stacked_task_{cond_name}.pkl"
@@ -100,11 +100,8 @@ if __name__ == '__main__':
                 with open(f'{input_path}{fname_rest}', 'rb') as f:
                     stacked_rest = pickle.load(f)
 
-                # Previously took just CCA training window - too short
-                # indices = [int(5000*0.1+window_time*5000) for window_time in window_times]
-
                 # Now checking 10ms before and 80ms after window time
-                indices = [int((5000*0.1) + (window_times[0]-10/1000)*5000), int((5000*0.1) + (window_times[1]+40/1000)*5000)]
+                indices = [int((5000*0.1) + (window_times[0])*5000), int((5000*0.1) + (window_times[1])*5000)]
                 stacked_trig_shorter = [stacked_trig[i][indices[0]:indices[1]] for i in range(len(stacked_trig))]
                 stacked_rest_shorter = [stacked_rest[i][indices[0]:indices[1]] for i in range(len(stacked_rest))]
 
@@ -123,10 +120,10 @@ if __name__ == '__main__':
                 plt.close()
 
                 # Save correlation matrices
-                afile = open(input_path + f'{data_type}_corr_task_shorter_{cond_name}.pkl', 'wb')
+                afile = open(input_path + f'{data_type}_corr_task_ccawin_{cond_name}.pkl', 'wb')
                 pickle.dump(abs(R1), afile)
                 afile.close()
 
-                afile = open(input_path + f'{data_type}_corr_rs_shorter_{cond_name}.pkl', 'wb')
+                afile = open(input_path + f'{data_type}_corr_rs_ccawin_{cond_name}.pkl', 'wb')
                 pickle.dump(abs(R2), afile)
                 afile.close()

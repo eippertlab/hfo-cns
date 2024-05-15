@@ -30,14 +30,19 @@ def get_comp1_evoked(iterable, time_window, epochs_full):
 
 if __name__ == '__main__':
     freq_band = 'sigma'
-    srmr_nr = 1
+    srmr_nr = 2
     iterations = 1000
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
         conditions = [2, 3]
-    else:
-        raise RuntimeError('Only implemented for srmr_nr 1')
+        folder = 'tmp_data'
+        figure_folder = 'Images'
+    elif srmr_nr == 2:
+        subjects = np.arange(1, 25)
+        conditions = [3, 5]
+        folder = 'tmp_data_2'
+        figure_folder = 'Images_2'
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)
@@ -95,15 +100,15 @@ if __name__ == '__main__':
 
                 # Select the right files
                 if data_type == 'spinal':
-                    input_path = f"/data/pt_02718/tmp_data/freq_banded_esg/{subject_id}/"
-                    save_path = f"/data/pt_02718/tmp_data/cca_rs/{subject_id}/"
+                    input_path = f"/data/pt_02718/{folder}/freq_banded_esg/{subject_id}/"
+                    save_path = f"/data/pt_02718/{folder}/cca_rs/{subject_id}/"
                 elif data_type == 'cortical':
-                    input_path = f"/data/pt_02718/tmp_data/freq_banded_eeg/{subject_id}/"
-                    save_path = f"/data/pt_02718/tmp_data/cca_eeg_rs/{subject_id}/"
+                    input_path = f"/data/pt_02718/{folder}/freq_banded_eeg/{subject_id}/"
+                    save_path = f"/data/pt_02718/{folder}/cca_eeg_rs/{subject_id}/"
                 elif data_type == 'subcortical':
-                    input_path = f"/data/pt_02718/tmp_data/freq_banded_eeg/{subject_id}/"
-                    save_path = f"/data/pt_02718/tmp_data/cca_eeg_thalamic_rs/{subject_id}/"
-                figure_path = f"/data/p_02718/Images/CCA_RS_Task/{data_type}/"
+                    input_path = f"/data/pt_02718/{folder}/freq_banded_eeg/{subject_id}/"
+                    save_path = f"/data/pt_02718/{folder}/cca_eeg_thalamic_rs/{subject_id}/"
+                figure_path = f"/data/p_02718/{figure_folder}/CCA_RS_Task/{data_type}/"
                 os.makedirs(save_path, exist_ok=True)
                 os.makedirs(figure_path, exist_ok=True)
 
@@ -172,9 +177,9 @@ if __name__ == '__main__':
 
                 # Save stacked matrix of time courses
                 afile = open(save_path + f'{data_type}_stacked_task_{cond_name}.pkl', 'wb')
-                pickle.dump(stacked_rest, afile)
+                pickle.dump(stacked_trig, afile)
                 afile.close()
 
                 afile = open(save_path + f'{data_type}_stacked_rs_{cond_name}.pkl', 'wb')
-                pickle.dump(stacked_trig, afile)
+                pickle.dump(stacked_rest, afile)
                 afile.close()
