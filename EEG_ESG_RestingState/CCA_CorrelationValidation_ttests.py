@@ -43,7 +43,8 @@ if __name__ == '__main__':
     print(df.mean())
     print(df.sem())
 
-    # Test just the 12 tests we're interested in and correct them
+    # Test just the relationships of interest to us (i.e. whether for spinal, median task-evoked correlations are greater
+    # than resting state correlations
     dict_pvals = {}
     for data_type in data_types:
         for cond_name in cond_names:

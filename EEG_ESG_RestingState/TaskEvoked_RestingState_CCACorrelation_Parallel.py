@@ -93,6 +93,8 @@ if __name__ == '__main__':
                 # Set variables
                 subject_id = f'sub-{str(subject).zfill(3)}'
                 eeg_chans, spin_chans, bipolar_chans = get_channels(subject, False, False, srmr_nr)
+                # Sticking with previous choice to use only lumbar channels for tibial nerve stimulation and only
+                # cervical channels for median nerve stimulation
                 if cond_name in ['median', 'med_mixed']:
                     esg_chans = cervical_chans
                 else:

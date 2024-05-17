@@ -69,11 +69,6 @@ if __name__ == '__main__':
             for subject in subjects:
                 # Set variables
                 subject_id = f'sub-{str(subject).zfill(3)}'
-                eeg_chans, spin_chans, bipolar_chans = get_channels(subject, False, False, srmr_nr)
-                if cond_name in ['median', 'med_mixed']:
-                    esg_chans = cervical_chans
-                else:
-                    esg_chans = lumbar_chans
 
                 # Select the right files
                 if data_type == 'spinal':
@@ -93,11 +88,7 @@ if __name__ == '__main__':
                     fname_trig = f"{data_type}_corr_task_ccawin_{cond_name}.pkl"
                     fname_rest = f"{data_type}_corr_rs_ccawin_{cond_name}.pkl"
 
-                # All evoked objects run from time -0.1s up to 0.299s
-                # Have shape n_trials, n_times
-                # Need to crop to the time windows above
-                # Our times are in steps of 0.0002 s (5000Hz sample rate)
-                # These are lists of numpy.ndarray
+                # Read in correlation matrices already created
                 with open(f'{input_path}{fname_trig}', 'rb') as f:
                     corr_trig = pickle.load(f)
 

@@ -70,11 +70,6 @@ if __name__ == '__main__':
             for subject in subjects:
                 # Set variables
                 subject_id = f'sub-{str(subject).zfill(3)}'
-                eeg_chans, spin_chans, bipolar_chans = get_channels(subject, False, False, srmr_nr)
-                if cond_name in ['median', 'med_mixed']:
-                    esg_chans = cervical_chans
-                else:
-                    esg_chans = lumbar_chans
 
                 # Select the right files
                 if data_type == 'spinal':
@@ -100,10 +95,7 @@ if __name__ == '__main__':
                 with open(f'{input_path}{fname_rest}', 'rb') as f:
                     stacked_rest = pickle.load(f)
 
-                # Previously took just CCA training window - too short
-                # indices = [int(5000*0.1+window_time*5000) for window_time in window_times]
-
-                # Now checking 10ms before and 80ms after window time
+                # Now checking 10ms before and 40ms after window time
                 indices = [int((5000*0.1) + (window_times[0]-10/1000)*5000), int((5000*0.1) + (window_times[1]+40/1000)*5000)]
                 stacked_trig_shorter = [stacked_trig[i][indices[0]:indices[1]] for i in range(len(stacked_trig))]
                 stacked_rest_shorter = [stacked_rest[i][indices[0]:indices[1]] for i in range(len(stacked_rest))]

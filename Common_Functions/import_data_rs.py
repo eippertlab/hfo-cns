@@ -79,8 +79,8 @@ def import_data(subject, condition, srmr_nr, sampling_rate, esg_flag):
     elif srmr_nr == 2:
         search = input_path + subject_id + '*' + cond_name2 + '*.set'
     else:
-        print('Error: Check experiment number')
-        exit()
+        raise RuntimeError('Error: Check experiment number')
+
     cond_files = glob.glob(search)
     cond_files = sorted(cond_files)  # Arrange in order from lowest to highest value
     nblocks = len(cond_files)
@@ -90,19 +90,20 @@ def import_data(subject, condition, srmr_nr, sampling_rate, esg_flag):
                                                        study_nr=srmr_nr)
 
     # Repeat for median and tibial conditions
+    # First run will add tibial triggers to resting state file and save
+    # Second run will add median triggers to resting state file and save
     for fname_trig, cond_name_trig, trigger_name_trig in zip(fnames_trig, cond_names_trig, trigger_names_trig):
         ####################################################################
         # Extract the raw data for each block, remove stimulus artefact, down-sample, concatenate, detect ecg,
         # and then save
         ####################################################################
-        # Looping through each condition and each subject in ESG_Pipeline.py
         # Only dealing with one condition at a time, loop through however many blocks of said condition
         for iblock in np.arange(0, nblocks):
-            # load data - need to read in files from EEGLAB format in bids folder
+            # load in resting state data - need to read in files from EEGLAB format in bids folder
             fname = cond_files[iblock]
             raw = mne.io.read_raw_eeglab(fname, eog=(), preload=True, uint16_codec=None, verbose=None)
 
-            # If you only want to look at esg channels, drop the rest
+            # Drop channels of no interest
             if esg_flag:
                 raw.pick_channels(esg_chans)
             else:
@@ -111,25 +112,24 @@ def import_data(subject, condition, srmr_nr, sampling_rate, esg_flag):
             # Downsample the data
             raw.resample(sampling_rate)  # resamples to desired
 
-        raw_concat = raw  # Only one file for raw in these bids data
+        raw_concat = raw  # Only one resting state file
 
-        # Resting state files are WAY shorter than median files, going to replicate resting state *7
+        # Resting state files are WAY shorter than task-evoked files, going to replicate resting state *3
+        # Repeat the resting state file 3 times before we add task-evoked triggers
         for i in np.arange(0, 3):
             mne.concatenate_raws([raw_concat, raw])
 
-        # # Interpolate based on the median triggers
-        # # events contains timestamps with corresponding event_id
+        # Load in task-evoked data
         raw_trig = mne.io.read_raw_fif(input_path_trig + fname_trig, preload=True)
-
         # event_dict returns the event/trigger names with their corresponding event_id
         events, event_dict = mne.events_from_annotations(raw_trig)
 
-        # Acts in place to edit raw via linear interpolation to remove stimulus artefact
-        # Since the median files already have qrs triggers added, we need to be sure we isolate only the stimulation triggers
+        # Since the task-evoked files already have qrs triggers added, we need to be sure we isolate only the stimulation triggers
         relevant_events = [list(event) for event in events if event[2]==event_dict[trigger_name_trig]]
         # Need to get indices of events linked to this trigger
         trigger_points = [event[0] for event in relevant_events]
 
+        # Remove stimulus artefact and add identified triggers
         if esg_flag:
             interpol_window = [tstart_esg, tmax_esg]
             PCHIP_kwargs = dict(
@@ -156,7 +156,7 @@ def import_data(subject, condition, srmr_nr, sampling_rate, esg_flag):
             fname_save = f'noStimart_sr{sampling_rate}_{cond_name}_{cond_name_trig}_withqrs_eeg.fif'
 
         else:
-            print('Flag has not been set - indicate if you are working with eeg or esg channels')
+            raise RuntimeError('Flag has not been set - indicate if you are working with eeg or esg channels')
 
         ##############################################################################################
         # Add reference channel in case not in channel list and Remove Powerline Noise
@@ -171,6 +171,7 @@ def import_data(subject, condition, srmr_nr, sampling_rate, esg_flag):
         # doesn't do any actual rereferencing
 
         # Crop 5s after last relevant event
+        # We do this just to avoid saving unecessarily large files
         t_event = trigger_points[-1] / sampling_rate
         raw_concat.crop(tmin= 0, tmax=t_event + 5)
 
