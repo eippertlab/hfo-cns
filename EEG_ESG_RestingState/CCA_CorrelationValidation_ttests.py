@@ -13,7 +13,7 @@ pd.set_option('display.width', 1000)
 import pingouin as pg
 
 if __name__ == '__main__':
-    srmr_nr = 1
+    srmr_nr = 2
     type = 'cca'  # Can be long, shorter or cca
 
     if srmr_nr == 1:
@@ -41,6 +41,7 @@ if __name__ == '__main__':
     df = pd.read_excel(excel_fname, sheetname)
     df.drop('Subject', axis=1, inplace=True)
     print(df.mean())
+    print(df.sem())
 
     # Test just the 12 tests we're interested in and correct them
     dict_pvals = {}

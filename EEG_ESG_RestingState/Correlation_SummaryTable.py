@@ -16,7 +16,7 @@ from Common_Functions.check_excel_exist_general import check_excel_exist_general
 
 if __name__ == '__main__':
     freq_band = 'sigma'
-    srmr_nr = 1
+    srmr_nr = 2
     type = 'cca'  # can be long, shorter or cca
 
     if srmr_nr == 1:
@@ -41,12 +41,21 @@ if __name__ == '__main__':
     elif type == 'cca':
         excel_fname = f'{excel_path}Correlation_CCAWin.xlsx'
     excel_sheetname = 'Correlation'
-    col_names = ['Subject', 'cortical_median_task', 'cortical_median_rest',
-                 'cortical_tibial_task', 'cortical_tibial_rest',
-                 'subcortical_median_task', 'subcortical_median_rest',
-                 'subcortical_tibial_task', 'subcortical_tibial_rest',
-                 'spinal_median_task', 'spinal_median_rest',
-                 'spinal_tibial_task', 'spinal_tibial_rest']
+
+    if srmr_nr == 1:
+        col_names = ['Subject', 'cortical_median_task', 'cortical_median_rest',
+                     'cortical_tibial_task', 'cortical_tibial_rest',
+                     'subcortical_median_task', 'subcortical_median_rest',
+                     'subcortical_tibial_task', 'subcortical_tibial_rest',
+                     'spinal_median_task', 'spinal_median_rest',
+                     'spinal_tibial_task', 'spinal_tibial_rest']
+    elif srmr_nr == 2:
+        col_names = ['Subject', 'cortical_med_mixed_task', 'cortical_med_mixed_rest',
+                     'cortical_tib_mixed_task', 'cortical_tib_mixed_rest',
+                     'subcortical_med_mixed_task', 'subcortical_med_mixed_rest',
+                     'subcortical_tib_mixed_task', 'subcortical_tib_mixed_rest',
+                     'spinal_med_mixed_task', 'spinal_med_mixed_rest',
+                     'spinal_tib_mixed_task', 'spinal_tib_mixed_rest']
     check_excel_exist_general(subjects, fname=excel_fname, sheetname=excel_sheetname, col_names=col_names)
     df_corr = pd.read_excel(excel_fname, excel_sheetname)
     df_corr.set_index('Subject', inplace=True)
@@ -68,11 +77,11 @@ if __name__ == '__main__':
 
                 # Select the right files
                 if data_type == 'spinal':
-                    input_path = f"/data/pt_02718/tmp_data/cca_rs/{subject_id}/"
+                    input_path = f"/data/pt_02718/{folder}/cca_rs/{subject_id}/"
                 elif data_type == 'cortical':
-                    input_path = f"/data/pt_02718/tmp_data/cca_eeg_rs/{subject_id}/"
+                    input_path = f"/data/pt_02718/{folder}/cca_eeg_rs/{subject_id}/"
                 elif data_type == 'subcortical':
-                    input_path = f"/data/pt_02718/tmp_data/cca_eeg_thalamic_rs/{subject_id}/"
+                    input_path = f"/data/pt_02718/{folder}/cca_eeg_thalamic_rs/{subject_id}/"
 
                 if type == 'long':
                     fname_trig = f"{data_type}_corr_task_{cond_name}.pkl"

@@ -24,6 +24,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Python.BurstFreq_AcrossCNS_Stats.executor&quot;: &quot;Run&quot;,
     &quot;Python.CCA_CorrelationValidation_ttests.executor&quot;: &quot;Run&quot;,
     &quot;Python.Correlation_SummaryTable.executor&quot;: &quot;Run&quot;,
     &quot;Python.EEG_RestingState_Pipeline.executor&quot;: &quot;Run&quot;,
@@ -34,7 +35,7 @@
     &quot;Python.TaskEvoked_RestingState_CCACorrelation_Parallel.executor&quot;: &quot;Run&quot;,
     &quot;Python.TaskEvoked_RestingState_CCACorrelation_ShorterWindow.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/data/pt_02889/Emma/Analysis&quot;
+    &quot;last_opened_file_path&quot;: &quot;/data/pt_02569/Python_Cardiac&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -42,11 +43,33 @@
       <recent name="$PROJECT_DIR$/EEG_ESG_RestingState" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/EEG_ESG_RestingState" />
       <recent name="$PROJECT_DIR$/Archive" />
+      <recent name="$PROJECT_DIR$/EEG_ESG_RestingState" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.TaskEvoked_RestingState_CCACorrelation_Parallel">
+  <component name="RunManager" selected="Python.BurstFreq_AcrossCNS_Stats">
+    <configuration name="BurstFreq_AcrossCNS_Stats" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="HF_Oscillations" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/EEG&amp;ESG" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/EEG&amp;ESG/BurstFreq_AcrossCNS_Stats.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="CCA_CorrelationValidation_ttests" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
@@ -91,51 +114,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="EEG_RestingState_Pipeline" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="HF_Oscillations" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/EEG_RestingState_Pipeline.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="ESG_RestingState_Pipeline" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="HF_Oscillations" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ESG_RestingState_Pipeline.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="TaskEvoked_RestingState_CCACorrelation_Parallel" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="TaskEvoked_RestingState_CCACorrelation_CCAWindow" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -148,7 +127,29 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/EEG_ESG_RestingState/TaskEvoked_RestingState_CCACorrelation_Parallel.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/EEG_ESG_RestingState/TaskEvoked_RestingState_CCACorrelation_CCAWindow.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TaskEvoked_RestingState_CCACorrelation_ShorterWindow" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="HF_Oscillations" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/EEG_ESG_RestingState" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/EEG_ESG_RestingState/TaskEvoked_RestingState_CCACorrelation_ShorterWindow.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -159,11 +160,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.TaskEvoked_RestingState_CCACorrelation_Parallel" />
-        <item itemvalue="Python.ESG_RestingState_Pipeline" />
-        <item itemvalue="Python.EEG_RestingState_Pipeline" />
+        <item itemvalue="Python.BurstFreq_AcrossCNS_Stats" />
         <item itemvalue="Python.CCA_CorrelationValidation_ttests" />
         <item itemvalue="Python.Correlation_SummaryTable" />
+        <item itemvalue="Python.TaskEvoked_RestingState_CCACorrelation_CCAWindow" />
+        <item itemvalue="Python.TaskEvoked_RestingState_CCACorrelation_ShorterWindow" />
       </list>
     </recent_temporary>
   </component>
