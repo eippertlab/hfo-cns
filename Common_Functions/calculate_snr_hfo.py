@@ -1,13 +1,13 @@
 # Function to calculate the SNR of a single channel evoked HFO
 
-def calculate_snr(evoked_channel, noise_window, signal_window, sep_latency):
+def calculate_snr(evoked_channel, noise_window, signal_window, sep_latency, data_type):
     # evoked is a single channel of evoked data in MNE
     # noise_window is the period in seconds where noise is
     # signal_window is used to determine bounds around sep_latency where signal should be (in seconds)
-    # sep_latency is the time in s where that subjects low frequency SEP peaks
+    # sep_latency is expected time of sep peak
 
-    if sep_latency == 15/1000 or sep_latency == 30/1000:
-        # Subcortical time window is now asymmetric - using sep_latency to define this now
+    if data_type == 'subcortical':
+        # Subcortical time window is now asymmetric
         ch_name, latency, amplitude = evoked_channel.get_peak(tmin=sep_latency - signal_window,
                                                               tmax=sep_latency + signal_window/2,
                                                               mode='abs',

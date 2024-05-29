@@ -4,7 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="32d78150-f875-4a94-a101-72a4657c6a8a" name="Changes" comment="" />
+    <list default="true" id="32d78150-f875-4a94-a101-72a4657c6a8a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/EEG&amp;ESG/RankCorrelation_WaveletCountAcrossCNS.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EEG&amp;ESG/SingleTrial_SNR_CorticalSpinal.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Archive/Peaks_Troughs_ByCNSLevel.py" beforeDir="false" afterPath="$PROJECT_DIR$/EEG&amp;ESG_images/Peaks_Troughs_ByCNSLevel_ByCutOff.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Common_Functions/calculate_snr_hfo.py" beforeDir="false" afterPath="$PROJECT_DIR$/Common_Functions/calculate_snr_hfo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EEG&amp;ESG/BurstFreq_AcrossCNS_Stats.py" beforeDir="false" afterPath="$PROJECT_DIR$/EEG&amp;ESG/BurstFreq_AcrossCNS_Stats.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EEG&amp;ESG/LowFreq_HighFreq_Relation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Archive/LowFreq_HighFreq_Relation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EEG&amp;ESG/PartialCorrelation_SNR_CreateTables.py" beforeDir="false" afterPath="$PROJECT_DIR$/EEG&amp;ESG/PartialCorrelation_SNR_CreateTables.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EEG/SNR_EnvelopePeak_Cortical.py" beforeDir="false" afterPath="$PROJECT_DIR$/EEG/SNR_EnvelopePeak_Cortical.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EEG/SNR_EnvelopePeak_Cortical_Digits.py" beforeDir="false" afterPath="$PROJECT_DIR$/EEG/SNR_EnvelopePeak_Cortical_Digits.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EEG/SNR_EnvelopePeak_Thalamic.py" beforeDir="false" afterPath="$PROJECT_DIR$/EEG/SNR_EnvelopePeak_Thalamic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EEG/SNR_EnvelopePeak_Thalamic_Digits.py" beforeDir="false" afterPath="$PROJECT_DIR$/EEG/SNR_EnvelopePeak_Thalamic_Digits.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ESG/SNR_EnvelopePeak_Spinal.py" beforeDir="false" afterPath="$PROJECT_DIR$/ESG/SNR_EnvelopePeak_Spinal.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ESG/SNR_EnvelopePeak_Spinal_Digits.py" beforeDir="false" afterPath="$PROJECT_DIR$/ESG/SNR_EnvelopePeak_Spinal_Digits.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -22,33 +37,131 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.BurstFreq_AcrossCNS_Stats.executor&quot;: &quot;Run&quot;,
-    &quot;Python.CCA_CorrelationValidation_ttests.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Correlation_SummaryTable.executor&quot;: &quot;Run&quot;,
-    &quot;Python.EEG_RestingState_Pipeline.executor&quot;: &quot;Run&quot;,
-    &quot;Python.ESG_RestingState_Pipeline.executor&quot;: &quot;Run&quot;,
-    &quot;Python.ExploratoryPlots_WrongFiles.executor&quot;: &quot;Run&quot;,
-    &quot;Python.RenameWrongFiles.executor&quot;: &quot;Run&quot;,
-    &quot;Python.TaskEvoked_RestingState_CCACorrelation_CCAWindow.executor&quot;: &quot;Run&quot;,
-    &quot;Python.TaskEvoked_RestingState_CCACorrelation_Parallel.executor&quot;: &quot;Run&quot;,
-    &quot;Python.TaskEvoked_RestingState_CCACorrelation_ShorterWindow.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/data/pt_02569/Python_Cardiac&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.BurstFreq_AcrossCNS_Stats.executor": "Run",
+    "Python.CCA_CorrelationValidation_ttests.executor": "Run",
+    "Python.CCA_Digit_ClusterPermutation_CorticalAndThalamic.executor": "Run",
+    "Python.CCA_Digit_EnvelopeComparison_CorticalAndThalamic.executor": "Run",
+    "Python.Correlation_SummaryTable.executor": "Run",
+    "Python.EEG_Pipeline.executor": "Run",
+    "Python.EEG_RestingState_Pipeline.executor": "Run",
+    "Python.ESG_RestingState_Pipeline.executor": "Run",
+    "Python.ExploratoryPlots_WrongFiles.executor": "Run",
+    "Python.Peaks_Troughs_ByCNSLevel_ByCutOff.executor": "Run",
+    "Python.RankCorrelation_WaveletCountAcrossCNS.executor": "Run",
+    "Python.RenameWrongFiles.executor": "Run",
+    "Python.SNR_EnvelopePeak_Thalamic.executor": "Run",
+    "Python.SNR_EnvelopePeak_Thalamic_Digits.executor": "Run",
+    "Python.SingleTrial_SNR_CorticalSpinal.executor": "Run",
+    "Python.TaskEvoked_RestingState_CCACorrelation_CCAWindow.executor": "Run",
+    "Python.TaskEvoked_RestingState_CCACorrelation_Parallel.executor": "Run",
+    "Python.TaskEvoked_RestingState_CCACorrelation_ShorterWindow.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "/data/pt_02718/HF_Oscillations/EEG&ESG_images"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/EEG&amp;ESG_images" />
       <recent name="$PROJECT_DIR$/EEG_ESG_RestingState" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/Archive" />
+      <recent name="$PROJECT_DIR$/EEG&amp;ESG_images" />
       <recent name="$PROJECT_DIR$/EEG_ESG_RestingState" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.BurstFreq_AcrossCNS_Stats">
-    <configuration name="BurstFreq_AcrossCNS_Stats" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.SingleTrial_SNR_CorticalSpinal">
+    <configuration name="CCA_Digit_ClusterPermutation_CorticalAndThalamic" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="HF_Oscillations" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Publication_Images" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Publication_Images/CCA_Digit_ClusterPermutation_CorticalAndThalamic.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="CCA_Digit_EnvelopeComparison_CorticalAndThalamic" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="HF_Oscillations" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Publication_Images" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Publication_Images/CCA_Digit_EnvelopeComparison_CorticalAndThalamic.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="EEG_Pipeline" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="HF_Oscillations" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/EEG_Pipeline.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="SNR_EnvelopePeak_Thalamic_Digits" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="HF_Oscillations" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/EEG" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/EEG/SNR_EnvelopePeak_Thalamic_Digits.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="SingleTrial_SNR_CorticalSpinal" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -61,95 +174,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/EEG&amp;ESG/BurstFreq_AcrossCNS_Stats.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="CCA_CorrelationValidation_ttests" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="HF_Oscillations" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/EEG_ESG_RestingState" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/EEG_ESG_RestingState/CCA_CorrelationValidation_ttests.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Correlation_SummaryTable" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="HF_Oscillations" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/EEG_ESG_RestingState" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/EEG_ESG_RestingState/Correlation_SummaryTable.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="TaskEvoked_RestingState_CCACorrelation_CCAWindow" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="HF_Oscillations" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/EEG_ESG_RestingState" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/EEG_ESG_RestingState/TaskEvoked_RestingState_CCACorrelation_CCAWindow.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="TaskEvoked_RestingState_CCACorrelation_ShorterWindow" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="HF_Oscillations" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/EEG_ESG_RestingState" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/EEG_ESG_RestingState/TaskEvoked_RestingState_CCACorrelation_ShorterWindow.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/EEG&amp;ESG/SingleTrial_SNR_CorticalSpinal.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -160,11 +185,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.BurstFreq_AcrossCNS_Stats" />
-        <item itemvalue="Python.CCA_CorrelationValidation_ttests" />
-        <item itemvalue="Python.Correlation_SummaryTable" />
-        <item itemvalue="Python.TaskEvoked_RestingState_CCACorrelation_CCAWindow" />
-        <item itemvalue="Python.TaskEvoked_RestingState_CCACorrelation_ShorterWindow" />
+        <item itemvalue="Python.SingleTrial_SNR_CorticalSpinal" />
+        <item itemvalue="Python.EEG_Pipeline" />
+        <item itemvalue="Python.CCA_Digit_EnvelopeComparison_CorticalAndThalamic" />
+        <item itemvalue="Python.CCA_Digit_ClusterPermutation_CorticalAndThalamic" />
+        <item itemvalue="Python.SNR_EnvelopePeak_Thalamic_Digits" />
       </list>
     </recent_temporary>
   </component>

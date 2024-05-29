@@ -242,7 +242,7 @@ if __name__ == '__main__':
                     _, latency_high, amplitude_high = evoked.get_peak(tmin=time_peak - time_edge,
                                                                       tmax=time_peak + time_edge,
                                                                       mode='abs', return_amplitude=True)
-                    snr_high = calculate_snr(evoked, noise_window, time_edge, time_peak)
+                    snr_high = calculate_snr(evoked, noise_window, time_edge, time_peak, data_type.lower())
                 else:
                     latency_high = time_peak
                     amplitude_high = np.nan

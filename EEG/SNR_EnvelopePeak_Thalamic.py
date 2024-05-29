@@ -114,7 +114,7 @@ if __name__ == '__main__':
                 # # Get SNR of HFO
                 noise_window = [-100/1000, -10/1000]
                 # Signal window is divided by 2 inside this function for subcortical data to ensure asymmetric window
-                snr = calculate_snr(evoked.copy(), noise_window, signal_window, sep_latency)
+                snr = calculate_snr(evoked.copy(), noise_window, signal_window, sep_latency, 'subcortical')
                 snr_comp.append(snr)
                 snr_cond[subject-1][c] = snr
 

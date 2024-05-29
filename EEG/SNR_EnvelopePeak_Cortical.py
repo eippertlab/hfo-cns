@@ -118,7 +118,7 @@ if __name__ == '__main__':
 
                 # # Get SNR of HFO
                 noise_window = [-100/1000, -10/1000]
-                snr = calculate_snr(evoked.copy(), noise_window, signal_window, sep_latency)
+                snr = calculate_snr(evoked.copy(), noise_window, signal_window, sep_latency, 'cortical')
                 snr_comp.append(snr)
                 snr_cond[subject-1][c] = snr
 
