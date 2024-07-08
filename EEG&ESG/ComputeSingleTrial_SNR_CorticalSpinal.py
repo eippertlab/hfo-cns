@@ -1,7 +1,6 @@
 # Get the single trial SNR for each subject and condition
 # Looking at only spinal and cortical data
 # Tricky: CCA data has some trials excluded based on annotations, need to exclude same trials from low freq epochs
-# FInd time of triggers that don't match?
 
 import mne
 import os
@@ -15,7 +14,7 @@ import matplotlib as mpl
 mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
-    data_types = ['Cortical', 'Spinal']  # Can be Cortical, Spinal here or all
+    data_types = ['Spinal', 'Cortical']  # Can be Cortical, Spinal here or all
     # Difficulties with LF-SEP timings in Thalamic - leave out
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
@@ -25,7 +24,7 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epo_cca_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
-    srmr_nr = 1
+    srmr_nr = 2
     sfreq = 5000
     freq_band = 'sigma'
     timing_path = "/data/pt_02718/Time_Windows.xlsx"  # Contains important info about experiment
@@ -58,9 +57,6 @@ if __name__ == '__main__':
             trigger_name = cond_info.trigger_name
 
             for subject in subjects:  # All subjects
-                # Np.nan arrays - will stay nan for bottom indices equal to however many trials were dropped
-                low_snr = np.full(2000, np.nan)
-                high_snr = np.full(2000, np.nan)
                 noise_window = [-100 / 1000, -10 / 1000]
 
                 eeg_chans, esg_chans, bipolar_chans = get_channels(subject, False, False, srmr_nr)
@@ -134,9 +130,13 @@ if __name__ == '__main__':
                     raw_withbadmarked = mne.io.read_raw_fif(input_path_bad + fname_bad, preload=True)
                     events_bad, event_ids_bad = mne.events_from_annotations(raw_withbadmarked)
                     event_id_dict_bad = {key: value for key, value in event_ids_bad.items() if key == trigger_name}
-                    epochs_withbads = mne.Epochs(raw_withbadmarked, events_bad, event_id=event_id_dict_bad,
+                    epochs_withoutbads = mne.Epochs(raw_withbadmarked, events_bad, event_id=event_id_dict_bad,
                                                  tmin=iv_epoch[0], tmax=iv_epoch[1]-1/1000,
                                                  baseline=tuple(iv_baseline), preload=True, reject_by_annotation=True)
+                    epochs_withbads = mne.Epochs(raw_withbadmarked, events_bad, event_id=event_id_dict_bad,
+                                                    tmin=iv_epoch[0], tmax=iv_epoch[1] - 1 / 1000,
+                                                    baseline=tuple(iv_baseline), preload=True,
+                                                    reject_by_annotation=False)
 
                 elif data_type == 'Spinal':
                     if srmr_nr == 1:
@@ -174,11 +174,12 @@ if __name__ == '__main__':
                     raw_withbadmarked = mne.io.read_raw_fif(input_path_bad + fname_bad, preload=True)
                     events_bad, event_ids_bad = mne.events_from_annotations(raw_withbadmarked)
                     event_id_dict_bad = {key: value for key, value in event_ids_bad.items() if key == trigger_name}
-                    epochs_withbads = mne.Epochs(raw_withbadmarked, events_bad, event_id=event_id_dict_bad, tmin=iv_epoch[0], tmax=iv_epoch[1]-1/1000,
+                    epochs_withoutbads = mne.Epochs(raw_withbadmarked, events_bad, event_id=event_id_dict_bad, tmin=iv_epoch[0], tmax=iv_epoch[1]-1/1000,
                                         baseline=tuple(iv_baseline), preload=True, reject_by_annotation=True)
-
-                # Select correct channel for raw ESG data
-                epochs_low = epochs_low.pick_channels(channel)
+                    epochs_withbads = mne.Epochs(raw_withbadmarked, events_bad, event_id=event_id_dict_bad,
+                                                    tmin=iv_epoch[0], tmax=iv_epoch[1] - 1 / 1000,
+                                                    baseline=tuple(iv_baseline), preload=True,
+                                                    reject_by_annotation=False)
 
                 # Get correct channel for cca HFO data
                 channel_no = df.loc[subject, f"{freq_band}_{cond_name}_comp"]
@@ -186,66 +187,90 @@ if __name__ == '__main__':
                     channel_cca = f'Cor{channel_no}'
                     inv = df.loc[subject, f"{freq_band}_{cond_name}_flip"]
                     epochs = mne.read_epochs(input_path + fname, preload=True)
-                    epochs = epochs.pick_channels([channel_cca])
+                    epochs = epochs.pick([channel_cca])
                     if inv == 'T':
                         epochs.apply_function(invert, picks=channel_cca)
 
                 # Locate bad trials so we can drop the same ones from the low freq data as have been dropped from the
                 # HF data before we do CCA
-                bad_trials = [ix for ix, log in enumerate(epochs_withbads.drop_log) if log == ('BAD_amp',)]
-                # print(bad_trials)
-                # print(epochs_low.drop(bad_trials, reason='BAD_amp').__len__())
+                # print(epochs_low.__len__())
                 # print(epochs.__len__())
                 # print(epochs_withbads.__len__())
+                # epochs.selection has indices of triggers as part of larger ~3300 annotations
+                # Need to map the triggers to the trial space running from 0 to ~2000
+                epochs_localindices = []
+                n = 0
+                for index in epochs_withbads.selection:
+                    if index in epochs_withoutbads.selection:
+                        epochs_localindices.append(n)
+                    n+=1
+                # Drop trials that are excluded in the high frequency data from the low frequency stuff
+                diff = (set(epochs_localindices) | set(np.arange(0, epochs_low.__len__()))) - (set(epochs_localindices) & set(np.arange(0, epochs_low.__len__())))
+                epochs_low.drop(list(diff))
 
                 # Crop
+                epochs_low_beforecrop = epochs_low.copy()  # For saving the epochs structure for later images - need all channels and uncropped data
+
+                # Select correct channel for raw ESG data
+                epochs_low = epochs_low.pick(channel)
                 epochs_low.crop(tmin=-0.1, tmax=0.07)
-                epochs.crop(tmin=-0.1, tmax=0.07)
+
+                if channel_no != 0:
+                    epochs.crop(tmin=-0.1, tmax=0.07)
+
+                    if epochs_low.__len__() != epochs.__len__():
+                        print(len(epochs_localindices))
+                        print(epochs_low.__len__())
+                        print(epochs.__len__())
+                        raise AssertionError('Number of HF and LF trials should be equal')
 
                 # Get timing and amplitude of both peaks
                 # Look negative for low freq N20, N22, N13, look positive for P39
                 # For HFO polarity is not important
-                for n in np.arange(0, epochs.__len__()):
-                    # Low Freq
+                # Np.nan arrays - as big as however many trials were kept
+                low_snr = np.full(epochs_low.__len__(), np.nan)
+                high_snr = np.full(epochs_low.__len__(), np.nan)
+                for n in np.arange(0, epochs_low.__len__()):
+                    ### Low Freq ###
                     evoked_low = epochs_low[n].average()
-                    # First check there is a negative/positive potential to be found
-                    data_low = evoked_low.copy().crop(tmin=time_peak-time_edge_neg, tmax=time_peak+time_edge_pos).get_data().reshape(-1)
+                    # P39
                     if data_type == 'Cortical' and cond_name in ['tibial', 'tib_mixed']:
-                        if max(data_low) > 0:
-                            _, latency_low, amplitude_low = evoked_low.get_peak(tmin=time_peak - time_edge_neg,
-                                                                                 tmax=time_peak + time_edge_pos,
-                                                                                 mode='pos', return_amplitude=True)
+                        _, latency_low, amplitude_low = evoked_low.get_peak(tmin=time_peak - time_edge_neg,
+                                                                             tmax=time_peak + time_edge_pos,
+                                                                             mode='pos', return_amplitude=True,
+                                                                            strict=False)
+                        # Since strict is false, make sure amplitude is positive, otherwise leave as nan
+                        if amplitude_low > 0:
+                            data = evoked_low.copy().crop(tmin=noise_window[0], tmax=noise_window[1]).get_data()
+                            sd = data.std()
+                            snr_low = abs(amplitude_low / sd)
                         else:
-                            latency_low = time_peak
-                            amplitude_low = np.nan
+                            snr_low = np.nan
+                    # N20, N22, N13
                     else:
-                        if min(data_low) < 0:
-                            _, latency_low, amplitude_low = evoked_low.get_peak(tmin=time_peak - time_edge_neg,
-                                                                                tmax=time_peak + time_edge_pos,
-                                                                                mode='neg', return_amplitude=True)
+                        _, latency_low, amplitude_low = evoked_low.get_peak(tmin=time_peak - time_edge_neg,
+                                                                            tmax=time_peak + time_edge_pos,
+                                                                            mode='neg', return_amplitude=True,
+                                                                            strict=False)
+                        # Since strict is false, make sure amplitude is negative, otherwise leave as nan
+                        if amplitude_low < 0:
+                            data = evoked_low.copy().crop(tmin=noise_window[0], tmax=noise_window[1]).get_data()
+                            sd = data.std()
+                            snr_low = abs(amplitude_low / sd)
                         else:
-                            latency_low = time_peak
-                            amplitude_low = np.nan
+                            snr_low = np.nan
 
-                    # High Freq
-                    evoked = epochs[n].average()
+                    ### High Freq ###
                     if channel_no != 0:
+                        evoked = epochs[n].average()
                         _, latency_high, amplitude_high = evoked.get_peak(tmin=time_peak - time_edge_neg,
                                                                           tmax=time_peak + time_edge_pos,
                                                                           mode='abs', return_amplitude=True)
+                        data = evoked.copy().crop(tmin=noise_window[0], tmax=noise_window[1]).get_data()
+                        sd = data.std()
+                        snr_high = abs(amplitude_high / sd)
                     else:
-                        latency_high = np.nan
-                        amplitude_high = np.nan
-
-                    # Low freq SNR
-                    data = evoked_low.copy().crop(tmin=noise_window[0], tmax=noise_window[1]).get_data()
-                    sd = data.std()
-                    snr_low = abs(amplitude_low / sd)
-
-                    # High freq SNR
-                    data = evoked.copy().crop(tmin=noise_window[0], tmax=noise_window[1]).get_data()
-                    sd = data.std()
-                    snr_high = abs(amplitude_high / sd)
+                        snr_high = np.nan
 
                     low_snr[n] = snr_low
                     high_snr[n] = snr_high
@@ -257,3 +282,6 @@ if __name__ == '__main__':
                 afile = open(save_path + f'snr_low_{freq_band}_{cond_name}_{data_type.lower()}.pkl', 'wb')
                 pickle.dump(low_snr, afile)
                 afile.close()
+
+                epochs_low_beforecrop.save(save_path+f'{data_type.lower()}_lowfreq_epochs_{freq_band}_{cond_name}',
+                                           overwrite=True)

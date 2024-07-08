@@ -20,12 +20,12 @@ def run_CCA_restingstate(window_times, epochs):
     # Epo av is no_times x no_channels (10x40)
     # Want to repeat this to form an array thats no. observations x no.channels (20000x40)
     # Need to repeat the array, no_trials/times amount along the y axis
-    avg_matrix = np.tile(epo_av, (int((np.shape(epochs.get_data())[0])), 1))
+    avg_matrix = np.tile(epo_av, (int((np.shape(epochs.get_data(copy=True))[0])), 1))
     avg_matrix = avg_matrix.T  # Need to transpose for correct form for function - channels x observations
 
     ##### Single trial matrix
-    epo_cca_data = epo_cca.get_data()
-    epo_data = epochs.get_data()
+    epo_cca_data = epo_cca.get_data(copy=True)
+    epo_data = epochs.get_data(copy=True)
 
     # 0 to access number of epochs, 1 to access number of channels
     # channels x observations
@@ -47,8 +47,8 @@ def run_CCA_restingstate(window_times, epochs):
     A_st = np.cov(st_matrix) @ W_st
 
     # Reshape - (900, 2000, 9)
-    no_times_long = np.shape(epochs.get_data())[2]
-    no_epochs = np.shape(epochs.get_data())[0]
+    no_times_long = np.shape(epochs.get_data(copy=True))[2]
+    no_epochs = np.shape(epochs.get_data(copy=True))[0]
 
     # Perform reshape
     CCA_comps = np.reshape(CCA_concat, (all_components, no_times_long, no_epochs), order='F')

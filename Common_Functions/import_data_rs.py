@@ -134,7 +134,7 @@ def import_data(subject, condition, srmr_nr, sampling_rate, esg_flag):
             interpol_window = [tstart_esg, tmax_esg]
             PCHIP_kwargs = dict(
                 debug_mode=False, interpol_window_sec=interpol_window,
-                trigger_indices=trigger_points, fs=sampling_rate_og
+                trigger_indices=trigger_points, fs=sampling_rate
             )
             raw_concat.apply_function(PCHIP_interpolation, picks=esg_chans, **PCHIP_kwargs,
                                n_jobs=len(esg_chans))
@@ -147,7 +147,7 @@ def import_data(subject, condition, srmr_nr, sampling_rate, esg_flag):
             interpol_window = [tstart_eeg, tmax_eeg]
             PCHIP_kwargs = dict(
                 debug_mode=False, interpol_window_sec=interpol_window,
-                trigger_indices=trigger_points, fs=sampling_rate_og
+                trigger_indices=trigger_points, fs=sampling_rate
             )
             raw_concat.apply_function(PCHIP_interpolation, picks=eeg_chans, **PCHIP_kwargs,
                                n_jobs=len(eeg_chans))

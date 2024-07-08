@@ -137,8 +137,8 @@ if __name__ == '__main__':
                     channels = esg_chans
                 elif data_type in ['subcortical', 'cortical']:
                     channels = eeg_chans
-                epochs_trig_full = epochs_trig_full.pick_channels(channels, ordered=True)
-                epochs_rest_full = epochs_rest_full.pick_channels(channels, ordered=True)
+                epochs_trig_full = epochs_trig_full.pick(channels)
+                epochs_rest_full = epochs_rest_full.pick(channels)
 
                 ind_rest = epochs_rest_full.time_as_index(window_times)
                 ind_trig = epochs_trig_full.time_as_index(window_times)
