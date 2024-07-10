@@ -16,12 +16,10 @@ import pandas as pd
 import pickle
 
 
-def run_CCA(subject, condition, srmr_nr, freq_band):
+def run_CCA(subject, condition, srmr_nr, freq_band, freq_type):
     if freq_band != 'sigma':
         raise RuntimeError('Frequency band must be set to sigma, kappa is depreciated')
 
-    if srmr_nr != 1:
-        raise RuntimeError('Error: Not implemented for srmr_nr 2')
     plot_graphs = True
 
     # Set variables
@@ -30,7 +28,6 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
     trigger_name = cond_info.trigger_name
     subject_id = f'sub-{str(subject).zfill(3)}'
 
-    potential_path = f"/data/p_02068/SRMR1_experiment/analyzed_data/esg/{subject_id}/"
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)
     iv_baseline = [df.loc[df['var_name'] == 'baseline_start', 'var_value'].iloc[0],
@@ -42,10 +39,24 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
     df_timing = pd.read_excel(timing_path)
 
     # Select the right files based on the data_string
-    input_path = "/data/pt_02718/tmp_data/freq_banded_esg/" + subject_id + "/"
-    fname = f"{freq_band}_{cond_name}.fif"
-    save_path = "/data/pt_02718/tmp_data/cca/" + subject_id + "/"
+    if freq_type == 'high':
+        input_path = "/data/pt_02718/tmp_data/freq_banded_esg/" + subject_id + "/"
+        fname = f"{freq_band}_{cond_name}.fif"
+        save_path = "/data/pt_02718/tmp_data/cca/" + subject_id + "/"
+        append = ''
+    else:
+        input_path = "/data/pt_02718/tmp_data/ssp_cleaned/" + subject_id + "/"
+        fname = f'ssp6_cleaned_{cond_name}.fif'
+        save_path = "/data/pt_02718/tmp_data/cca_low/" + subject_id + "/"
+        append = '_low'
     os.makedirs(save_path, exist_ok=True)
+
+    figure_path_spatial = f'/data/p_02718/Images/CCA{append}/ComponentIsopotentialPlots/{subject_id}/'
+    os.makedirs(figure_path_spatial, exist_ok=True)
+    figure_path_time = f'/data/p_02718/Images/CCA{append}/ComponentTimePlots/{subject_id}/'
+    os.makedirs(figure_path_time, exist_ok=True)
+    figure_path = f'/data/p_02718/Images/CCA{append}/ComponentPlots/{subject_id}/'
+    os.makedirs(figure_path, exist_ok=True)
 
     brainstem_chans, cervical_chans, lumbar_chans, ref_chan = get_esg_channels()
 
@@ -168,9 +179,6 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
     rfile.close()
 
     ################################ Plotting Graphs #######################################
-    figure_path_spatial = f'/data/p_02718/Images/CCA/ComponentIsopotentialPlots/{subject_id}/'
-    os.makedirs(figure_path_spatial, exist_ok=True)
-
     if plot_graphs:
         ####### Spinal Isopotential Plots for the first 4 components ########
         # fig, axes = plt.figure()
@@ -198,10 +206,6 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
         plt.close(fig)
 
         ############ Time Course of First 4 components ###############
-        # cca_epochs and cca_epochs_d both already baseline corrected before this point
-        figure_path_time = f'/data/p_02718/Images/CCA/ComponentTimePlots/{subject_id}/'
-        os.makedirs(figure_path_time, exist_ok=True)
-
         fig = plt.figure()
         for icomp in np.arange(0, 4):
             plt.subplot(2, 2, icomp + 1, title=f'Component {icomp + 1}, r={r[icomp]:.3f}')
@@ -222,48 +226,15 @@ def run_CCA(subject, condition, srmr_nr, freq_band):
             plt.savefig(figure_path_time + f'{freq_band}_{cond_name}.png')
         plt.close(fig)
 
-        # ######################## Plot image for cca_epochs ############################
-        # # cca_epochs and cca_epochs_d both already baseline corrected before this point
-        # figure_path_st = f'/data/p_02718/Images/CCA/ComponentSinglePlots/{subject_id}/'
-        # os.makedirs(figure_path_st, exist_ok=True)
-        #
-        # fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(nrows=2, ncols=2)
-        # axes = [ax1, ax2, ax3, ax4]
-        # cropped = cca_epochs.copy().crop(tmin=-0.025, tmax=0.065)
-        # cmap = mpl.colors.ListedColormap(["blue", "green", "red"])
-        #
-        # for icomp in np.arange(0, 4):
-        #     cropped.plot_image(picks=f'Cor{icomp + 1}', combine=None, cmap='jet', evoked=False, show=False,
-        #                        axes=axes[icomp], title=f'Component {icomp + 1}', colorbar=False, group_by=None,
-        #                        vmin=-1.6, vmax=1.6, units=dict(eeg='V'), scalings=dict(eeg=1))
-        #
-        # plt.tight_layout()
-        # fig.subplots_adjust(right=0.85)
-        # ax5 = fig.add_axes([0.9, 0.1, 0.01, 0.8])
-        # norm = mpl.colors.Normalize(vmin=-1.6, vmax=1.6)
-        # # mpl.colorbar.ColorbarBase(ax5, cmap=cmap, norm=norm, spacing='proportional')
-        # mpl.colorbar.ColorbarBase(ax5, cmap='jet', norm=norm)
-        # # has to be as a list - starts with x, y coordinates for start and then width and height in % of figure width
-        # plt.savefig(figure_path_st + f'{freq_band}_{cond_name}.png')
-        # plt.close(fig)
-        # # plt.show()
-
         ############################ Combine to one Image ##########################
-        figure_path = f'/data/p_02718/Images/CCA/ComponentPlots/{subject_id}/'
-        os.makedirs(figure_path, exist_ok=True)
-
         spatial = plt.imread(figure_path_spatial + f'{freq_band}_{cond_name}.png')
         time = plt.imread(figure_path_time + f'{freq_band}_{cond_name}.png')
-        # single_trial = plt.imread(figure_path_st + f'{freq_band}_{cond_name}.png')
 
         fig, axes = plt.subplots(1, 2, figsize=(10, 6))
         axes[0].imshow(time)
         axes[0].axis('off')
         axes[1].imshow(spatial)
         axes[1].axis('off')
-        # axes[1, 0].imshow(single_trial)
-        # axes[1, 0].axis('off')
-        # axes[1, 1].axis('off')
 
         plt.subplots_adjust(top=0.95, wspace=0, hspace=0)
 

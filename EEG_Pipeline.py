@@ -15,7 +15,7 @@ from EEG.run_CCA_brain_thalamic import run_CCA_thalamic
 from EEG.run_CCA_brain_thalamic_2 import run_CCA_thalamic2
 
 if __name__ == '__main__':
-    srmr_nr = 2  # Set the experiment number
+    srmr_nr = 1  # Set the experiment number
 
     if srmr_nr == 1:
         n_subjects = 36  # Number of subjects
@@ -42,6 +42,7 @@ if __name__ == '__main__':
     split_bands_flag = False
 
     ######## 5. Run CCA on cortical activity ########
+    freq_type = 'low'
     CCA_flag = True
 
     ######## 6. Run CCA on subcortical activity  ########
@@ -91,13 +92,13 @@ if __name__ == '__main__':
             for subject in subjects:
                 for condition in conditions:
                     for freq_band in ['sigma']:
-                        run_CCA(subject, condition, srmr_nr, freq_band, sampling_rate)
+                        run_CCA(subject, condition, srmr_nr, freq_band, sampling_rate, freq_type)
         elif srmr_nr == 2:
             conditions_d2 = [2, 4]  # only need to specify digits, takes care of mixed nerve within other script
             for subject in subjects:
                 for condition in conditions_d2:
                     for freq_band in ['sigma']:
-                        run_CCA2(subject, condition, srmr_nr, freq_band, sampling_rate)
+                        run_CCA2(subject, condition, srmr_nr, freq_band, sampling_rate, freq_type)
 
     ###################################################
     # Run CCA on subcortical activity - all trials
@@ -107,10 +108,10 @@ if __name__ == '__main__':
             for subject in subjects:
                 for condition in conditions:
                     for freq_band in ['sigma']:
-                        run_CCA_thalamic(subject, condition, srmr_nr, freq_band, sampling_rate)
+                        run_CCA_thalamic(subject, condition, srmr_nr, freq_band, sampling_rate, freq_type)
         elif srmr_nr == 2:
             conditions_d2 = [2, 4]  # only need to specify digits, takes care of mixed nerve within other script
             for subject in subjects:
                 for condition in conditions_d2:
                     for freq_band in ['sigma']:
-                        run_CCA_thalamic2(subject, condition, srmr_nr, freq_band, sampling_rate)
+                        run_CCA_thalamic2(subject, condition, srmr_nr, freq_band, sampling_rate, freq_type)

@@ -14,7 +14,7 @@ from ESG.run_CCA_spinal import run_CCA
 from ESG.run_CCA_spinal_2 import run_CCA2
 
 if __name__ == '__main__':
-    srmr_nr = 2  # Set the experiment number
+    srmr_nr = 1  # Set the experiment number
 
     if srmr_nr == 1:
         n_subjects = 36  # Number of subjects
@@ -46,6 +46,7 @@ if __name__ == '__main__':
     split_bands_flag = False
 
     ######### 6. Run CCA on each frequency band ##########
+    freq_type = 'low'
     CCA_flag = True
 
     ############################################
@@ -100,10 +101,10 @@ if __name__ == '__main__':
             for subject in subjects:
                 for condition in conditions:
                     for freq_band in ['sigma']:
-                        run_CCA(subject, condition, srmr_nr, freq_band)
+                        run_CCA(subject, condition, srmr_nr, freq_band, freq_type)
         elif srmr_nr == 2:
             conditions_d2 = [2, 4]  # only need to specify digits, takes care of mixed nerve within other script
             for subject in subjects:
                 for condition in conditions_d2:
                     for freq_band in ['sigma']:
-                        run_CCA2(subject, condition, srmr_nr, freq_band)
+                        run_CCA2(subject, condition, srmr_nr, freq_band, freq_type)

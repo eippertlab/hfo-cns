@@ -25,8 +25,12 @@ if __name__ == '__main__':
     save_to_excel = True  # If we want to save the SNR values on each run
 
     freq_band = 'sigma'
-    data_type = 'spinal'  # cortical, subcortical or spinal
+    data_type = 'subcortical'  # cortical, subcortical or spinal
     srmr_nr = 2
+    re_ref = True
+
+    if re_ref == True and data_type == 'spinal' or data_type == 'subcortical':
+        raise RuntimeError('Reref cannot be done with data type spinal or subcortical')
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)  # 1 through 36 to access subject data
@@ -42,8 +46,12 @@ if __name__ == '__main__':
 
     if data_type == 'cortical':
         stem = 'cort'
-        visibility_fname = f'/data/pt_02718/tmp_data{append}/Visibility_Updated_LF.xlsx'
-        figure_path = f'/data/p_02718/Images{append}/EEG_Cort/SNR&EnvelopePeak/'
+        if re_ref:
+            visibility_fname = f'/data/pt_02718/tmp_data{append}/Visibility_Updated_LF_reref.xlsx'
+            figure_path = f'/data/p_02718/Images{append}/EEG_Cort/SNR&EnvelopePeak_reref/'
+        else:
+            visibility_fname = f'/data/pt_02718/tmp_data{append}/Visibility_Updated_LF.xlsx'
+            figure_path = f'/data/p_02718/Images{append}/EEG_Cort/SNR&EnvelopePeak/'
         input_path = f"/data/pt_02718/tmp_data{append}/freq_banded_eeg/"
     elif data_type == 'subcortical':
         stem = 'sub'
@@ -91,6 +99,9 @@ if __name__ == '__main__':
             subject_id = f'sub-{str(subject).zfill(3)}'
             fname = f"{subject_id}/{freq_band}_{cond_name}.fif"
             raw = mne.io.read_raw_fif(input_path + fname, preload=True)
+
+            if data_type == 'cortical' and re_ref is True:
+                raw.set_eeg_reference(ref_channels='average')
             events, event_ids = mne.events_from_annotations(raw)
             event_id_dict = {key: value for key, value in event_ids.items() if key == trigger_name}
             epochs = mne.Epochs(raw, events, event_id=event_id_dict, tmin=iv_epoch[0], tmax=iv_epoch[1],

@@ -16,7 +16,7 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 import pickle
 
 
-def run_CCA2(subject, condition, srmr_nr, freq_band, sfreq):
+def run_CCA2(subject, condition, srmr_nr, freq_band, sfreq, freq_type):
     # Read in locations of channels
     plot_graphs = True
 
@@ -42,11 +42,26 @@ def run_CCA2(subject, condition, srmr_nr, freq_band, sfreq):
     df_timing = pd.read_excel(timing_path)
 
     # Select the right files based on the data_string
-    input_path = "/data/pt_02718/tmp_data_2/freq_banded_eeg/" + subject_id + "/"
-    fname_dig = f"{freq_band}_{cond_name_dig}.fif"
-    fname_mixed = f"{freq_band}_{cond_name_mixed}.fif"
-    save_path = "/data/pt_02718/tmp_data_2/cca_eeg/" + subject_id + "/"
+    if freq_type == 'high':
+        input_path = "/data/pt_02718/tmp_data_2/freq_banded_eeg/" + subject_id + "/"
+        fname_dig = f"{freq_band}_{cond_name_dig}.fif"
+        fname_mixed = f"{freq_band}_{cond_name_mixed}.fif"
+        save_path = "/data/pt_02718/tmp_data_2/cca_eeg/" + subject_id + "/"
+        append = ''
+    else:
+        input_path = "/data/pt_02718/tmp_data_2/imported/" + subject_id + "/"
+        fname_dig = f'noStimart_sr{sfreq}_{cond_name_dig}_withqrs_eeg.fif'
+        fname_mixed = f'noStimart_sr{sfreq}_{cond_name_mixed}_withqrs_eeg.fif'
+        save_path = "/data/pt_02718/tmp_data_2/cca_eeg_low/" + subject_id + "/"
+        append = '_low'
     os.makedirs(save_path, exist_ok=True)
+
+    figure_path_spatial = f'/data/p_02718/Images_2/CCA_eeg{append}/ComponentIsopotentialPlots/{subject_id}/'
+    os.makedirs(figure_path_spatial, exist_ok=True)
+    figure_path_time = f'/data/p_02718/Images_2/CCA_eeg{append}/ComponentTimePlots/{subject_id}/'
+    os.makedirs(figure_path_time, exist_ok=True)
+    figure_path = f'/data/p_02718/Images_2/CCA_eeg{append}/ComponentPlots/{subject_id}/'
+    os.makedirs(figure_path, exist_ok=True)
 
     eeg_chans, esg_chans, bipolar_chans = get_channels(subject, False, False, srmr_nr)
 
@@ -59,7 +74,6 @@ def run_CCA2(subject, condition, srmr_nr, freq_band, sfreq):
     montage = mne.channels.read_custom_montage(montage_path + montage_name)
     for raw in [raw_dig, raw_mixed]:
         raw.set_montage(montage, on_missing="ignore")
-        # idx_by_type = mne.channel_indices_by_type(raw.info, picks=eeg_chans)
 
     # now create epochs based on the trigger names
     # Mixed data
@@ -90,18 +104,6 @@ def run_CCA2(subject, condition, srmr_nr, freq_band, sfreq):
     else:
         print('Invalid condition name attempted for use')
         exit()
-
-    # Drop bad channels  -  if a channel is bad in mixed, drop it from mixed & digits
-    # if raw_mixed.info['bads'] or raw_dig.info['bads']:
-    #     for channel in raw_mixed.info['bads'] + raw_dig.info['bads']:
-    #         if channel in eeg_chans:
-    #             epochs_d.drop_channels(ch_names=[channel])
-    #             epochs_m.drop_channels(ch_names=[channel])
-    # if raw_mixed.info['bads']:
-    #     for channel in raw_mixed.info['bads']:
-    #         if channel in esg_chans:
-    #             # epochs_d.drop_channels(ch_names=[channel])
-    #             epochs_m.drop_channels(ch_names=[channel])
 
     # We plot for the mixed data so we want this below - need info object after channels dropped
     idx_by_type = mne.channel_indices_by_type(epochs_m.info, picks=eeg_chans)
@@ -220,17 +222,12 @@ def run_CCA2(subject, condition, srmr_nr, freq_band, sfreq):
     rfile.close()
 
     ################################ Plotting Graphs #######################################
-    figure_path_spatial = f'/data/p_02718/Images_2/CCA_eeg/ComponentIsopotentialPlots/{subject_id}/'
-    os.makedirs(figure_path_spatial, exist_ok=True)
-
     if plot_graphs:
         ####### Isopotential Plots for the first 4 components ########
-        # fig, axes = plt.figure()
         fig, axes = plt.subplots(2, 2)
         axes_unflat = axes
         axes = axes.flatten()
         for icomp in np.arange(0, 4):  # Plot for each of four components
-            # plt.subplot(2, 2, icomp + 1, title=f'Component {icomp + 1}')
             chan_labels = epochs_m.ch_names
             mne.viz.plot_topomap(data=A_st[:, icomp], pos=res, ch_type='eeg', sensors=True, names=None,
                                  contours=6, outlines='head', sphere=None, image_interp='cubic',
@@ -245,10 +242,6 @@ def run_CCA2(subject, condition, srmr_nr, freq_band, sfreq):
         plt.close(fig)
 
         ############ Time Course of First 4 components ###############
-        # cca_epochs and cca_epochs_d both already baseline corrected before this point
-        figure_path_time = f'/data/p_02718/Images_2/CCA_eeg/ComponentTimePlots/{subject_id}/'
-        os.makedirs(figure_path_time, exist_ok=True)
-
         fig = plt.figure()
         for icomp in np.arange(0, 4):
             plt.subplot(2, 2, icomp + 1, title=f'Component {icomp + 1}, r={r[icomp]:.3f}')
@@ -269,21 +262,14 @@ def run_CCA2(subject, condition, srmr_nr, freq_band, sfreq):
         plt.close(fig)
 
         ############################ Combine to one Image ##########################
-        figure_path = f'/data/p_02718/Images_2/CCA_eeg/ComponentPlots/{subject_id}/'
-        os.makedirs(figure_path, exist_ok=True)
-
         spatial = plt.imread(figure_path_spatial + f'{freq_band}_{cond_name_mixed}.png')
         time = plt.imread(figure_path_time + f'{freq_band}_{cond_name_mixed}.png')
-        # single_trial = plt.imread(figure_path_st + f'{freq_band}_{cond_name}.png')
 
         fig, axes = plt.subplots(1, 2, figsize=(10, 6))
         axes[0].imshow(time)
         axes[0].axis('off')
         axes[1].imshow(spatial)
         axes[1].axis('off')
-        # axes[1, 0].imshow(single_trial)
-        # axes[1, 0].axis('off')
-        # axes[1, 1].axis('off')
 
         plt.subplots_adjust(top=0.95, wspace=0, hspace=0)
 

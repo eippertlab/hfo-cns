@@ -15,12 +15,10 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 import pickle
 
 
-def run_CCA(subject, condition, srmr_nr, freq_band, sfreq):
+def run_CCA(subject, condition, srmr_nr, freq_band, sfreq, freq_type):
     if freq_band != 'sigma':
         raise RuntimeError('Frequency band must be set to sigma, kappa is depreciated')
 
-    if srmr_nr != 1:
-        raise RuntimeError('Error: Not implemented for srmr_nr 2')
     # Read in locations of channels
     plot_graphs = True
 
@@ -41,10 +39,24 @@ def run_CCA(subject, condition, srmr_nr, freq_band, sfreq):
     df_timing = pd.read_excel(timing_path)
 
     # Select the right files based on the data_string
-    input_path = "/data/pt_02718/tmp_data/freq_banded_eeg/" + subject_id + "/"
-    fname = f"{freq_band}_{cond_name}.fif"
-    save_path = "/data/pt_02718/tmp_data/cca_eeg/" + subject_id + "/"
+    if freq_type == 'high':
+        input_path = "/data/pt_02718/tmp_data/freq_banded_eeg/" + subject_id + "/"
+        fname = f"{freq_band}_{cond_name}.fif"
+        save_path = "/data/pt_02718/tmp_data/cca_eeg/" + subject_id + "/"
+        append = ''
+    else:
+        input_path = "/data/pt_02718/tmp_data/imported/" + subject_id + "/"
+        fname = f'noStimart_sr{sfreq}_{cond_name}_withqrs_eeg.fif'
+        save_path = "/data/pt_02718/tmp_data/cca_eeg_low/" + subject_id + "/"
+        append = '_low'
     os.makedirs(save_path, exist_ok=True)
+
+    figure_path_spatial = f'/data/p_02718/Images/CCA_eeg{append}/ComponentIsopotentialPlots/{subject_id}/'
+    os.makedirs(figure_path_spatial, exist_ok=True)
+    figure_path_time = f'/data/p_02718/Images/CCA_eeg{append}/ComponentTimePlots/{subject_id}/'
+    os.makedirs(figure_path_time, exist_ok=True)
+    figure_path = f'/data/p_02718/Images/CCA_eeg{append}/ComponentPlots/{subject_id}/'
+    os.makedirs(figure_path, exist_ok=True)
 
     eeg_chans, esg_chans, bipolar_chans = get_channels(subject, False, False, srmr_nr)
 
@@ -175,9 +187,6 @@ def run_CCA(subject, condition, srmr_nr, freq_band, sfreq):
     rfile.close()
 
     ################################ Plotting Graphs #######################################
-    figure_path_spatial = f'/data/p_02718/Images/CCA_eeg/ComponentIsopotentialPlots/{subject_id}/'
-    os.makedirs(figure_path_spatial, exist_ok=True)
-
     if plot_graphs:
         ####### Isopotential Plots for the first 4 components ########
         # fig, axes = plt.figure()
@@ -200,10 +209,6 @@ def run_CCA(subject, condition, srmr_nr, freq_band, sfreq):
         plt.close(fig)
 
         ############ Time Course of First 4 components ###############
-        # cca_epochs and cca_epochs_d both already baseline corrected before this point
-        figure_path_time = f'/data/p_02718/Images/CCA_eeg/ComponentTimePlots/{subject_id}/'
-        os.makedirs(figure_path_time, exist_ok=True)
-
         fig = plt.figure()
         for icomp in np.arange(0, 4):
             plt.subplot(2, 2, icomp + 1, title=f'Component {icomp + 1}, r={r[icomp]:.3f}')
@@ -224,9 +229,6 @@ def run_CCA(subject, condition, srmr_nr, freq_band, sfreq):
         plt.close(fig)
 
         ############################ Combine to one Image ##########################
-        figure_path = f'/data/p_02718/Images/CCA_eeg/ComponentPlots/{subject_id}/'
-        os.makedirs(figure_path, exist_ok=True)
-
         spatial = plt.imread(figure_path_spatial + f'{freq_band}_{cond_name}.png')
         time = plt.imread(figure_path_time + f'{freq_band}_{cond_name}.png')
         # single_trial = plt.imread(figure_path_st + f'{freq_band}_{cond_name}.png')
