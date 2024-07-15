@@ -61,6 +61,8 @@ def run_CCA_thalamic(subject, condition, srmr_nr, freq_band, sfreq, freq_type):
     eeg_chans, esg_chans, bipolar_chans = get_channels(subject, False, False, srmr_nr)
 
     raw = mne.io.read_raw_fif(input_path + fname, preload=True)
+    if freq_type == 'low':
+        raw.filter(l_freq=1, h_freq=350)
 
     # Set montage
     montage_path = '/data/pt_02718/'

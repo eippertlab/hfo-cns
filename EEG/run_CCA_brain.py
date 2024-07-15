@@ -61,12 +61,14 @@ def run_CCA(subject, condition, srmr_nr, freq_band, sfreq, freq_type):
     eeg_chans, esg_chans, bipolar_chans = get_channels(subject, False, False, srmr_nr)
 
     raw = mne.io.read_raw_fif(input_path + fname, preload=True)
-
     # Set montage
     montage_path = '/data/pt_02718/'
     montage_name = 'electrode_montage_eeg_10_5.elp'
     montage = mne.channels.read_custom_montage(montage_path + montage_name)
     raw.set_montage(montage, on_missing="ignore")
+
+    if freq_type == 'low':
+        raw.filter(l_freq=1, h_freq=350)
 
     # now create epochs based on the trigger names
     events, event_ids = mne.events_from_annotations(raw)

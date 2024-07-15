@@ -8,6 +8,7 @@ import numpy as np
 from Common_Functions.import_data import import_data
 from Common_Functions.bad_trial_check import bad_trial_check
 from Common_Functions.bad_channel_check import bad_channel_check
+from Common_Functions.automated_blinkremoval import run_icablinkremoval
 from Common_Functions.Create_Frequency_Bands import create_frequency_bands
 from EEG.run_CCA_brain import run_CCA
 from EEG.run_CCA_brain_2 import run_CCA2
@@ -41,12 +42,15 @@ if __name__ == '__main__':
     ######## 4. Freq band ##########
     split_bands_flag = False
 
+    # ######## 4. a) Automated eyeblink correction #####
+    # remove_eyeblinks = False
+
     ######## 5. Run CCA on cortical activity ########
     freq_type = 'low'
     CCA_flag = True
 
     ######## 6. Run CCA on subcortical activity  ########
-    CCA_thalamic_flag = True
+    CCA_thalamic_flag = False
 
     ############################################
     # Import Data from BIDS directory
@@ -83,6 +87,14 @@ if __name__ == '__main__':
         for subject in subjects:
             for condition in conditions:
                 create_frequency_bands(subject, condition, srmr_nr, sampling_rate, channel_type='eeg')
+
+    # ###################################################
+    # # Remove eyeblinks
+    # ###################################################
+    # if remove_eyeblinks:
+    #     for subject in subjects:
+    #         for condition in conditions:
+    #             run_icablinkremoval(subject, condition, srmr_nr, sampling_rate)
 
     ###################################################
     # Run CCA on Freq Bands - all trials

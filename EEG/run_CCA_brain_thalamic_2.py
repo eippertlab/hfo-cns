@@ -67,6 +67,10 @@ def run_CCA_thalamic2(subject, condition, srmr_nr, freq_band, sfreq, freq_type):
     raw_dig = mne.io.read_raw_fif(input_path + fname_dig, preload=True)
     raw_mixed = mne.io.read_raw_fif(input_path + fname_mixed, preload=True)
 
+    if freq_type == 'low':
+        raw_dig.filter(l_freq=1, h_freq=350)
+        raw_mixed.filter(l_freq=1, h_freq=350)
+
     # Set montage
     montage_path = '/data/pt_02718/'
     montage_name = 'electrode_montage_eeg_10_5.elp'

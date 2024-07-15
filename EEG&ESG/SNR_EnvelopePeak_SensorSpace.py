@@ -206,3 +206,4 @@ if __name__ == '__main__':
         with pd.ExcelWriter(f'{figure_path}ComponentSNR.xlsx') as writer:
             df_med.to_excel(writer, sheet_name='Median Stimulation')
             df_tib.to_excel(writer, sheet_name='Tibial Stimulation')
+                                   

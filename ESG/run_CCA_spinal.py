@@ -62,6 +62,9 @@ def run_CCA(subject, condition, srmr_nr, freq_band, freq_type):
 
     raw = mne.io.read_raw_fif(input_path + fname, preload=True)
 
+    if freq_type == 'low':
+        raw.filter(l_freq=1, h_freq=350)
+
     # now create epochs based on the trigger names
     events, event_ids = mne.events_from_annotations(raw)
     event_id_dict = {key: value for key, value in event_ids.items() if key == trigger_name}

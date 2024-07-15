@@ -68,6 +68,10 @@ def run_CCA2(subject, condition, srmr_nr, freq_band, freq_type):
     raw_dig = mne.io.read_raw_fif(input_path + fname_dig, preload=True)
     raw_mixed = mne.io.read_raw_fif(input_path + fname_mixed, preload=True)
 
+    if freq_type == 'low':
+        raw_dig.filter(l_freq=1, h_freq=350)
+        raw_mixed.filter(l_freq=1, h_freq=350)
+
     # now create epochs based on the trigger names
     # Mixed data
     events, event_ids = mne.events_from_annotations(raw_mixed)

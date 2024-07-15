@@ -75,6 +75,10 @@ def run_CCA2(subject, condition, srmr_nr, freq_band, sfreq, freq_type):
     for raw in [raw_dig, raw_mixed]:
         raw.set_montage(montage, on_missing="ignore")
 
+    if freq_type == 'low':
+        raw_dig.filter(l_freq=1, h_freq=350)
+        raw_mixed.filter(l_freq=1, h_freq=350)
+
     # now create epochs based on the trigger names
     # Mixed data
     events, event_ids = mne.events_from_annotations(raw_mixed)
