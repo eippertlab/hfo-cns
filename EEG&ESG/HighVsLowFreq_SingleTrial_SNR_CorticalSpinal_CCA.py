@@ -20,9 +20,8 @@ pd.set_option('display.width', 1000)
 
 
 if __name__ == '__main__':
-    data_types = ['Spinal']  # Can be Cortical, Spinal here or both
-    # data_types = ['Cortical']
-    # data_types = ['Spinal', 'Cortical']
+    # data_types = ['Spinal']  # Can be Cortical or Spinal, not both
+    data_types = ['Cortical']
 
     srmr_nr = 2
     sfreq = 5000
@@ -268,7 +267,7 @@ if __name__ == '__main__':
             ax[0].plot(epochs_low.times, ga_low_bottom.reshape(-1), color='darkgreen')
             ax[0].fill_between(epochs_low.times, lower_low_bottom, upper_low_bottom, color='darkgreen', alpha=0.3)
             ax[0].set_title('LF-SEP')
-            ax[0].set_ylabel(u'Amplitude (\u03bcV)')
+            ax[0].set_ylabel(u'Amplitude (AU)')
             ax[0].set_xlim([0, 0.07])
             ax[1].plot(hf_times, ga_high_top.reshape(-1), color='limegreen', label='Strongest 200 trials')
             ax[1].fill_between(hf_times, lower_high_top, upper_high_top, color='limegreen', alpha=0.3)
