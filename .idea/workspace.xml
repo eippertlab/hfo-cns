@@ -30,6 +30,8 @@
       <change beforePath="$PROJECT_DIR$/ESG/run_CCA_spinal.py" beforeDir="false" afterPath="$PROJECT_DIR$/ESG/run_CCA_spinal.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ESG/run_CCA_spinal_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/ESG/run_CCA_spinal_2.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ESG_Pipeline.py" beforeDir="false" afterPath="$PROJECT_DIR$/ESG_Pipeline.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Publication_Images/CCAEnvelope_Spinal_SubCortical_Cortical.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/CCAEnvelope_Spinal_SubCortical_Cortical.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Publication_Images/CCAEnvelope_Spinal_SubCortical_Cortical_NoShift.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/CCAEnvelope_Spinal_SubCortical_Cortical_NoShift.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,6 +54,7 @@
   "keyToString": {
     "Python.BurstFreq_AcrossCNS_Stats.executor": "Run",
     "Python.BurstFrequency_CCAtoBroadband_Filter_Digit.executor": "Run",
+    "Python.CCAEnvelope_Spinal_SubCortical_Cortical.executor": "Run",
     "Python.CCA_CorrelationValidation_ttests.executor": "Run",
     "Python.CCA_Digit_ClusterPermutation_CorticalAndThalamic.executor": "Run",
     "Python.CCA_Digit_EnvelopeComparison_CorticalAndThalamic.executor": "Run",
@@ -105,7 +108,7 @@
       <recent name="$PROJECT_DIR$/EEG_ESG_RestingState" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.BurstFrequency_CCAtoBroadband_Filter_Digit">
+  <component name="RunManager" selected="Python.CCAEnvelope_Spinal_SubCortical_Cortical_NoShift">
     <configuration name="BurstFrequency_CCAtoBroadband_Filter_Digit" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
@@ -128,6 +131,50 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="CCAEnvelope_Spinal_SubCortical_Cortical" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="HF_Oscillations" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Publication_Images" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Publication_Images/CCAEnvelope_Spinal_SubCortical_Cortical.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="CCAEnvelope_Spinal_SubCortical_Cortical_NoShift" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="HF_Oscillations" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Publication_Images" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Publication_Images/CCAEnvelope_Spinal_SubCortical_Cortical_NoShift.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="LowFreq_HighFreq_LatencyComparison_CCA" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
@@ -142,50 +189,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/EEG&amp;ESG/LowFreq_HighFreq_LatencyComparison_CCA.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="PartialCorrelation_LowFreq_HighFreq_CCA_Amp_SNR" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="HF_Oscillations" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/EEG&amp;ESG" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/EEG&amp;ESG/PartialCorrelation_LowFreq_HighFreq_CCA_Amp_SNR.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="PartialCorrelation_SNR_CreateTables_CCA" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="HF_Oscillations" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/EEG&amp;ESG" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/EEG&amp;ESG/PartialCorrelation_SNR_CreateTables_CCA.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -218,11 +221,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.CCAEnvelope_Spinal_SubCortical_Cortical_NoShift" />
+        <item itemvalue="Python.CCAEnvelope_Spinal_SubCortical_Cortical" />
         <item itemvalue="Python.BurstFrequency_CCAtoBroadband_Filter_Digit" />
         <item itemvalue="Python.TFR_ROISearch_BurstFrequency_WeightsToBroadband_Filter_Digits" />
         <item itemvalue="Python.LowFreq_HighFreq_LatencyComparison_CCA" />
-        <item itemvalue="Python.PartialCorrelation_LowFreq_HighFreq_CCA_Amp_SNR" />
-        <item itemvalue="Python.PartialCorrelation_SNR_CreateTables_CCA" />
       </list>
     </recent_temporary>
   </component>

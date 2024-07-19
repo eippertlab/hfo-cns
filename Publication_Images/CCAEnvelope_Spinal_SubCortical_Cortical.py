@@ -205,6 +205,10 @@ if __name__ == '__main__':
                     upper = (grand_average[0, :] + error).reshape(-1)
                     lower = (grand_average[0, :] - error).reshape(-1)
 
+                    # Get latency of envelope across subjects
+                    index_max = np.argmax(grand_average)
+                    print(f'Study{srmr_nr}, {data_type}, peak latency: {evoked.times[index_max]:0.4f}s')
+
                     #################################################################################################
                     # Plot Time Course
                     #################################################################################################
