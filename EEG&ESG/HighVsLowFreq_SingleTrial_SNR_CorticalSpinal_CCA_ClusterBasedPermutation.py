@@ -22,14 +22,13 @@ pd.set_option('display.width', 1000)
 
 
 if __name__ == '__main__':
-    data_types = ['Spinal']  # Can be Cortical or Spinal, not both
+    data_types = ['Spinal', 'Cortical']  # Can be Cortical or Spinal, not both
     # data_types = ['Cortical']
 
     srmr_nr = 2
     sfreq = 5000
     n_trials = 200 # Number of trials at top/bottom to test
     freq_band = 'sigma'
-    perform_pairedttest_and_effsize = True
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
@@ -74,10 +73,18 @@ if __name__ == '__main__':
     iv_epoch = [df.loc[df['var_name'] == 'epo_cca_start', 'var_value'].iloc[0],
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
+    # End of interpolation for cortical and spinal data added to period before stim starts in epoch
+    tmax_esg = 0.007 + abs(iv_epoch[0])
+    tmax_eeg = 0.006 + abs(iv_epoch[0])
 
     for data_type in data_types:
+        if data_type == 'Cortical':
+            tmax = tmax_eeg
+        elif data_type == 'Spinal':
+            tmax = tmax_esg
+
         df_topbottom10 = pd.DataFrame()
-        figure_path_highlow = f'/data/p_02718/{fig_folder}/SingleTrialSNR_LowVsHigh_CCA/StrongestVsWeakest/{data_type}/'
+        figure_path_highlow = f'/data/p_02718/{fig_folder}/SingleTrialSNR_LowVsHigh_CCA/StrongestVsWeakest_ClusterBasedPermutation/{data_type}/'
         os.makedirs(figure_path_highlow, exist_ok=True)
 
         for condition in conditions:  # Conditions (median, tibial)
@@ -92,6 +99,8 @@ if __name__ == '__main__':
             evoked_list_low_top = []
             evoked_list_high_bottom = []
             evoked_list_high_top = []
+            evoked_list_difference_high = []
+            evoked_list_difference_low = []
 
             for subject in subjects:  # All subjects
                 subject_id = f'sub-{str(subject).zfill(3)}'
@@ -178,59 +187,22 @@ if __name__ == '__main__':
 
                     index_low = df_sub.index[:200].tolist()
                     index_high = df_sub.index[-200:].tolist()
-                    fig, ax = plt.subplots(2, 1)
-                    # Not just taking top 200 - need to get indices associated with top and bottom 200 trials first
                     # Also need to be wary the srate of LF files is 1kHz, but HF files are 5kHz
                     hf_times = np.linspace(iv_epoch[0], iv_epoch[1]-1/1000, 1996)
-                    ax[0].plot(epochs_low.times, np.mean(epochs_low.get_data(copy=True)[index_high], axis=0).reshape(-1), color='limegreen')
-                    ax[0].plot(epochs_low.times, np.mean(epochs_low.get_data(copy=True)[index_low], axis=0).reshape(-1), color='darkgreen')
-                    ax[0].set_title('LF-SEP')
-                    ax[0].set_ylabel(u'Amplitude (\u03bcV)')
-                    ax[0].set_xlim([0, 0.07])
-                    ax[1].plot(hf_times, np.mean(epochs.get_data(copy=True)[index_high], axis=0).reshape(-1), color='limegreen', label='Strongest 200 trials')
-                    ax[1].plot(hf_times, np.mean(epochs.get_data(copy=True)[index_low], axis=0).reshape(-1), color='darkgreen', label='Weakest 200 trials')
-                    ax[1].set_title('HFO')
-                    ax[1].set_xlim([0, 0.07])
-                    ax[1].set_ylabel('Amplitude (AU)')
-                    ax[1].set_xlabel('Time (s)')
-                    plt.legend()
-                    plt.suptitle(f'{subject_id}, {data_type}, {cond_name}')
-                    plt.tight_layout()
-                    plt.savefig(figure_path_highlow+f'{subject_id}_{cond_name}')
-                    plt.close()
 
                     # Add evoked LF-SEP and envelope of HFO to evoked lists to later create GA image
                     # Shift the timing if we're dealing with spinal data
                     if data_type == 'Spinal':
-                        evoked_list_low_bottom.append(epochs_low[index_low].shift_time(shift, relative=True).average().data)
-                        evoked_list_low_top.append(epochs_low[index_high].shift_time(shift, relative=True).average().data)
-                        evoked_list_high_bottom.append(epochs[index_low].shift_time(shift, relative=True).average().apply_hilbert(envelope=True).data)
-                        evoked_list_high_top.append(epochs[index_high].shift_time(shift, relative=True).average().apply_hilbert(envelope=True).data)
+                        evoked_list_low_bottom.append(epochs_low[index_low].shift_time(shift, relative=True).average().data.reshape(-1))
+                        evoked_list_low_top.append(epochs_low[index_high].shift_time(shift, relative=True).average().data.reshape(-1))
+                        evoked_list_high_bottom.append(epochs[index_low].shift_time(shift, relative=True).average().apply_hilbert(envelope=True).data.reshape(-1))
+                        evoked_list_high_top.append(epochs[index_high].shift_time(shift, relative=True).average().apply_hilbert(envelope=True).data.reshape(-1))
 
                     else:
-                        evoked_list_low_bottom.append(epochs_low[index_low].average().data)
-                        evoked_list_low_top.append(epochs_low[index_high].average().data)
-                        evoked_list_high_bottom.append(epochs[index_low].average().apply_hilbert(envelope=True).data)
-                        evoked_list_high_top.append(epochs[index_high].average().apply_hilbert(envelope=True).data)
-
-                    # Generate envelope version of plot while we're at it
-                    fig, ax = plt.subplots(2, 1)
-                    ax[0].plot(epochs_low.times,epochs_low[index_high].average().data.reshape(-1), color='limegreen')
-                    ax[0].plot(epochs_low.times,epochs_low[index_low].average().data.reshape(-1),color='darkgreen')
-                    ax[0].set_title('LF-SEP')
-                    ax[0].set_ylabel(u'Amplitude (\u03bcV)')
-                    ax[0].set_xlim([0, 0.07])
-                    ax[1].plot(hf_times, epochs[index_high].average().apply_hilbert(envelope=True).data.reshape(-1), color='limegreen', label='Strongest 200 trials')
-                    ax[1].plot(hf_times, epochs[index_low].average().apply_hilbert(envelope=True).data.reshape(-1), color='darkgreen', label='Weakest 200 trials')
-                    ax[1].set_title('HFO')
-                    ax[1].set_xlim([0, 0.07])
-                    ax[1].set_ylabel('Amplitude (AU)')
-                    ax[1].set_xlabel('Time (s)')
-                    plt.legend()
-                    plt.suptitle(f'{subject_id}, {data_type}, {cond_name}')
-                    plt.tight_layout()
-                    plt.savefig(figure_path_highlow+f'{subject_id}_{cond_name}_env')
-                    plt.close()
+                        evoked_list_low_bottom.append(epochs_low[index_low].average().data.reshape(-1))
+                        evoked_list_low_top.append(epochs_low[index_high].average().data.reshape(-1))
+                        evoked_list_high_bottom.append(epochs[index_low].average().apply_hilbert(envelope=True).data.reshape(-1))
+                        evoked_list_high_top.append(epochs[index_high].average().apply_hilbert(envelope=True).data.reshape(-1))
 
                 else:
                     bottom_low.append(np.nan)
@@ -247,29 +219,90 @@ if __name__ == '__main__':
             ga_low_bottom = np.mean(evoked_list_low_bottom, axis=0)
             ga_low_top = np.mean(evoked_list_low_top, axis=0)
             error_low_bottom = sem(evoked_list_low_bottom, axis=0)
-            upper_low_bottom = (ga_low_bottom[0, :] + error_low_bottom).reshape(-1)
-            lower_low_bottom = (ga_low_bottom[0, :] - error_low_bottom).reshape(-1)
+            upper_low_bottom = (ga_low_bottom[:] + error_low_bottom).reshape(-1)
+            lower_low_bottom = (ga_low_bottom[:] - error_low_bottom).reshape(-1)
             error_low_top = sem(evoked_list_low_top, axis=0)
-            upper_low_top = (ga_low_top[0, :] + error_low_top).reshape(-1)
-            lower_low_top = (ga_low_top[0, :] - error_low_top).reshape(-1)
+            upper_low_top = (ga_low_top[:] + error_low_top).reshape(-1)
+            lower_low_top = (ga_low_top[:] - error_low_top).reshape(-1)
 
             ga_high_bottom = np.mean(evoked_list_high_bottom, axis=0)
             ga_high_top = np.mean(evoked_list_high_top, axis=0)
             error_high_bottom = sem(evoked_list_high_bottom, axis=0)
-            upper_high_bottom = (ga_high_bottom[0, :] + error_high_bottom).reshape(-1)
-            lower_high_bottom = (ga_high_bottom[0, :] - error_high_bottom).reshape(-1)
+            upper_high_bottom = (ga_high_bottom[:] + error_high_bottom).reshape(-1)
+            lower_high_bottom = (ga_high_bottom[:] - error_high_bottom).reshape(-1)
             error_high_top = sem(evoked_list_high_top, axis=0)
-            upper_high_top = (ga_high_top[0, :] + error_high_top).reshape(-1)
-            lower_high_top = (ga_high_top[0, :] - error_high_top).reshape(-1)
+            upper_high_top = (ga_high_top[:] + error_high_top).reshape(-1)
+            lower_high_top = (ga_high_top[:] - error_high_top).reshape(-1)
+
+            ################################################################################################
+            # Perform cluster based permutation test and plot image
+            ################################################################################################
+            class ClusterResults():
+                def __init__(self):
+                    pass
+            # Need one sample test as our data is paired - therefore need to get difference in each case
+            # Low frequency
+            for evoked_top, evoked_bottom in zip(evoked_list_low_top, evoked_list_low_bottom):
+                evoked_difference = evoked_top - evoked_bottom
+                evoked_list_difference_low.append(evoked_difference[int(sfreq*tmax):])
+
+            # High frequency
+            for evoked_top, evoked_bottom in zip(evoked_list_high_top, evoked_list_high_bottom):
+                evoked_difference = evoked_top - evoked_bottom
+                evoked_list_difference_high.append(evoked_difference[int(sfreq*tmax):])
+
+            cluster_res = ClusterResults()
+            for evoked_list_difference, data_name in zip([evoked_list_difference_low, evoked_list_difference_high],
+                                                         ['low', 'high']):
+                T_obs, clusters, cluster_p_values, H0 = mne.stats.permutation_cluster_1samp_test(
+                    np.array(evoked_list_difference),
+                    out_type="mask",
+                    n_permutations=1000,
+                    tail=1,
+                    seed=np.random.default_rng(seed=8675309),
+                )  # tail = 1 for one-sided test
+                if data_name == 'low':
+                    cluster_res.T_obs_low = T_obs
+                    cluster_res.clusters_low = clusters
+                    cluster_res.cluster_p_values_low = cluster_p_values
+                    cluster_res.H0_low = H0
+                elif data_name == 'high':
+                    cluster_res.T_obs_high = T_obs
+                    cluster_res.clusters_high = clusters
+                    cluster_res.cluster_p_values_high = cluster_p_values
+                    cluster_res.H0_high = H0
 
             # Plot GA image
             fig, ax = plt.subplots(2, 1)
+            # Add lines to indicate zones of statistical significant clusters
+            for data_name in ['low', 'high']:
+                if data_name == 'low':
+                    clusters = cluster_res.clusters_low
+                    cluster_p_values = cluster_res.cluster_p_values_low
+                    ax2 = ax[0]
+                elif data_name == 'high':
+                    clusters = cluster_res.clusters_high
+                    cluster_p_values = cluster_res.cluster_p_values_high
+                    ax2 = ax[1]
+
+                for i_c, c in enumerate(clusters):
+                    c = c[0]
+                    if cluster_p_values[i_c] <= 0.05:
+                        h = ax2.axvspan(hf_times[int(tmax*sfreq) + c.start], hf_times[int(tmax*sfreq) + c.stop - 1], color="gray", alpha=0.3)
+                        print(data_type)
+                        print('Significant Cluster')
+                        print(f'p-val: {cluster_p_values[i_c]}')
+                        print(hf_times[int(tmax*sfreq) + c.start])
+                        print(hf_times[int(tmax*sfreq) + c.stop - 1])
+
+            # Plot actual time courses
             ax[0].plot(epochs_low.times, ga_low_top.reshape(-1), color='limegreen')
             ax[0].fill_between(epochs_low.times, lower_low_top, upper_low_top, color='limegreen', alpha=0.3)
             ax[0].plot(epochs_low.times, ga_low_bottom.reshape(-1), color='darkgreen')
-            ax[0].fill_between(epochs_low.times, lower_low_bottom, upper_low_bottom, color='darkgreen', alpha=0.3)
+            ax[0].fill_between(epochs_low.times, lower_low_bottom, upper_low_bottom, color='darkgreen',
+                               alpha=0.3)
             ax[0].set_title('LF-SEP')
-            ax[0].set_ylabel(u'Amplitude (AU)')
+            ax[0].set_ylabel('Amplitude (AU)')
             ax[0].set_xlim([0, 0.07])
             ax[1].plot(hf_times, ga_high_top.reshape(-1), color='limegreen', label='Strongest 200 trials')
             ax[1].fill_between(hf_times, lower_high_top, upper_high_top, color='limegreen', alpha=0.3)
@@ -285,38 +318,5 @@ if __name__ == '__main__':
             plt.savefig(figure_path_highlow + f'GA_{cond_name}_env')
             plt.savefig(figure_path_highlow + f'GA_{cond_name}_env.pdf',
                         bbox_inches='tight', format="pdf")
-            plt.close()
 
-    # Get percentage change between top and bottom 200 trials
-    def percent_change(col1, col2):
-        # (top-bottom/bottom)
-        return ((col1 - col2) / col2) * 100
-    print(df_topbottom10)
-    print(df_topbottom10.describe())
-    if perform_pairedttest_and_effsize:
-        for data_type in data_types:
-            for condition in conditions:
-                cond_info = get_conditioninfo(condition, srmr_nr)
-                cond_name = cond_info.cond_name
-                bottom10_low = df_topbottom10[f'{data_type}_{cond_name}_bottom10_low'].tolist()
-                top10_low = df_topbottom10[f'{data_type}_{cond_name}_top10_low'].tolist()
-                percent_change_low = percent_change(df_topbottom10[f'{data_type}_{cond_name}_top10_low'], df_topbottom10[f'{data_type}_{cond_name}_bottom10_low'])
-                bottom10_high = df_topbottom10[f'{data_type}_{cond_name}_bottom10_high'].tolist()
-                top10_high = df_topbottom10[f'{data_type}_{cond_name}_top10_high'].tolist()
-                percent_change_high = percent_change(df_topbottom10[f'{data_type}_{cond_name}_top10_high'], df_topbottom10[f'{data_type}_{cond_name}_bottom10_high'])
-                print(f'{data_type}, {cond_name}')
-                result_low = ttest_rel(bottom10_low, top10_low, nan_policy='omit')
-                eff_low = pg.compute_effsize(bottom10_low, top10_low, paired=True, eftype='cohen')
-                print('Low')
-                print(result_low)
-                print(eff_low)
-                print(percent_change_low.mean())
-                print(percent_change_low.sem())
-                result_high = ttest_rel(bottom10_high, top10_high, nan_policy='omit')
-                eff_high = pg.compute_effsize(bottom10_high, top10_high, paired=True, eftype='cohen')
-                print('High')
-                print(result_high)
-                print(eff_high)
-                print(percent_change_high.mean())
-                print(percent_change_high.sem())
-                print('\n')
+            plt.show()

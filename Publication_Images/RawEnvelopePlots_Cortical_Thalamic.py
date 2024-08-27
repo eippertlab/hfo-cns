@@ -97,7 +97,7 @@ if __name__ == '__main__':
                     visible = df_vis.loc[subject, f"{freq_band.capitalize()}_{cond_name.capitalize()}_Visible"]
                     if visible == 'T':
                         ############################################################################################
-                        # Get time to shift for this subject and set the electrode options for raw ESG
+                        # Get expected latency to mark on graph
                         ############################################################################################
                         if srmr_nr == 1:
                             condition_names = ['median', 'tibial']
@@ -156,16 +156,16 @@ if __name__ == '__main__':
                     ax1.set_xlim([0.0, 0.05])
                     # Add coloured boxes to mark time zones of interest
                     # [10 / 1000, 16 / 1000]
-                    plt.axvspan(10/1000, 16/1000, color='tab:cyan', alpha=0.3)
+                    # plt.axvspan(10/1000, 16/1000, color='tab:cyan', alpha=0.3)
                     # window_times = [15.4 / 1000, 24.8 / 1000]
-                    plt.axvspan(15.4 / 1000, 24.8 / 1000, color='tab:purple', alpha=0.3)
+                    # plt.axvspan(15.4 / 1000, 24.8 / 1000, color='tab:purple', alpha=0.3)
                     # ax1.axvline(expected, color='red')
                 else:
                     ax1.set_xlim([0.0, 0.07])
                     # [24 / 1000, 36 / 1000]
-                    plt.axvspan(24 / 1000, 36 / 1000, color='tab:cyan', alpha=0.3)
+                    # plt.axvspan(24 / 1000, 36 / 1000, color='tab:cyan', alpha=0.3)
                     # window_times = [32 / 1000, 44 / 1000]
-                    plt.axvspan(32 / 1000, 44 / 1000, color='tab:purple', alpha=0.3)
+                    # plt.axvspan(32 / 1000, 44 / 1000, color='tab:purple', alpha=0.3)
 
                     # ax1.axvline(expected, color='red')
 

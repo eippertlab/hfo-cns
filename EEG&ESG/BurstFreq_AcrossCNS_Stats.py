@@ -11,9 +11,9 @@ import os
 mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
-    srmr_nr = 1
+    srmr_nr = 2
     high_freq = 800
-    ttest_type = 'med_v_tib' # 'across_cns' 'med_v_tib'
+    ttest_type = 'across_cns' # 'across_cns' 'med_v_tib'
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
@@ -43,16 +43,19 @@ if __name__ == '__main__':
             print(df_combination.sem())
 
             aov = df_combination.rm_anova()
+            print('ANOVA result')
             print(aov)
 
             # If rm_anova was significant, perform post-hoc t-tests
             if aov['p-unc'].loc[aov.index[0]] < 0.05:
                 # Two-sided
                 ptest_mat = df_combination.ptests(paired=True, padjust='bonf', stars=False, alternative='two-sided')
+                print('two-sided ttest result')
                 print(ptest_mat)
 
-                # Less than
+                # Less than - testing if spinal > thalamic etc.
                 ptest_mat = df_combination.ptests(paired=True, padjust='bonf', stars=False, alternative='less')
+                print('one-sided ttest result')
                 print(ptest_mat)
 
     elif ttest_type == 'med_v_tib':

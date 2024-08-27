@@ -5,33 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="32d78150-f875-4a94-a101-72a4657c6a8a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Common_Functions/automated_blinkremoval.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Common_Functions/calculate_snr_lowfreq_cca.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Common_Functions/calculate_snr_lowfreq_ccapolarity.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EEG&amp;ESG/TFR_ROISearch_BurstFrequency_WeightsToBroadband_Filter_Digits.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EEG&amp;ESG_images/BurstFrequency_CCAtoBroadband_Filter_Digit.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EEG&amp;ESG/WaveletCount_Stats.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EEG_ESG_RestingState/CCA_CorrelationValidation_ttests_UpperTri.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EEG_ESG_RestingState/Correlation_SummaryTable_UpperTri.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EEG&amp;ESG/ComputeSingleTrial_SNR_CorticalSpinal.py" beforeDir="false" afterPath="$PROJECT_DIR$/Archive/ComputeSingleTrial_SNR_CorticalSpinal.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EEG&amp;ESG/Count_Peaks_Troughs.py" beforeDir="false" afterPath="$PROJECT_DIR$/Archive/Count_Peaks_Troughs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EEG&amp;ESG/HFOEnvPeak_EarlyOrLate_LFPeak.py" beforeDir="false" afterPath="$PROJECT_DIR$/Archive/HFOEnvPeak_EarlyOrLate_LFPeak.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EEG&amp;ESG/HighVsLowFreq_SingleTrial_SNR_CorticalSpinal.py" beforeDir="false" afterPath="$PROJECT_DIR$/Archive/HighVsLowFreq_SingleTrial_SNR_CorticalSpinal.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EEG&amp;ESG/BurstFreq_AcrossCNS_Stats.py" beforeDir="false" afterPath="$PROJECT_DIR$/EEG&amp;ESG/BurstFreq_AcrossCNS_Stats.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EEG&amp;ESG/HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA.py" beforeDir="false" afterPath="$PROJECT_DIR$/EEG&amp;ESG/HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EEG&amp;ESG/PartialCorrelation_LowFreq_HighFreq_Amp_SNR.py" beforeDir="false" afterPath="$PROJECT_DIR$/Archive/PartialCorrelation_LowFreq_HighFreq_Amp_SNR.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EEG&amp;ESG/PartialCorrelation_SNR_CreateTables.py" beforeDir="false" afterPath="$PROJECT_DIR$/Archive/PartialCorrelation_SNR_CreateTables.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EEG&amp;ESG/SNR_EnvelopePeak_SensorSpace.py" beforeDir="false" afterPath="$PROJECT_DIR$/EEG&amp;ESG/SNR_EnvelopePeak_SensorSpace.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EEG/SNR_LFSelection_Cortical.py" beforeDir="false" afterPath="$PROJECT_DIR$/Archive/SNR_LFSelection_Cortical.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EEG/SNR_LFSelection_Cortical_AutoFlip.py" beforeDir="false" afterPath="$PROJECT_DIR$/Archive/SNR_LFSelection_Cortical_AutoFlip.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EEG/run_CCA_brain.py" beforeDir="false" afterPath="$PROJECT_DIR$/EEG/run_CCA_brain.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EEG/run_CCA_brain_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/EEG/run_CCA_brain_2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EEG/run_CCA_brain_thalamic.py" beforeDir="false" afterPath="$PROJECT_DIR$/EEG/run_CCA_brain_thalamic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EEG/run_CCA_brain_thalamic_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/EEG/run_CCA_brain_thalamic_2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EEG_Pipeline.py" beforeDir="false" afterPath="$PROJECT_DIR$/EEG_Pipeline.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ESG/SNR_LFSelection_Spinal.py" beforeDir="false" afterPath="$PROJECT_DIR$/Common_Functions/SNR_LFSelection_Spinal.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ESG/run_CCA_spinal.py" beforeDir="false" afterPath="$PROJECT_DIR$/ESG/run_CCA_spinal.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ESG/run_CCA_spinal_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/ESG/run_CCA_spinal_2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ESG_Pipeline.py" beforeDir="false" afterPath="$PROJECT_DIR$/ESG_Pipeline.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Publication_Images/CCAEnvelope_Spinal_SubCortical_Cortical.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/CCAEnvelope_Spinal_SubCortical_Cortical.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Publication_Images/CCAEnvelope_Spinal_SubCortical_Cortical_NoShift.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/CCAEnvelope_Spinal_SubCortical_Cortical_NoShift.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EEG&amp;ESG/RankCorrelation_WaveletCountAcrossCNS.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/EEG_ESG_RestingState/CCA_CorrelationValidation_ttests.py" beforeDir="false" afterPath="$PROJECT_DIR$/Archive/CCA_CorrelationValidation_ttests.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EEG_ESG_RestingState/Correlation_SummaryTable.py" beforeDir="false" afterPath="$PROJECT_DIR$/Archive/Correlation_SummaryTable.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Polished_Images/RawEnvelopePlots_Cortical_Thalamic.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/RawEnvelopePlots_Cortical_Thalamic.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,12 +38,15 @@
     "Python.BurstFreq_AcrossCNS_Stats.executor": "Run",
     "Python.BurstFrequency_CCAtoBroadband_Filter_Digit.executor": "Run",
     "Python.CCAEnvelope_Spinal_SubCortical_Cortical.executor": "Run",
+    "Python.CCAEnvelope_Spinal_SubCortical_Cortical_NoShift.executor": "Run",
     "Python.CCA_CorrelationValidation_ttests.executor": "Run",
+    "Python.CCA_CorrelationValidation_ttests_UpperTri.executor": "Run",
     "Python.CCA_Digit_ClusterPermutation_CorticalAndThalamic.executor": "Run",
     "Python.CCA_Digit_EnvelopeComparison_CorticalAndThalamic.executor": "Run",
     "Python.ComputeSingleTrial_SNR_CorticalSpinal.executor": "Run",
     "Python.ComputeSingleTrial_SNR_CorticalSpinal_CCA.executor": "Run",
     "Python.Correlation_SummaryTable.executor": "Run",
+    "Python.Correlation_SummaryTable_UpperTri.executor": "Run",
     "Python.EEG_Pipeline.executor": "Run",
     "Python.EEG_RestingState_Pipeline.executor": "Run",
     "Python.ESG_Pipeline.executor": "Run",
@@ -68,11 +54,13 @@
     "Python.ExploratoryPlots_WrongFiles.executor": "Run",
     "Python.HighVsLowFreq_SingleTrial_SNR_CorticalSpinal.executor": "Run",
     "Python.HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA.executor": "Run",
+    "Python.HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA_ClusterBasedPermutation.executor": "Run",
     "Python.LowFreq_HighFreq_LatencyComparison_CCA.executor": "Run",
     "Python.PartialCorrelation_LowFreq_HighFreq_CCA_Amp_SNR.executor": "Run",
     "Python.PartialCorrelation_SNR_CreateTables_CCA.executor": "Run",
     "Python.Peaks_Troughs_ByCNSLevel_ByCutOff.executor": "Run",
     "Python.RankCorrelation_WaveletCountAcrossCNS.executor": "Run",
+    "Python.RawEnvelopePlots_Cortical_Thalamic.executor": "Run",
     "Python.RenameWrongFiles.executor": "Run",
     "Python.SNR_EnvelopePeak_LowFreq_CorticalThalamic.executor": "Run",
     "Python.SNR_EnvelopePeak_SensorSpace.executor": "Run",
@@ -86,30 +74,31 @@
     "Python.TaskEvoked_RestingState_CCACorrelation_CCAWindow.executor": "Run",
     "Python.TaskEvoked_RestingState_CCACorrelation_Parallel.executor": "Run",
     "Python.TaskEvoked_RestingState_CCACorrelation_ShorterWindow.executor": "Run",
+    "Python.WaveletCount_Stats.executor": "Run",
     "Python.plot_task_rest.executor": "Run",
     "Python.quick_check.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/data/pt_02718/HF_Oscillations/EEG&ESG"
+    "last_opened_file_path": "/data/pt_02718/HF_Oscillations/EEG_ESG_RestingState"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/EEG_ESG_RestingState" />
       <recent name="$PROJECT_DIR$/EEG&amp;ESG" />
       <recent name="$PROJECT_DIR$/EEG&amp;ESG_images" />
       <recent name="$PROJECT_DIR$/Common_Functions" />
       <recent name="$PROJECT_DIR$/EEG" />
-      <recent name="$PROJECT_DIR$/ESG" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/Common_Functions" />
       <recent name="$PROJECT_DIR$/Archive" />
+      <recent name="$PROJECT_DIR$/Publication_Images" />
+      <recent name="$PROJECT_DIR$/Common_Functions" />
       <recent name="$PROJECT_DIR$/EEG&amp;ESG" />
       <recent name="$PROJECT_DIR$/EEG&amp;ESG_images" />
-      <recent name="$PROJECT_DIR$/EEG_ESG_RestingState" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.CCAEnvelope_Spinal_SubCortical_Cortical_NoShift">
-    <configuration name="BurstFrequency_CCAtoBroadband_Filter_Digit" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.CCA_CorrelationValidation_ttests_UpperTri">
+    <configuration name="CCA_CorrelationValidation_ttests_UpperTri" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -118,11 +107,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/EEG&amp;ESG_images" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/EEG_ESG_RestingState" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/EEG&amp;ESG_images/BurstFrequency_CCAtoBroadband_Filter_Digit.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/EEG_ESG_RestingState/CCA_CorrelationValidation_ttests_UpperTri.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -131,7 +120,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="CCAEnvelope_Spinal_SubCortical_Cortical" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="Correlation_SummaryTable" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -140,11 +129,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Publication_Images" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/EEG_ESG_RestingState" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Publication_Images/CCAEnvelope_Spinal_SubCortical_Cortical.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Archive/Correlation_SummaryTable.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -153,7 +142,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="CCAEnvelope_Spinal_SubCortical_Cortical_NoShift" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="Correlation_SummaryTable_UpperTri" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -162,11 +151,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Publication_Images" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/EEG_ESG_RestingState" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Publication_Images/CCAEnvelope_Spinal_SubCortical_Cortical_NoShift.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/EEG_ESG_RestingState/Correlation_SummaryTable_UpperTri.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -175,7 +164,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="LowFreq_HighFreq_LatencyComparison_CCA" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA_ClusterBasedPermutation" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -188,7 +177,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/EEG&amp;ESG/LowFreq_HighFreq_LatencyComparison_CCA.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/EEG&amp;ESG/HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA_ClusterBasedPermutation.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -197,7 +186,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="TFR_ROISearch_BurstFrequency_WeightsToBroadband_Filter_Digits" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="RawEnvelopePlots_Cortical_Thalamic" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -206,11 +195,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/EEG&amp;ESG" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Publication_Images" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/EEG&amp;ESG/TFR_ROISearch_BurstFrequency_WeightsToBroadband_Filter_Digits.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Publication_Images/RawEnvelopePlots_Cortical_Thalamic.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -221,11 +210,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.CCAEnvelope_Spinal_SubCortical_Cortical_NoShift" />
-        <item itemvalue="Python.CCAEnvelope_Spinal_SubCortical_Cortical" />
-        <item itemvalue="Python.BurstFrequency_CCAtoBroadband_Filter_Digit" />
-        <item itemvalue="Python.TFR_ROISearch_BurstFrequency_WeightsToBroadband_Filter_Digits" />
-        <item itemvalue="Python.LowFreq_HighFreq_LatencyComparison_CCA" />
+        <item itemvalue="Python.CCA_CorrelationValidation_ttests_UpperTri" />
+        <item itemvalue="Python.Correlation_SummaryTable_UpperTri" />
+        <item itemvalue="Python.Correlation_SummaryTable" />
+        <item itemvalue="Python.HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA_ClusterBasedPermutation" />
+        <item itemvalue="Python.RawEnvelopePlots_Cortical_Thalamic" />
       </list>
     </recent_temporary>
   </component>
