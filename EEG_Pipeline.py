@@ -8,12 +8,11 @@ import numpy as np
 from Common_Functions.import_data import import_data
 from Common_Functions.bad_trial_check import bad_trial_check
 from Common_Functions.bad_channel_check import bad_channel_check
-from Common_Functions.automated_blinkremoval import run_icablinkremoval
 from Common_Functions.Create_Frequency_Bands import create_frequency_bands
-from EEG.run_CCA_brain import run_CCA
-from EEG.run_CCA_brain_2 import run_CCA2
-from EEG.run_CCA_brain_thalamic import run_CCA_thalamic
-from EEG.run_CCA_brain_thalamic_2 import run_CCA_thalamic2
+from CNSLevelSpecificFunctions.run_CCA_brain import run_CCA
+from CNSLevelSpecificFunctions.run_CCA_brain_2 import run_CCA2
+from CNSLevelSpecificFunctions.run_CCA_brain_thalamic import run_CCA_thalamic
+from CNSLevelSpecificFunctions.run_CCA_brain_thalamic_2 import run_CCA_thalamic2
 
 if __name__ == '__main__':
     srmr_nr = 1  # Set the experiment number

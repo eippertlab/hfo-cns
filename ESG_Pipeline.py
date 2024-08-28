@@ -6,12 +6,12 @@
 
 import numpy as np
 from Common_Functions.import_data import import_data
-from ESG.SSP import apply_SSP
+from CNSLevelSpecificFunctions.SSP import apply_SSP
 from Common_Functions.bad_channel_check import bad_channel_check
 from Common_Functions.bad_trial_check import bad_trial_check
 from Common_Functions.Create_Frequency_Bands import create_frequency_bands
-from ESG.run_CCA_spinal import run_CCA
-from ESG.run_CCA_spinal_2 import run_CCA2
+from CNSLevelSpecificFunctions.run_CCA_spinal import run_CCA
+from CNSLevelSpecificFunctions.run_CCA_spinal_2 import run_CCA2
 
 if __name__ == '__main__':
     srmr_nr = 2  # Set the experiment number

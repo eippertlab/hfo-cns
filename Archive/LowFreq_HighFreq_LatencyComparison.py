@@ -80,8 +80,6 @@ if __name__ == '__main__':
                              [col_med, col_tib, col_med_high, col_tib_high]):
         plt.figure()
         df = df[col_names]
-        # stats = df.drop(labels='Subject', axis=1).ptests(paired=True, alternative='greater', stars=False, padjust='bonf')
-        # print(stats)
         df_combination = pd.melt(df, id_vars=['Subject'],
                                  value_vars=[col_names[1], col_names[2]],
                                  var_name='Potential', value_name='Latency')  # Change to long format
@@ -112,8 +110,6 @@ if __name__ == '__main__':
                              [col_med, col_tib, col_med_high, col_tib_high]):
         plt.figure()
         df = df[col_names]
-        # stats = df.drop(labels='Subject', axis=1).ptests(paired=True, alternative='greater', stars=False, padjust='bonf')
-        # print(stats)
         sns.scatterplot(data=df, x=col_names[1], y=col_names[2])
         if col_names == col_med:
             plt.title(f"Median, Low Frequency")
@@ -134,7 +130,4 @@ if __name__ == '__main__':
         else:
             plt.savefig(figure_path + fname + 'scatter.png')
             plt.close()
-
-    # plt.show()
-    # exit()
 

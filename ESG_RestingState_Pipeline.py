@@ -6,7 +6,7 @@
 
 import numpy as np
 from Common_Functions.import_data_rs import import_data
-from ESG.SSP_restingstate import apply_SSP_restingstate
+from CNSLevelSpecificFunctions.SSP_restingstate import apply_SSP_restingstate
 from Common_Functions.Create_Frequency_Bands_RS import create_frequency_bands_rs
 
 

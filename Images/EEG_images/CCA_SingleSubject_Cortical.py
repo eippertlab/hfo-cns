@@ -1,4 +1,4 @@
-# Plots each subjects chosen component after CCA has been performed on EEG data
+# Plots each subjects chosen component after CCA has been performed on CNSLevelSpecificFunctions data
 # Plots first 18 subjects in one subplot, and then the next 18 in another
 
 import os

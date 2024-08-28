@@ -1,7 +1,6 @@
 # Plot single subject envelopes with bounds where peak should be
 # Calculate SNR and add information to plot
 # Implement automatic selection of components
-# This will select components BUT you still need to manually choose flipping of components
 
 
 import os
@@ -47,20 +46,20 @@ if __name__ == '__main__':
     if data_type == 'cortical':
         stem = 'cort'
         if re_ref:
-            visibility_fname = f'/data/pt_02718/tmp_data{append}/Visibility_Updated_LF_reref.xlsx'
+            visibility_fname = f'/data/pt_02718/tmp_data{append}/Visibility_Updated_BeforeCCA_reref.xlsx'
             figure_path = f'/data/p_02718/Images{append}/EEG_Cort/SNR&EnvelopePeak_reref/'
         else:
-            visibility_fname = f'/data/pt_02718/tmp_data{append}/Visibility_Updated_LF.xlsx'
+            visibility_fname = f'/data/pt_02718/tmp_data{append}/Visibility_Updated_BeforeCCA.xlsx'
             figure_path = f'/data/p_02718/Images{append}/EEG_Cort/SNR&EnvelopePeak/'
         input_path = f"/data/pt_02718/tmp_data{append}/freq_banded_eeg/"
     elif data_type == 'subcortical':
         stem = 'sub'
-        visibility_fname = f'/data/pt_02718/tmp_data{append}/Visibility_Thalamic_Updated_LF.xlsx'
+        visibility_fname = f'/data/pt_02718/tmp_data{append}/Visibility_Thalamic_Updated_BeforeCCA.xlsx'
         figure_path = f'/data/p_02718/Images{append}/EEG_Sub/SNR&EnvelopePeak/'
         input_path = f"/data/pt_02718/tmp_data{append}/freq_banded_eeg/"
     else:
         stem = 'spinal'
-        visibility_fname = f'/data/pt_02718/tmp_data{append}/Visibility_Spinal_Updated_LF.xlsx'
+        visibility_fname = f'/data/pt_02718/tmp_data{append}/Visibility_Spinal_Updated_BeforeCCA.xlsx'
         figure_path = f'/data/p_02718/Images{append}/ESG/SNR&EnvelopePeak/'
         input_path = f"/data/pt_02718/tmp_data{append}/freq_banded_esg/"
     os.makedirs(figure_path, exist_ok=True)
@@ -71,7 +70,7 @@ if __name__ == '__main__':
     # Check the component file is already generated - want to store the flipping info in the same place so easier to
     # do it this way
     # If fname and sheet exist already - subjects indices will already be in file from initial creation **
-    visibility_sheetname = 'LF_Vis'
+    visibility_sheetname = 'BeforeCCA_Vis'
     check_excel_exist_general(subjects, visibility_fname, visibility_sheetname, col_names)
 
     df_vis = pd.read_excel(visibility_fname, visibility_sheetname)
@@ -206,4 +205,3 @@ if __name__ == '__main__':
         with pd.ExcelWriter(f'{figure_path}ComponentSNR.xlsx') as writer:
             df_med.to_excel(writer, sheet_name='Median Stimulation')
             df_tib.to_excel(writer, sheet_name='Tibial Stimulation')
-                                   

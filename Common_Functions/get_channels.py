@@ -1,7 +1,7 @@
 def get_channels(subject_nr, includesEcg, includesEog, study_nr):
     # return eeg_chans, esg_chans, bipolar_chans
 
-    # returns EEG, ESG and bipolar channel names
+    # returns CNSLevelSpecificFunctions, ESG and bipolar channel names
     esg_chans1 = ['S35', 'S24', 'S36', 'Iz', 'S17', 'S15', 'S32', 'S22',
                   'S19', 'S26', 'S28', 'S9', 'S13', 'S11', 'S7', 'SC1', 'S4', 'S18',
                   'S8', 'S31', 'SC6', 'S12', 'S16', 'S5', 'S30', 'S20', 'S34', 'AC',

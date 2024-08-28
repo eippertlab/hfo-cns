@@ -1,6 +1,6 @@
 # Want to plot envelope from CCA when trained for thalamic versus cortical time windows
 # Want to add error bands to show standard error of the mean in same
-# No shifting as we don't have info for thalamic
+# Shift only the spinal data
 
 import os
 import mne

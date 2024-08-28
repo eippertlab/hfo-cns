@@ -1,4 +1,4 @@
-# Plot grand average envelope after application of CCA on EEG data
+# Plot grand average envelope after application of CCA on CNSLevelSpecificFunctions data
 # Can use only the subjects with visible HFOs, or all subjects regardless
 
 
