@@ -87,7 +87,7 @@ if __name__ == '__main__':
                     if visible == 'T':
                         channel = f'Cor{int(channel_no)}'
                         inv = df.loc[subject, f"{freq_band}_{cond_name}_flip"]
-                        epochs = epochs.pick_channels([channel])
+                        epochs = epochs.pick([channel])
                         if inv == 'T':
                             epochs.apply_function(invert, picks=channel)
                         evoked = epochs.copy().average()
@@ -106,26 +106,28 @@ if __name__ == '__main__':
                         x_interpol = x_total[interpol_indices[0]:interpol_indices[1]]
                         x_after = x_total[interpol_indices[1]:]
                         x = np.concatenate((x_before, x_after))
-                        # # Data is just a string of values
+                        # Data is just a string of values
                         y = cleaned_data[0][x]  # y values to be fitted
                         y_interpol_before = y[x_interpol]
                         y_interpol = pchip(x, y)(x_interpol)  # perform interpolation
                         cleaned_data[0][x_interpol] = y_interpol  # replace in data
 
-
                         if trigger_name == 'med1':
                             subj_list.append(subject_id)
+
                         evoked_list.append(cleaned_data.reshape(-1))
 
             # Perform test and plot
             times = evoked.times
+
             for evoked_list, trigger_name in zip([evoked_list_1, evoked_list_2, evoked_list_12], ['finger1', 'finger2', 'finger12']):
                 T_obs, clusters, cluster_p_values, H0 = mne.stats.permutation_cluster_1samp_test(
                     X=np.array(evoked_list),
                     n_permutations=2000,
                     tail=1,
                     n_jobs=None,
-                    out_type="mask", )
+                    out_type="mask",
+                    seed=np.random.default_rng(seed=8675309))
 
                 # Plot each individuals difference line instead of ga
                 fig, (ax, ax2) = plt.subplots(2, 1, figsize=(8, 4))
@@ -146,14 +148,14 @@ if __name__ == '__main__':
                         print('Significant Cluster')
                         print(f'p-val: {cluster_p_values[i_c]}')
                         print(times[c.start])
-                        print(times[c.stop])
+                        print(times[c.stop-1])
                     else:
                         ax2.axvspan(times[c.start], times[c.stop - 1], color=(0.3, 0.3, 0.3), alpha=0.3)
                         print(data_type)
                         print('Insignificant Cluster')
                         print(f'p-val: {cluster_p_values[i_c]}')
                         print(times[c.start])
-                        print(times[c.stop])
+                        print(times[c.stop-1])
 
                 hf = plt.plot(times, T_obs, "g")
                 # ax2.legend((h,), ("cluster p-value < 0.05",))
