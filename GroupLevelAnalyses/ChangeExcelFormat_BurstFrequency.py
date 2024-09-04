@@ -19,18 +19,19 @@ if __name__ == '__main__':
         folder = 'tmp_data_2'
         cond_names = ['med_mixed', 'tib_mixed']
 
-    save_folder = f"/data/pt_02718/{folder}/WaveletCount_EqualWindow_JASPFormat/"
+    save_folder = f"/data/pt_02718/{folder}/PeakFrequency_JASPFormat/"
     os.makedirs(save_folder, exist_ok=True)
 
-    for threshold in ['10%', '20%', '25%', '33%', '50%']:
-        df_og = pd.read_excel(io=f"/data/pt_02718/{folder}/Peaks_Troughs_EqualWindow.xlsx", sheet_name=threshold)
-        df_new = pd.DataFrame()
+
+    df_new = pd.DataFrame()
+    for data_type in ['Spinal', 'Thalamic', 'Cortical']:
+        df_og = pd.read_excel(io=f"/data/pt_02718/{folder}/Peak_Frequency_400_800_ccabroadband_filter.xlsx",
+                              sheet_name=data_type)
         df_new['Subject'] = df_og['Subject']
 
-        for data_type in ['spinal', 'subcortical', 'cortical']:
-            for cond_name in cond_names:
-                df_new[f'{data_type}_{cond_name}_wavelets'] = df_og[[f'{data_type}_peaks_{cond_name}', f'{data_type}_troughs_{cond_name}']].mean(axis=1)
+        for cond_name in cond_names:
+                df_new[f'{data_type}_{cond_name}_peakfrequency'] = df_og[f'Peak_Frequency_{cond_name}']
 
-        df_new.set_index('Subject', inplace=True)
-        with pd.ExcelWriter(save_folder + f"{threshold}.ods", engine="odf") as writer:
-            df_new.to_excel(writer)
+    df_new.set_index('Subject', inplace=True)
+    with pd.ExcelWriter(save_folder + f"burst_frequency.ods", engine="odf") as writer:
+        df_new.to_excel(writer)

@@ -74,6 +74,7 @@ if __name__ == '__main__':
                 df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
     # End of interpolation for cortical and spinal data added to period before stim starts in epoch
+    # This is so that cluster based permutation test does not include interpolation interval
     tmax_esg = 0.007 + abs(iv_epoch[0])
     tmax_eeg = 0.006 + abs(iv_epoch[0])
 
