@@ -182,7 +182,7 @@ if __name__ == '__main__':
                             channel_no = df.loc[subject, f"{freq_band}_{cond_name}_comp"]
                             channels = f'Cor{channel_no}'
                             inv = df.loc[subject, f"{freq_band}_{cond_name}_flip"]
-                            epochs = epochs.pick_channels([channels])
+                            epochs = epochs.pick([channels])
                             if inv == 'T':
                                 epochs.apply_function(invert, picks=channels)
                             evoked = epochs.copy().average()

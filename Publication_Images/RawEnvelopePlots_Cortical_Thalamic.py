@@ -47,35 +47,28 @@ if __name__ == '__main__':
                     df.loc[df['var_name'] == 'epo_cca_end', 'var_value'].iloc[0]]
 
         if srmr_nr == 1:
-            xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG_Updated.xlsx')
-            df = pd.read_excel(xls, 'CCA')
-            df.set_index('Subject', inplace=True)
-
-            xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility_Updated.xlsx')
-            df_vis = pd.read_excel(xls, 'CCA_Brain')
-            df_vis.set_index('Subject', inplace=True)
-
-            xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/LowFreq_HighFreq_Relation.xlsx')
-            df_timing = pd.read_excel(xls_timing, 'Cortical')
-            df_timing.set_index('Subject', inplace=True)
-
-            figure_path = '/data/p_02718/Polished/Raw_Envelopes/'
-            os.makedirs(figure_path, exist_ok=True)
+            subjects = np.arange(1, 37)
+            folder = 'tmp_data'
+            figure_folder = 'Polished'
         elif srmr_nr == 2:
-            xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Components_EEG_Updated.xlsx')
-            df = pd.read_excel(xls, 'CCA')
-            df.set_index('Subject', inplace=True)
+            subjects = np.arange(1, 25)
+            folder = 'tmp_data_2'
+            figure_folder = 'Polished_2'
 
-            xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Visibility_Updated.xlsx')
-            df_vis = pd.read_excel(xls, 'CCA_Brain')
-            df_vis.set_index('Subject', inplace=True)
+        xls = pd.ExcelFile(f'/data/pt_02718/{folder}/Components_EEG_Updated.xlsx')
+        df = pd.read_excel(xls, 'CCA')
+        df.set_index('Subject', inplace=True)
 
-            xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/LowFreq_HighFreq_Relation.xlsx')
-            df_timing = pd.read_excel(xls_timing, 'Cortical')
-            df_timing.set_index('Subject', inplace=True)
+        xls = pd.ExcelFile(f'/data/pt_02718/{folder}/Visibility_Updated.xlsx')
+        df_vis = pd.read_excel(xls, 'CCA_Brain')
+        df_vis.set_index('Subject', inplace=True)
 
-            figure_path = '/data/p_02718/Polished_2/Raw_Envelopes/'
-            os.makedirs(figure_path, exist_ok=True)
+        xls_timing = pd.ExcelFile(f'/data/pt_02718/{folder}/LowFreq_HighFreq_Relation.xlsx')
+        df_timing = pd.read_excel(xls_timing, 'Cortical')
+        df_timing.set_index('Subject', inplace=True)
+
+        figure_path = f'/data/p_02718/{figure_folder}/Raw_Envelopes_MergedBothDatasets/'
+        os.makedirs(figure_path, exist_ok=True)
 
         median_names = ['median', 'med_mixed']
         tibial_names = ['tibial', 'tib_mixed']
@@ -154,6 +147,8 @@ if __name__ == '__main__':
                 ax1.set_ylabel('Amplitude (\u03BCV)')
                 if cond_name in median_names:
                     ax1.set_xlim([0.0, 0.05])
+                    ax1.axvline(0.0147, linestyle='dashed', color='black')
+                    ax1.axvline(0.022, linestyle='dashed', color='black')
                     # Add coloured boxes to mark time zones of interest
                     # [10 / 1000, 16 / 1000]
                     # plt.axvspan(10/1000, 16/1000, color='tab:cyan', alpha=0.3)
@@ -162,6 +157,8 @@ if __name__ == '__main__':
                     # ax1.axvline(expected, color='red')
                 else:
                     ax1.set_xlim([0.0, 0.07])
+                    ax1.axvline(0.029, linestyle='dashed', color='black')
+                    ax1.axvline(0.041, linestyle='dashed', color='black')
                     # [24 / 1000, 36 / 1000]
                     # plt.axvspan(24 / 1000, 36 / 1000, color='tab:cyan', alpha=0.3)
                     # window_times = [32 / 1000, 44 / 1000]
@@ -173,4 +170,5 @@ if __name__ == '__main__':
                 plt.savefig(figure_path+f'GA_Envelope_{freq_band}_{cond_name}_n={len(evoked_list)}')
                 plt.savefig(figure_path + f'GA_Envelope_{freq_band}_{cond_name}_n={len(evoked_list)}.pdf',
                             bbox_inches='tight', format="pdf")
+                # plt.show()
                 plt.close(fig)

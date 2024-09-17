@@ -11,7 +11,7 @@ import os
 mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
-    srmr_nr = 2
+    srmr_nr = 1
     high_freq = 800
     ttest_type = 'across_cns' # 'across_cns' 'med_v_tib'
 

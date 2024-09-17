@@ -1,5 +1,5 @@
 # For digit stimulation (fingers & toes)
-# Use the finger/toe 1&2 for selection as this is the strongest condition signal wise
+# Use the finger/toe1, finger/toe2 and finger/toe 1&2 for selection as this is the strongest signal wise
 #
 # Plot single subject envelopes with bounds where peak should be
 # Calculate SNR and add information to plot

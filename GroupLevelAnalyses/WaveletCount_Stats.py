@@ -13,7 +13,7 @@ pd.set_option('display.width', 150)
 mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
-    srmr_nr = 2
+    srmr_nr = 1
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
@@ -40,7 +40,7 @@ if __name__ == '__main__':
             for data_type in data_types:
                 df_wavelet[f'{data_type.capitalize()}'] = df_pt[[f'{data_type}_peaks_{cond_name}', f'{data_type}_troughs_{cond_name}']].mean(axis=1)
             print(f'{cond_name}, {sheetname}')
-            df_wavelet.dropna()
+            df_wavelet.dropna(inplace=True)
             df_longform = df_wavelet.melt(id_vars=['Subject'], var_name='CNS_Level', value_name='no_wavelets')
 
 

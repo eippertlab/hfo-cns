@@ -31,10 +31,26 @@ mpl.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
 
 
 if __name__ == '__main__':
-    subjects = np.arange(1, 37)
-    conditions = [2, 3]
+    srmr_nr = 2
     freq_bands = ['sigma']
-    srmr_nr = 1
+
+    if srmr_nr == 1:
+        subjects = np.arange(1, 37)
+        conditions = [2, 3]
+        folder = 'tmp_data'
+        figure_folder = 'Polished'
+        subjects_cortical = [3, 6, 31, 36]
+        subjects_subcortical = [3, 6, 31, 36]
+        subjects_spinal = [3, 6, 31, 36]
+
+    elif srmr_nr == 2:
+        subjects = np.arange(1, 25)
+        conditions = [3, 5]
+        folder = 'tmp_data_2'
+        figure_folder = 'Polished_2'
+        subjects_cortical = [10, 14, 20]  # [2, 5, 7, 13, 17, 19, 22]
+        subjects_subcortical = [10, 14, 20]  # [2, 5, 7, 13, 17, 19, 22]
+        subjects_spinal = [10, 14, 20]  # [2, 5, 7, 13, 17, 19, 22]
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)
@@ -45,49 +61,35 @@ if __name__ == '__main__':
     iv_crop = [df.loc[df['var_name'] == 'epoch_start', 'var_value'].iloc[0],
                df.loc[df['var_name'] == 'epoch_end', 'var_value'].iloc[0]]
 
-    # Get a raw file so I can use the montage
-    raw = mne.io.read_raw_fif("/data/pt_02718/tmp_data/freq_banded_eeg/sub-001/sigma_median.fif", preload=True)
-    montage_path = '/data/pt_02718/'
-    montage_name = 'electrode_montage_eeg_10_5.elp'
-    montage = mne.channels.read_custom_montage(montage_path + montage_name)
-    raw.set_montage(montage, on_missing="ignore")
-    eeg_chans, esg_chans, bipolar_chans = get_channels(1, False, False, srmr_nr)
-    idx_by_type = mne.channel_indices_by_type(raw.info, picks=eeg_chans)
-    res = mne.pick_info(raw.info, sel=idx_by_type['eeg'], copy=True, verbose=None)
-
-    figure_path = '/data/p_02718/Polished/SingleSubject/'
+    figure_path = f'/data/p_02718/{figure_folder}/SingleSubject/'
     os.makedirs(figure_path, exist_ok=True)
 
     # Cortical Excel files
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility_Updated.xlsx')
+    xls = pd.ExcelFile(f'/data/pt_02718/{folder}/Visibility_Updated.xlsx')
     df_vis_cortical = pd.read_excel(xls, 'CCA_Brain')
     df_vis_cortical.set_index('Subject', inplace=True)
 
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG_Updated.xlsx')
+    xls = pd.ExcelFile(f'/data/pt_02718/{folder}/Components_EEG_Updated.xlsx')
     df_cortical = pd.read_excel(xls, 'CCA')
     df_cortical.set_index('Subject', inplace=True)
 
     # Subcortical Excel files
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility_Thalamic_Updated.xlsx')
+    xls = pd.ExcelFile(f'/data/pt_02718/{folder}/Visibility_Thalamic_Updated.xlsx')
     df_vis_sub = pd.read_excel(xls, 'CCA_Brain')
     df_vis_sub.set_index('Subject', inplace=True)
 
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_EEG_Thalamic_Updated.xlsx')
+    xls = pd.ExcelFile(f'/data/pt_02718/{folder}/Components_EEG_Thalamic_Updated.xlsx')
     df_sub = pd.read_excel(xls, 'CCA')
     df_sub.set_index('Subject', inplace=True)
 
     # Spinal Excel files
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_Updated.xlsx')
+    xls = pd.ExcelFile(f'/data/pt_02718/{folder}/Components_Updated.xlsx')
     df_spinal = pd.read_excel(xls, 'CCA')
     df_spinal.set_index('Subject', inplace=True)
 
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility_Updated.xlsx')
+    xls = pd.ExcelFile(f'/data/pt_02718/{folder}/Visibility_Updated.xlsx')
     df_vis_spinal = pd.read_excel(xls, 'CCA_Spinal')
     df_vis_spinal.set_index('Subject', inplace=True)
-
-    subjects_cortical = [3, 6, 31, 36]
-    subjects_subcortical = [3, 6, 31, 36]
-    subjects_spinal = [3, 6, 31, 36]
 
     for data_type, subjects in zip(['eeg', 'esg', 'eeg_sub'], [subjects_cortical, subjects_spinal, subjects_subcortical]):
         for freq_band in freq_bands:
@@ -112,7 +114,7 @@ if __name__ == '__main__':
 
                         # HFO
                         fname = f"{freq_band}_{cond_name}.fif"
-                        input_path = "/data/pt_02718/tmp_data/cca_eeg/" + subject_id + "/"
+                        input_path = f"/data/pt_02718/{folder}/cca_eeg/" + subject_id + "/"
                         df = df_cortical
                         df_vis = df_vis_cortical
 
@@ -123,7 +125,7 @@ if __name__ == '__main__':
 
                         # HFO
                         fname = f"{freq_band}_{cond_name}.fif"
-                        input_path = f"/data/pt_02718/tmp_data/cca_eeg_thalamic/{subject_id}/"
+                        input_path = f"/data/pt_02718/{folder}/cca_eeg_thalamic/{subject_id}/"
                         df = df_sub
                         df_vis = df_vis_sub
 
@@ -133,7 +135,7 @@ if __name__ == '__main__':
                         color_low = 'deeppink'
                         # HFO
                         fname = f"{freq_band}_{cond_name}.fif"
-                        input_path = "/data/pt_02718/tmp_data/cca/" + subject_id + "/"
+                        input_path = f"/data/pt_02718/{folder}/cca/" + subject_id + "/"
                         df = df_spinal
                         df_vis = df_vis_spinal
 
@@ -143,7 +145,7 @@ if __name__ == '__main__':
                     channel_no = df.loc[subject, f"{freq_band}_{cond_name}_comp"]
                     channel = f'Cor{channel_no}'
                     inv = df.loc[subject, f"{freq_band}_{cond_name}_flip"]
-                    epochs = epochs.pick_channels([channel])
+                    epochs = epochs.pick([channel])
                     if inv == 'T':
                         epochs.apply_function(invert, picks=channel)
                     evoked = epochs.copy().average()
@@ -168,14 +170,14 @@ if __name__ == '__main__':
                     ax1.spines['top'].set_visible(False)
                     ax1.spines['right'].set_visible(False)
 
-                    if condition == 2:
+                    if cond_name in ['median', 'med_mixed']:
                         if data_type == 'eeg':
                             ax1.axvline(0.02, color='black', label='20ms', linestyle='dashed')
                         elif data_type == 'eeg_sub':
                             ax1.axvline(0.014, color='black', label='14ms', linestyle='dashed')
                         elif data_type == 'esg':
                             ax1.axvline(0.013, color='black', label='13ms', linestyle='dashed')
-                    elif condition == 3:
+                    elif cond_name in ['tibial', 'tib_mixed']:
                         if data_type == 'eeg':
                             ax1.axvline(0.04, color='black', label='40ms', linestyle='dashed')
                         elif data_type == 'eeg_sub':
