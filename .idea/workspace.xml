@@ -6,13 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="32d78150-f875-4a94-a101-72a4657c6a8a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CNSLevelSpecificFunctions/SNR_EnvelopePeak_Cortical_Digits.py" beforeDir="false" afterPath="$PROJECT_DIR$/CNSLevelSpecificFunctions/SNR_EnvelopePeak_Cortical_Digits.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CNSLevelSpecificFunctions/SNR_EnvelopePeak_Thalamic_Digits.py" beforeDir="false" afterPath="$PROJECT_DIR$/CNSLevelSpecificFunctions/SNR_EnvelopePeak_Thalamic_Digits.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GroupLevelAnalyses/BurstFreq_AcrossCNS_Stats.py" beforeDir="false" afterPath="$PROJECT_DIR$/GroupLevelAnalyses/BurstFreq_AcrossCNS_Stats.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GroupLevelAnalyses/WaveletCount_Stats.py" beforeDir="false" afterPath="$PROJECT_DIR$/GroupLevelAnalyses/WaveletCount_Stats.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Publication_Images/CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Publication_Images/RawEnvelopePlots_Cortical_Thalamic.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/RawEnvelopePlots_Cortical_Thalamic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Publication_Images/SingleSubject_TimeCourse.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/SingleSubject_TimeCourse.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Publication_Images/RawEnvelopePlots_Cortical_Thalamic_MergeDatasets.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/RawEnvelopePlots_Cortical_Thalamic_MergeDatasets.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

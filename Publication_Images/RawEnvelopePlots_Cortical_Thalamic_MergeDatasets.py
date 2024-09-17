@@ -147,7 +147,7 @@ if __name__ == '__main__':
         else:
             ax1.set_xlim([0.0, 0.07])
             ax1.axvline(0.0282, linestyle='dashed', color='black')
-            ax1.axvline(0.04, linestyle='dashed', color='black')
+            ax1.axvline(0.0409, linestyle='dashed', color='black')
             # [24 / 1000, 36 / 1000]
             # plt.axvspan(24 / 1000, 36 / 1000, color='tab:cyan', alpha=0.3)
             # window_times = [32 / 1000, 44 / 1000]
