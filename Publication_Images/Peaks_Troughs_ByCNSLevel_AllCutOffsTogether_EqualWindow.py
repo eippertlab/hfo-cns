@@ -12,7 +12,7 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 
 if __name__ == '__main__':
-    srmr_nr = 2
+    srmr_nr = 1
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
@@ -51,7 +51,10 @@ if __name__ == '__main__':
                     ax=ax, fill=False, palette=sns.color_palette(['tab:blue', 'tab:cyan', 'tab:purple']),
                     legend=True, linewidth=3, gap=0.1)
         plt.title(f"{cond_name}")
-        ax.set_ylim([0, 10])
+        if srmr_nr == 1:
+            ax.set_ylim([1.4, 10])
+        else:
+            ax.set_ylim([0, 10])
         plt.savefig(figure_path + f'CrossCNS_CombinedThreshold_PeaksTroughs_{cond_name}_{sheetname}.png')
         plt.savefig(
             figure_path + f'CrossCNS_CombinedThreshold_PeaksTroughs_{cond_name}_{sheetname}.pdf',
