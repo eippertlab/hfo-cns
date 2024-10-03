@@ -1,17 +1,17 @@
 # cns-hfo
 
-This repository is associated with the following [manuscript] and the corresponding [dataset1](https://openneuro.org/datasets/ds004388) 
-and [dataset2](https://openneuro.org/datasets/ds004389). If you have any questions related to this code, please feel free to 
+This repository is associated with the following [manuscript] and the corresponding data in [Dataset 1](https://openneuro.org/datasets/ds004388) 
+and [Dataset 2](https://openneuro.org/datasets/ds004389). If you have any questions related to this code, please feel free to 
 contact [bailey@cbs.mpg.de](mailto:bailey@cbs.mpg.de).
 
-Abbreviations:
+Abbreviations used:
 * CNS: Central nervous system
 * HFO: High frequency oscillation
 * LF-SEP: Low frequency somatosensory evoked potential
 
 
 # Content
-This repository contains the preprocessing and analysis code used to preprocess and analyse high frequency oscillations 
+This repository contains the code used to preprocess and analyse high frequency oscillations 
 across the central nervous system in electrophysiology data as presented in the above-mentioned manuscript.
 
 ## Main Processing
@@ -50,7 +50,7 @@ Scripts contained in [GroupLevelAnalyses](GroupLevelAnalyses) contain scripts re
 ## Publication_Images
 Scripts contained in [Publication_Images](Publication_Images) are used to generate all figures presented in the manuscript and supplement.
 
-# CCA validation using resting state recordings
+## CCA validation using resting state recordings
 In addition to the main analysis, validation of the results obtained via CCA was performed using resting state recordings
 which accompany the task-evoked recordings for each participant. 
 * [EEG_RestingState_Pipeline.py](EEG_RestingState_Pipeline.py) and [ESG_RestingState_Pipeline.py](ESG_RestingState_Pipeline.py) are 
@@ -68,4 +68,4 @@ wrapper scripts used to preprocess the resting state data in a similar fashion t
     related statistics
 
 # Required Software
-All scripts run with python 3.9 and MNE 1.0.3,  for an extensive list of required packages see [requirements.txt](requirements.txt).
+All scripts run with python 3.9 and MNE 1.0.3,  for a detailed list of required packages see [requirements.txt](requirements.txt).
