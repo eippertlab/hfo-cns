@@ -37,15 +37,16 @@ scripts required to run cardiac artefact removal via SSP are found here.
 
 ## Group_Level_Analyses
 Scripts contained in [Group_Level_Analyses](Group_Level_Analyses) contain scripts required to:
+* Obtain the latency of high and low frequency potentials of interest ([GetPotential_Timing_LowFreq_HighFreq.py](GroupLevelAnalyses%2FGetPotential_Timing_LowFreq_HighFreq.py))
+* Determine the number of participants with detected HFOs before CCA is applied ([SNR_EnvelopePeak_SensorSpace.py](GroupLevelAnalyses%2FSNR_EnvelopePeak_SensorSpace.py))
 * Compute the burst frequency at each CNS level for each participant ([TFR_ROISearch_BurstFrequency_WeightsToBroadband_Filter.py](GroupLevelAnalyses%2FTFR_ROISearch_BurstFrequency_WeightsToBroadband_Filter.py))
   * As well as related statistical analyses ([BurstFreq_AcrossCNS_Stats.py](GroupLevelAnalyses%2FBurstFreq_AcrossCNS_Stats.py))
-* Obtain the latency of high and low frequency potentials of interest ([GetPotential_Timing_LowFreq_HighFreq.py](GroupLevelAnalyses%2FGetPotential_Timing_LowFreq_HighFreq.py))
-* Compute the single trial signal-to-noise ratio for the HFOs and LF-SEPs for cortical and spinal data ([HighVsLowFreq_ComputeSingleTrial_SNR_CorticalSpinal_CCA.py](GroupLevelAnalyses%2FHighVsLowFreq_ComputeSingleTrial_SNR_CorticalSpinal_CCA.py))
-* Compute the latency, amplitude and signal-to-noise ratio of HFOs and LF-SEPs ([PartialCorrelation_SNR_CreateTables_CCA.py](GroupLevelAnalyses%2FPartialCorrelation_SNR_CreateTables_CCA.py)), such that we can
-  * Compute the correlation and partial correlation between grand average HFO and LF-SEPs across participants ([PartialCorrelation_LowFreq_HighFreq_CCA_Amp_SNR.py](GroupLevelAnalyses%2FPartialCorrelation_LowFreq_HighFreq_CCA_Amp_SNR.py))
-* Determine the number of participants with detected HFOs before CCA is applied ([SNR_EnvelopePeak_SensorSpace.py](GroupLevelAnalyses%2FSNR_EnvelopePeak_SensorSpace.py))
 * Determine the number of burst peaks for each HFO burst ([WaveletCount_EqualWindowCounting.py](GroupLevelAnalyses%2FWaveletCount_EqualWindowCounting.py))
   * As well as related statistical analyses ([WaveletCount_Stats.py](GroupLevelAnalyses%2FWaveletCount_Stats.py))
+* Compute the latency, amplitude and signal-to-noise ratio of average HFOs and LF-SEPs ([PartialCorrelation_SNR_CreateTables_CCA.py](GroupLevelAnalyses%2FPartialCorrelation_SNR_CreateTables_CCA.py)), such that we can
+  * Compute the correlation and partial correlation between average HFO and LF-SEPs across participants ([PartialCorrelation_LowFreq_HighFreq_CCA_Amp_SNR.py](GroupLevelAnalyses%2FPartialCorrelation_LowFreq_HighFreq_CCA_Amp_SNR.py))
+* Compute the single trial signal-to-noise ratio for the HFOs and LF-SEPs for cortical and spinal data ([HighVsLowFreq_ComputeSingleTrial_SNR_CorticalSpinal_CCA.py](GroupLevelAnalyses%2FHighVsLowFreq_ComputeSingleTrial_SNR_CorticalSpinal_CCA.py))
+to enable LF-SEP to HFO comparison in the strongest versus weakest trials
 
 ## CCA_Resting_State_Validation
 In addition to the main analysis, validation of the results obtained via CCA was performed using resting state recordings
