@@ -36,7 +36,7 @@ the optimal spatial filter for each condition at the spinal, subcortical and cor
 scripts required to run cardiac artefact removal via SSP are found here.
 
 ## Group_Level_Analyses
-Scripts contained in [GroupLevelAnalyses](Group_Level_Analyses) contain scripts required to:
+Scripts contained in [Group_Level_Analyses](Group_Level_Analyses) contain scripts required to:
 * Compute the burst frequency at each CNS level for each participant ([TFR_ROISearch_BurstFrequency_WeightsToBroadband_Filter.py](GroupLevelAnalyses%2FTFR_ROISearch_BurstFrequency_WeightsToBroadband_Filter.py))
   * As well as related statistical analyses ([BurstFreq_AcrossCNS_Stats.py](GroupLevelAnalyses%2FBurstFreq_AcrossCNS_Stats.py))
 * Obtain the latency of high and low frequency potentials of interest ([GetPotential_Timing_LowFreq_HighFreq.py](GroupLevelAnalyses%2FGetPotential_Timing_LowFreq_HighFreq.py))

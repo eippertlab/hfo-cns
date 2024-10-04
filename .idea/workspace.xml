@@ -5,55 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="32d78150-f875-4a94-a101-72a4657c6a8a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Archive/Bipolar/ImportBipolar_CNAP.py" beforeDir="false" afterPath="$PROJECT_DIR$/Archive/Bipolar/ImportBipolar_CNAP.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Archive/Images/EEG_images/CCA_Digit_EnvelopeComparison_CorticalAndThalamic.py" beforeDir="false" afterPath="$PROJECT_DIR$/Archive/Images/EEG_images/CCA_Digit_EnvelopeComparison_CorticalAndThalamic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Archive/Images/EEG_images/CCA_Digit_EnvelopeComparison_CorticalAndThalamic_SingleSubject.py" beforeDir="false" afterPath="$PROJECT_DIR$/Archive/Images/EEG_images/CCA_Digit_EnvelopeComparison_CorticalAndThalamic_SingleSubject.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Archive/Images/EEG_images/CCA_Envelope_Cortical.py" beforeDir="false" afterPath="$PROJECT_DIR$/Archive/Images/EEG_images/CCA_Envelope_Cortical.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Archive/Images/EEG_images/CCA_SingleSubject_Cortical.py" beforeDir="false" afterPath="$PROJECT_DIR$/Archive/Images/EEG_images/CCA_SingleSubject_Cortical.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Archive/Images/EEG_images/CombinedEnvelopePlots_Cortical.py" beforeDir="false" afterPath="$PROJECT_DIR$/Archive/Images/EEG_images/CombinedEnvelopePlots_Cortical.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Archive/Polished_Images/CCA_Digit_ClusterPermutation_CorticalAndThalamic.py" beforeDir="false" afterPath="$PROJECT_DIR$/Archive/Polished_Images/CCA_Digit_ClusterPermutation_CorticalAndThalamic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CCA_RestingStateValidation/CCA_CorrelationValidation_ttests_UpperTri.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_Resting_State_Validation/CCA_CorrelationValidation_ttests_UpperTri.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CCA_RestingStateValidation/Correlation_SummaryTable_UpperTri.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_Resting_State_Validation/Correlation_SummaryTable_UpperTri.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CCA_RestingStateValidation/TaskEvoked_RestingState_CCACorrelation_CCAWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_Resting_State_Validation/TaskEvoked_RestingState_CCACorrelation_CCAWindow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CCA_RestingStateValidation/TaskEvoked_RestingState_CCACorrelation_Parallel.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_Resting_State_Validation/TaskEvoked_RestingState_CCACorrelation_Parallel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CCA_RestingStateValidation/TaskEvoked_RestingState_CCACorrelation_ShorterWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_Resting_State_Validation/TaskEvoked_RestingState_CCACorrelation_ShorterWindow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CCA_RestingStateValidation/plot_task_rest.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_Resting_State_Validation/plot_task_rest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CCA_RestingStateValidation/run_CCA_restingstate.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_Resting_State_Validation/run_CCA_restingstate.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CNSLevelSpecificFunctions/SNR_EnvelopePeak_Cortical.py" beforeDir="false" afterPath="$PROJECT_DIR$/CNS_Level_Specific_Functions/SNR_EnvelopePeak_Cortical.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CNSLevelSpecificFunctions/SNR_EnvelopePeak_Cortical_Digits.py" beforeDir="false" afterPath="$PROJECT_DIR$/CNS_Level_Specific_Functions/SNR_EnvelopePeak_Cortical_Digits.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CNSLevelSpecificFunctions/SNR_EnvelopePeak_Spinal.py" beforeDir="false" afterPath="$PROJECT_DIR$/CNS_Level_Specific_Functions/SNR_EnvelopePeak_Spinal.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CNSLevelSpecificFunctions/SNR_EnvelopePeak_Spinal_Digits.py" beforeDir="false" afterPath="$PROJECT_DIR$/CNS_Level_Specific_Functions/SNR_EnvelopePeak_Spinal_Digits.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CNSLevelSpecificFunctions/SNR_EnvelopePeak_Thalamic.py" beforeDir="false" afterPath="$PROJECT_DIR$/CNS_Level_Specific_Functions/SNR_EnvelopePeak_Thalamic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CNSLevelSpecificFunctions/SNR_EnvelopePeak_Thalamic_Digits.py" beforeDir="false" afterPath="$PROJECT_DIR$/CNS_Level_Specific_Functions/SNR_EnvelopePeak_Thalamic_Digits.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CNSLevelSpecificFunctions/SSP.py" beforeDir="false" afterPath="$PROJECT_DIR$/CNS_Level_Specific_Functions/SSP.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CNSLevelSpecificFunctions/SSP_restingstate.py" beforeDir="false" afterPath="$PROJECT_DIR$/CNS_Level_Specific_Functions/SSP_restingstate.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CNSLevelSpecificFunctions/run_CCA_brain.py" beforeDir="false" afterPath="$PROJECT_DIR$/CNS_Level_Specific_Functions/run_CCA_brain.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CNSLevelSpecificFunctions/run_CCA_brain_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/CNS_Level_Specific_Functions/run_CCA_brain_2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CNSLevelSpecificFunctions/run_CCA_brain_thalamic.py" beforeDir="false" afterPath="$PROJECT_DIR$/CNS_Level_Specific_Functions/run_CCA_brain_thalamic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CNSLevelSpecificFunctions/run_CCA_brain_thalamic_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/CNS_Level_Specific_Functions/run_CCA_brain_thalamic_2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CNSLevelSpecificFunctions/run_CCA_spinal.py" beforeDir="false" afterPath="$PROJECT_DIR$/CNS_Level_Specific_Functions/run_CCA_spinal.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CNSLevelSpecificFunctions/run_CCA_spinal_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/CNS_Level_Specific_Functions/run_CCA_spinal_2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Common_Functions/calculate_snr_lowfreq.py" beforeDir="false" afterPath="$PROJECT_DIR$/Common_Functions/calculate_snr_lowfreq.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Common_Functions/calculate_snr_lowfreq_cca.py" beforeDir="false" afterPath="$PROJECT_DIR$/Common_Functions/calculate_snr_lowfreq_cca.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Common_Functions/calculate_snr_lowfreq_ccapolarity.py" beforeDir="false" afterPath="$PROJECT_DIR$/Common_Functions/calculate_snr_lowfreq_ccapolarity.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Common_Functions/get_channels.py" beforeDir="false" afterPath="$PROJECT_DIR$/Common_Functions/get_channels.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EEG_Pipeline.py" beforeDir="false" afterPath="$PROJECT_DIR$/EEG_Pipeline.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ESG_Pipeline.py" beforeDir="false" afterPath="$PROJECT_DIR$/ESG_Pipeline.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ESG_RestingState_Pipeline.py" beforeDir="false" afterPath="$PROJECT_DIR$/ESG_RestingState_Pipeline.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GroupLevelAnalyses/BurstFreq_AcrossCNS_Stats.py" beforeDir="false" afterPath="$PROJECT_DIR$/Group_Level_Analyses/BurstFreq_AcrossCNS_Stats.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GroupLevelAnalyses/ChangeExcelFormat_BurstFrequency.py" beforeDir="false" afterPath="$PROJECT_DIR$/Group_Level_Analyses/ChangeExcelFormat_BurstFrequency.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GroupLevelAnalyses/ChangeExcelFormat_WaveletCount.py" beforeDir="false" afterPath="$PROJECT_DIR$/Group_Level_Analyses/ChangeExcelFormat_WaveletCount.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GroupLevelAnalyses/GetPotential_Timing_LowFreq_HighFreq.py" beforeDir="false" afterPath="$PROJECT_DIR$/Group_Level_Analyses/GetPotential_Timing_LowFreq_HighFreq.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GroupLevelAnalyses/HighVsLowFreq_ComputeSingleTrial_SNR_CorticalSpinal_CCA.py" beforeDir="false" afterPath="$PROJECT_DIR$/Group_Level_Analyses/HighVsLowFreq_ComputeSingleTrial_SNR_CorticalSpinal_CCA.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GroupLevelAnalyses/PartialCorrelation_LowFreq_HighFreq_CCA_Amp_SNR.py" beforeDir="false" afterPath="$PROJECT_DIR$/Group_Level_Analyses/PartialCorrelation_LowFreq_HighFreq_CCA_Amp_SNR.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GroupLevelAnalyses/PartialCorrelation_SNR_CreateTables_CCA.py" beforeDir="false" afterPath="$PROJECT_DIR$/Group_Level_Analyses/PartialCorrelation_SNR_CreateTables_CCA.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GroupLevelAnalyses/SNR_EnvelopePeak_SensorSpace.py" beforeDir="false" afterPath="$PROJECT_DIR$/Group_Level_Analyses/SNR_EnvelopePeak_SensorSpace.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GroupLevelAnalyses/TFR_ROISearch_BurstFrequency_WeightsToBroadband_Filter.py" beforeDir="false" afterPath="$PROJECT_DIR$/Group_Level_Analyses/TFR_ROISearch_BurstFrequency_WeightsToBroadband_Filter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GroupLevelAnalyses/TFR_ROISearch_BurstFrequency_WeightsToBroadband_Filter_Digits.py" beforeDir="false" afterPath="$PROJECT_DIR$/Archive/TFR_ROISearch_BurstFrequency_WeightsToBroadband_Filter_Digits.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GroupLevelAnalyses/WaveletCount_EqualWindowCounting.py" beforeDir="false" afterPath="$PROJECT_DIR$/Group_Level_Analyses/WaveletCount_EqualWindowCounting.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GroupLevelAnalyses/WaveletCount_Stats.py" beforeDir="false" afterPath="$PROJECT_DIR$/Group_Level_Analyses/WaveletCount_Stats.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Publication_Images/CCA_Digit_ClusterPermutation_CorticalAndThalamic_YY.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/CCA_Digit_ClusterPermutation_CorticalAndThalamic_YY.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
