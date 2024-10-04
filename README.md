@@ -1,4 +1,4 @@
-# cns-hfo
+# hfo-cns
 
 This repository is associated with the following [manuscript] and the corresponding data in [Dataset 1](https://openneuro.org/datasets/ds004388) 
 and [Dataset 2](https://openneuro.org/datasets/ds004389). If you have any questions related to this code, please feel free to 
@@ -14,7 +14,7 @@ Abbreviations used:
 This repository contains the code used to preprocess and analyse high frequency oscillations 
 across the central nervous system in electrophysiology data as presented in the above-mentioned manuscript.
 
-## Main Processing
+## Main_Processing
 **EEG_Pipeline.py** and **ESG_Pipeline.py** are wrapper scripts which can be used to specify the stages of analysis to
 run. These steps include:
 * Data Import (incl. downsampling, r-peak event annotation, stimulus artefact removal, file concatenation)
@@ -30,14 +30,14 @@ Scripts contained in [Common_Functions](Common_Functions) contain function files
 EEG and ESG data in the aforementioned datasets. They can generally be used independent of the CNS level currently
 under study.
 
-## CNSLevelSpecificFunctions
-Scripts contained in [CNSLevelSpecificFunctions](CNSLevelSpecificFunctions) contain the functions required to run CCA and subsequently select
+## CNS_Level_Specific_Functions
+Scripts contained in [CNS_Level_Specific_Functions](CNS_Level_Specific_Functions) contain the functions required to run CCA and subsequently select
 the optimal spatial filter for each condition at the spinal, subcortical and cortical CNS levels. Additionally, the 
 scripts required to run cardiac artefact removal via SSP are found here.
 
-## GroupLevelAnalyses
-Scripts contained in [GroupLevelAnalyses](GroupLevelAnalyses) contain scripts required to:
-* Compute the burst frequency at each CNS level for each participant ([TFR_ROISearch_BurstFrequency_WeightsToBroadband_Filter.py](GroupLevelAnalyses%2FTFR_ROISearch_BurstFrequency_WeightsToBroadband_Filter.py) and [TFR_ROISearch_BurstFrequency_WeightsToBroadband_Filter_Digits.py](GroupLevelAnalyses%2FTFR_ROISearch_BurstFrequency_WeightsToBroadband_Filter_Digits.py))
+## Group_Level_Analyses
+Scripts contained in [GroupLevelAnalyses](Group_Level_Analyses) contain scripts required to:
+* Compute the burst frequency at each CNS level for each participant ([TFR_ROISearch_BurstFrequency_WeightsToBroadband_Filter.py](GroupLevelAnalyses%2FTFR_ROISearch_BurstFrequency_WeightsToBroadband_Filter.py))
   * As well as related statistical analyses ([BurstFreq_AcrossCNS_Stats.py](GroupLevelAnalyses%2FBurstFreq_AcrossCNS_Stats.py))
 * Obtain the latency of high and low frequency potentials of interest ([GetPotential_Timing_LowFreq_HighFreq.py](GroupLevelAnalyses%2FGetPotential_Timing_LowFreq_HighFreq.py))
 * Compute the single trial signal-to-noise ratio for the HFOs and LF-SEPs for cortical and spinal data ([HighVsLowFreq_ComputeSingleTrial_SNR_CorticalSpinal_CCA.py](GroupLevelAnalyses%2FHighVsLowFreq_ComputeSingleTrial_SNR_CorticalSpinal_CCA.py))
@@ -47,25 +47,25 @@ Scripts contained in [GroupLevelAnalyses](GroupLevelAnalyses) contain scripts re
 * Determine the number of burst peaks for each HFO burst ([WaveletCount_EqualWindowCounting.py](GroupLevelAnalyses%2FWaveletCount_EqualWindowCounting.py))
   * As well as related statistical analyses ([WaveletCount_Stats.py](GroupLevelAnalyses%2FWaveletCount_Stats.py))
 
-## Publication_Images
-Scripts contained in [Publication_Images](Publication_Images) are used to generate all figures presented in the manuscript and supplement.
-
-## CCA validation using resting state recordings
+## CCA_Resting_State_Validation
 In addition to the main analysis, validation of the results obtained via CCA was performed using resting state recordings
 which accompany the task-evoked recordings for each participant. 
 * [EEG_RestingState_Pipeline.py](EEG_RestingState_Pipeline.py) and [ESG_RestingState_Pipeline.py](ESG_RestingState_Pipeline.py) are 
 wrapper scripts used to preprocess the resting state data in a similar fashion to the task-evoked data
-* [CCA_RestingStateValidation](CCA_RestingStateValidation) contains scripts to perform the validation itself
+* [CCA_Resting_State_Validation](CCA_Resting_State_Validation) contains scripts to perform the validation itself
   * [TaskEvoked_RestingState_CCACorrelation_Parallel.py](CCA_RestingStateValidation%2FTaskEvoked_RestingState_CCACorrelation_Parallel.py) performs
   the validation and computes the correlation between iterations of CCA across the entire trial length
   * [TaskEvoked_RestingState_CCACorrelation_CCAWindow.py](CCA_RestingStateValidation%2FTaskEvoked_RestingState_CCACorrelation_CCAWindow.py) takes the 
   time courses from the previous step and computes the correlation within only the time window used to train CCA
   * [TaskEvoked_RestingState_CCACorrelation_ShorterWindow.py](CCA_RestingStateValidation%2FTaskEvoked_RestingState_CCACorrelation_ShorterWindow.py) takes the 
-  time courses from the previous step and computes the correlation within only from 10ms before to 40ms after the time window used to train CCA
+  time courses from the previous step and computes the correlation from 10ms before to 40ms after the time window used to train CCA
   * [Correlation_SummaryTable_UpperTri.py](CCA_RestingStateValidation%2FCorrelation_SummaryTable_UpperTri.py) computes the average
   absolute correlation across participants
     * [CCA_CorrelationValidation_ttests_UpperTri.py](CCA_RestingStateValidation%2FCCA_CorrelationValidation_ttests_UpperTri.py) performs 
     related statistics
 
+## Publication_Images
+Scripts contained in [Publication_Images](Publication_Images) are used to generate all figures presented in the manuscript and supplement.
+
 # Required Software
-All scripts run with python 3.9 and MNE 1.0.3,  for a detailed list of required packages see [requirements.txt](requirements.txt).
+All scripts run with python 3.9 and MNE 1.0.3, for a detailed list of required packages see [requirements.txt](requirements.txt).

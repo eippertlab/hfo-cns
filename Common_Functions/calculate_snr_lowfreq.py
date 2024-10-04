@@ -1,4 +1,4 @@
-# Compute SNR of the data for each mode (ESG and CNSLevelSpecificFunctions) and each condition (median, tibial, med_mixed, tib_mixed)
+# Compute SNR of the data for each mode (ESG and CNS_Level_Specific_Functions) and each condition (median, tibial, med_mixed, tib_mixed)
 # This is for the low frequency SEPs
 # The SNR was estimated by dividing the evoked response peak amplitude
 # (absolute value) by the standard deviation of the LEP waveform in

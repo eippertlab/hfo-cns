@@ -15,7 +15,7 @@ import random
 from Common_Functions.get_channels import get_channels
 from Common_Functions.get_esg_channels import get_esg_channels
 from Common_Functions.get_conditioninfo import get_conditioninfo
-from CCA_RestingStateValidation.run_CCA_restingstate import run_CCA_restingstate
+from CCA_Resting_State_Validation.run_CCA_restingstate import run_CCA_restingstate
 
 
 def get_comp1_evoked(iterable, time_window, epochs_full):

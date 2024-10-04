@@ -46,7 +46,7 @@ if __name__ == '__main__':
             df_timing = pd.read_excel(xls_timing, 'Cortical')
             df_timing.set_index('Subject', inplace=True)
 
-            figure_path = '/data/p_02718/Images/CNSLevelSpecificFunctions&CCA/Combined_Envelopes/'
+            figure_path = '/data/p_02718/Images/CNS_Level_Specific_Functions&CCA/Combined_Envelopes/'
             os.makedirs(figure_path, exist_ok=True)
         elif srmr_nr == 2:
             xls = pd.ExcelFile('/data/pt_02718/tmp_data_2/Components_EEG_Updated.xlsx')
@@ -61,7 +61,7 @@ if __name__ == '__main__':
             df_timing = pd.read_excel(xls_timing, 'Cortical')
             df_timing.set_index('Subject', inplace=True)
 
-            figure_path = '/data/p_02718/Images_2/CNSLevelSpecificFunctions&CCA/Combined_Envelopes/'
+            figure_path = '/data/p_02718/Images_2/CNS_Level_Specific_Functions&CCA/Combined_Envelopes/'
             os.makedirs(figure_path, exist_ok=True)
 
         median_names = ['median', 'med_mixed']

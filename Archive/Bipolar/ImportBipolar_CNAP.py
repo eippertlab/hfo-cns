@@ -27,7 +27,7 @@ def import_data(subject, condition, srmr_nr, sampling_rate_og, repair_stim_art):
     df = pd.read_excel(cfg_path)
     notch_freq = df.loc[df['var_name'] == 'notch_freq', 'var_value'].iloc[0]
 
-    # Process ESG channels and then CNSLevelSpecificFunctions channels separately
+    # Process ESG channels and then CNS_Level_Specific_Functions channels separately
     # for esg_flag in [True, False]:  # True for esg, false for eeg
     # Get the condition information based on the condition read in
     cond_info = get_conditioninfo(condition, srmr_nr)

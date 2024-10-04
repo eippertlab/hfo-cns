@@ -9,10 +9,10 @@ from Common_Functions.import_data import import_data
 from Common_Functions.bad_trial_check import bad_trial_check
 from Common_Functions.bad_channel_check import bad_channel_check
 from Common_Functions.Create_Frequency_Bands import create_frequency_bands
-from CNSLevelSpecificFunctions.run_CCA_brain import run_CCA
-from CNSLevelSpecificFunctions.run_CCA_brain_2 import run_CCA2
-from CNSLevelSpecificFunctions.run_CCA_brain_thalamic import run_CCA_thalamic
-from CNSLevelSpecificFunctions.run_CCA_brain_thalamic_2 import run_CCA_thalamic2
+from CNS_Level_Specific_Functions.run_CCA_brain import run_CCA
+from CNS_Level_Specific_Functions.run_CCA_brain_2 import run_CCA2
+from CNS_Level_Specific_Functions.run_CCA_brain_thalamic import run_CCA_thalamic
+from CNS_Level_Specific_Functions.run_CCA_brain_thalamic_2 import run_CCA_thalamic2
 
 if __name__ == '__main__':
     srmr_nr = 1  # Set the experiment number
