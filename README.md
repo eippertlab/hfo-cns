@@ -32,7 +32,7 @@ under study.
 
 ## CNS_Level_Specific_Functions
 Scripts contained in [CNS_Level_Specific_Functions](CNS_Level_Specific_Functions) contain the functions required to run CCA and subsequently select
-the optimal spatial filter for each condition at the spinal, subcortical and cortical CNS levels. Additionally, the 
+the optimal spatial filter (and thus determine the participants with detected HFOs) for each condition at the spinal, subcortical and cortical CNS levels. Additionally, the 
 scripts required to run cardiac artefact removal via SSP are found here.
 
 ## Group_Level_Analyses
