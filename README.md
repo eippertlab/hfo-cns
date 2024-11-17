@@ -1,3 +1,4 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 # hfo-cns
 
 This repository is associated with the following [preprint](https://www.biorxiv.org/content/10.1101/2024.11.16.622608v1) and the corresponding data in [Dataset 1](https://openneuro.org/datasets/ds004388) 
