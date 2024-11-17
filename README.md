@@ -1,6 +1,6 @@
 # hfo-cns
 
-This repository is associated with the following [manuscript] and the corresponding data in [Dataset 1](https://openneuro.org/datasets/ds004388) 
+This repository is associated with the following [preprint](https://www.biorxiv.org/content/10.1101/2024.11.16.622608v1) and the corresponding data in [Dataset 1](https://openneuro.org/datasets/ds004388) 
 and [Dataset 2](https://openneuro.org/datasets/ds004389). If you have any questions related to this code, please feel free to 
 contact [bailey@cbs.mpg.de](mailto:bailey@cbs.mpg.de).
 
