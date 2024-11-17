@@ -1,3 +1,5 @@
+[![GitHub Release](https://img.shields.io/github/v/release/eippertlab/hfo-cns)](https://github.com/eippertlab/hfo-cns/releases/tag/v1.0)
+[![DOI](https://zenodo.org/badge/554081060.svg)](https://doi.org/10.5281/zenodo.14175917)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 # hfo-cns
 
