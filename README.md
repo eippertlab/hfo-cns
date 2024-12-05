@@ -1,6 +1,9 @@
+[![GitHub Release](https://img.shields.io/github/v/release/eippertlab/hfo-cns)](https://github.com/eippertlab/hfo-cns/releases/tag/v1.0)
+[![DOI](https://zenodo.org/badge/554081060.svg)](https://doi.org/10.5281/zenodo.14175917)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 # hfo-cns
 
-This repository is associated with the following [manuscript] and the corresponding data in [Dataset 1](https://openneuro.org/datasets/ds004388) 
+This repository is associated with the following [preprint](https://www.biorxiv.org/content/10.1101/2024.11.16.622608v1) and the corresponding data in [Dataset 1](https://openneuro.org/datasets/ds004388) 
 and [Dataset 2](https://openneuro.org/datasets/ds004389). If you have any questions related to this code, please feel free to 
 contact [bailey@cbs.mpg.de](mailto:bailey@cbs.mpg.de).
 
