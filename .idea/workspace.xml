@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="32d78150-f875-4a94-a101-72a4657c6a8a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Publication_Images/HighVsLowFreq_SingleTrial_SNRLow_CorticalSpinal_CCA_ClusterBasedPermutation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Archive/Images/EEG&amp;ESG_images/CCAEnvelope_Spinal_SubCortical_Cortical_NoShift.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical_NoShift.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Archive/Polished_Images/GrandAverageD2_HFOEnvelope_LowFreqTime_YY_NewAlignment.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Archive/Polished_Images/GrandAverage_HFOEnvelope_LowFreqTime_YY_NewAlignment.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Archive/Polished_Images/SingleSubject_TimeCourse_YY.py" beforeDir="false" />
@@ -15,6 +17,7 @@
       <change beforePath="$PROJECT_DIR$/Publication_Images/GrandAverageD2_SpatialPatterns.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/GrandAverageD2_SpatialPatterns.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Publication_Images/GrandAverage_SpatialPatterns.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/GrandAverage_SpatialPatterns.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Publication_Images/GrandAverage_SpatialPatterns_Thalamic.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/GrandAverage_SpatialPatterns_Thalamic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Publication_Images/HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA_ClusterBasedPermutation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA_ClusterBasedPermutation.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,9 +62,11 @@
     "Python.GrandAverageD2_SpatialPatterns.executor": "Run",
     "Python.GrandAverage_SpatialPatterns.executor": "Run",
     "Python.GrandAverage_SpatialPatterns_Thalamic.executor": "Run",
+    "Python.HighVsLowFreq_SingleTrial_SNRLow_CorticalSpinal_CCA_ClusterBasedPermutation.executor": "Run",
     "Python.HighVsLowFreq_SingleTrial_SNR_CorticalSpinal.executor": "Run",
     "Python.HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA.executor": "Run",
     "Python.HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA_ClusterBasedPermutation.executor": "Run",
+    "Python.HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA_ClusterBasedPermutation_NoShift.executor": "Run",
     "Python.LowFreq_HighFreq_LatencyComparison_CCA.executor": "Run",
     "Python.PartialCorrelation_LowFreq_HighFreq_CCA_Amp_SNR.executor": "Run",
     "Python.PartialCorrelation_SNR_CreateTables_CCA.executor": "Run",
@@ -102,14 +107,14 @@
       <recent name="$PROJECT_DIR$/EEG&amp;ESG_images" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Publication_Images" />
       <recent name="$PROJECT_DIR$/Archive" />
       <recent name="$PROJECT_DIR$/Polished_Images" />
       <recent name="$PROJECT_DIR$/Images/EEG&amp;ESG_images" />
       <recent name="$PROJECT_DIR$/GroupLevelAnalyses" />
-      <recent name="$PROJECT_DIR$/CNSLevelSpecificFunctions" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.GrandAverage_SpatialPatterns">
+  <component name="RunManager" selected="Python.HighVsLowFreq_SingleTrial_SNRLow_CorticalSpinal_CCA_ClusterBasedPermutation">
     <configuration name="GrandAverageD2_SpatialPatterns" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
@@ -176,7 +181,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Peaks_Troughs_ByCNSLevel_AllCutOffsTogether_EqualWindow" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="HighVsLowFreq_SingleTrial_SNRLow_CorticalSpinal_CCA_ClusterBasedPermutation" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -189,7 +194,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Publication_Images/Peaks_Troughs_ByCNSLevel_AllCutOffsTogether_EqualWindow.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Publication_Images/HighVsLowFreq_SingleTrial_SNRLow_CorticalSpinal_CCA_ClusterBasedPermutation.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -198,7 +203,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="RawEnvelopePlots_Cortical_Thalamic_MergeDatasets" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA_ClusterBasedPermutation" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -211,7 +216,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Publication_Images/RawEnvelopePlots_Cortical_Thalamic_MergeDatasets.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Publication_Images/HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA_ClusterBasedPermutation.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -222,11 +227,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.HighVsLowFreq_SingleTrial_SNRLow_CorticalSpinal_CCA_ClusterBasedPermutation" />
+        <item itemvalue="Python.HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA_ClusterBasedPermutation_NoShift" />
         <item itemvalue="Python.GrandAverage_SpatialPatterns" />
         <item itemvalue="Python.GrandAverageD2_SpatialPatterns" />
         <item itemvalue="Python.GrandAverage_SpatialPatterns_Thalamic" />
-        <item itemvalue="Python.Peaks_Troughs_ByCNSLevel_AllCutOffsTogether_EqualWindow" />
-        <item itemvalue="Python.RawEnvelopePlots_Cortical_Thalamic_MergeDatasets" />
       </list>
     </recent_temporary>
   </component>

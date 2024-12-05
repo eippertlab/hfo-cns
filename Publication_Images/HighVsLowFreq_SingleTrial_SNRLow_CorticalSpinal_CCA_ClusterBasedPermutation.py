@@ -22,8 +22,7 @@ pd.set_option('display.width', 1000)
 
 
 if __name__ == '__main__':
-    data_types = ['Spinal', 'Cortical']  # Can be Cortical or Spinal, not both
-    # data_types = ['Cortical']
+    data_types = ['Spinal', 'Cortical']  # Can be Cortical or Spinal
 
     srmr_nr = 1
     sfreq = 5000
@@ -85,7 +84,7 @@ if __name__ == '__main__':
             tmax = tmax_esg
 
         df_topbottom10 = pd.DataFrame()
-        figure_path_highlow = f'/data/p_02718/{fig_folder}/SingleTrialSNR_LowVsHigh_CCA/StrongestVsWeakest_ClusterBasedPermutation/{data_type}/'
+        figure_path_highlow = f'/data/p_02718/{fig_folder}/SingleTrialSNR_LowVsHigh_CCA/StrongestVsWeakest_ClusterBasedPermutation_LowSNRRank/{data_type}/'
         os.makedirs(figure_path_highlow, exist_ok=True)
 
         for condition in conditions:  # Conditions (median, tibial)
@@ -170,8 +169,8 @@ if __name__ == '__main__':
                     df_sub[f'high'] = snr_high
                     df_sub.dropna(inplace=True)
 
-                    # Sort based on SNR of high frequency trials, then get average SNR across top and bottom 10% of trials
-                    df_sub.sort_values('high', inplace=True)
+                    # Sort based on SNR of low frequency trials, then get average SNR across top and bottom 10% of trials
+                    df_sub.sort_values('low', inplace=True)
                     # print(df_sub)
                     bottom_low.append(df_sub[:n_trials].mean()['low'])
                     bottom_high.append(df_sub[:n_trials].mean()['high'])
@@ -239,19 +238,35 @@ if __name__ == '__main__':
             cluster_res = ClusterResults()
             for evoked_list_difference, data_name in zip([evoked_list_difference_low, evoked_list_difference_high],
                                                          ['low', 'high']):
-                T_obs, clusters, cluster_p_values, H0 = mne.stats.permutation_cluster_1samp_test(
-                    np.array(evoked_list_difference),
-                    out_type="mask",
-                    n_permutations=1000,
-                    tail=1,
-                    seed=np.random.default_rng(seed=8675309),
-                )  # tail = 1 for one-sided test
                 if data_name == 'low':
+                    if data_type == 'Cortical' and cond_name in ['tibial', 'tib_mixed']:
+                        T_obs, clusters, cluster_p_values, H0 = mne.stats.permutation_cluster_1samp_test(
+                            np.array(evoked_list_difference),
+                            out_type="mask",
+                            n_permutations=1000,
+                            tail=1,
+                            seed=np.random.default_rng(seed=8675309),
+                        )  # tail = 1 for one-sided test (P40 greater for strongest trials)
+                    else:
+                        T_obs, clusters, cluster_p_values, H0 = mne.stats.permutation_cluster_1samp_test(
+                            np.array(evoked_list_difference),
+                            out_type="mask",
+                            n_permutations=1000,
+                            tail=-1,
+                            seed=np.random.default_rng(seed=8675309),
+                        )  # tail = -1 for one-sided test (N13, N22, N20 smaller for strongest trials)
                     cluster_res.T_obs_low = T_obs
                     cluster_res.clusters_low = clusters
                     cluster_res.cluster_p_values_low = cluster_p_values
                     cluster_res.H0_low = H0
                 elif data_name == 'high':
+                    T_obs, clusters, cluster_p_values, H0 = mne.stats.permutation_cluster_1samp_test(
+                        np.array(evoked_list_difference),
+                        out_type="mask",
+                        n_permutations=1000,
+                        tail=1,
+                        seed=np.random.default_rng(seed=8675309),
+                    )  # tail = 1 for one-sided test
                     cluster_res.T_obs_high = T_obs
                     cluster_res.clusters_high = clusters
                     cluster_res.cluster_p_values_high = cluster_p_values
