@@ -5,7 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="32d78150-f875-4a94-a101-72a4657c6a8a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Archive/Polished_Images/GrandAverageD2_HFOEnvelope_LowFreqTime_YY_NewAlignment.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Archive/Polished_Images/GrandAverage_HFOEnvelope_LowFreqTime_YY_NewAlignment.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Archive/Polished_Images/SingleSubject_TimeCourse_YY.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Common_Functions/IsopotentialFunctions.py" beforeDir="false" afterPath="$PROJECT_DIR$/Common_Functions/IsopotentialFunctions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Common_Functions/IsopotentialFunctions_CbarLabel.py" beforeDir="false" afterPath="$PROJECT_DIR$/Common_Functions/IsopotentialFunctions_CbarLabel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Group_Level_Analyses/GetPotential_Timing_LowFreq_HighFreq.py" beforeDir="false" afterPath="$PROJECT_DIR$/Group_Level_Analyses/GetPotential_Timing_LowFreq_HighFreq.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Publication_Images/GrandAverageD2_SpatialPatterns.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/GrandAverageD2_SpatialPatterns.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Publication_Images/GrandAverage_SpatialPatterns.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/GrandAverage_SpatialPatterns.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Publication_Images/GrandAverage_SpatialPatterns_Thalamic.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/GrandAverage_SpatialPatterns_Thalamic.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +56,9 @@
     "Python.ESG_Pipeline.executor": "Run",
     "Python.ESG_RestingState_Pipeline.executor": "Run",
     "Python.ExploratoryPlots_WrongFiles.executor": "Run",
+    "Python.GrandAverageD2_SpatialPatterns.executor": "Run",
+    "Python.GrandAverage_SpatialPatterns.executor": "Run",
+    "Python.GrandAverage_SpatialPatterns_Thalamic.executor": "Run",
     "Python.HighVsLowFreq_SingleTrial_SNR_CorticalSpinal.executor": "Run",
     "Python.HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA.executor": "Run",
     "Python.HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA_ClusterBasedPermutation.executor": "Run",
@@ -77,7 +89,7 @@
     "Python.plot_task_rest.executor": "Run",
     "Python.quick_check.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/data/pt_02569/Python_Cardiac",
+    "last_opened_file_path": "/data/pt_02718/HF_Oscillations/Publication_Images",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
@@ -97,8 +109,8 @@
       <recent name="$PROJECT_DIR$/CNSLevelSpecificFunctions" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.Peaks_Troughs_ByCNSLevel_AllCutOffsTogether_EqualWindow">
-    <configuration name="CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.GrandAverage_SpatialPatterns">
+    <configuration name="GrandAverageD2_SpatialPatterns" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -111,7 +123,51 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Publication_Images/CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Publication_Images/GrandAverageD2_SpatialPatterns.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="GrandAverage_SpatialPatterns" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="HF_Oscillations" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Publication_Images" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Publication_Images/GrandAverage_SpatialPatterns.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="GrandAverage_SpatialPatterns_Thalamic" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="HF_Oscillations" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Publication_Images" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Publication_Images/GrandAverage_SpatialPatterns_Thalamic.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -142,28 +198,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="RawEnvelopePlots_Cortical_Thalamic" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="HF_Oscillations" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Publication_Images" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Publication_Images/RawEnvelopePlots_Cortical_Thalamic.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="RawEnvelopePlots_Cortical_Thalamic_MergeDatasets" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
@@ -186,35 +220,13 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="SingleSubject_TimeCourse" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="HF_Oscillations" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Publication_Images" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Publication_Images/SingleSubject_TimeCourse.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.GrandAverage_SpatialPatterns" />
+        <item itemvalue="Python.GrandAverageD2_SpatialPatterns" />
+        <item itemvalue="Python.GrandAverage_SpatialPatterns_Thalamic" />
         <item itemvalue="Python.Peaks_Troughs_ByCNSLevel_AllCutOffsTogether_EqualWindow" />
         <item itemvalue="Python.RawEnvelopePlots_Cortical_Thalamic_MergeDatasets" />
-        <item itemvalue="Python.RawEnvelopePlots_Cortical_Thalamic" />
-        <item itemvalue="Python.CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical" />
-        <item itemvalue="Python.SingleSubject_TimeCourse" />
       </list>
     </recent_temporary>
   </component>

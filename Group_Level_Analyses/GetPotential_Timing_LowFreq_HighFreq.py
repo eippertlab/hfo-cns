@@ -202,7 +202,7 @@ if __name__ == '__main__':
                         df = df_spinal
 
                         # Low Freq SEP
-                        input_path_low = f"/data/p_02569/SSP/{subject_id}/6 projections/"
+                        input_path_low = f"/data/p_02569/SSP_forhfo/{subject_id}/6 projections/"
                         fname_low = f"epochs_{cond_name}.fif"
                         epochs_low = mne.read_epochs(input_path_low + fname_low, preload=True)
                         evoked_low = epochs_low.average()
@@ -214,7 +214,7 @@ if __name__ == '__main__':
                         df = df_spinal
 
                         # Low Freq SEP
-                        input_path_low = f"/data/pt_02569/tmp_data_2/ssp_py/{subject_id}/esg/prepro/6 projections/"
+                        input_path_low = f"/data/pt_02569/tmp_data_2/ssp_py_forhfo/{subject_id}/esg/prepro/6 projections/"
                         fname_low = f"ssp_cleaned_{cond_name}.fif"
                         raw = mne.io.read_raw_fif(input_path_low + fname_low, preload=True)
                         evoked_low = evoked_from_raw(raw, iv_epoch, iv_baseline, trigger_name, False)

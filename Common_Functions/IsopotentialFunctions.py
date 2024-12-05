@@ -96,7 +96,7 @@ def plot_esg_isopotential(chanvalues, colorbar_axes, gridsize, chan_pos_grid, la
     vq *= 1e6
     levels = MaxNLocator(nbins=150).tick_values(colorbar_axes[0], colorbar_axes[1])
     cf = axis.contourf(xq, yq, np.clip(vq, a_min=colorbar_axes[0], a_max=colorbar_axes[1]),
-                       levels=levels, cmap='turbo', origin='upper', extend='neither')
+                       levels=levels, cmap='RdBu_r', origin='upper', extend='neither')
     if colorbar:
         ticks = [colorbar_axes[0], 0, colorbar_axes[1]]
         # plt.colorbar(cf, ax=axis, label='Amplitude (\u03BCV)', ticks=ticks)

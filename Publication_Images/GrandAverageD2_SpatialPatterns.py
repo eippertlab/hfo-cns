@@ -130,7 +130,7 @@ if __name__ == '__main__':
                         epochs = mne.read_epochs(input_path + fname, preload=True)
 
                         # Low Freq SEP
-                        input_path_low = f"/data/pt_02569/tmp_data_2/ssp_py/{subject_id}/esg/prepro/6 projections/"
+                        input_path_low = f"/data/pt_02569/tmp_data_2/ssp_py_forhfo/{subject_id}/esg/prepro/6 projections/"
                         fname_low = f"ssp_cleaned_{cond_name}.fif"
                         raw = mne.io.read_raw_fif(input_path_low + fname_low, preload=True)
                         events, event_ids = mne.events_from_annotations(raw)
@@ -187,73 +187,6 @@ if __name__ == '__main__':
                         elif data_type == 'eeg':
                             evoked_list.append(evoked_low)
 
-                # Get grand average
-                # Need to add dummy NaN value for some subjects where channels are missing as otherwise can't average
-                # This loop takes care of the HFO stuff
-                # spatial_pattern_complete = []
-                # for count, pattern in enumerate(spatial_pattern):
-                #     print(subject_ids[count])
-                #     print(np.shape(pattern))
-                #     if cond_name == 'med_mixed':
-                #         if data_type == 'esg':
-                #             bad_channel_path = f'/data/pt_02718/tmp_data_2/bad_channels_esg/{subject_ids[count]}/'
-                #             m = len(cervical_chans)
-                #             expected_chans = cervical_chans
-                #         elif data_type == 'eeg':
-                #             bad_channel_path = f'/data/pt_02718/tmp_data_2/bad_channels_eeg/{subject_ids[count]}/'
-                #             m = len(eeg_chans)
-                #             expected_chans = eeg_chans
-                #         fnames = ['bad_channels_med_mixed.txt']
-                #     elif cond_name == 'tib_mixed':
-                #         if data_type == 'esg':
-                #             bad_channel_path = f'/data/pt_02718/tmp_data_2/bad_channels_esg/{subject_ids[count]}/'
-                #             m = len(lumbar_chans)
-                #             expected_chans = lumbar_chans
-                #         elif data_type == 'eeg':
-                #             bad_channel_path = f'/data/pt_02718/tmp_data_2/bad_channels_eeg/{subject_ids[count]}/'
-                #             m = len(eeg_chans)
-                #             expected_chans = eeg_chans
-                #         fnames = ['bad_channels_tib_mixed.txt']
-                #     print(np.shape(pattern[0]))
-                #     print(m)
-                #     if np.shape(pattern)[0] != m:
-                #         bad_ch_list = []
-                #         indices = []
-                #         for file in fnames:
-                #             # If it's not empty, open it and read channels
-                #             if not os.stat(bad_channel_path+file).st_size == 0:
-                #                 with open(bad_channel_path+file, "r") as bad_channels:
-                #                     lines = bad_channels.read().splitlines()
-                #                     for l in lines:
-                #                         as_list = l.split(' ')
-                #                         for item in as_list:
-                #                             bad_ch_list.append(item)
-                #                             indices.append(expected_chans.index(item))
-                #                             # Gives location in target list
-                #         indices_unique = list(set(indices))
-                #         indices_unique.sort(reverse=True)
-                #         pattern_new = np.insert(pattern, indices_unique - np.arange(len(indices_unique)), np.nan)
-                #         spatial_pattern_complete.append(pattern_new)
-                #         if subject_ids[count] == 'sub-009':
-                #             print(pattern)
-                #             print(pattern_new)
-                #             print(eeg_chans)
-                #             print(bad_ch_list)
-                #             print(indices)
-                #             print(indices_unique)
-                #             exit()
-                #     else:
-                #         spatial_pattern_complete.append(pattern)
-
-                # Use different list for averaging depending on whether we had to add nan values
-                # if spatial_pattern_complete:
-                #     for count, p in enumerate(spatial_pattern_complete):
-                #         print(subject_ids[count])
-                #         print(np.shape(p))
-                #     grand_average_spatial = np.nanmean(spatial_pattern_complete, axis=0)  # HFO
-                # else:
-                #     grand_average_spatial = np.nanmean(spatial_pattern, axis=0)  # HFO
-
                 grand_average_spatial = np.nanmean(spatial_pattern, axis=0)  # HFO
 
                 if data_type == 'eeg':
@@ -268,7 +201,7 @@ if __name__ == '__main__':
                     mne.viz.plot_topomap(data=grand_average_spatial * 10 ** 6, pos=res, ch_type='eeg', sensors=True,
                                          names=None,
                                          contours=6, outlines='head', sphere=None, image_interp='cubic',
-                                         extrapolate='head', border='mean', res=64, size=1, cmap='jet', vlim=(None, None),
+                                         extrapolate='head', border='mean', res=64, size=1, cmap='RdBu_r', vlim=(None, None),
                                          cnorm=None, axes=ax, show=False)
                     # ax.set_title(f'Grand Average Spatial Pattern, n={len(spatial_pattern)}')
                     divider = make_axes_locatable(ax)
@@ -290,8 +223,7 @@ if __name__ == '__main__':
                                           sensors=True, show_names=False, mask=None, mask_params=None, contours=6,
                                           outlines='head', sphere=None, image_interp='cubic', extrapolate='auto',
                                           border='mean',
-                                          res=64, size=1, cmap='jet', vlim=(None, None), vmin=None, vmax=None,
-                                          cnorm=None,
+                                          res=64, size=1, cmap='RdBu_r',
                                           colorbar=False, cbar_fmt='%3.1f', units=None, axes=ax_low, time_unit='s',
                                           time_format=None,
                                           nrows=1, ncols='auto', show=True)

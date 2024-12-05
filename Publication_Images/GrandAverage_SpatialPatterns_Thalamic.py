@@ -90,10 +90,7 @@ if __name__ == '__main__':
 
                     # Low Freq SEP
                     input_path_low = f"/data/pt_02718/{folder}/imported/{subject_id}/"
-                    # input_path_low = "/data/pt_02068/analysis/final/tmp_data/" + subject_id + "/eeg/prepro/"   # d1
-                    # input_path_low = "/data/pt_02151/analysis/final/tmp_data/" + subject_id + "/eeg/prepro/"   # d2
                     fname_low = f"noStimart_sr5000_{cond_name}_withqrs_eeg.fif"
-                    # fname_low = f"cnt_clean_{cond_name}.set"
                     raw = mne.io.read_raw_fif(input_path_low + fname_low, preload=True)
 
                     # Set montage
@@ -165,7 +162,7 @@ if __name__ == '__main__':
                 mne.viz.plot_topomap(data=grand_average_spatial * 10 ** 6, pos=res, ch_type='eeg', sensors=True,
                                      names=None,
                                      contours=6, outlines='head', sphere=None, image_interp='cubic',
-                                     extrapolate='head', border='mean', res=64, size=1, cmap='jet', vlim=(vmin, vmax),
+                                     extrapolate='box', border='mean', res=64, size=1, cmap='RdBu_r', vlim=(vmin, vmax),
                                      cnorm=None, axes=ax, show=False)
                 # ax.set_title(f'Grand Average Spatial Pattern, n={len(spatial_pattern)}')
                 divider = make_axes_locatable(ax)
@@ -193,10 +190,9 @@ if __name__ == '__main__':
                         vmax = 0.8
                 averaged.plot_topomap(times=time_point, average=None, ch_type=None, scalings=None, proj=False,
                                       sensors=True, show_names=False, mask=None, mask_params=None, contours=6,
-                                      outlines='head', sphere=None, image_interp='cubic', extrapolate='auto',
+                                      outlines='head', sphere=None, image_interp='cubic', extrapolate='box',
                                       border='mean',
-                                      res=64, size=1, cmap='jet', vlim=(vmin, vmax), vmin=None, vmax=None,
-                                      cnorm=None,
+                                      res=64, size=1, cmap='RdBu_r',
                                       colorbar=False, cbar_fmt='%3.1f', units=None, axes=ax_low, time_unit='s',
                                       time_format=None,
                                       nrows=1, ncols='auto', show=False)
@@ -207,10 +203,10 @@ if __name__ == '__main__':
                 cb = fig.colorbar(ax_low.images[-1], cax=cax, shrink=0.6, orientation='vertical')
                 cb.set_label('Amplitude (\u03BCV)', rotation=90)
 
-                fig.savefig(figure_path + f'HFO_GA_Spatial_{freq_band}_{cond_name}_visible')
-                fig.savefig(figure_path + f'HFO_GA_Spatial_{freq_band}_{cond_name}_visible.pdf',
+                fig.savefig(figure_path + f'HFO_GA_Spatial_{freq_band}_{cond_name}_visible_box')
+                fig.savefig(figure_path + f'HFO_GA_Spatial_{freq_band}_{cond_name}_visible_box.pdf',
                             bbox_inches='tight', format="pdf")
 
-                fig_low.savefig(figure_path + f'SEP_GA_Spatial_{cond_name}_visible')
-                fig_low.savefig(figure_path + f'SEP_GA_Spatial_{cond_name}_visible.pdf',
+                fig_low.savefig(figure_path + f'SEP_GA_Spatial_{cond_name}_visible_box')
+                fig_low.savefig(figure_path + f'SEP_GA_Spatial_{cond_name}_visible_box.pdf',
                                 bbox_inches='tight', format="pdf")

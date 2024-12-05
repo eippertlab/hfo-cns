@@ -124,7 +124,7 @@ if __name__ == '__main__':
                         df_vis = df_vis_spinal
 
                         # Low Freq SEP
-                        input_path_low = f"/data/p_02569/SSP/{subject_id}/6 projections/"
+                        input_path_low = f"/data/p_02569/SSP_forhfo/{subject_id}/6 projections/"
                         fname_low = f"epochs_{cond_name}.fif"
                         epochs_low = mne.read_epochs(input_path_low + fname_low, preload=True)
                         evoked_low = epochs_low.average()
@@ -187,7 +187,7 @@ if __name__ == '__main__':
                     mne.viz.plot_topomap(data=grand_average_spatial * 10 ** 6, pos=res, ch_type='eeg', sensors=True,
                                          names=None,
                                          contours=6, outlines='head', sphere=None, image_interp='cubic',
-                                         extrapolate='head', border='mean', res=64, size=1, cmap='jet', vlim=(None, None),
+                                         extrapolate='head', border='mean', res=64, size=1, cmap='RdBu_r', vlim=(None, None),
                                          cnorm=None, axes=ax, show=False)
                     # ax.set_title(f'Grand Average Spatial Pattern, n={len(spatial_pattern)}')
                     divider = make_axes_locatable(ax)
@@ -209,8 +209,7 @@ if __name__ == '__main__':
                                           sensors=True, show_names=False, mask=None, mask_params=None, contours=6,
                                           outlines='head', sphere=None, image_interp='cubic', extrapolate='auto',
                                           border='mean',
-                                          res=64, size=1, cmap='jet', vlim=(None, None), vmin=None, vmax=None,
-                                          cnorm=None,
+                                          res=64, size=1, cmap='RdBu_r',
                                           colorbar=False, cbar_fmt='%3.1f', units=None, axes=ax_low, time_unit='s',
                                           time_format=None,
                                           nrows=1, ncols='auto', show=True)
