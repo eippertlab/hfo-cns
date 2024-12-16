@@ -25,7 +25,7 @@ if __name__ == '__main__':
     data_types = ['Spinal', 'Cortical']  # Can be Cortical or Spinal, not both
     # data_types = ['Cortical']
 
-    srmr_nr = 2
+    srmr_nr = 1
     sfreq = 5000
     n_trials = 200 # Number of trials at top/bottom to test
     freq_band = 'sigma'
@@ -85,7 +85,7 @@ if __name__ == '__main__':
             tmax = tmax_esg
 
         df_topbottom10 = pd.DataFrame()
-        figure_path_highlow = f'/data/p_02718/{fig_folder}/SingleTrialSNR_LowVsHigh_CCA/StrongestVsWeakest_ClusterBasedPermutation/{data_type}/'
+        figure_path_highlow = f'/data/p_02718/{fig_folder}/SingleTrialSNR_LowVsHigh_CCA/StrongestVsWeakest_ClusterBasedPermutation_Gradient/{data_type}/'
         os.makedirs(figure_path_highlow, exist_ok=True)
 
         for condition in conditions:  # Conditions (median, tibial)
@@ -156,7 +156,7 @@ if __name__ == '__main__':
                 # Only do analysis if visible component for LF and HFO data
                 if channel_no != 0 and channel_no_low != 0:
                     df_sub = pd.DataFrame()
-                    input_path_snr = f'/data/pt_02718/{folder}/singletrial_snr_cca/{subject_id}/'
+                    input_path_snr = f'/data/pt_02718/{folder}/singletrial_snr_cca_gradient/{subject_id}/'
                     fname_low = f'snr_low_{freq_band}_{cond_name}_{data_type.lower()}.pkl'
                     fname_high = f'snr_high_{freq_band}_{cond_name}_{data_type.lower()}.pkl'
 
@@ -321,4 +321,5 @@ if __name__ == '__main__':
             plt.savefig(figure_path_highlow + f'GA_{cond_name}_env.pdf',
                         bbox_inches='tight', format="pdf")
 
-            plt.show()
+            plt.close()
+            # plt.show()

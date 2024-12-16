@@ -22,10 +22,10 @@ pd.set_option('display.width', 1000)
 
 
 if __name__ == '__main__':
-    data_types = ['Spinal', 'Cortical']  # Can be Cortical or Spinal, not both
-    # data_types = ['Cortical']
+    data_types = ['Spinal', 'Cortical']  # Can be Cortical or Spinal
+    long = True  # Long: -100ms to 300ms, otherwise 0ms to 70ms
 
-    srmr_nr = 2
+    srmr_nr = 1
     sfreq = 5000
     n_trials = 200 # Number of trials at top/bottom to test
     freq_band = 'sigma'
@@ -85,7 +85,7 @@ if __name__ == '__main__':
             tmax = tmax_esg
 
         df_topbottom10 = pd.DataFrame()
-        figure_path_highlow = f'/data/p_02718/{fig_folder}/SingleTrialSNR_LowVsHigh_CCA/StrongestVsWeakest_ClusterBasedPermutation/{data_type}/'
+        figure_path_highlow = f'/data/p_02718/{fig_folder}/SingleTrialSNR_LowVsHigh_CCA/StrongestVsWeakest_ClusterBasedPermutation_LowSNRRank_LowFilter/{data_type}/'
         os.makedirs(figure_path_highlow, exist_ok=True)
 
         for condition in conditions:  # Conditions (median, tibial)
@@ -155,8 +155,11 @@ if __name__ == '__main__':
 
                 # Only do analysis if visible component for LF and HFO data
                 if channel_no != 0 and channel_no_low != 0:
+                    # Filter low freq signals
+                    epochs_low.filter(l_freq=10, h_freq=None, method='iir',
+                                      iir_params={'order': 5, 'ftype': 'butter'}, phase='zero')
                     df_sub = pd.DataFrame()
-                    input_path_snr = f'/data/pt_02718/{folder}/singletrial_snr_cca/{subject_id}/'
+                    input_path_snr = f'/data/pt_02718/{folder}/singletrial_snr_cca_filterlow/{subject_id}/'
                     fname_low = f'snr_low_{freq_band}_{cond_name}_{data_type.lower()}.pkl'
                     fname_high = f'snr_high_{freq_band}_{cond_name}_{data_type.lower()}.pkl'
 
@@ -170,8 +173,8 @@ if __name__ == '__main__':
                     df_sub[f'high'] = snr_high
                     df_sub.dropna(inplace=True)
 
-                    # Sort based on SNR of high frequency trials, then get average SNR across top and bottom 10% of trials
-                    df_sub.sort_values('high', inplace=True)
+                    # Sort based on SNR of low frequency trials, then get average SNR across top and bottom 10% of trials
+                    df_sub.sort_values('low', inplace=True)
                     # print(df_sub)
                     bottom_low.append(df_sub[:n_trials].mean()['low'])
                     bottom_high.append(df_sub[:n_trials].mean()['high'])
@@ -256,7 +259,6 @@ if __name__ == '__main__':
                             tail=-1,
                             seed=np.random.default_rng(seed=8675309),
                         )  # tail = -1 for one-sided test (N13, N22, N20 smaller for strongest trials)
-
                     cluster_res.T_obs_low = T_obs
                     cluster_res.clusters_low = clusters
                     cluster_res.cluster_p_values_low = cluster_p_values
@@ -305,20 +307,27 @@ if __name__ == '__main__':
                                alpha=0.3)
             ax[0].set_title('LF-SEP')
             ax[0].set_ylabel('Amplitude (AU)')
-            ax[0].set_xlim([0, 0.07])
+            if not long:
+                ax[0].set_xlim([0, 0.07])
             ax[1].plot(hf_times, ga_high_top.reshape(-1), color='limegreen', label='Strongest 200 trials')
             ax[1].fill_between(hf_times, lower_high_top, upper_high_top, color='limegreen', alpha=0.3)
             ax[1].plot(hf_times, ga_high_bottom.reshape(-1), color='darkgreen', label='Weakest 200 trials')
             ax[1].fill_between(hf_times, lower_high_bottom, upper_high_bottom, color='darkgreen', alpha=0.3)
             ax[1].set_title('HFO')
-            ax[1].set_xlim([0, 0.07])
+            if not long:
+                ax[1].set_xlim([0, 0.07])
             ax[1].set_ylabel('Amplitude (AU)')
             ax[1].set_xlabel('Time (s)')
             plt.legend()
             plt.suptitle(f'GA, {data_type}, {cond_name}, n={len(evoked_list_low_bottom)}')
             plt.tight_layout()
-            plt.savefig(figure_path_highlow + f'GA_{cond_name}_env')
-            plt.savefig(figure_path_highlow + f'GA_{cond_name}_env.pdf',
-                        bbox_inches='tight', format="pdf")
+            if not long:
+                plt.savefig(figure_path_highlow + f'GA_{cond_name}_env')
+                plt.savefig(figure_path_highlow + f'GA_{cond_name}_env.pdf',
+                            bbox_inches='tight', format="pdf")
+            else:
+                plt.savefig(figure_path_highlow + f'GA_{cond_name}_env_long')
+                plt.savefig(figure_path_highlow + f'GA_{cond_name}_env_long.pdf',
+                            bbox_inches='tight', format="pdf")
 
             plt.show()
