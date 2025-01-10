@@ -23,10 +23,10 @@ pd.set_option('display.width', 1000)
 
 if __name__ == '__main__':
     data_types = ['Spinal', 'Cortical']  # Can be Cortical or Spinal, not both
-    long = True  # Long: -100ms to 300ms, otherwise 0ms to 70ms
+    long = False  # Long: -100ms to 300ms, otherwise 0ms to 70ms
     # data_types = ['Cortical']
 
-    srmr_nr = 1
+    srmr_nr = 2
     sfreq = 5000
     n_trials = 200 # Number of trials at top/bottom to test
     freq_band = 'sigma'
@@ -42,6 +42,13 @@ if __name__ == '__main__':
         conditions = [3, 5]
         folder = 'tmp_data_2'
         fig_folder = 'Polished_2'
+
+    # Set interpolation window (different for eeg and esg data, both in seconds)
+    tstart_esg = -0.007
+    tend_esg = 0.007
+
+    tstart_eeg = -0.0015
+    tend_eeg = 0.006
 
     # Cortical Excel file
     xls = pd.ExcelFile(f'/data/pt_02718/{folder}/Components_EEG_Updated.xlsx')
@@ -86,7 +93,7 @@ if __name__ == '__main__':
             tmax = tmax_esg
 
         df_topbottom10 = pd.DataFrame()
-        figure_path_highlow = f'/data/p_02718/{fig_folder}/SingleTrialSNR_LowVsHigh_CCA/StrongestVsWeakest_ClusterBasedPermutation_LowFilter/{data_type}/'
+        figure_path_highlow = f'/data/p_02718/{fig_folder}/SingleTrialSNR_LowVsHigh_CCA/StrongestVsWeakest_ClusterBasedPermutation_BaselineCorr/{data_type}/'
         os.makedirs(figure_path_highlow, exist_ok=True)
 
         for condition in conditions:  # Conditions (median, tibial)
@@ -156,11 +163,13 @@ if __name__ == '__main__':
 
                 # Only do analysis if visible component for LF and HFO data
                 if channel_no != 0 and channel_no_low != 0:
-                    # Filter low freq signals
-                    epochs_low.filter(l_freq=10, h_freq=None, method='iir',
-                                      iir_params={'order': 5, 'ftype': 'butter'}, phase='zero')
+                    if data_type == 'Cortical':
+                        mne.preprocessing.fix_stim_artifact(epochs_low, event_id=epochs_low.event_id[trigger_name], tmin=tstart_eeg, tmax=tend_eeg, mode='window')
+                    elif data_type == 'Spinal':
+                        mne.preprocessing.fix_stim_artifact(epochs_low, event_id=epochs_low.event_id[trigger_name], tmin=tstart_esg, tmax=tend_esg, mode='window')
+
                     df_sub = pd.DataFrame()
-                    input_path_snr = f'/data/pt_02718/{folder}/singletrial_snr_cca_filterlow/{subject_id}/'
+                    input_path_snr = f'/data/pt_02718/{folder}/singletrial_snr_cca_baselinecorr/{subject_id}/'
                     fname_low = f'snr_low_{freq_band}_{cond_name}_{data_type.lower()}.pkl'
                     fname_high = f'snr_high_{freq_band}_{cond_name}_{data_type.lower()}.pkl'
 
@@ -332,4 +341,5 @@ if __name__ == '__main__':
                 plt.savefig(figure_path_highlow + f'GA_{cond_name}_env_long.pdf',
                             bbox_inches='tight', format="pdf")
 
-            plt.show()
+            plt.close()
+            # plt.show()

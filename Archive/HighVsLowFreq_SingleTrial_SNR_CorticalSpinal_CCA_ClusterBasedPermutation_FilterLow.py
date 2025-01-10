@@ -22,13 +22,21 @@ pd.set_option('display.width', 1000)
 
 
 if __name__ == '__main__':
-    data_types = ['Spinal', 'Cortical']  # Can be Cortical or Spinal
+    data_types = ['Spinal', 'Cortical']  # Can be Cortical or Spinal, not both
     long = True  # Long: -100ms to 300ms, otherwise 0ms to 70ms
+    # data_types = ['Cortical']
 
-    srmr_nr = 1
+    srmr_nr = 2
     sfreq = 5000
     n_trials = 200 # Number of trials at top/bottom to test
     freq_band = 'sigma'
+
+    # Set interpolation window (different for eeg and esg data, both in seconds)
+    tstart_esg = -0.007
+    tend_esg = 0.007
+
+    tstart_eeg = -0.0015
+    tend_eeg = 0.006
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
@@ -85,7 +93,7 @@ if __name__ == '__main__':
             tmax = tmax_esg
 
         df_topbottom10 = pd.DataFrame()
-        figure_path_highlow = f'/data/p_02718/{fig_folder}/SingleTrialSNR_LowVsHigh_CCA/StrongestVsWeakest_ClusterBasedPermutation_LowSNRRank_LowFilter/{data_type}/'
+        figure_path_highlow = f'/data/p_02718/{fig_folder}/SingleTrialSNR_LowVsHigh_CCA/StrongestVsWeakest_ClusterBasedPermutation_LowFilter/{data_type}/'
         os.makedirs(figure_path_highlow, exist_ok=True)
 
         for condition in conditions:  # Conditions (median, tibial)
@@ -155,9 +163,14 @@ if __name__ == '__main__':
 
                 # Only do analysis if visible component for LF and HFO data
                 if channel_no != 0 and channel_no_low != 0:
-                    # Filter low freq signals
+                    # Filter low freq signals and interpolate
                     epochs_low.filter(l_freq=10, h_freq=None, method='iir',
                                       iir_params={'order': 5, 'ftype': 'butter'}, phase='zero')
+                    if data_type == 'Cortical':
+                        mne.preprocessing.fix_stim_artifact(epochs_low, event_id=epochs_low.event_id[trigger_name], tmin=tstart_eeg, tmax=tend_eeg, mode='window')
+                    elif data_type == 'Spinal':
+                        mne.preprocessing.fix_stim_artifact(epochs_low, event_id=epochs_low.event_id[trigger_name], tmin=tstart_esg, tmax=tend_esg, mode='window')
+
                     df_sub = pd.DataFrame()
                     input_path_snr = f'/data/pt_02718/{folder}/singletrial_snr_cca_filterlow/{subject_id}/'
                     fname_low = f'snr_low_{freq_band}_{cond_name}_{data_type.lower()}.pkl'
@@ -173,8 +186,8 @@ if __name__ == '__main__':
                     df_sub[f'high'] = snr_high
                     df_sub.dropna(inplace=True)
 
-                    # Sort based on SNR of low frequency trials, then get average SNR across top and bottom 10% of trials
-                    df_sub.sort_values('low', inplace=True)
+                    # Sort based on SNR of high frequency trials, then get average SNR across top and bottom 10% of trials
+                    df_sub.sort_values('high', inplace=True)
                     # print(df_sub)
                     bottom_low.append(df_sub[:n_trials].mean()['low'])
                     bottom_high.append(df_sub[:n_trials].mean()['high'])
@@ -259,6 +272,7 @@ if __name__ == '__main__':
                             tail=-1,
                             seed=np.random.default_rng(seed=8675309),
                         )  # tail = -1 for one-sided test (N13, N22, N20 smaller for strongest trials)
+
                     cluster_res.T_obs_low = T_obs
                     cluster_res.clusters_low = clusters
                     cluster_res.cluster_p_values_low = cluster_p_values
@@ -330,4 +344,3 @@ if __name__ == '__main__':
                 plt.savefig(figure_path_highlow + f'GA_{cond_name}_env_long.pdf',
                             bbox_inches='tight', format="pdf")
 
-            plt.show()
