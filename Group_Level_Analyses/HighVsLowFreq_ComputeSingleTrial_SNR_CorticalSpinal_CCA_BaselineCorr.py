@@ -113,6 +113,10 @@ if __name__ == '__main__':
                         fname_low = f"noStimart_sr5000_{cond_name}_withqrs_eeg.fif"
                         df_low = df_cortical_lf
 
+                        # Set interpolation window (different for eeg and esg data, both in seconds)
+                        tstart_interp = -0.0015
+                        tend_interp = 0.006
+
                     elif data_type == 'Spinal':
                         # HFO
                         fname = f"{freq_band}_{cond_name}.fif"
@@ -123,6 +127,10 @@ if __name__ == '__main__':
                         input_path_low = f"/data/pt_02718/{folder}/cca_low/{subject_id}/"
                         fname_low = f"ssp6_cleaned_{cond_name}.fif"
                         df_low = df_spinal_lf
+
+                        # Set interpolation window (different for eeg and esg data, both in seconds)
+                        tstart_interp = -0.007
+                        tend_interp = 0.007
 
                     # Get correct channel for cca HFO data
                     channel_no = df.loc[subject, f"{freq_band}_{cond_name}_comp"]
@@ -171,8 +179,10 @@ if __name__ == '__main__':
                                                                                      mode='pos', return_amplitude=True,
                                                                                     strict=False)
 
-                                # Also get the mean value in the baseline noise window
+                                # Also get the mean value in the epoch window without the interpolation window
                                 data = evoked_low.copy().crop(tmin=epoch_window[0], tmax=epoch_window[1]).get_data()
+                                indices = evoked_low.time_as_index([tstart_interp, tend_interp], use_rounding=False)
+                                data = np.delete(data, np.arange(indices[0], indices[1]), axis=None)
                                 mean_base = data.mean()
                                 amplitude_diff = amplitude_low - mean_base
 
@@ -190,8 +200,10 @@ if __name__ == '__main__':
                                                                                     mode='neg', return_amplitude=True,
                                                                                     strict=False)
 
-                                # Also get the mean value in the baseline noise window
+                                # Also get the mean value in the epoch window without the interpolation window
                                 data = evoked_low.copy().crop(tmin=epoch_window[0], tmax=epoch_window[1]).get_data()
+                                indices = evoked_low.time_as_index([tstart_interp, tend_interp], use_rounding=False)
+                                data = np.delete(data, np.arange(indices[0], indices[1]), axis=None)
                                 mean_base = data.mean()
                                 amplitude_diff = amplitude_low - mean_base
 
@@ -208,14 +220,10 @@ if __name__ == '__main__':
                             _, latency_high, amplitude_high = evoked.get_peak(tmin=time_peak - time_edge_neg,
                                                                               tmax=time_peak + time_edge_pos,
                                                                               mode='abs', return_amplitude=True)
-                            # Also get the mean value in the baseline noise window
-                            data = evoked.copy().crop(tmin=epoch_window[0], tmax=epoch_window[1]).get_data()
-                            mean_base = data.mean()
-                            amplitude_diff = amplitude_high - mean_base
 
                             data = evoked.copy().crop(tmin=noise_window[0], tmax=noise_window[1]).get_data()
                             sd = data.std()
-                            snr_high = abs(amplitude_diff / sd)
+                            snr_high = abs(amplitude_high / sd)
 
                             low_snr[n] = snr_low
                             high_snr[n] = snr_high
