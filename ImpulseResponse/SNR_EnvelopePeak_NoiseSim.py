@@ -22,7 +22,7 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
     save_to_excel = True  # If we want to save the SNR values on each run
-    scaler = 12  # Identifier for how much we multiplied standard noise (std ~1 by)
+    scaler = 14  # Identifier for how much we multiplied standard noise (std ~1 by)
 
     runs = np.arange(0, 100)  # 0 through 99 to access simulated subject data
     input_path = f"/data/pt_02718/tmp_data/noise_simulations_{scaler}timesnoise/"
@@ -31,13 +31,19 @@ if __name__ == '__main__':
     snr_allruns = []
 
     for run in runs:
+        # 2000 trials by 2000 sample points
         run_trials = np.load(f"{input_path}{run}_filtered.npy")
+        # plt.figure()
+        # plt.plot(np.mean(run_trials, axis=0))  # Plots the average across 2000 trials
+        # plt.show()
         # Get SNR of  simulated
         noise_period_filtered = [x[10:461] for x in run_trials]
-        std_postfilter = np.std(noise_period_filtered)
+        std_postfilter = np.std(np.mean(noise_period_filtered, axis=0))
         # Want peak 5ms before and 5ms after (5e-3 times sf of 5000 is 25 samples)
         sig_amp = np.max(np.mean(run_trials, axis=0)[1000-25:1000+25])
         snr = sig_amp/std_postfilter
         snr_allruns.append(snr)
 
+    print(np.mean(snr_allruns))
+    print(np.std(snr_allruns))
     np.savetxt(f"{input_path}SNR_filtered", snr_allruns, fmt='%f')
