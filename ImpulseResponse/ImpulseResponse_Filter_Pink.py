@@ -14,11 +14,11 @@ import colorednoise as cn
 if __name__ == '__main__':
     iir_params = {'order': 2, 'ftype': 'butter'}
     sfreq = 10000
-    scaler = 14
+    scaler = 5.1
     save_path = f"/data/pt_02718/tmp_data/noise_simulations_{scaler}timesnoise/"
     os.makedirs(save_path, exist_ok=True)
 
-    for n_iterations in np.arange(0, 100):
+    for n_iterations in np.arange(0, 60):
         all_trials_impulse = []
         all_trials_signal = []
         all_trials_signal_unfiltered = []

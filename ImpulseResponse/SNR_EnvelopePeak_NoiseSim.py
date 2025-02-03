@@ -22,9 +22,9 @@ mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
     save_to_excel = True  # If we want to save the SNR values on each run
-    scaler = 14  # Identifier for how much we multiplied standard noise (std ~1 by)
+    scaler = 5.1  # Identifier for how much we multiplied standard noise (std ~1 by)
 
-    runs = np.arange(0, 100)  # 0 through 99 to access simulated subject data
+    runs = np.arange(0, 60)  # 0 through 59 to access simulated subject data
     input_path = f"/data/pt_02718/tmp_data/noise_simulations_{scaler}timesnoise/"
 
     snr_threshold = 5

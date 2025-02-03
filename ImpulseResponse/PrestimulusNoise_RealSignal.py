@@ -9,8 +9,8 @@ from Common_Functions.get_conditioninfo import get_conditioninfo
 from Common_Functions.get_channels import get_channels
 
 if __name__ == '__main__':
-    data_types = ['Cortical', 'Spinal']
-    srmr_nr = 2
+    data_types = ['Cortical' , 'Spinal']
+    srmr_nr = 1
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)

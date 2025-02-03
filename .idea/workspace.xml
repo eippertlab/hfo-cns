@@ -5,9 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="32d78150-f875-4a94-a101-72a4657c6a8a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Group_Level_Analyses/WaveletCount_CorrelationWithSNR.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ImpulseResponse/Compute_EvokedAmplitude_Spinal.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImpulseResponse/ImpulseResponse_Filter_Gaussian.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImpulseResponse/Compute_EvokedAmplitude_SSP6.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImpulseResponse/Compute_EvokedAmplitude_Cortical.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImpulseResponse/ImpulseResponse_Filter_Pink.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImpulseResponse/ImpulseResponse_Filter_Pink.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImpulseResponse/PrestimulusNoise_RealSignal.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImpulseResponse/PrestimulusNoise_RealSignal.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImpulseResponse/PrestimulusNoise_RealSignal_HF.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImpulseResponse/PrestimulusNoise_RealSignal_HF.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ImpulseResponse/SNR_EnvelopePeak_NoiseSim.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImpulseResponse/SNR_EnvelopePeak_NoiseSim.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -43,6 +46,7 @@
     "Python.ChangeExcelFormat_WaveletCount.executor": "Run",
     "Python.ComputeSingleTrial_SNR_CorticalSpinal.executor": "Run",
     "Python.ComputeSingleTrial_SNR_CorticalSpinal_CCA.executor": "Run",
+    "Python.Compute_EvokedAmplitude_Cortical.executor": "Run",
     "Python.Compute_EvokedAmplitude_SSP6.executor": "Run",
     "Python.Correlation_SummaryTable.executor": "Run",
     "Python.Correlation_SummaryTable_UpperTri.executor": "Run",
@@ -108,15 +112,15 @@
     "Python.plot_task_rest.executor": "Run",
     "Python.quick_check.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/data/pt_02718/HF_Oscillations",
+    "last_opened_file_path": "/data/pt_02718/HF_Oscillations/ImpulseResponse",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/ImpulseResponse" />
       <recent name="$PROJECT_DIR$/Publication_Images" />
       <recent name="$PROJECT_DIR$/Group_Level_Analyses" />
-      <recent name="$PROJECT_DIR$/ImpulseResponse" />
       <recent name="$PROJECT_DIR$/SingleSubject_EvolvingTopgraphy" />
       <recent name="$PROJECT_DIR$/GroupLevelAnalyses" />
     </key>
@@ -129,7 +133,7 @@
     </key>
   </component>
   <component name="RunManager" selected="Python.SNR_EnvelopePeak_NoiseSim">
-    <configuration name="HighVsLowFreq_ComputeSingleTrial_SNR_CorticalSpinal_CCA_BaselineCorr" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="Compute_EvokedAmplitude_Cortical" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -138,11 +142,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Group_Level_Analyses" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ImpulseResponse" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Group_Level_Analyses/HighVsLowFreq_ComputeSingleTrial_SNR_CorticalSpinal_CCA_BaselineCorr.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ImpulseResponse/Compute_EvokedAmplitude_Cortical.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -151,7 +155,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="HighVsLowFreq_SingleTrial_SNRLow_CorticalSpinal_CCA_ClusterBasedPermutation_BaselineCorr" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="ImpulseResponse_Filter_Pink" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -160,11 +164,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Publication_Images" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ImpulseResponse" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Publication_Images/HighVsLowFreq_SingleTrial_SNRLow_CorticalSpinal_CCA_ClusterBasedPermutation_BaselineCorr.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ImpulseResponse/ImpulseResponse_Filter_Pink.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -173,7 +177,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA_ClusterBasedPermutation_BaselineCorr" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="PrestimulusNoise_RealSignal" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -182,11 +186,33 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Publication_Images" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ImpulseResponse" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Publication_Images/HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA_ClusterBasedPermutation_BaselineCorr.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ImpulseResponse/PrestimulusNoise_RealSignal.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="PrestimulusNoise_RealSignal_HF" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="HF_Oscillations" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ImpulseResponse" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ImpulseResponse/PrestimulusNoise_RealSignal_HF.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -217,35 +243,13 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="WaveletCount_CorrelationWithSNR" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="HF_Oscillations" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Group_Level_Analyses" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Group_Level_Analyses/WaveletCount_CorrelationWithSNR.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Python.SNR_EnvelopePeak_NoiseSim" />
-        <item itemvalue="Python.WaveletCount_CorrelationWithSNR" />
-        <item itemvalue="Python.HighVsLowFreq_SingleTrial_SNRLow_CorticalSpinal_CCA_ClusterBasedPermutation_BaselineCorr" />
-        <item itemvalue="Python.HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA_ClusterBasedPermutation_BaselineCorr" />
-        <item itemvalue="Python.HighVsLowFreq_ComputeSingleTrial_SNR_CorticalSpinal_CCA_BaselineCorr" />
+        <item itemvalue="Python.ImpulseResponse_Filter_Pink" />
+        <item itemvalue="Python.Compute_EvokedAmplitude_Cortical" />
+        <item itemvalue="Python.PrestimulusNoise_RealSignal_HF" />
+        <item itemvalue="Python.PrestimulusNoise_RealSignal" />
       </list>
     </recent_temporary>
   </component>
