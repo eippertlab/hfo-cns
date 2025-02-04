@@ -5,13 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="32d78150-f875-4a94-a101-72a4657c6a8a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/ImpulseResponse/Compute_EvokedAmplitude_Spinal.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImpulseResponse/Compute_EvokedAmplitude_SSP6.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImpulseResponse/Compute_EvokedAmplitude_Cortical.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImpulseResponse/ImpulseResponse_Filter_Pink.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImpulseResponse/ImpulseResponse_Filter_Pink.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImpulseResponse/PrestimulusNoise_RealSignal.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImpulseResponse/PrestimulusNoise_RealSignal.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImpulseResponse/PrestimulusNoise_RealSignal_HF.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImpulseResponse/PrestimulusNoise_RealSignal_HF.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImpulseResponse/SNR_EnvelopePeak_NoiseSim.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImpulseResponse/SNR_EnvelopePeak_NoiseSim.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImpulseResponse/Compute_EvokedAmplitude_Cortical.py" beforeDir="false" afterPath="$PROJECT_DIR$/Noise_Simulations/Compute_EvokedAmplitude_Cortical.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImpulseResponse/Compute_EvokedAmplitude_Spinal.py" beforeDir="false" afterPath="$PROJECT_DIR$/Noise_Simulations/Compute_EvokedAmplitude_Spinal.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImpulseResponse/ImpulseResponse_Filter_Pink.py" beforeDir="false" afterPath="$PROJECT_DIR$/Noise_Simulations/ImpulseResponse_Filter_Pink.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImpulseResponse/PrestimulusNoise_RealSignal.py" beforeDir="false" afterPath="$PROJECT_DIR$/Noise_Simulations/PrestimulusNoise_RealSignal.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImpulseResponse/PrestimulusNoise_RealSignal_HF.py" beforeDir="false" afterPath="$PROJECT_DIR$/Noise_Simulations/PrestimulusNoise_RealSignal_HF.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImpulseResponse/RawData_DifferentFilters.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImpulseResponse/SNR_EnvelopePeak_NoiseSim.py" beforeDir="false" afterPath="$PROJECT_DIR$/Noise_Simulations/SNR_NoiseSim.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,8 +114,8 @@
     "Python.plot_task_rest.executor": "Run",
     "Python.quick_check.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/data/pt_02718/HF_Oscillations/ImpulseResponse",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+    "last_opened_file_path": "/data/pt_02718/HF_Oscillations",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.grazie"
   }
 }]]></component>
   <component name="RecentsManager">

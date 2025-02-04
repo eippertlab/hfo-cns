@@ -68,6 +68,21 @@ wrapper scripts used to preprocess the resting state data in a similar fashion t
     * [CCA_CorrelationValidation_ttests_UpperTri.py](CCA_RestingStateValidation%2FCCA_CorrelationValidation_ttests_UpperTri.py) performs 
     related statistics
 
+## Noise Simulations
+Supplementary analyses were performed to investigate the impact of filter artefacts (e.g. ringing) on the results of this
+study. This directory contains the code required to add scaled 1/f or pink noise to a unit impulse to simulate single-trial
+data for different scaling factors that are relevant based on our empirical data.
+* [Compute_EvokedAmplitude_Cortical.py](Compute_EvokedAmplitude_Cortical.py) and [Compute_EvokedAmplitude_Spinal.py](Compute_EvokedAmplitude_Spinal.py)
+allows for the computation of the peak amplitude of cortical and spinal single-subject evoked responses. The average of these 
+peak amplitudes across subjects are used to inform the scaling factor for the noise simulations 
+* [PrestimulusNoise_RealSignal.py](PrestimulusNoise_RealSignal.py) and [PrestimulusNoise_RealSignal_HF.py](PrestimulusNoise_RealSignal_HF.py)
+allows for the computation of the standard deviation of cortical and spinal single-subject epochs in the baseline period. The average of these 
+standard deviations across subjects are used to inform the scaling factor for the noise simulations
+* [ImpulseResponse_Filter_Pink.py](ImpulseResponse_Filter_Pink.py) performs the single-trial simulations by summing the unit impulse
+and scaled 1/f or pink noise for each of 2000 trials per simulated participant (N=60). These single-trials are then band-pass filtered
+from 400-800Hz to investigate the effect of filtering.
+* [SNR_NoiseSim.py](SNR_NoiseSim.py) calculates the signal-to-noise ratio of the simulated data
+
 ## Publication_Images
 Scripts contained in [Publication_Images](Publication_Images) are used to generate all figures presented in the manuscript and supplement.
 
