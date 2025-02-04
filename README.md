@@ -68,7 +68,7 @@ wrapper scripts used to preprocess the resting state data in a similar fashion t
     * [CCA_CorrelationValidation_ttests_UpperTri.py](CCA_RestingStateValidation%2FCCA_CorrelationValidation_ttests_UpperTri.py) performs 
     related statistics
 
-## Noise Simulations
+## Noise_Simulations
 Supplementary analyses were performed to investigate the impact of filter artefacts (e.g. ringing) on the results of this
 study. This directory contains the code required to add scaled 1/f or pink noise to a unit impulse to simulate single-trial
 data for different scaling factors that are relevant based on our empirical data.
