@@ -12,7 +12,6 @@ import colorednoise as cn
 
 
 if __name__ == '__main__':
-    iir_params = {'order': 2, 'ftype': 'butter'}
     sfreq = 10000
     scaler = 5.1
     save_path = f"/data/pt_02718/tmp_data/noise_simulations_{scaler}timesnoise/"

@@ -5,15 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="32d78150-f875-4a94-a101-72a4657c6a8a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Noise_Simulations/ImpulseResponse_Filter_Pink_SingleTrial.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Publication_Images/RawEnvelopePlots_Cortical_Thalamic_MergeDatasets_Reref.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImpulseResponse/Compute_EvokedAmplitude_Cortical.py" beforeDir="false" afterPath="$PROJECT_DIR$/Noise_Simulations/Compute_EvokedAmplitude_Cortical.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImpulseResponse/Compute_EvokedAmplitude_Spinal.py" beforeDir="false" afterPath="$PROJECT_DIR$/Noise_Simulations/Compute_EvokedAmplitude_Spinal.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImpulseResponse/ImpulseResponse_Filter_Pink.py" beforeDir="false" afterPath="$PROJECT_DIR$/Noise_Simulations/ImpulseResponse_Filter_Pink.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImpulseResponse/PrestimulusNoise_RealSignal.py" beforeDir="false" afterPath="$PROJECT_DIR$/Noise_Simulations/PrestimulusNoise_RealSignal.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImpulseResponse/PrestimulusNoise_RealSignal_HF.py" beforeDir="false" afterPath="$PROJECT_DIR$/Noise_Simulations/PrestimulusNoise_RealSignal_HF.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImpulseResponse/RawData_DifferentFilters.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImpulseResponse/SNR_EnvelopePeak_NoiseSim.py" beforeDir="false" afterPath="$PROJECT_DIR$/Noise_Simulations/SNR_NoiseSim.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Noise_Simulations/ImpulseResponse_Filter_Pink.py" beforeDir="false" afterPath="$PROJECT_DIR$/Noise_Simulations/ImpulseResponse_Filter_Pink.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,99 +27,102 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.BurstFreq_AcrossCNS_Stats.executor": "Run",
-    "Python.BurstFrequency_CCAtoBroadband_Filter_Digit.executor": "Run",
-    "Python.CCAEnvelope_Spinal_SubCortical_Cortical.executor": "Run",
-    "Python.CCAEnvelope_Spinal_SubCortical_Cortical_NoShift.executor": "Run",
-    "Python.CCA_CorrelationValidation_ttests.executor": "Run",
-    "Python.CCA_CorrelationValidation_ttests_UpperTri.executor": "Run",
-    "Python.CCA_Digit_ClusterPermutation_CorticalAndThalamic.executor": "Run",
-    "Python.CCA_Digit_ClusterPermutation_CorticalAndThalamic_YY.executor": "Run",
-    "Python.CCA_Digit_EnvelopeComparison_CorticalAndThalamic.executor": "Run",
-    "Python.CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical.executor": "Run",
-    "Python.ChangeExcelFormat_BurstFrequency.executor": "Run",
-    "Python.ChangeExcelFormat_WaveletCount.executor": "Run",
-    "Python.ComputeSingleTrial_SNR_CorticalSpinal.executor": "Run",
-    "Python.ComputeSingleTrial_SNR_CorticalSpinal_CCA.executor": "Run",
-    "Python.Compute_EvokedAmplitude_Cortical.executor": "Run",
-    "Python.Compute_EvokedAmplitude_SSP6.executor": "Run",
-    "Python.Correlation_SummaryTable.executor": "Run",
-    "Python.Correlation_SummaryTable_UpperTri.executor": "Run",
-    "Python.EEG_Pipeline.executor": "Run",
-    "Python.EEG_RestingState_Pipeline.executor": "Run",
-    "Python.ESG_Pipeline.executor": "Run",
-    "Python.ESG_RestingState_Pipeline.executor": "Run",
-    "Python.ExploratoryPlots_WrongFiles.executor": "Run",
-    "Python.GrandAverageD2_SpatialPatterns.executor": "Run",
-    "Python.GrandAverage_SpatialPatterns.executor": "Run",
-    "Python.GrandAverage_SpatialPatterns_Thalamic.executor": "Run",
-    "Python.HighVsLowFreq_ComputeSingleTrial_SNR_CorticalSpinal_CCA_BaselineCorr.executor": "Run",
-    "Python.HighVsLowFreq_ComputeSingleTrial_SNR_CorticalSpinal_CCA_BaselineCorrLow.executor": "Run",
-    "Python.HighVsLowFreq_ComputeSingleTrial_SNR_CorticalSpinal_CCA_Gradient.executor": "Run",
-    "Python.HighVsLowFreq_ComputeSingleTrial_SNR_CorticalSpinal_CCA_HPFLow.executor": "Run",
-    "Python.HighVsLowFreq_SingleTrial_SNRLow_CorticalSpinal_CCA_ClusterBasedPermutation.executor": "Run",
-    "Python.HighVsLowFreq_SingleTrial_SNRLow_CorticalSpinal_CCA_ClusterBasedPermutation_BaselineCorr.executor": "Run",
-    "Python.HighVsLowFreq_SingleTrial_SNRLow_CorticalSpinal_CCA_ClusterBasedPermutation_FilterLow.executor": "Run",
-    "Python.HighVsLowFreq_SingleTrial_SNRLow_CorticalSpinal_CCA_ClusterBasedPermutation_Gradient.executor": "Run",
-    "Python.HighVsLowFreq_SingleTrial_SNR_CorticalSpinal.executor": "Run",
-    "Python.HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA.executor": "Run",
-    "Python.HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA_ClusterBasedPermutation.executor": "Run",
-    "Python.HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA_ClusterBasedPermutation_BaselineCorr.executor": "Run",
-    "Python.HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA_ClusterBasedPermutation_FilterLow.executor": "Run",
-    "Python.HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA_ClusterBasedPermutation_Gradient.executor": "Run",
-    "Python.HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA_ClusterBasedPermutation_NoShift.executor": "Run",
-    "Python.ImpulseResponse_Filter.executor": "Run",
-    "Python.ImpulseResponse_Filter_Gaussian.executor": "Run",
-    "Python.ImpulseResponse_Filter_Pink.executor": "Run",
-    "Python.LowFreq_HighFreq_LatencyComparison_CCA.executor": "Run",
-    "Python.PartialCorrelation_LowFreq_HighFreq_CCA_Amp_SNR.executor": "Run",
-    "Python.PartialCorrelation_SNR_CreateTables_CCA.executor": "Run",
-    "Python.Peaks_Troughs_ByCNSLevel_AllCutOffsTogether_EqualWindow.executor": "Run",
-    "Python.Peaks_Troughs_ByCNSLevel_ByCutOff.executor": "Run",
-    "Python.PrestimulusNoise_RealSignal.executor": "Run",
-    "Python.PrestimulusNoise_RealSignal_HF.executor": "Run",
-    "Python.RankCorrelation_WaveletCountAcrossCNS.executor": "Run",
-    "Python.RawData_DifferentFilters.executor": "Run",
-    "Python.RawData_WithTriggers.executor": "Run",
-    "Python.RawEnvelopePlots_Cortical_Thalamic.executor": "Run",
-    "Python.RawEnvelopePlots_Cortical_Thalamic_MergeDatasets.executor": "Run",
-    "Python.Read_SSP6_amplitudes.executor": "Run",
-    "Python.RenameWrongFiles.executor": "Run",
-    "Python.SNR_EnvelopePeak_Cortical_Digits.executor": "Run",
-    "Python.SNR_EnvelopePeak_LowFreq_CorticalThalamic.executor": "Run",
-    "Python.SNR_EnvelopePeak_NoiseSim.executor": "Run",
-    "Python.SNR_EnvelopePeak_SensorSpace.executor": "Run",
-    "Python.SNR_EnvelopePeak_Thalamic.executor": "Run",
-    "Python.SNR_EnvelopePeak_Thalamic_Digits.executor": "Run",
-    "Python.SNR_LFSelection_Cortical.executor": "Run",
-    "Python.SNR_LFSelection_Cortical_AutoFlip.executor": "Run",
-    "Python.SNR_LFSelection_Spinal.executor": "Run",
-    "Python.SingleSubject_TimeCourse.executor": "Run",
-    "Python.SingleSubject_TimeEvolvingTopography.executor": "Run",
-    "Python.SingleSubject_TimeEvolvingTopography_GIF.executor": "Run",
-    "Python.SingleTrial_SNR_CorticalSpinal.executor": "Run",
-    "Python.TFR_ROISearch_BurstFrequency_WeightsToBroadband_Filter_Digits.executor": "Run",
-    "Python.TaskEvoked_RestingState_CCACorrelation_CCAWindow.executor": "Run",
-    "Python.TaskEvoked_RestingState_CCACorrelation_Parallel.executor": "Run",
-    "Python.TaskEvoked_RestingState_CCACorrelation_ShorterWindow.executor": "Run",
-    "Python.WaveletCount_CorrelationWithSNR.executor": "Run",
-    "Python.WaveletCount_Stats.executor": "Run",
-    "Python.plot_task_rest.executor": "Run",
-    "Python.quick_check.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/data/pt_02718/HF_Oscillations",
-    "settings.editor.selected.configurable": "reference.settingsdialog.project.grazie"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.BurstFreq_AcrossCNS_Stats.executor&quot;: &quot;Run&quot;,
+    &quot;Python.BurstFrequency_CCAtoBroadband_Filter_Digit.executor&quot;: &quot;Run&quot;,
+    &quot;Python.CCAEnvelope_Spinal_SubCortical_Cortical.executor&quot;: &quot;Run&quot;,
+    &quot;Python.CCAEnvelope_Spinal_SubCortical_Cortical_NoShift.executor&quot;: &quot;Run&quot;,
+    &quot;Python.CCA_CorrelationValidation_ttests.executor&quot;: &quot;Run&quot;,
+    &quot;Python.CCA_CorrelationValidation_ttests_UpperTri.executor&quot;: &quot;Run&quot;,
+    &quot;Python.CCA_Digit_ClusterPermutation_CorticalAndThalamic.executor&quot;: &quot;Run&quot;,
+    &quot;Python.CCA_Digit_ClusterPermutation_CorticalAndThalamic_YY.executor&quot;: &quot;Run&quot;,
+    &quot;Python.CCA_Digit_EnvelopeComparison_CorticalAndThalamic.executor&quot;: &quot;Run&quot;,
+    &quot;Python.CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical.executor&quot;: &quot;Run&quot;,
+    &quot;Python.CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical_NoShift.executor&quot;: &quot;Run&quot;,
+    &quot;Python.ChangeExcelFormat_BurstFrequency.executor&quot;: &quot;Run&quot;,
+    &quot;Python.ChangeExcelFormat_WaveletCount.executor&quot;: &quot;Run&quot;,
+    &quot;Python.ComputeSingleTrial_SNR_CorticalSpinal.executor&quot;: &quot;Run&quot;,
+    &quot;Python.ComputeSingleTrial_SNR_CorticalSpinal_CCA.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Compute_EvokedAmplitude_Cortical.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Compute_EvokedAmplitude_SSP6.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Correlation_SummaryTable.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Correlation_SummaryTable_UpperTri.executor&quot;: &quot;Run&quot;,
+    &quot;Python.EEG_Pipeline.executor&quot;: &quot;Run&quot;,
+    &quot;Python.EEG_RestingState_Pipeline.executor&quot;: &quot;Run&quot;,
+    &quot;Python.ESG_Pipeline.executor&quot;: &quot;Run&quot;,
+    &quot;Python.ESG_RestingState_Pipeline.executor&quot;: &quot;Run&quot;,
+    &quot;Python.ExploratoryPlots_WrongFiles.executor&quot;: &quot;Run&quot;,
+    &quot;Python.GrandAverageD2_SpatialPatterns.executor&quot;: &quot;Run&quot;,
+    &quot;Python.GrandAverage_SpatialPatterns.executor&quot;: &quot;Run&quot;,
+    &quot;Python.GrandAverage_SpatialPatterns_Thalamic.executor&quot;: &quot;Run&quot;,
+    &quot;Python.HighVsLowFreq_ComputeSingleTrial_SNR_CorticalSpinal_CCA_BaselineCorr.executor&quot;: &quot;Run&quot;,
+    &quot;Python.HighVsLowFreq_ComputeSingleTrial_SNR_CorticalSpinal_CCA_BaselineCorrLow.executor&quot;: &quot;Run&quot;,
+    &quot;Python.HighVsLowFreq_ComputeSingleTrial_SNR_CorticalSpinal_CCA_Gradient.executor&quot;: &quot;Run&quot;,
+    &quot;Python.HighVsLowFreq_ComputeSingleTrial_SNR_CorticalSpinal_CCA_HPFLow.executor&quot;: &quot;Run&quot;,
+    &quot;Python.HighVsLowFreq_SingleTrial_SNRLow_CorticalSpinal_CCA_ClusterBasedPermutation.executor&quot;: &quot;Run&quot;,
+    &quot;Python.HighVsLowFreq_SingleTrial_SNRLow_CorticalSpinal_CCA_ClusterBasedPermutation_BaselineCorr.executor&quot;: &quot;Run&quot;,
+    &quot;Python.HighVsLowFreq_SingleTrial_SNRLow_CorticalSpinal_CCA_ClusterBasedPermutation_FilterLow.executor&quot;: &quot;Run&quot;,
+    &quot;Python.HighVsLowFreq_SingleTrial_SNRLow_CorticalSpinal_CCA_ClusterBasedPermutation_Gradient.executor&quot;: &quot;Run&quot;,
+    &quot;Python.HighVsLowFreq_SingleTrial_SNR_CorticalSpinal.executor&quot;: &quot;Run&quot;,
+    &quot;Python.HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA.executor&quot;: &quot;Run&quot;,
+    &quot;Python.HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA_ClusterBasedPermutation.executor&quot;: &quot;Run&quot;,
+    &quot;Python.HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA_ClusterBasedPermutation_BaselineCorr.executor&quot;: &quot;Run&quot;,
+    &quot;Python.HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA_ClusterBasedPermutation_FilterLow.executor&quot;: &quot;Run&quot;,
+    &quot;Python.HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA_ClusterBasedPermutation_Gradient.executor&quot;: &quot;Run&quot;,
+    &quot;Python.HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA_ClusterBasedPermutation_NoShift.executor&quot;: &quot;Run&quot;,
+    &quot;Python.ImpulseResponse_Filter.executor&quot;: &quot;Run&quot;,
+    &quot;Python.ImpulseResponse_Filter_Gaussian.executor&quot;: &quot;Run&quot;,
+    &quot;Python.ImpulseResponse_Filter_Pink.executor&quot;: &quot;Run&quot;,
+    &quot;Python.ImpulseResponse_Filter_Pink_SingleTrial.executor&quot;: &quot;Run&quot;,
+    &quot;Python.LowFreq_HighFreq_LatencyComparison_CCA.executor&quot;: &quot;Run&quot;,
+    &quot;Python.PartialCorrelation_LowFreq_HighFreq_CCA_Amp_SNR.executor&quot;: &quot;Run&quot;,
+    &quot;Python.PartialCorrelation_SNR_CreateTables_CCA.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Peaks_Troughs_ByCNSLevel_AllCutOffsTogether_EqualWindow.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Peaks_Troughs_ByCNSLevel_ByCutOff.executor&quot;: &quot;Run&quot;,
+    &quot;Python.PrestimulusNoise_RealSignal.executor&quot;: &quot;Run&quot;,
+    &quot;Python.PrestimulusNoise_RealSignal_HF.executor&quot;: &quot;Run&quot;,
+    &quot;Python.RankCorrelation_WaveletCountAcrossCNS.executor&quot;: &quot;Run&quot;,
+    &quot;Python.RawData_DifferentFilters.executor&quot;: &quot;Run&quot;,
+    &quot;Python.RawData_WithTriggers.executor&quot;: &quot;Run&quot;,
+    &quot;Python.RawEnvelopePlots_Cortical_Thalamic.executor&quot;: &quot;Run&quot;,
+    &quot;Python.RawEnvelopePlots_Cortical_Thalamic_MergeDatasets.executor&quot;: &quot;Run&quot;,
+    &quot;Python.RawEnvelopePlots_Cortical_Thalamic_MergeDatasets_Reref.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Read_SSP6_amplitudes.executor&quot;: &quot;Run&quot;,
+    &quot;Python.RenameWrongFiles.executor&quot;: &quot;Run&quot;,
+    &quot;Python.SNR_EnvelopePeak_Cortical_Digits.executor&quot;: &quot;Run&quot;,
+    &quot;Python.SNR_EnvelopePeak_LowFreq_CorticalThalamic.executor&quot;: &quot;Run&quot;,
+    &quot;Python.SNR_EnvelopePeak_NoiseSim.executor&quot;: &quot;Run&quot;,
+    &quot;Python.SNR_EnvelopePeak_SensorSpace.executor&quot;: &quot;Run&quot;,
+    &quot;Python.SNR_EnvelopePeak_Thalamic.executor&quot;: &quot;Run&quot;,
+    &quot;Python.SNR_EnvelopePeak_Thalamic_Digits.executor&quot;: &quot;Run&quot;,
+    &quot;Python.SNR_LFSelection_Cortical.executor&quot;: &quot;Run&quot;,
+    &quot;Python.SNR_LFSelection_Cortical_AutoFlip.executor&quot;: &quot;Run&quot;,
+    &quot;Python.SNR_LFSelection_Spinal.executor&quot;: &quot;Run&quot;,
+    &quot;Python.SingleSubject_TimeCourse.executor&quot;: &quot;Run&quot;,
+    &quot;Python.SingleSubject_TimeEvolvingTopography.executor&quot;: &quot;Run&quot;,
+    &quot;Python.SingleSubject_TimeEvolvingTopography_GIF.executor&quot;: &quot;Run&quot;,
+    &quot;Python.SingleTrial_SNR_CorticalSpinal.executor&quot;: &quot;Run&quot;,
+    &quot;Python.TFR_ROISearch_BurstFrequency_WeightsToBroadband_Filter_Digits.executor&quot;: &quot;Run&quot;,
+    &quot;Python.TaskEvoked_RestingState_CCACorrelation_CCAWindow.executor&quot;: &quot;Run&quot;,
+    &quot;Python.TaskEvoked_RestingState_CCACorrelation_Parallel.executor&quot;: &quot;Run&quot;,
+    &quot;Python.TaskEvoked_RestingState_CCACorrelation_ShorterWindow.executor&quot;: &quot;Run&quot;,
+    &quot;Python.WaveletCount_CorrelationWithSNR.executor&quot;: &quot;Run&quot;,
+    &quot;Python.WaveletCount_Stats.executor&quot;: &quot;Run&quot;,
+    &quot;Python.plot_task_rest.executor&quot;: &quot;Run&quot;,
+    &quot;Python.quick_check.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/data/pt_02718/HF_Oscillations&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.grazie&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/ImpulseResponse" />
       <recent name="$PROJECT_DIR$/Publication_Images" />
+      <recent name="$PROJECT_DIR$/Noise_Simulations" />
+      <recent name="$PROJECT_DIR$/ImpulseResponse" />
       <recent name="$PROJECT_DIR$/Group_Level_Analyses" />
       <recent name="$PROJECT_DIR$/SingleSubject_EvolvingTopgraphy" />
-      <recent name="$PROJECT_DIR$/GroupLevelAnalyses" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/Archive" />
@@ -134,8 +132,8 @@
       <recent name="$PROJECT_DIR$/Images/EEG&amp;ESG_images" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.SNR_EnvelopePeak_NoiseSim">
-    <configuration name="Compute_EvokedAmplitude_Cortical" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.WaveletCount_Stats">
+    <configuration name="CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical_NoShift" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -144,11 +142,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ImpulseResponse" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Publication_Images" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ImpulseResponse/Compute_EvokedAmplitude_Cortical.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Publication_Images/CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical_NoShift.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -157,7 +155,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="ImpulseResponse_Filter_Pink" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="ImpulseResponse_Filter_Pink_SingleTrial" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -166,11 +164,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ImpulseResponse" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Noise_Simulations" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ImpulseResponse/ImpulseResponse_Filter_Pink.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Noise_Simulations/ImpulseResponse_Filter_Pink_SingleTrial.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -179,7 +177,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="PrestimulusNoise_RealSignal" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="RawEnvelopePlots_Cortical_Thalamic_MergeDatasets_Reref" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -188,33 +186,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ImpulseResponse" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Publication_Images" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ImpulseResponse/PrestimulusNoise_RealSignal.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="PrestimulusNoise_RealSignal_HF" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="HF_Oscillations" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ImpulseResponse" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ImpulseResponse/PrestimulusNoise_RealSignal_HF.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Publication_Images/RawEnvelopePlots_Cortical_Thalamic_MergeDatasets_Reref.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -245,13 +221,35 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="WaveletCount_Stats" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="HF_Oscillations" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Group_Level_Analyses" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Group_Level_Analyses/WaveletCount_Stats.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.WaveletCount_Stats" />
+        <item itemvalue="Python.CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical_NoShift" />
+        <item itemvalue="Python.RawEnvelopePlots_Cortical_Thalamic_MergeDatasets_Reref" />
+        <item itemvalue="Python.ImpulseResponse_Filter_Pink_SingleTrial" />
         <item itemvalue="Python.SNR_EnvelopePeak_NoiseSim" />
-        <item itemvalue="Python.ImpulseResponse_Filter_Pink" />
-        <item itemvalue="Python.Compute_EvokedAmplitude_Cortical" />
-        <item itemvalue="Python.PrestimulusNoise_RealSignal_HF" />
-        <item itemvalue="Python.PrestimulusNoise_RealSignal" />
       </list>
     </recent_temporary>
   </component>
