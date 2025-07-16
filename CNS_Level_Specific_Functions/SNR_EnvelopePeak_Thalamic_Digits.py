@@ -77,6 +77,15 @@ if __name__ == '__main__':
         trigger_names = cond_info.trigger_name  # Will return list of 3, we just want the 12 one
         trigger_name = trigger_names[2]
 
+        if cond_name == 'med_digits':
+            sep_latency = df_timing.loc[df_timing['Name'] == 'centre_sub_med', 'Time'].iloc[0] / 1000
+            signal_window = df_timing.loc[df_timing['Name'] == 'edge_sub_med', 'Time'].iloc[0] / 1000
+            sep_latency += 0.004  # Add 4ms to account for difference between wrist and fingers etc.
+        elif cond_name == 'tib_digits':
+            sep_latency = df_timing.loc[df_timing['Name'] == 'centre_sub_tib', 'Time'].iloc[0] / 1000
+            signal_window = df_timing.loc[df_timing['Name'] == 'edge_sub_tib', 'Time'].iloc[0] / 1000
+            sep_latency += 0.008  # Add 8ms to account for difference between ankle and toes etc.
+
         for subject in subjects:
             fig, ax = plt.subplots(2, 2)
             ax = ax.flatten()
@@ -84,14 +93,6 @@ if __name__ == '__main__':
             fname = f"{freq_band}_{cond_name}.fif"
             input_path = "/data/pt_02718/tmp_data_2/cca_eeg_thalamic/" + subject_id + "/"
             epochs = mne.read_epochs(input_path + fname, preload=True)
-
-            if cond_name == 'med_digits':
-                sep_latency = df_timing.loc[df_timing['Name'] == 'centre_sub_med', 'Time'].iloc[0] / 1000
-                signal_window = df_timing.loc[df_timing['Name'] == 'edge_sub_med', 'Time'].iloc[0] / 1000
-            elif cond_name == 'tib_digits':
-                sep_latency = df_timing.loc[df_timing['Name'] == 'centre_sub_tib', 'Time'].iloc[0] / 1000
-                signal_window = df_timing.loc[df_timing['Name'] == 'edge_sub_tib', 'Time'].iloc[0] / 1000
-            sep_latency += 0.002  # Add 2ms to account for difference between ankle and toes etc.
 
             snr_comp = []
             peak_latency_comp = []
@@ -172,8 +173,3 @@ if __name__ == '__main__':
                 df_med = pd.DataFrame(snr_cond, columns=['Component 1', 'Component 2', 'Component 3', 'Component 4'])
             elif cond_name == 'tib_digits':
                 df_tib = pd.DataFrame(snr_cond, columns=['Component 1', 'Component 2', 'Component 3', 'Component 4'])
-
-    if save_to_excel:
-        with pd.ExcelWriter(f'{figure_path}ComponentSNR.xlsx') as writer:
-            df_med.to_excel(writer, sheet_name='Median Digits')
-            df_tib.to_excel(writer, sheet_name='Tibial Digits')

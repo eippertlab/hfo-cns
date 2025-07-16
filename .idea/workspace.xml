@@ -5,10 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="32d78150-f875-4a94-a101-72a4657c6a8a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Noise_Simulations/ImpulseResponse_Filter_Pink_SingleTrial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Publication_Images/RawEnvelopePlots_Cortical_Thalamic_MergeDatasets_Reref.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Noise_Simulations/ImpulseResponse_Filter_Pink.py" beforeDir="false" afterPath="$PROJECT_DIR$/Noise_Simulations/ImpulseResponse_Filter_Pink.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CNS_Level_Specific_Functions/SNR_EnvelopePeak_Cortical_Digits.py" beforeDir="false" afterPath="$PROJECT_DIR$/CNS_Level_Specific_Functions/SNR_EnvelopePeak_Cortical_Digits.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CNS_Level_Specific_Functions/SNR_EnvelopePeak_Spinal_Digits.py" beforeDir="false" afterPath="$PROJECT_DIR$/CNS_Level_Specific_Functions/SNR_EnvelopePeak_Spinal_Digits.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CNS_Level_Specific_Functions/SNR_EnvelopePeak_Thalamic_Digits.py" beforeDir="false" afterPath="$PROJECT_DIR$/CNS_Level_Specific_Functions/SNR_EnvelopePeak_Thalamic_Digits.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Publication_Images/CCA_Digit_ClusterPermutation_CorticalAndThalamic_YY.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/CCA_Digit_ClusterPermutation_CorticalAndThalamic_YY.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -132,8 +133,8 @@
       <recent name="$PROJECT_DIR$/Images/EEG&amp;ESG_images" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.WaveletCount_Stats">
-    <configuration name="CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical_NoShift" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.CCA_Digit_ClusterPermutation_CorticalAndThalamic_YY">
+    <configuration name="CCA_Digit_ClusterPermutation_CorticalAndThalamic_YY" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -146,7 +147,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Publication_Images/CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical_NoShift.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Publication_Images/CCA_Digit_ClusterPermutation_CorticalAndThalamic_YY.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -155,7 +156,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="ImpulseResponse_Filter_Pink_SingleTrial" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="SNR_EnvelopePeak_Cortical_Digits" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -164,11 +165,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Noise_Simulations" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CNS_Level_Specific_Functions" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Noise_Simulations/ImpulseResponse_Filter_Pink_SingleTrial.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CNS_Level_Specific_Functions/SNR_EnvelopePeak_Cortical_Digits.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -177,7 +178,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="RawEnvelopePlots_Cortical_Thalamic_MergeDatasets_Reref" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="SNR_EnvelopePeak_Spinal_Digits" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -186,11 +187,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Publication_Images" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CNS_Level_Specific_Functions" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Publication_Images/RawEnvelopePlots_Cortical_Thalamic_MergeDatasets_Reref.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CNS_Level_Specific_Functions/SNR_EnvelopePeak_Spinal_Digits.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -199,7 +200,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="SNR_EnvelopePeak_NoiseSim" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="SNR_EnvelopePeak_Thalamic_Digits" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -208,11 +209,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ImpulseResponse" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CNS_Level_Specific_Functions" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ImpulseResponse/SNR_EnvelopePeak_NoiseSim.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CNS_Level_Specific_Functions/SNR_EnvelopePeak_Thalamic_Digits.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -245,18 +246,18 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.CCA_Digit_ClusterPermutation_CorticalAndThalamic_YY" />
+        <item itemvalue="Python.SNR_EnvelopePeak_Spinal_Digits" />
+        <item itemvalue="Python.SNR_EnvelopePeak_Thalamic_Digits" />
+        <item itemvalue="Python.SNR_EnvelopePeak_Cortical_Digits" />
         <item itemvalue="Python.WaveletCount_Stats" />
-        <item itemvalue="Python.CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical_NoShift" />
-        <item itemvalue="Python.RawEnvelopePlots_Cortical_Thalamic_MergeDatasets_Reref" />
-        <item itemvalue="Python.ImpulseResponse_Filter_Pink_SingleTrial" />
-        <item itemvalue="Python.SNR_EnvelopePeak_NoiseSim" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-0509580d9d50-746f403e7f0c-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-241.14494.241" />
+        <option value="bundled-python-sdk-598b0484d0b5-e2d783800521-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-251.26927.74" />
       </set>
     </attachedChunks>
   </component>

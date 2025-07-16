@@ -144,14 +144,14 @@ if __name__ == '__main__':
                     c = c[0]
                     if cluster_p_values[i_c] <= 0.05:
                         h = ax.axvspan(times[c.start], times[c.stop - 1], color="r", alpha=0.3)
-                        print(data_type)
+                        print(f"{data_type}, {trigger_name}")
                         print('Significant Cluster')
                         print(f'p-val: {cluster_p_values[i_c]}')
                         print(times[c.start])
                         print(times[c.stop-1])
                     else:
                         ax.axvspan(times[c.start], times[c.stop - 1], color=(0.3, 0.3, 0.3), alpha=0.2)
-                        print(data_type)
+                        print(f"{data_type}, {trigger_name}")
                         print('Insignificant Cluster')
                         print(f'p-val: {cluster_p_values[i_c]}')
                         print(times[c.start])
