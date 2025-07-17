@@ -87,4 +87,4 @@ from 400-800Hz to investigate the effect of filtering.
 Scripts contained in [Publication_Images](Publication_Images) are used to generate all figures presented in the manuscript and supplement.
 
 # Required Software
-All scripts run with python 3.9 and MNE 1.0.3, for a detailed list of required packages see [requirements.txt](requirements.txt).
+All scripts run with python 3.10 and MNE 1.7.0, for a detailed list of required packages see [requirements.txt](requirements.txt).
