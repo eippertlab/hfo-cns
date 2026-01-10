@@ -25,24 +25,24 @@ if __name__ == '__main__':
     save_to_excel = True  # If we want to save the SNR values on each run
 
     freq_band = 'sigma'
-    srmr_nr = 2
+    srmr_nr = 1
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)  # 1 through 36 to access subject data
         conditions = [2, 3]  # Conditions of interest
         # xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/LowFreq_HighFreq_Relation.xlsx')
-        component_fname = '/data/pt_02718/tmp_data/Components_EEG_Updated.xlsx'
-        visibility_fname = '/data/pt_02718/tmp_data/Visibility_Updated.xlsx'
-        figure_path = '/data/p_02718/Images/CCA_eeg/SNR&EnvelopePeak/'
+        component_fname = '/data/pt_02718/tmp_data/Components_HalfData_EEG_Updated.xlsx'
+        visibility_fname = '/data/pt_02718/tmp_data/Visibility_HalfData_Updated.xlsx'
+        figure_path = '/data/p_02718/Images/CCA_HalfData_eeg/SNR&EnvelopePeak/'
         os.makedirs(figure_path, exist_ok=True)
 
     elif srmr_nr == 2:
         subjects = np.arange(1, 25)  # (1, 2) # 1 through 24 to access subject data
         conditions = [3, 5]  # Conditions of interest - med_mixed and tib_mixed [3, 5]
         # xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/LowFreq_HighFreq_Relation.xlsx')
-        component_fname = '/data/pt_02718/tmp_data_2/Components_EEG_Updated.xlsx'
-        visibility_fname = '/data/pt_02718/tmp_data_2/Visibility_Updated.xlsx'
-        figure_path = '/data/p_02718/Images_2/CCA_eeg/SNR&EnvelopePeak/'
+        component_fname = '/data/pt_02718/tmp_data_2/Components_HalfData_EEG_Updated.xlsx'
+        visibility_fname = '/data/pt_02718/tmp_data_2/Visibility_HalfData_Updated.xlsx'
+        figure_path = '/data/p_02718/Images_2/CCA_HalfData_eeg/SNR&EnvelopePeak/'
         os.makedirs(figure_path, exist_ok=True)
 
     timing_path = "/data/pt_02718/Time_Windows.xlsx"  # Contains important info about experiment

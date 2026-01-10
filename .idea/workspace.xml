@@ -5,13 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="32d78150-f875-4a94-a101-72a4657c6a8a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/CCA_HalfData_ModelValidation/ModelValidation_Pipeline.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CCA_HalfData_ModelValidation/SNR_EnvelopePeak_Cortical.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CCA_HalfData_ModelValidation/SNR_EnvelopePeak_Spinal.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CCA_HalfData_ModelValidation/SNR_EnvelopePeak_Thalamic.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CCA_HalfData_ModelValidation/run_CCA_brain.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CCA_HalfData_ModelValidation/run_CCA_brain_thalamic.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CCA_HalfData_ModelValidation/run_CCA_spinal.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Group_Level_Analyses/TFR_ROISearch_BurstFrequency_WeightsToBroadband_Filter.py" beforeDir="false" afterPath="$PROJECT_DIR$/Group_Level_Analyses/TFR_ROISearch_BurstFrequency_WeightsToBroadband_Filter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CCA_Resting_State_Validation/TaskEvoked_RestingState_CCACorrelation_Parallel.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_Resting_State_Validation/TaskEvoked_RestingState_CCACorrelation_WholeEpoch.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -74,6 +88,7 @@
     "Python.ImpulseResponse_Filter_Pink.executor": "Run",
     "Python.ImpulseResponse_Filter_Pink_SingleTrial.executor": "Run",
     "Python.LowFreq_HighFreq_LatencyComparison_CCA.executor": "Run",
+    "Python.ModelValidation_Pipeline.executor": "Run",
     "Python.PartialCorrelation_LowFreq_HighFreq_CCA_Amp_SNR.executor": "Run",
     "Python.PartialCorrelation_SNR_CreateTables_CCA.executor": "Run",
     "Python.Peaks_Troughs_ByCNSLevel_AllCutOffsTogether_EqualWindow.executor": "Run",
@@ -88,6 +103,7 @@
     "Python.RawEnvelopePlots_Cortical_Thalamic_MergeDatasets_Reref.executor": "Run",
     "Python.Read_SSP6_amplitudes.executor": "Run",
     "Python.RenameWrongFiles.executor": "Run",
+    "Python.SNR_EnvelopePeak_Cortical.executor": "Run",
     "Python.SNR_EnvelopePeak_Cortical_Digits.executor": "Run",
     "Python.SNR_EnvelopePeak_LowFreq_CorticalThalamic.executor": "Run",
     "Python.SNR_EnvelopePeak_NoiseSim.executor": "Run",
@@ -112,27 +128,27 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "master",
-    "last_opened_file_path": "/data/pt_02718/HF_Oscillations",
+    "last_opened_file_path": "/data/pt_02718/HF_Oscillations/CCA_HalfData_ModelValidation",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/CCA_HalfData_ModelValidation" />
+      <recent name="$PROJECT_DIR$/HalfData_ModelValidation" />
       <recent name="$PROJECT_DIR$/Publication_Images" />
       <recent name="$PROJECT_DIR$/Noise_Simulations" />
       <recent name="$PROJECT_DIR$/ImpulseResponse" />
-      <recent name="$PROJECT_DIR$/Group_Level_Analyses" />
-      <recent name="$PROJECT_DIR$/SingleSubject_EvolvingTopgraphy" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/Archive" />
       <recent name="$PROJECT_DIR$/Group_Level_Analyses" />
       <recent name="$PROJECT_DIR$/Publication_Images" />
       <recent name="$PROJECT_DIR$/Polished_Images" />
-      <recent name="$PROJECT_DIR$/Images/EEG&amp;ESG_images" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.CCA_CorrelationValidation_ttests_UpperTri">
+  <component name="RunManager" selected="Python.SNR_EnvelopePeak_Thalamic">
     <configuration name="CCA_CorrelationValidation_ttests_UpperTri" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
@@ -177,7 +193,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="SNR_EnvelopePeak_Cortical_Digits" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="ModelValidation_Pipeline" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -186,11 +202,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CNS_Level_Specific_Functions" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CCA_HalfData_ModelValidation" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CNS_Level_Specific_Functions/SNR_EnvelopePeak_Cortical_Digits.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CCA_HalfData_ModelValidation/ModelValidation_Pipeline.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -199,7 +215,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="SNR_EnvelopePeak_Spinal_Digits" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="SNR_EnvelopePeak_Cortical" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -208,11 +224,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CNS_Level_Specific_Functions" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CCA_HalfData_ModelValidation" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CNS_Level_Specific_Functions/SNR_EnvelopePeak_Spinal_Digits.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CCA_HalfData_ModelValidation/SNR_EnvelopePeak_Cortical.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -221,7 +237,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="SNR_EnvelopePeak_Thalamic_Digits" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="SNR_EnvelopePeak_Thalamic" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -230,11 +246,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CNS_Level_Specific_Functions" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CCA_HalfData_ModelValidation" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CNS_Level_Specific_Functions/SNR_EnvelopePeak_Thalamic_Digits.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CCA_HalfData_ModelValidation/SNR_EnvelopePeak_Thalamic.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -245,11 +261,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.SNR_EnvelopePeak_Thalamic" />
+        <item itemvalue="Python.SNR_EnvelopePeak_Cortical" />
+        <item itemvalue="Python.ModelValidation_Pipeline" />
         <item itemvalue="Python.CCA_CorrelationValidation_ttests_UpperTri" />
         <item itemvalue="Python.CCA_Digit_ClusterPermutation_CorticalAndThalamic_YY" />
-        <item itemvalue="Python.SNR_EnvelopePeak_Spinal_Digits" />
-        <item itemvalue="Python.SNR_EnvelopePeak_Thalamic_Digits" />
-        <item itemvalue="Python.SNR_EnvelopePeak_Cortical_Digits" />
       </list>
     </recent_temporary>
   </component>

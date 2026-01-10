@@ -14,9 +14,10 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import pandas as pd
 import pickle
+import random
 
 
-def run_CCA(subject, condition, srmr_nr, freq_band, freq_type):
+def run_CCA_spinal(subject, condition, srmr_nr, freq_band, freq_type):
     if freq_band != 'sigma':
         raise RuntimeError('Frequency band must be set to sigma, kappa is depreciated')
 
@@ -42,20 +43,20 @@ def run_CCA(subject, condition, srmr_nr, freq_band, freq_type):
     if freq_type == 'high':
         input_path = "/data/pt_02718/tmp_data/freq_banded_esg/" + subject_id + "/"
         fname = f"{freq_band}_{cond_name}.fif"
-        save_path = "/data/pt_02718/tmp_data/cca/" + subject_id + "/"
+        save_path = "/data/pt_02718/tmp_data/cca_halfdata/" + subject_id + "/"
         append = ''
     else:
         input_path = "/data/pt_02718/tmp_data/ssp_cleaned/" + subject_id + "/"
         fname = f'ssp6_cleaned_{cond_name}.fif'
-        save_path = "/data/pt_02718/tmp_data/cca_low/" + subject_id + "/"
+        save_path = "/data/pt_02718/tmp_data/cca_halfdata_low/" + subject_id + "/"
         append = '_low'
     os.makedirs(save_path, exist_ok=True)
 
-    figure_path_spatial = f'/data/p_02718/Images/CCA{append}/ComponentIsopotentialPlots/{subject_id}/'
+    figure_path_spatial = f'/data/p_02718/Images/CCA_HalfData{append}/ComponentIsopotentialPlots/{subject_id}/'
     os.makedirs(figure_path_spatial, exist_ok=True)
-    figure_path_time = f'/data/p_02718/Images/CCA{append}/ComponentTimePlots/{subject_id}/'
+    figure_path_time = f'/data/p_02718/Images/CCA_HalfData{append}/ComponentTimePlots/{subject_id}/'
     os.makedirs(figure_path_time, exist_ok=True)
-    figure_path = f'/data/p_02718/Images/CCA{append}/ComponentPlots/{subject_id}/'
+    figure_path = f'/data/p_02718/Images/CCA_HalfData{append}/ComponentPlots/{subject_id}/'
     os.makedirs(figure_path, exist_ok=True)
 
     brainstem_chans, cervical_chans, lumbar_chans, ref_chan = get_esg_channels()
@@ -66,10 +67,11 @@ def run_CCA(subject, condition, srmr_nr, freq_band, freq_type):
         raw.filter(l_freq=1, h_freq=350)
 
     # now create epochs based on the trigger names
+    # Set reject by annotations to false so we always keep all 2000 trials
     events, event_ids = mne.events_from_annotations(raw)
     event_id_dict = {key: value for key, value in event_ids.items() if key == trigger_name}
     epochs = mne.Epochs(raw, events, event_id=event_id_dict, tmin=iv_epoch[0], tmax=iv_epoch[1]-1/1000,
-                        baseline=tuple(iv_baseline), preload=True)
+                        baseline=tuple(iv_baseline), preload=True, reject_by_annotation=False)
 
     if cond_name == 'median':
         epochs = epochs.pick_channels(cervical_chans, ordered=True)
@@ -86,52 +88,55 @@ def run_CCA(subject, condition, srmr_nr, freq_band, freq_type):
     else:
         raise RuntimeError('Invalid condition name attempted for use')
 
-    # Drop bad channels
-    # if raw.info['bads']:
-    #     for channel in raw.info['bads']:
-    #         if channel in esg_chans:
-    #             epochs.drop_channels(ch_names=[channel])
-
-    # Crop the epochs
+    # Crop the epochs for CCA and subselect 50% for training and 50% for application from both full and cropped epochs
     window = epochs.time_as_index(window_times)
-    epo_cca = epochs.copy().crop(tmin=window_times[0], tmax=window_times[1], include_tmax=False)
+    random.seed(321)  # Set the seed so the randomisation is reproducible
+    trials = random.sample(range(0, 1999), 1000)
+    missing = np.setdiff1d(np.arange(0, 1999), trials)
+
+    epochs_train = epochs.copy()[trials]
+    epo_cca_train = epochs.copy().crop(tmin=window_times[0], tmax=window_times[1], include_tmax=False)[trials]
+    epochs_apply = epochs.copy()[missing]
+    epo_cca_apply = epochs.copy().crop(tmin=window_times[0], tmax=window_times[1], include_tmax=False)[missing]
 
     # Prepare matrices for cca
     ##### Average matrix
-    epo_av = epo_cca.copy().average().data.T
+    epo_av = epo_cca_train.copy().average().data.T
     # Now want channels x observations matrix #np.shape()[0] gets number of trials
     # Epo av is no_times x no_channels (10x40)
     # Want to repeat this to form an array thats no. observations x no.channels (20000x40)
     # Need to repeat the array, no_trials/times amount along the y axis
-    avg_matrix = np.tile(epo_av, (int((np.shape(epochs.get_data())[0])), 1))
+    avg_matrix = np.tile(epo_av, (int((np.shape(epochs_train.get_data())[0])), 1))
     avg_matrix = avg_matrix.T  # Need to transpose for correct form for function - channels x observations
 
     ##### Single trial matrix
-    epo_cca_data = epo_cca.get_data(picks=esg_chans)
-    epo_data = epochs.get_data(picks=esg_chans)
+    epo_cca_data = epo_cca_train.get_data(picks=esg_chans)
+    epo_cca_data_apply = epo_cca_apply.get_data(picks=esg_chans)
+    epo_data_apply = epochs_apply.get_data(picks=esg_chans)
 
     # 0 to access number of epochs, 1 to access number of channels
     # channels x observations
     no_times = int(window[1] - window[0])
     # Need to transpose to get it in the form CCA wants
     st_matrix = np.swapaxes(epo_cca_data, 1, 2).reshape(-1, epo_cca_data.shape[1]).T
-    st_matrix_long = np.swapaxes(epo_data, 1, 2).reshape(-1, epo_data.shape[1]).T
+    st_matrix_apply = np.swapaxes(epo_cca_data_apply, 1, 2).reshape(-1, epo_cca_data_apply.shape[1]).T
+    st_matrix_long_apply = np.swapaxes(epo_data_apply, 1, 2).reshape(-1, epo_data_apply.shape[1]).T
 
-    # Run CCA
-    W_avg, W_st, r = spatfilt.CCA_data(avg_matrix, st_matrix)
+    # Run CCA to get the filters
+    W_avg, W_st, r = spatfilt.CCA_data(avg_matrix, st_matrix)  # avg and st from the train data
 
     all_components = len(r)
 
     # Apply obtained weights to the long dataset (dimensions 40x9) - matrix multiplication
-    CCA_concat = st_matrix_long.T @ W_st[:, 0:all_components]
+    CCA_concat = st_matrix_long_apply.T @ W_st[:, 0:all_components]
     CCA_concat = CCA_concat.T
 
     # Spatial Patterns
-    A_st = np.cov(st_matrix) @ W_st
+    A_st = np.cov(st_matrix_apply) @ W_st
 
-    # Reshape - (900, 2000, 9)
-    no_times_long = np.shape(epochs.get_data())[2]
-    no_epochs = np.shape(epochs.get_data())[0]
+    # Reshape
+    no_times_long = np.shape(epochs_apply.get_data())[2]
+    no_epochs = np.shape(epochs_apply.get_data())[0]
 
     # Perform reshape
     CCA_comps = np.reshape(CCA_concat, (all_components, no_times_long, no_epochs), order='F')
@@ -143,8 +148,8 @@ def run_CCA(subject, condition, srmr_nr, freq_band, freq_type):
 
     #######################  Epoch data class to store the information ####################
     data = CCA_comps[:, 0:selected_components, :]
-    events = epochs.events
-    event_id = epochs.event_id
+    events = epochs_apply.events
+    event_id = epochs_apply.event_id
     tmin = iv_epoch[0]
     sfreq = 5000
 

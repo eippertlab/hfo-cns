@@ -25,22 +25,22 @@ if __name__ == '__main__':
     save_to_excel = True  # If we want to save the SNR values on each run
 
     freq_band = 'sigma'
-    srmr_nr = 2
+    srmr_nr = 1
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)  # 1 through 36 to access subject data
         conditions = [2, 3]  # Conditions of interest
-        component_fname = '/data/pt_02718/tmp_data/Components_EEG_Thalamic_Updated.xlsx'
-        visibility_fname = '/data/pt_02718/tmp_data/Visibility_Thalamic_Updated.xlsx'
-        figure_path = '/data/p_02718/Images/CCA_eeg_thalamic/SNR&EnvelopePeak/'
+        component_fname = '/data/pt_02718/tmp_data/Components_HalfData_EEG_Thalamic_Updated.xlsx'
+        visibility_fname = '/data/pt_02718/tmp_data/Visibility_HalfData_Thalamic_Updated.xlsx'
+        figure_path = '/data/p_02718/Images/CCA_HalfData_eeg_thalamic/SNR&EnvelopePeak/'
         os.makedirs(figure_path, exist_ok=True)
 
     elif srmr_nr == 2:
         subjects = np.arange(1, 25)  # (1, 2) # 1 through 24 to access subject data
         conditions = [3, 5]  # Conditions of interest - med_mixed and tib_mixed [3, 5]
-        component_fname = '/data/pt_02718/tmp_data_2/Components_EEG_Thalamic_Updated.xlsx'
-        visibility_fname = '/data/pt_02718/tmp_data_2/Visibility_Thalamic_Updated.xlsx'
-        figure_path = '/data/p_02718/Images_2/CCA_eeg_thalamic/SNR&EnvelopePeak/'
+        component_fname = '/data/pt_02718/tmp_data_2/Components_HalfData_EEG_Thalamic_Updated.xlsx'
+        visibility_fname = '/data/pt_02718/tmp_data_2/Visibility_HalfData_Thalamic_Updated.xlsx'
+        figure_path = '/data/p_02718/Images_2/CCA_HalfData_eeg_thalamic/SNR&EnvelopePeak/'
         os.makedirs(figure_path, exist_ok=True)
 
     # Check the component file is already generated - want to store the flipping info in the same place so easier to
@@ -85,10 +85,10 @@ if __name__ == '__main__':
             subject_id = f'sub-{str(subject).zfill(3)}'
             if srmr_nr == 1:
                 fname = f"{freq_band}_{cond_name}.fif"
-                input_path = "/data/pt_02718/tmp_data/cca_eeg_thalamic/" + subject_id + "/"
+                input_path = "/data/pt_02718/tmp_data/cca_halfdata_eeg_thalamic/" + subject_id + "/"
             elif srmr_nr == 2:
                 fname = f"{freq_band}_{cond_name}.fif"
-                input_path = "/data/pt_02718/tmp_data_2/cca_eeg_thalamic/" + subject_id + "/"
+                input_path = "/data/pt_02718/tmp_data_2/cca_halfdata_eeg_thalamic/" + subject_id + "/"
             epochs = mne.read_epochs(input_path + fname, preload=True)
 
             if cond_name in ['median', 'med_mixed']:

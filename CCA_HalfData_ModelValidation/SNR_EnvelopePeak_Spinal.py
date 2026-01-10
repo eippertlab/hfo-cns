@@ -26,25 +26,25 @@ if __name__ == '__main__':
     save_to_excel = True
 
     freq_band = 'sigma'
-    srmr_nr = 2
+    srmr_nr = 1
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)  # 1 through 36 to access subject data
         conditions = [2, 3]  # Conditions of interest
-        figure_path = '/data/p_02718/Images/CCA/SNR&EnvelopePeak/'
+        figure_path = '/data/p_02718/Images/CCA_HalfData/SNR&EnvelopePeak/'
         os.makedirs(figure_path, exist_ok=True)
         # xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data/LowFreq_HighFreq_Relation.xlsx')
-        component_fname = '/data/pt_02718/tmp_data/Components_Updated.xlsx'
-        visibility_fname = '/data/pt_02718/tmp_data/Visibility_Updated.xlsx'
+        component_fname = '/data/pt_02718/tmp_data/Components_HalfData_Updated.xlsx'
+        visibility_fname = '/data/pt_02718/tmp_data/Visibility_HalfData_Updated.xlsx'
 
     elif srmr_nr == 2:
         subjects = np.arange(1, 25)  # (1, 2) # 1 through 24 to access subject data
         conditions = [3, 5]  # Conditions of interest - med_mixed and tib_mixed
-        figure_path = '/data/p_02718/Images_2/CCA/SNR&EnvelopePeak/'
+        figure_path = '/data/p_02718/Images_2/CCA_HalfData/SNR&EnvelopePeak/'
         os.makedirs(figure_path, exist_ok=True)
         # xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/LowFreq_HighFreq_Relation.xlsx')
-        component_fname = '/data/pt_02718/tmp_data_2/Components_Updated.xlsx'
-        visibility_fname = '/data/pt_02718/tmp_data_2/Visibility_Updated.xlsx'
+        component_fname = '/data/pt_02718/tmp_data_2/Components_HalfData_Updated.xlsx'
+        visibility_fname = '/data/pt_02718/tmp_data_2/Visibility_HalfData_Updated.xlsx'
 
     # Check the component file is already generated - want to store the flipping info in the same place so easier to
     # do it this way
@@ -89,9 +89,9 @@ if __name__ == '__main__':
             # Select the right files
             fname = f"{freq_band}_{cond_name}.fif"
             if srmr_nr == 1:
-                input_path = "/data/pt_02718/tmp_data/cca/" + subject_id + "/"
+                input_path = "/data/pt_02718/tmp_data/cca_halfdata/" + subject_id + "/"
             elif srmr_nr == 2:
-                input_path = "/data/pt_02718/tmp_data_2/cca/" + subject_id + "/"
+                input_path = "/data/pt_02718/tmp_data_2/cca_halfdata/" + subject_id + "/"
 
             epochs = mne.read_epochs(input_path + fname, preload=True)
 
