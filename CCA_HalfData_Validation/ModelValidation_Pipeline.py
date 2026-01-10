@@ -7,9 +7,9 @@ Aim:
 """
 
 import numpy as np
-from CCA_HalfData_ModelValidation.run_CCA_spinal import run_CCA_spinal
-from CCA_HalfData_ModelValidation.run_CCA_brain import run_CCA_brain
-from CCA_HalfData_ModelValidation.run_CCA_brain_thalamic import run_CCA_thalamic
+from CCA_HalfData_Validation.run_CCA_spinal import run_CCA_spinal
+from CCA_HalfData_Validation.run_CCA_brain import run_CCA_brain
+from CCA_HalfData_Validation.run_CCA_brain_thalamic import run_CCA_thalamic
 
 
 if __name__ == "__main__":
