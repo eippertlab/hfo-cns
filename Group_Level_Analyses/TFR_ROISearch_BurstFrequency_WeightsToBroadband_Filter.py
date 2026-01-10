@@ -91,29 +91,23 @@ if __name__ == '__main__':
                 trigger_name = cond_info.trigger_name
                 if cond_name in ['tibial', 'tib_mixed']:
                     if data_type == 'Cortical':
-                        channel = ['Cz']
                         time_peak = int(df_timing.loc[df_timing['Name'] == 'centre_cort_tib', 'Time'].iloc[0])
                         time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_cort_tib', 'Time'].iloc[0])
                     elif data_type == 'Thalamic':
-                        channel = ['Cz']
                         time_peak = int(df_timing.loc[df_timing['Name'] == 'centre_sub_tib', 'Time'].iloc[0])
                         time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_sub_tib', 'Time'].iloc[0])
                     elif data_type == 'Spinal':
-                        channel = ['L1']
                         time_peak = int(df_timing.loc[df_timing['Name'] == 'centre_spinal_tib', 'Time'].iloc[0])
                         time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_spinal_tib', 'Time'].iloc[0])
 
                 elif cond_name in ['median', 'med_mixed']:
                     if data_type == 'Cortical':
-                        channel = ['CP4']
                         time_peak = int(df_timing.loc[df_timing['Name'] == 'centre_cort_med', 'Time'].iloc[0])
                         time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_cort_med', 'Time'].iloc[0])
                     elif data_type == 'Thalamic':
-                        channel = ['CP4']
                         time_peak = int(df_timing.loc[df_timing['Name'] == 'centre_sub_med', 'Time'].iloc[0])
                         time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_sub_med', 'Time'].iloc[0])
                     elif data_type == 'Spinal':
-                        channel = ['SC6']
                         time_peak = int(df_timing.loc[df_timing['Name'] == 'centre_spinal_med', 'Time'].iloc[0])
                         time_edge = int(df_timing.loc[df_timing['Name'] == 'edge_spinal_med', 'Time'].iloc[0])
 
