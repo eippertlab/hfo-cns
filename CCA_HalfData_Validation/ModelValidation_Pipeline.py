@@ -1,5 +1,5 @@
 """
-Wrapper cript to run the CCA evoked data validation
+Wrapper script to run the CCA evoked data validation
 Aim:
 - Train CCA using half of the data
 - Use the resulting CCA filter on the other half of the data

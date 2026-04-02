@@ -28,12 +28,14 @@ mpl.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
 
 if __name__ == '__main__':
     srmr_nr = 1
+    selection = '_MatchSubjs'  # Can be empty '' for SNR, '_AllSubjs', '_MatchSubjs'
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
         conditions = [2, 3]
         freq_bands = ['sigma']
     elif srmr_nr == 2:
+        raise RuntimeError('srmr_nr=2 not yet implemented')
         subjects = np.arange(1, 25)
         conditions = [3, 5]
         freq_bands = ['sigma']
@@ -54,32 +56,32 @@ if __name__ == '__main__':
             for data_type in ['Spinal_CCA', 'Thalamic_CCA', 'Cortical_CCA']:
                 if srmr_nr == 1:
                     if data_type == 'Spinal_CCA':
-                        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_HalfData_Updated.xlsx')
+                        xls = pd.ExcelFile(f'/data/p_02718/HalfData_Sheets/Components_HalfData_Updated{selection}.xlsx')
                         df = pd.read_excel(xls, 'CCA')
                         df.set_index('Subject', inplace=True)
 
-                        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility_HalfData_Updated.xlsx')
+                        xls = pd.ExcelFile(f'/data/p_02718/HalfData_Sheets/Visibility_HalfData_Updated{selection}.xlsx')
                         df_vis = pd.read_excel(xls, 'CCA_Spinal')
                         df_vis.set_index('Subject', inplace=True)
 
                     elif data_type == 'Thalamic_CCA':
-                        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_HalfData_EEG_Thalamic_Updated.xlsx')
+                        xls = pd.ExcelFile(f'/data/p_02718/HalfData_Sheets/Components_HalfData_EEG_Thalamic_Updated{selection}.xlsx')
                         df = pd.read_excel(xls, 'CCA')
                         df.set_index('Subject', inplace=True)
 
-                        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility_HalfData_Thalamic_Updated.xlsx')
+                        xls = pd.ExcelFile(f'/data/p_02718/HalfData_Sheets/Visibility_HalfData_Thalamic_Updated{selection}.xlsx')
                         df_vis = pd.read_excel(xls, 'CCA_Brain')
                         df_vis.set_index('Subject', inplace=True)
                     else:
-                        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_HalfData_EEG_Updated.xlsx')
+                        xls = pd.ExcelFile(f'/data/p_02718/HalfData_Sheets/Components_HalfData_EEG_Updated{selection}.xlsx')
                         df = pd.read_excel(xls, 'CCA')
                         df.set_index('Subject', inplace=True)
 
-                        xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility_HalfData_Updated.xlsx')
+                        xls = pd.ExcelFile(f'/data/p_02718/HalfData_Sheets/Visibility_HalfData_Updated{selection}.xlsx')
                         df_vis = pd.read_excel(xls, 'CCA_Brain')
                         df_vis.set_index('Subject', inplace=True)
 
-                    figure_path = '/data/p_02718/Polished/Spinal_Subcortical_Cortical_NoShift_HalfData/'
+                    figure_path = f'/data/p_02718/Polished/Spinal_Subcortical_Cortical_NoShift_HalfData{selection}/'
                     os.makedirs(figure_path, exist_ok=True)
 
                 elif srmr_nr == 2:

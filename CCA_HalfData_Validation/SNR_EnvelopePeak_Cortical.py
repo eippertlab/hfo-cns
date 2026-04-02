@@ -37,6 +37,7 @@ if __name__ == '__main__':
         os.makedirs(figure_path, exist_ok=True)
 
     elif srmr_nr == 2:
+        raise RuntimeError('srmr_nr=2 not yet implemented')
         subjects = np.arange(1, 25)  # (1, 2) # 1 through 24 to access subject data
         conditions = [3, 5]  # Conditions of interest - med_mixed and tib_mixed [3, 5]
         # xls_timing = pd.ExcelFile('/data/pt_02718/tmp_data_2/LowFreq_HighFreq_Relation.xlsx')

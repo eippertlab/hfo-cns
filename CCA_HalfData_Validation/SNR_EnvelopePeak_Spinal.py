@@ -38,6 +38,7 @@ if __name__ == '__main__':
         visibility_fname = '/data/pt_02718/tmp_data/Visibility_HalfData_Updated.xlsx'
 
     elif srmr_nr == 2:
+        raise RuntimeError('srmr_nr=2 not yet implemented')
         subjects = np.arange(1, 25)  # (1, 2) # 1 through 24 to access subject data
         conditions = [3, 5]  # Conditions of interest - med_mixed and tib_mixed
         figure_path = '/data/p_02718/Images_2/CCA_HalfData/SNR&EnvelopePeak/'

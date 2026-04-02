@@ -5,10 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="32d78150-f875-4a94-a101-72a4657c6a8a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/CCA_HalfData_ModelValidation/CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical_NoShift.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CCA_HalfData_ModelValidation/GrandAverage_SpatialPatterns.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CCA_HalfData_ModelValidation/GrandAverage_SpatialPatterns_Thalamic.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CCA_HalfData_Validation/CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical_NoShift.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_HalfData_Validation/CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical_NoShift.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CCA_HalfData_Validation/GrandAverage_SpatialPatterns.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_HalfData_Validation/GrandAverage_SpatialPatterns.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CCA_HalfData_Validation/GrandAverage_SpatialPatterns_Thalamic.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_HalfData_Validation/GrandAverage_SpatialPatterns_Thalamic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CCA_HalfData_Validation/ModelValidation_Pipeline.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_HalfData_Validation/ModelValidation_Pipeline.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CCA_HalfData_Validation/SNR_EnvelopePeak_Cortical.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_HalfData_Validation/SNR_EnvelopePeak_Cortical.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CCA_HalfData_Validation/SNR_EnvelopePeak_Spinal.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_HalfData_Validation/SNR_EnvelopePeak_Spinal.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CCA_HalfData_Validation/SNR_EnvelopePeak_Thalamic.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_HalfData_Validation/SNR_EnvelopePeak_Thalamic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CCA_Resting_State_Validation/TaskEvoked_RestingState_CCACorrelation_WholeEpoch.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_Resting_State_Validation/TaskEvoked_RestingState_CCACorrelation_Parallel.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,6 +51,7 @@
     &quot;Python.CCA_Digit_ClusterPermutation_CorticalAndThalamic_YY.executor&quot;: &quot;Run&quot;,
     &quot;Python.CCA_Digit_EnvelopeComparison_CorticalAndThalamic.executor&quot;: &quot;Run&quot;,
     &quot;Python.CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical.executor&quot;: &quot;Run&quot;,
+    &quot;Python.CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical_NoShift (1).executor&quot;: &quot;Run&quot;,
     &quot;Python.CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical_NoShift.executor&quot;: &quot;Run&quot;,
     &quot;Python.ChangeExcelFormat_BurstFrequency.executor&quot;: &quot;Run&quot;,
     &quot;Python.ChangeExcelFormat_WaveletCount.executor&quot;: &quot;Run&quot;,
@@ -61,7 +67,9 @@
     &quot;Python.ESG_RestingState_Pipeline.executor&quot;: &quot;Run&quot;,
     &quot;Python.ExploratoryPlots_WrongFiles.executor&quot;: &quot;Run&quot;,
     &quot;Python.GrandAverageD2_SpatialPatterns.executor&quot;: &quot;Run&quot;,
+    &quot;Python.GrandAverage_SpatialPatterns (1).executor&quot;: &quot;Run&quot;,
     &quot;Python.GrandAverage_SpatialPatterns.executor&quot;: &quot;Run&quot;,
+    &quot;Python.GrandAverage_SpatialPatterns_Thalamic (1).executor&quot;: &quot;Run&quot;,
     &quot;Python.GrandAverage_SpatialPatterns_Thalamic.executor&quot;: &quot;Run&quot;,
     &quot;Python.HighVsLowFreq_ComputeSingleTrial_SNR_CorticalSpinal_CCA_BaselineCorr.executor&quot;: &quot;Run&quot;,
     &quot;Python.HighVsLowFreq_ComputeSingleTrial_SNR_CorticalSpinal_CCA_BaselineCorrLow.executor&quot;: &quot;Run&quot;,
@@ -144,8 +152,8 @@
       <recent name="$PROJECT_DIR$/Polished_Images" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.GrandAverage_SpatialPatterns_Thalamic">
-    <configuration name="CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical_NoShift" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.GrandAverage_SpatialPatterns (1)">
+    <configuration name="CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical_NoShift (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -154,11 +162,33 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CCA_HalfData_ModelValidation" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CCA_HalfData_Validation" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CCA_HalfData_ModelValidation/CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical_NoShift.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CCA_HalfData_Validation/CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical_NoShift.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="GrandAverage_SpatialPatterns (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="HF_Oscillations" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CCA_HalfData_Validation" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CCA_HalfData_Validation/GrandAverage_SpatialPatterns.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -189,6 +219,28 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="GrandAverage_SpatialPatterns_Thalamic (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="HF_Oscillations" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CCA_HalfData_Validation" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CCA_HalfData_Validation/GrandAverage_SpatialPatterns_Thalamic.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="GrandAverage_SpatialPatterns_Thalamic" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
@@ -211,57 +263,13 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="SNR_EnvelopePeak_Spinal" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="HF_Oscillations" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CCA_HalfData_ModelValidation" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CCA_HalfData_ModelValidation/SNR_EnvelopePeak_Spinal.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="SNR_EnvelopePeak_Thalamic" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="HF_Oscillations" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CCA_HalfData_ModelValidation" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CCA_HalfData_ModelValidation/SNR_EnvelopePeak_Thalamic.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.GrandAverage_SpatialPatterns (1)" />
+        <item itemvalue="Python.CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical_NoShift (1)" />
+        <item itemvalue="Python.GrandAverage_SpatialPatterns_Thalamic (1)" />
         <item itemvalue="Python.GrandAverage_SpatialPatterns_Thalamic" />
         <item itemvalue="Python.GrandAverage_SpatialPatterns" />
-        <item itemvalue="Python.CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical_NoShift" />
-        <item itemvalue="Python.SNR_EnvelopePeak_Spinal" />
-        <item itemvalue="Python.SNR_EnvelopePeak_Thalamic" />
       </list>
     </recent_temporary>
   </component>

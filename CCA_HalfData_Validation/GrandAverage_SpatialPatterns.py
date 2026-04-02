@@ -37,6 +37,7 @@ if __name__ == '__main__':
     conditions = [2, 3]
     freq_bands = ['sigma']
     srmr_nr = 1
+    selection = '_MatchSubjs'  # Can be empty '' for SNR, '_AllSubjs', '_MatchSubjs'
 
     cfg_path = "/data/pt_02718/cfg.xlsx"  # Contains important info about experiment
     df = pd.read_excel(cfg_path)
@@ -47,24 +48,24 @@ if __name__ == '__main__':
     iv_crop = [df.loc[df['var_name'] == 'epoch_start', 'var_value'].iloc[0],
                df.loc[df['var_name'] == 'epoch_end', 'var_value'].iloc[0]]
 
-    figure_path = '/data/p_02718/Polished/GrandAverage_SpatialPatterns_HalfData/'
+    figure_path = f'/data/p_02718/Polished/GrandAverage_SpatialPatterns_HalfData{selection}/'
     os.makedirs(figure_path, exist_ok=True)
 
     # Cortical Excel files
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_HalfData_EEG_Updated.xlsx')
+    xls = pd.ExcelFile(f'/data/p_02718/HalfData_Sheets/Components_HalfData_EEG_Updated{selection}.xlsx')
     df_cortical = pd.read_excel(xls, 'CCA')
     df_cortical.set_index('Subject', inplace=True)
 
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility_HalfData_Updated.xlsx')
+    xls = pd.ExcelFile(f'/data/p_02718/HalfData_Sheets/Visibility_HalfData_Updated{selection}.xlsx')
     df_vis_cortical = pd.read_excel(xls, 'CCA_Brain')
     df_vis_cortical.set_index('Subject', inplace=True)
 
     # Spinal Excel files
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Components_HalfData_Updated.xlsx')
+    xls = pd.ExcelFile(f'/data/p_02718/HalfData_Sheets/Components_HalfData_Updated{selection}.xlsx')
     df_spinal = pd.read_excel(xls, 'CCA')
     df_spinal.set_index('Subject', inplace=True)
 
-    xls = pd.ExcelFile('/data/pt_02718/tmp_data/Visibility_HalfData_Updated.xlsx')
+    xls = pd.ExcelFile(f'/data/p_02718/HalfData_Sheets/Visibility_HalfData_Updated{selection}.xlsx')
     df_vis_spinal = pd.read_excel(xls, 'CCA_Spinal')
     df_vis_spinal.set_index('Subject', inplace=True)
 

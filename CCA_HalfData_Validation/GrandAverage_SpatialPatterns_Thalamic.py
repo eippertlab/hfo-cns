@@ -30,11 +30,14 @@ plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
 
 if __name__ == '__main__':
     srmr_nr = 1
+    selection = '_AllSubjs'  # Can be empty '' for SNR, '_AllSubjs', '_MatchSubjs'
+
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
         conditions = [2, 3]
         freq_bands = ['sigma']
     elif srmr_nr == 2:
+        raise RuntimeError('srmr_nr=2 not yet implemented')
         subjects = np.arange(1, 25)
         conditions = [3, 5]
         freq_bands = ['sigma']
@@ -49,21 +52,15 @@ if __name__ == '__main__':
                df.loc[df['var_name'] == 'epoch_end', 'var_value'].iloc[0]]
 
     if srmr_nr == 1:
-        folder = 'tmp_data'
-        figure_path = '/data/p_02718/Polished/GrandAverage_SpatialPatterns_Thalamic_HalfData/'
-        os.makedirs(figure_path, exist_ok=True)
-
-    elif srmr_nr == 2:
-        folder = 'tmp_data_2'
-        figure_path = '/data/p_02718/Polished_2/GrandAverage_SpatialPatterns_Thalamic_HalfData/'
+        figure_path = f'/data/p_02718/Polished/GrandAverage_SpatialPatterns_Thalamic_HalfData{selection}/'
         os.makedirs(figure_path, exist_ok=True)
 
     # Excel files
-    xls = pd.ExcelFile(f'/data/pt_02718/{folder}/Components_HalfData_EEG_Thalamic_Updated.xlsx')
+    xls = pd.ExcelFile(f'/data/p_02718/HalfData_Sheets/Components_HalfData_EEG_Thalamic_Updated{selection}.xlsx')
     df_cortical = pd.read_excel(xls, 'CCA')
     df_cortical.set_index('Subject', inplace=True)
 
-    xls = pd.ExcelFile(f'/data/pt_02718/{folder}/Visibility_HalfData_Thalamic_Updated.xlsx')
+    xls = pd.ExcelFile(f'/data/p_02718/HalfData_Sheets/Visibility_HalfData_Thalamic_Updated{selection}.xlsx')
     df_vis_cortical = pd.read_excel(xls, 'CCA_Brain')
     df_vis_cortical.set_index('Subject', inplace=True)
 
@@ -83,12 +80,12 @@ if __name__ == '__main__':
 
                 # HFO
                 fname = f"{freq_band}_{cond_name}.fif"
-                input_path = f"/data/pt_02718/{folder}/cca_halfdata_eeg_thalamic/{subject_id}/"
+                input_path = f"/data/pt_02718/tmp_data/cca_halfdata_eeg_thalamic/{subject_id}/"
                 df = df_cortical
                 df_vis = df_vis_cortical
 
                 # Low Freq SEP
-                input_path_low = f"/data/pt_02718/{folder}/imported/{subject_id}/"
+                input_path_low = f"/data/pt_02718/tmp_data/imported/{subject_id}/"
                 fname_low = f"noStimart_sr5000_{cond_name}_withqrs_eeg.fif"
                 raw = mne.io.read_raw_fif(input_path_low + fname_low, preload=True)
 
