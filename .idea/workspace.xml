@@ -4,17 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="32d78150-f875-4a94-a101-72a4657c6a8a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CCA_HalfData_Validation/CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical_NoShift.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_HalfData_Validation/CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical_NoShift.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CCA_HalfData_Validation/GrandAverage_SpatialPatterns.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_HalfData_Validation/GrandAverage_SpatialPatterns.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CCA_HalfData_Validation/GrandAverage_SpatialPatterns_Thalamic.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_HalfData_Validation/GrandAverage_SpatialPatterns_Thalamic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CCA_HalfData_Validation/ModelValidation_Pipeline.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_HalfData_Validation/ModelValidation_Pipeline.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CCA_HalfData_Validation/SNR_EnvelopePeak_Cortical.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_HalfData_Validation/SNR_EnvelopePeak_Cortical.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CCA_HalfData_Validation/SNR_EnvelopePeak_Spinal.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_HalfData_Validation/SNR_EnvelopePeak_Spinal.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CCA_HalfData_Validation/SNR_EnvelopePeak_Thalamic.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_HalfData_Validation/SNR_EnvelopePeak_Thalamic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CCA_Resting_State_Validation/TaskEvoked_RestingState_CCACorrelation_WholeEpoch.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_Resting_State_Validation/TaskEvoked_RestingState_CCACorrelation_Parallel.py" afterDir="false" />
-    </list>
+    <list default="true" id="32d78150-f875-4a94-a101-72a4657c6a8a" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -90,6 +80,7 @@
     &quot;Python.ImpulseResponse_Filter_Gaussian.executor&quot;: &quot;Run&quot;,
     &quot;Python.ImpulseResponse_Filter_Pink.executor&quot;: &quot;Run&quot;,
     &quot;Python.ImpulseResponse_Filter_Pink_SingleTrial.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Kfold_ModelValidation_Pipeline.executor&quot;: &quot;Run&quot;,
     &quot;Python.LowFreq_HighFreq_LatencyComparison_CCA.executor&quot;: &quot;Run&quot;,
     &quot;Python.ModelValidation_Pipeline.executor&quot;: &quot;Run&quot;,
     &quot;Python.PartialCorrelation_LowFreq_HighFreq_CCA_Amp_SNR.executor&quot;: &quot;Run&quot;,
@@ -132,17 +123,17 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/data/pt_02718/HF_Oscillations&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/data/pt_02718/HF_Oscillations/CCA_Kfold_Validation&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/CCA_Kfold_Validation" />
       <recent name="$PROJECT_DIR$/CCA_HalfData_ModelValidation" />
       <recent name="$PROJECT_DIR$/HalfData_ModelValidation" />
       <recent name="$PROJECT_DIR$/Publication_Images" />
       <recent name="$PROJECT_DIR$/Noise_Simulations" />
-      <recent name="$PROJECT_DIR$/ImpulseResponse" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -152,7 +143,7 @@
       <recent name="$PROJECT_DIR$/Polished_Images" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.GrandAverage_SpatialPatterns (1)">
+  <component name="RunManager" selected="Python.Kfold_ModelValidation_Pipeline">
     <configuration name="CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical_NoShift (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
@@ -189,28 +180,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CCA_HalfData_Validation/GrandAverage_SpatialPatterns.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="GrandAverage_SpatialPatterns" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="HF_Oscillations" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CCA_HalfData_ModelValidation" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CCA_HalfData_ModelValidation/GrandAverage_SpatialPatterns.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -263,13 +232,35 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="Kfold_ModelValidation_Pipeline" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="HF_Oscillations" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CCA_Kfold_Validation" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CCA_Kfold_Validation/Kfold_ModelValidation_Pipeline.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.Kfold_ModelValidation_Pipeline" />
         <item itemvalue="Python.GrandAverage_SpatialPatterns (1)" />
         <item itemvalue="Python.CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical_NoShift (1)" />
         <item itemvalue="Python.GrandAverage_SpatialPatterns_Thalamic (1)" />
         <item itemvalue="Python.GrandAverage_SpatialPatterns_Thalamic" />
-        <item itemvalue="Python.GrandAverage_SpatialPatterns" />
       </list>
     </recent_temporary>
   </component>
