@@ -145,8 +145,8 @@
       <recent name="$PROJECT_DIR$/Polished_Images" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.Overall_SNR_Calculation">
-    <configuration name="CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical_NoShift (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.CCA_CorrelationValidation_ttests_UpperTri">
+    <configuration name="CCA_CorrelationValidation_ttests_UpperTri" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -155,11 +155,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CCA_HalfData_Validation" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CCA_Resting_State_Validation" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CCA_HalfData_Validation/CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical_NoShift.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CCA_Resting_State_Validation/CCA_CorrelationValidation_ttests_UpperTri.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -258,11 +258,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.CCA_CorrelationValidation_ttests_UpperTri" />
         <item itemvalue="Python.Overall_SNR_Calculation" />
         <item itemvalue="Python.SNR_EnvelopePeak_SeparateFolds" />
         <item itemvalue="Python.Kfold_ModelValidation_Pipeline" />
         <item itemvalue="Python.GrandAverage_SpatialPatterns (1)" />
-        <item itemvalue="Python.CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical_NoShift (1)" />
       </list>
     </recent_temporary>
   </component>

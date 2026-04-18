@@ -13,7 +13,7 @@ pd.set_option('display.width', 1000)
 import pingouin as pg
 
 if __name__ == '__main__':
-    srmr_nr = 2
+    srmr_nr = 1
     type = 'cca'  # Can be long, shorter or cca
 
     if srmr_nr == 1:
@@ -52,7 +52,12 @@ if __name__ == '__main__':
             # print(df_totest)
             stats = df_totest.ptests(paired=True, stars=False, decimals=30, alternative='greater')
             p_val = stats.loc[f'{data_type}_{cond_name}_task', f'{data_type}_{cond_name}_rest']
-            dict_pvals[f'{data_type}_{cond_name}'] = float(p_val)
+
+            # Get cohens d effect size
+            eff_size = pg.compute_effsize(df_totest[f'{data_type}_{cond_name}_task'], df_totest[f'{data_type}_{cond_name}_rest'].tolist(),
+                                          paired=True, eftype="cohen")
+
+            dict_pvals[f'{data_type}_{cond_name}'] = [float(p_val), eff_size]
 
     for key in dict_pvals.keys():
         print(f'{key}: {dict_pvals[key]}')
