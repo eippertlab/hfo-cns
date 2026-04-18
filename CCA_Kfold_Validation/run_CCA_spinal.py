@@ -44,20 +44,20 @@ def run_CCA_spinal(subject, condition, srmr_nr, freq_band, freq_type, k):
     if freq_type == 'high':
         input_path = "/data/pt_02718/tmp_data/freq_banded_esg/" + subject_id + "/"
         fname = f"{freq_band}_{cond_name}.fif"
-        save_path = "/data/pt_02718/tmp_data/cca_kfold/" + subject_id + "/"
+        save_path = f"/data/pt_02718/tmp_data/cca_{k}fold/" + subject_id + "/"
         append = ''
     else:
         input_path = "/data/pt_02718/tmp_data/ssp_cleaned/" + subject_id + "/"
         fname = f'ssp6_cleaned_{cond_name}.fif'
-        save_path = "/data/pt_02718/tmp_data/cca_kfold_low/" + subject_id + "/"
+        save_path = f"/data/pt_02718/tmp_data/cca_{k}fold_low/" + subject_id + "/"
         append = '_low'
     os.makedirs(save_path, exist_ok=True)
 
-    figure_path_spatial = f'/data/p_02718/Images/CCA_Kfold{append}/ComponentIsopotentialPlots/{subject_id}/'
+    figure_path_spatial = f'/data/p_02718/Images/CCA_{k}fold{append}/ComponentIsopotentialPlots/{subject_id}/'
     os.makedirs(figure_path_spatial, exist_ok=True)
-    figure_path_time = f'/data/p_02718/Images/CCA_Kfold{append}/ComponentTimePlots/{subject_id}/'
+    figure_path_time = f'/data/p_02718/Images/CCA_{k}fold{append}/ComponentTimePlots/{subject_id}/'
     os.makedirs(figure_path_time, exist_ok=True)
-    figure_path = f'/data/p_02718/Images/CCA_Kfold{append}/ComponentPlots/{subject_id}/'
+    figure_path = f'/data/p_02718/Images/CCA_{k}fold{append}/ComponentPlots/{subject_id}/'
     os.makedirs(figure_path, exist_ok=True)
 
     brainstem_chans, cervical_chans, lumbar_chans, ref_chan = get_esg_channels()

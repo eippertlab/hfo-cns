@@ -15,7 +15,7 @@ from CCA_Kfold_Validation.run_CCA_brain_thalamic import run_CCA_thalamic
 if __name__ == "__main__":
     srmr_nr = 1
     freq_type = 'high'
-    k=5
+    k=10
 
     if srmr_nr == 1:
         n_subjects = 36  # Number of subjects

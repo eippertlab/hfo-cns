@@ -44,20 +44,20 @@ def run_CCA_thalamic(subject, condition, srmr_nr, freq_band, sfreq, freq_type, k
     if freq_type == 'high':
         input_path = "/data/pt_02718/tmp_data/freq_banded_eeg/" + subject_id + "/"
         fname = f"{freq_band}_{cond_name}.fif"
-        save_path = "/data/pt_02718/tmp_data/cca_kfold_eeg_thalamic/" + subject_id + "/"
+        save_path = f"/data/pt_02718/tmp_data/cca_{k}fold_eeg_thalamic/" + subject_id + "/"
         append = ''
     else:
         input_path = "/data/pt_02718/tmp_data/imported/" + subject_id + "/"
         fname = f'noStimart_sr{sfreq}_{cond_name}_withqrs_eeg.fif'
-        save_path = "/data/pt_02718/tmp_data/cca_kfold_eeg_thalamic_low/" + subject_id + "/"
+        save_path = f"/data/pt_02718/tmp_data/cca_{k}fold_eeg_thalamic_low/" + subject_id + "/"
         append = '_low'
     os.makedirs(save_path, exist_ok=True)
 
-    figure_path_spatial = f'/data/p_02718/Images/CCA_Kfold_eeg_thalamic{append}/ComponentIsopotentialPlots/{subject_id}/'
+    figure_path_spatial = f'/data/p_02718/Images/CCA_{k}fold_eeg_thalamic{append}/ComponentIsopotentialPlots/{subject_id}/'
     os.makedirs(figure_path_spatial, exist_ok=True)
-    figure_path_time = f'/data/p_02718/Images/CCA_Kfold_eeg_thalamic{append}/ComponentTimePlots/{subject_id}/'
+    figure_path_time = f'/data/p_02718/Images/CCA_{k}fold_eeg_thalamic{append}/ComponentTimePlots/{subject_id}/'
     os.makedirs(figure_path_time, exist_ok=True)
-    figure_path = f'/data/p_02718/Images/CCA_Kfold_eeg_thalamic{append}/ComponentPlots/{subject_id}/'
+    figure_path = f'/data/p_02718/Images/CCA_{k}fold_eeg_thalamic{append}/ComponentPlots/{subject_id}/'
     os.makedirs(figure_path, exist_ok=True)
 
     eeg_chans, esg_chans, bipolar_chans = get_channels(subject, False, False, srmr_nr)
