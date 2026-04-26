@@ -11,7 +11,7 @@ import os
 mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
-    srmr_nr = 1
+    srmr_nr = 2
     high_freq = 800
     ttest_type = 'across_cns' # 'across_cns' 'med_v_tib'
 
@@ -57,6 +57,14 @@ if __name__ == '__main__':
                 ptest_mat = df_combination.ptests(paired=True, padjust='bonf', stars=False, alternative='less')
                 print('one-sided ttest result')
                 print(ptest_mat)
+
+                # Get effect size
+                for combinations in [['Spinal', 'Thalamic'], ['Spinal', 'Cortical'], ['Thalamic', 'Cortical']]:
+                    eff_size = pg.compute_effsize(df_combination[combinations[0]],
+                                                  df_combination[combinations[1]],
+                                                  paired=True, eftype="cohen")
+                    print(combinations)
+                    print(eff_size)
 
     elif ttest_type == 'med_v_tib':
         for data_type in data_types:

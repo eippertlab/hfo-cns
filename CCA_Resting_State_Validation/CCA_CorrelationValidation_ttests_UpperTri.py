@@ -54,7 +54,7 @@ if __name__ == '__main__':
             p_val = stats.loc[f'{data_type}_{cond_name}_task', f'{data_type}_{cond_name}_rest']
 
             # Get cohens d effect size
-            eff_size = pg.compute_effsize(df_totest[f'{data_type}_{cond_name}_task'], df_totest[f'{data_type}_{cond_name}_rest'].tolist(),
+            eff_size = pg.compute_effsize(df_totest[f'{data_type}_{cond_name}_task'], df_totest[f'{data_type}_{cond_name}_rest'],
                                           paired=True, eftype="cohen")
 
             dict_pvals[f'{data_type}_{cond_name}'] = [float(p_val), eff_size]

@@ -13,7 +13,7 @@ pd.set_option('display.width', 150)
 mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
-    srmr_nr = 1
+    srmr_nr = 2
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
@@ -55,6 +55,13 @@ if __name__ == '__main__':
                 result = pg.pairwise_tests(data=df_longform, dv='no_wavelets', subject='Subject', within='CNS_Level',
                                            parametric=False, alternative='two-sided', padjust='bonf')
                 print(result)
+                # Get effect size
+                for combinations in [['Spinal', 'Subcortical'], ['Subcortical', 'Cortical']]:
+                    eff_size = pg.compute_effsize(df_wavelet[combinations[0]],
+                                                  df_wavelet[combinations[1]],
+                                                  paired=True, eftype='pointbiserialr')
+                    print(combinations)
+                    print(eff_size)
                 # Nemenyi test nt specific to repeated measures design - used Wilcoxon
                 # nemenyi_results = sp.posthoc_nemenyi_friedman(df_wavelet)
                 # print(nemenyi_results)
