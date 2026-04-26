@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="32d78150-f875-4a94-a101-72a4657c6a8a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/CCA_Kfold_Validation/SNR_EnvelopePeakLatency_SeparateFolds.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CCA_Kfold_Validation/Overall_SNRPeakLatency_Calculation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -86,6 +86,7 @@
     "Python.Kfold_ModelValidation_Pipeline.executor": "Run",
     "Python.LowFreq_HighFreq_LatencyComparison_CCA.executor": "Run",
     "Python.ModelValidation_Pipeline.executor": "Run",
+    "Python.Overall_SNRPeakLatency_Calculation.executor": "Run",
     "Python.Overall_SNR_Calculation.executor": "Run",
     "Python.PartialCorrelation_LowFreq_HighFreq_CCA_Amp_SNR.executor": "Run",
     "Python.PartialCorrelation_SNR_CreateTables_CCA.executor": "Run",
@@ -156,7 +157,7 @@
       <recent name="$PROJECT_DIR$/Polished_Images" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.SNR_EnvelopePeakLatency_SeparateFolds">
+  <component name="RunManager" selected="Python.Overall_SNRPeakLatency_Calculation">
     <configuration name="BurstFreq_AcrossCNS_Stats" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
@@ -205,7 +206,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Overall_SNR_Calculation" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="Overall_SNRPeakLatency_Calculation" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -218,9 +219,9 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="DEBUG_JUST_MY_CODE" value="true" />
+      <option name="DEBUG_JUST_MY_CODE" value="false" />
       <option name="RUN_TOOL" value="" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CCA_Kfold_Validation/Overall_SNR_Calculation.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CCA_Kfold_Validation/Overall_SNRPeakLatency_Calculation.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -279,11 +280,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.Overall_SNRPeakLatency_Calculation" />
         <item itemvalue="Python.SNR_EnvelopePeakLatency_SeparateFolds" />
         <item itemvalue="Python.WaveletCount_Stats" />
         <item itemvalue="Python.BurstFreq_AcrossCNS_Stats" />
         <item itemvalue="Python.CCA_CorrelationValidation_ttests_UpperTri" />
-        <item itemvalue="Python.Overall_SNR_Calculation" />
       </list>
     </recent_temporary>
   </component>
