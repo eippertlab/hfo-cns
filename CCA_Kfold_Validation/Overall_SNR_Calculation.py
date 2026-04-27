@@ -8,35 +8,44 @@ pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
 
 if __name__ == '__main__':
-    srmr_nr = 1
+    srmr_nr = 2
     mode = 'Spinal'  # Can be Brain, Thalamic or Spinal
-    kfolds = 10
+    kfolds = 5
     n_components = 4
 
     if srmr_nr == 1:
-        if mode == 'Brain':
-            excel_fname = f'/data/pt_02718/tmp_data/SNR_Peak_{kfolds}fold_EEG_Updated.xlsx'
-        elif mode == 'Thalamic':
-            excel_fname = f'/data/pt_02718/tmp_data/SNR_Peak_{kfolds}fold_EEG_Thalamic_Updated.xlsx'
-        elif mode == 'Spinal':
-            excel_fname = f'/data/pt_02718/tmp_data/SNR_Peak_{kfolds}fold_Updated.xlsx'
-        else:
-            raise ValueError('Mode must be selected as either Brain, Thalamic or Spinal')
+        app_folder = ""
+    elif srmr_nr == 2:
+        app_folder = "_2"
 
+    if mode == 'Brain':
+        excel_fname = f'/data/pt_02718/tmp_data{app_folder}/SNR_Peak_{kfolds}fold_EEG_Updated.xlsx'
+    elif mode == 'Thalamic':
+        excel_fname = f'/data/pt_02718/tmp_data{app_folder}/SNR_Peak_{kfolds}fold_EEG_Thalamic_Updated.xlsx'
+    elif mode == 'Spinal':
+        excel_fname = f'/data/pt_02718/tmp_data{app_folder}/SNR_Peak_{kfolds}fold_Updated.xlsx'
     else:
-        raise RuntimeError('srmr_nr=2 is not yet implemented')
+        raise ValueError('Mode must be selected as either Brain, Thalamic or Spinal')
 
     df = pd.read_excel(excel_fname, sheet_name='SNR_Peak')
     df_avg = pd.DataFrame()
 
     # Want average of just the SNR columns across the folds for each component
     for comp in range(n_components):
-        median_cols = [f"sigma_median_fold{x + 1}_comp{comp + 1}_{option}" for x in range(kfolds)
-                       for
-                       option in ['SNR']]
-        tibial_cols = [f"sigma_tibial_fold{x + 1}_comp{comp + 1}_{option}" for x in range(kfolds)
-                       for
-                       option in ['SNR']]
+        if srmr_nr == 1:
+            median_cols = [f"sigma_median_fold{x + 1}_comp{comp + 1}_{option}" for x in range(kfolds)
+                           for
+                           option in ['SNR']]
+            tibial_cols = [f"sigma_tibial_fold{x + 1}_comp{comp + 1}_{option}" for x in range(kfolds)
+                           for
+                           option in ['SNR']]
+        elif srmr_nr == 2:
+            median_cols = [f"sigma_med_mixed_fold{x + 1}_comp{comp + 1}_{option}" for x in range(kfolds)
+                           for
+                           option in ['SNR']]
+            tibial_cols = [f"sigma_tib_mixed_fold{x + 1}_comp{comp + 1}_{option}" for x in range(kfolds)
+                           for
+                           option in ['SNR']]
         df_avg[f'med_comp{comp+1}'] = df[median_cols].mean(axis=1)
         df_avg[f'tib_comp{comp+1}'] = df[tibial_cols].mean(axis=1)
     print(df_avg)
@@ -46,16 +55,22 @@ if __name__ == '__main__':
     # Now looking at the SNR values if only subjects with T for the Peak being in correct zone are included
     df_avg_reduced = pd.DataFrame()
     for comp in range(n_components):
-        median_cols = [f"sigma_median_fold{x + 1}_comp{comp + 1}_{option}" for x in range(kfolds)
+        if srmr_nr == 1:
+            med_name = 'median'
+            tib_name = 'tibial'
+        elif srmr_nr == 2:
+            med_name = 'med_mixed'
+            tib_name = 'tib_mixed'
+        median_cols = [f"sigma_{med_name}_fold{x + 1}_comp{comp + 1}_{option}" for x in range(kfolds)
                        for
                        option in ['SNR']]
-        tibial_cols = [f"sigma_tibial_fold{x + 1}_comp{comp + 1}_{option}" for x in range(kfolds)
+        tibial_cols = [f"sigma_{tib_name}_fold{x + 1}_comp{comp + 1}_{option}" for x in range(kfolds)
                        for
                        option in ['SNR']]
-        median_cols_peak = [f"sigma_median_fold{x + 1}_comp{comp + 1}_{option}" for x in range(kfolds)
+        median_cols_peak = [f"sigma_{med_name}_fold{x + 1}_comp{comp + 1}_{option}" for x in range(kfolds)
                        for
                        option in ['Peak']]
-        tibial_cols_peak = [f"sigma_tibial_fold{x + 1}_comp{comp + 1}_{option}" for x in range(kfolds)
+        tibial_cols_peak = [f"sigma_{tib_name}_fold{x + 1}_comp{comp + 1}_{option}" for x in range(kfolds)
                        for
                        option in ['Peak']]
 
@@ -67,11 +82,11 @@ if __name__ == '__main__':
         tibial_mask = df_current_tibial[tibial_cols_peak].eq('T').all(axis=1)
 
         # Average remaining SNR values across the row
-        df_current_median.loc[median_mask, f"sigma_median_comp{comp + 1}_SNR_avg"] = df_current_median.loc[median_mask, median_cols].mean(axis=1)
-        df_current_tibial.loc[tibial_mask, f"sigma_tibial_comp{comp + 1}_SNR_avg"] = df_current_tibial.loc[tibial_mask, tibial_cols].mean(axis=1)
+        df_current_median.loc[median_mask, f"sigma_{med_name}_comp{comp + 1}_SNR_avg"] = df_current_median.loc[median_mask, median_cols].mean(axis=1)
+        df_current_tibial.loc[tibial_mask, f"sigma_{tib_name}_comp{comp + 1}_SNR_avg"] = df_current_tibial.loc[tibial_mask, tibial_cols].mean(axis=1)
 
-        df_avg_reduced[f'med_comp{comp + 1}'] = df_current_median[f"sigma_median_comp{comp + 1}_SNR_avg"]
-        df_avg_reduced[f'tib_comp{comp + 1}'] = df_current_tibial[f"sigma_tibial_comp{comp + 1}_SNR_avg"]
+        df_avg_reduced[f'med_comp{comp + 1}'] = df_current_median[f"sigma_{med_name}_comp{comp + 1}_SNR_avg"]
+        df_avg_reduced[f'tib_comp{comp + 1}'] = df_current_tibial[f"sigma_{tib_name}_comp{comp + 1}_SNR_avg"]
 
     print(df_avg_reduced)
     print(f'{mode}_{kfolds}folds_AverageSNRAcrossParticipants')

@@ -17,33 +17,48 @@ pd.set_option('display.max_columns', None)
 if __name__ == '__main__':
 
     freq_band = 'sigma'
-    srmr_nr = 1
-    mode = 'Brain'  # Can be Brain, Thalamic or Spinal
+    srmr_nr = 2
+    mode = 'Spinal'  # Can be Brain, Thalamic or Spinal
     kfolds = 5
     n_components = 4
 
     if srmr_nr == 1:
-        median_cols = [f"sigma_median_fold{x + 1}_comp{y + 1}_{option}" for y in range(n_components) for x in range(kfolds) for
-                       option in ['SNR', 'Peak']]
-        tibial_cols = [f"sigma_tibial_fold{x + 1}_comp{y + 1}_{option}" for y in range(n_components) for x in range(kfolds) for
-                       option in ['SNR', 'Peak']]
-
+        app_folder = ""
         subjects = np.arange(1, 37)  # 1 through 36 to access subject data
         conditions = [2, 3]  # Conditions of interest
-        if mode == 'Brain':
-            excel_fname = f'/data/pt_02718/tmp_data/SNR_PeakLatency_{kfolds}fold_EEG_Updated.xlsx'
-            excel_sheetname = 'SNR_Peak'
-        elif mode == 'Thalamic':
-            excel_fname = f'/data/pt_02718/tmp_data/SNR_PeakLatency_{kfolds}fold_EEG_Thalamic_Updated.xlsx'
-            excel_sheetname = 'SNR_Peak'
-        elif mode == 'Spinal':
-            excel_fname = f'/data/pt_02718/tmp_data/SNR_PeakLatency_{kfolds}fold_Updated.xlsx'
-            excel_sheetname = 'SNR_Peak'
-        else:
-            raise ValueError('Mode must be selected')
+        median_cols = [f"sigma_median_fold{x + 1}_comp{y + 1}_{option}" for y in range(n_components) for x in
+                       range(kfolds)
+                       for
+                       option in ['SNR', 'Peak']]
+        tibial_cols = [f"sigma_tibial_fold{x + 1}_comp{y + 1}_{option}" for y in range(n_components) for x in
+                       range(kfolds)
+                       for
+                       option in ['SNR', 'Peak']]
 
     elif srmr_nr == 2:
-        raise ValueError('srmr_nr=2 not yet implemented')
+        app_folder = "_2"
+        subjects = np.arange(1, 25)  # 1 through 36 to access subject data
+        conditions = [3, 5]  # Conditions of interest
+        median_cols = [f"sigma_med_mixed_fold{x + 1}_comp{y + 1}_{option}" for y in range(n_components) for x in
+                       range(kfolds)
+                       for
+                       option in ['SNR', 'Peak']]
+        tibial_cols = [f"sigma_tib_mixed_fold{x + 1}_comp{y + 1}_{option}" for y in range(n_components) for x in
+                       range(kfolds)
+                       for
+                       option in ['SNR', 'Peak']]
+
+    if mode == 'Brain':
+        excel_fname = f'/data/pt_02718/tmp_data{app_folder}/SNR_PeakLatency_{kfolds}fold_EEG_Updated.xlsx'
+        excel_sheetname = 'SNR_Peak'
+    elif mode == 'Thalamic':
+        excel_fname = f'/data/pt_02718/tmp_data{app_folder}/SNR_PeakLatency_{kfolds}fold_EEG_Thalamic_Updated.xlsx'
+        excel_sheetname = 'SNR_Peak'
+    elif mode == 'Spinal':
+        excel_fname = f'/data/pt_02718/tmp_data{app_folder}/SNR_PeakLatency_{kfolds}fold_Updated.xlsx'
+        excel_sheetname = 'SNR_Peak'
+    else:
+        raise ValueError('Mode must be selected')
 
     timing_path = "/data/pt_02718/Time_Windows.xlsx"  # Contains important info about experiment
     df_timing = pd.read_excel(timing_path)
@@ -69,7 +84,7 @@ if __name__ == '__main__':
                 subject_id = f'sub-{str(subject).zfill(3)}'
                 fname = f"{fold}fold_{freq_band}_{cond_name}.fif"
                 if mode == 'Brain':
-                    input_path = f"/data/pt_02718/tmp_data/cca_{kfolds}fold_eeg/" + subject_id + "/"
+                    input_path = f"/data/pt_02718/tmp_data{app_folder}/cca_{kfolds}fold_eeg/" + subject_id + "/"
                     data_type = 'cortical'
                     if cond_name in ['median', 'med_mixed']:
                         sep_latency = df_timing.loc[df_timing['Name'] == 'centre_cort_med', 'Time'].iloc[0] / 1000
@@ -78,7 +93,7 @@ if __name__ == '__main__':
                         sep_latency = df_timing.loc[df_timing['Name'] == 'centre_cort_tib', 'Time'].iloc[0] / 1000
                         signal_window = df_timing.loc[df_timing['Name'] == 'edge_cort_tib', 'Time'].iloc[0] / 1000
                 elif mode == 'Thalamic':
-                    input_path = f"/data/pt_02718/tmp_data/cca_{kfolds}fold_eeg_thalamic/" + subject_id + "/"
+                    input_path = f"/data/pt_02718/tmp_data{app_folder}/cca_{kfolds}fold_eeg_thalamic/" + subject_id + "/"
                     data_type = 'subcortical'
                     if cond_name in ['median', 'med_mixed']:
                         sep_latency = df_timing.loc[df_timing['Name'] == 'centre_sub_med', 'Time'].iloc[0] / 1000
@@ -87,7 +102,7 @@ if __name__ == '__main__':
                         sep_latency = df_timing.loc[df_timing['Name'] == 'centre_sub_tib', 'Time'].iloc[0] / 1000
                         signal_window = df_timing.loc[df_timing['Name'] == 'edge_sub_tib', 'Time'].iloc[0] / 1000
                 elif mode == 'Spinal':
-                    input_path = f"/data/pt_02718/tmp_data/cca_{kfolds}fold/" + subject_id + "/"
+                    input_path = f"/data/pt_02718/tmp_data{app_folder}/cca_{kfolds}fold/" + subject_id + "/"
                     data_type = 'spinal'
                     if cond_name in ['median', 'med_mixed']:
                         sep_latency = df_timing.loc[df_timing['Name'] == 'centre_spinal_med', 'Time'].iloc[0] / 1000
