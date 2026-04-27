@@ -20,6 +20,10 @@ import pickle
 def run_CCA_brain(subject, condition, srmr_nr, freq_band, sfreq, freq_type, k):
     if freq_band != 'sigma':
         raise RuntimeError('Frequency band must be set to sigma, kappa is depreciated')
+    if srmr_nr == 1:
+        app_folder = ''
+    elif srmr_nr == 2:
+        app_folder = '_2'
 
     # Read in locations of channels
     plot_graphs = True
@@ -42,22 +46,22 @@ def run_CCA_brain(subject, condition, srmr_nr, freq_band, sfreq, freq_type, k):
 
     # Select the right files based on the data_string
     if freq_type == 'high':
-        input_path = "/data/pt_02718/tmp_data/freq_banded_eeg/" + subject_id + "/"
+        input_path = "/data/pt_02718/tmp_data" + app_folder + "/freq_banded_eeg/" + subject_id + "/"
         fname = f"{freq_band}_{cond_name}.fif"
-        save_path = f"/data/pt_02718/tmp_data/cca_{k}fold_eeg/" + subject_id + "/"
+        save_path = f"/data/pt_02718/tmp_data" + app_folder + f"/cca_{k}fold_eeg/" + subject_id + "/"
         append = ''
     else:
-        input_path = "/data/pt_02718/tmp_data/imported/" + subject_id + "/"
+        input_path = "/data/pt_02718/tmp_data" + app_folder + "/imported/" + subject_id + "/"
         fname = f'noStimart_sr{sfreq}_{cond_name}_withqrs_eeg.fif'
-        save_path = f"/data/pt_02718/tmp_data/cca_{k}fold_eeg_low/" + subject_id + "/"
+        save_path = f"/data/pt_02718/tmp_data" + app_folder + f"/cca_{k}fold_eeg_low/" + subject_id + "/"
         append = '_low'
     os.makedirs(save_path, exist_ok=True)
 
-    figure_path_spatial = f'/data/p_02718/Images/CCA_{k}fold_eeg{append}/ComponentIsopotentialPlots/{subject_id}/'
+    figure_path_spatial = f'/data/p_02718/Images{app_folder}/CCA_{k}fold_eeg{append}/ComponentIsopotentialPlots/{subject_id}/'
     os.makedirs(figure_path_spatial, exist_ok=True)
-    figure_path_time = f'/data/p_02718/Images/CCA_{k}fold_eeg{append}/ComponentTimePlots/{subject_id}/'
+    figure_path_time = f'/data/p_02718/Images{app_folder}/CCA_{k}fold_eeg{append}/ComponentTimePlots/{subject_id}/'
     os.makedirs(figure_path_time, exist_ok=True)
-    figure_path = f'/data/p_02718/Images/CCA_{k}fold_eeg{append}/ComponentPlots/{subject_id}/'
+    figure_path = f'/data/p_02718/Images{app_folder}/CCA_{k}fold_eeg{append}/ComponentPlots/{subject_id}/'
     os.makedirs(figure_path, exist_ok=True)
 
     eeg_chans, esg_chans, bipolar_chans = get_channels(subject, False, False, srmr_nr)
@@ -78,12 +82,12 @@ def run_CCA_brain(subject, condition, srmr_nr, freq_band, sfreq, freq_type, k):
     epochs = mne.Epochs(raw, events, event_id=event_id_dict, tmin=iv_epoch[0], tmax=iv_epoch[1]-1/1000,
                         baseline=tuple(iv_baseline), preload=True, reject_by_annotation=False)
 
-    if cond_name == 'median':
+    if cond_name in ['median', 'med_mixed']:
         epochs = epochs.pick_channels(eeg_chans, ordered=True)
         window_times = [df_timing.loc[df_timing['Name'] == 'tsart_ccacort_med', 'Time'].iloc[0]/1000,
                        df_timing.loc[df_timing['Name'] == 'tend_ccacort_med', 'Time'].iloc[0]/1000]
         sep_latency = int(df_timing.loc[df_timing['Name'] == 'centre_cort_med', 'Time'].iloc[0])
-    elif cond_name == 'tibial':
+    elif cond_name in ['tibial', 'tib_mixed']:
         epochs = epochs.pick_channels(eeg_chans, ordered=True)
         window_times = [df_timing.loc[df_timing['Name'] == 'tsart_ccacort_tib', 'Time'].iloc[0] / 1000,
                         df_timing.loc[df_timing['Name'] == 'tend_ccacort_tib', 'Time'].iloc[0] / 1000]

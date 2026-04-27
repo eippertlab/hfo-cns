@@ -5,8 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="32d78150-f875-4a94-a101-72a4657c6a8a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/CCA_Kfold_Validation/Overall_SNRPeakLatency_Calculation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CCA_Kfold_Validation/Kfold_ModelValidation_Pipeline.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_Kfold_Validation/Kfold_ModelValidation_Pipeline.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CCA_Kfold_Validation/run_CCA_brain.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_Kfold_Validation/run_CCA_brain.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CCA_Kfold_Validation/run_CCA_brain_thalamic.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_Kfold_Validation/run_CCA_brain_thalamic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CCA_Kfold_Validation/run_CCA_spinal.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_Kfold_Validation/run_CCA_spinal.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -157,7 +160,7 @@
       <recent name="$PROJECT_DIR$/Polished_Images" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.Overall_SNRPeakLatency_Calculation">
+  <component name="RunManager" selected="Python.Kfold_ModelValidation_Pipeline">
     <configuration name="BurstFreq_AcrossCNS_Stats" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
@@ -182,7 +185,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="CCA_CorrelationValidation_ttests_UpperTri" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="Kfold_ModelValidation_Pipeline" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -191,13 +194,13 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CCA_Resting_State_Validation" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CCA_Kfold_Validation" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="DEBUG_JUST_MY_CODE" value="true" />
+      <option name="DEBUG_JUST_MY_CODE" value="false" />
       <option name="RUN_TOOL" value="" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CCA_Resting_State_Validation/CCA_CorrelationValidation_ttests_UpperTri.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CCA_Kfold_Validation/Kfold_ModelValidation_Pipeline.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -280,11 +283,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.Kfold_ModelValidation_Pipeline" />
         <item itemvalue="Python.Overall_SNRPeakLatency_Calculation" />
         <item itemvalue="Python.SNR_EnvelopePeakLatency_SeparateFolds" />
         <item itemvalue="Python.WaveletCount_Stats" />
         <item itemvalue="Python.BurstFreq_AcrossCNS_Stats" />
-        <item itemvalue="Python.CCA_CorrelationValidation_ttests_UpperTri" />
       </list>
     </recent_temporary>
   </component>

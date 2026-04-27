@@ -13,9 +13,9 @@ from CCA_Kfold_Validation.run_CCA_brain_thalamic import run_CCA_thalamic
 
 
 if __name__ == "__main__":
-    srmr_nr = 1
+    srmr_nr = 2
     freq_type = 'high'
-    k=10
+    k = 5
 
     if srmr_nr == 1:
         n_subjects = 36  # Number of subjects
@@ -26,7 +26,7 @@ if __name__ == "__main__":
     elif srmr_nr == 2:
         n_subjects = 24  # Number of subjects
         subjects = np.arange(1, 25)  # (1, 2) # 1 through 24 to access subject data
-        conditions = [2, 3, 4, 5]  # Conditions of interest - tib digits and med digits, also including mixed nerve now
+        conditions = [3, 5]  # Conditions of interest
         sampling_rate = 5000  # Frequency to downsample to from original of 10kHz
 
     ###################################################
