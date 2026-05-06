@@ -6,14 +6,16 @@
   <component name="ChangeListManager">
     <list default="true" id="32d78150-f875-4a94-a101-72a4657c6a8a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CCA_Kfold_Validation/Kfold_ModelValidation_Pipeline.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_Kfold_Validation/Kfold_ModelValidation_Pipeline.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CCA_Kfold_Validation/Overall_SNRPeakLatency_Calculation.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_Kfold_Validation/Overall_SNRPeakLatency_Calculation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CCA_Kfold_Validation/Overall_SNR_Calculation.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_Kfold_Validation/Overall_SNR_Calculation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CCA_Kfold_Validation/SNR_EnvelopePeakLatency_SeparateFolds.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_Kfold_Validation/SNR_EnvelopePeakLatency_SeparateFolds.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CCA_Kfold_Validation/SNR_EnvelopePeak_SeparateFolds.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_Kfold_Validation/SNR_EnvelopePeak_SeparateFolds.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CCA_Kfold_Validation/run_CCA_brain.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_Kfold_Validation/run_CCA_brain.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CCA_Kfold_Validation/run_CCA_brain_thalamic.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_Kfold_Validation/run_CCA_brain_thalamic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CCA_Kfold_Validation/run_CCA_spinal.py" beforeDir="false" afterPath="$PROJECT_DIR$/CCA_Kfold_Validation/run_CCA_spinal.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Publication_Images/CCA_Digit_ClusterPermutation_CorticalAndThalamic_YY.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/F6_CCA_Digit_ClusterPermutation_CorticalAndThalamic_YY.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Publication_Images/CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical_NoShift.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/F3_CCA_GAEnvelopeTimeCourse_Spinal_SubCortical_Cortical_NoShift.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Publication_Images/GrandAverageD2_SpatialPatterns.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/S2_GrandAverageD2_SpatialPatterns.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Publication_Images/GrandAverage_SpatialPatterns.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/F3_S4_GrandAverage_SpatialPatterns.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Publication_Images/GrandAverage_SpatialPatterns_Thalamic.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/F3_S2_S4_GrandAverage_SpatialPatterns_Thalamic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Publication_Images/HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA_ClusterBasedPermutation_BaselineCorr.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/F7_S8_HighVsLowFreq_SingleTrial_SNR_CorticalSpinal_CCA_ClusterBasedPermutation_BaselineCorr.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Publication_Images/Peaks_Troughs_ByCNSLevel_AllCutOffsTogether_EqualWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/F5_S6_Peaks_Troughs_ByCNSLevel_AllCutOffsTogether_EqualWindow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Publication_Images/RawEnvelopePlots_Cortical_Thalamic_MergeDatasets.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/S3_RawEnvelopePlots_Cortical_Thalamic_MergeDatasets.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Publication_Images/SingleSubject_TimeCourse.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/F2_S1_SingleSubject_TimeCourse.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Publication_Images/TFR_CorticalAndSpinal_SingleChannel_CCAtoBroadband.py" beforeDir="false" afterPath="$PROJECT_DIR$/Publication_Images/F4_S5_TFR_CorticalAndSpinal_SingleChannel_CCAtoBroadband.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,6 +68,7 @@
     "Python.ESG_Pipeline.executor": "Run",
     "Python.ESG_RestingState_Pipeline.executor": "Run",
     "Python.ExploratoryPlots_WrongFiles.executor": "Run",
+    "Python.F4_S3_TFR_CorticalAndSpinal_SingleChannel_CCAtoBroadband.executor": "Debug",
     "Python.GrandAverageD2_SpatialPatterns.executor": "Run",
     "Python.GrandAverage_SpatialPatterns (1).executor": "Run",
     "Python.GrandAverage_SpatialPatterns.executor": "Run",
@@ -139,7 +142,7 @@
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "git-widget-placeholder": "master",
-    "last_opened_file_path": "/data/pt_02718/HF_Oscillations/CCA_Kfold_Validation",
+    "last_opened_file_path": "/data/pt_02718/HF_Oscillations",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -164,8 +167,8 @@
       <recent name="$PROJECT_DIR$/Polished_Images" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.Overall_SNRPeakLatency_Calculation">
-    <configuration name="Kfold_ModelValidation_Pipeline" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.S3_RawEnvelopePlots_Cortical_Thalamic_MergeDatasets">
+    <configuration name="F4_S5_TFR_CorticalAndSpinal_SingleChannel_CCAtoBroadband" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -174,13 +177,13 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CCA_Kfold_Validation" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Publication_Images" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="DEBUG_JUST_MY_CODE" value="false" />
       <option name="RUN_TOOL" value="" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CCA_Kfold_Validation/Kfold_ModelValidation_Pipeline.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Publication_Images/F4_S5_TFR_CorticalAndSpinal_SingleChannel_CCAtoBroadband.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -237,7 +240,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="SNR_EnvelopePeakLatency_SeparateFolds" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="S3_RawEnvelopePlots_Cortical_Thalamic_MergeDatasets" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="HF_Oscillations" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -246,13 +249,13 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CCA_Kfold_Validation" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Publication_Images" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="DEBUG_JUST_MY_CODE" value="false" />
       <option name="RUN_TOOL" value="" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CCA_Kfold_Validation/SNR_EnvelopePeakLatency_SeparateFolds.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Publication_Images/S3_RawEnvelopePlots_Cortical_Thalamic_MergeDatasets.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -287,18 +290,18 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.S3_RawEnvelopePlots_Cortical_Thalamic_MergeDatasets" />
+        <item itemvalue="Python.F4_S5_TFR_CorticalAndSpinal_SingleChannel_CCAtoBroadband" />
         <item itemvalue="Python.Overall_SNRPeakLatency_Calculation" />
         <item itemvalue="Python.Overall_SNR_Calculation" />
         <item itemvalue="Python.SNR_EnvelopePeak_SeparateFolds" />
-        <item itemvalue="Python.SNR_EnvelopePeakLatency_SeparateFolds" />
-        <item itemvalue="Python.Kfold_ModelValidation_Pipeline" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-b63d5a1f7c97-b61e75351b1f-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-261.22158.340" />
+        <option value="bundled-python-sdk-024ed6589d45-c2ffad84badb-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-261.23567.174" />
       </set>
     </attachedChunks>
   </component>
