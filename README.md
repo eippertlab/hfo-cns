@@ -18,15 +18,15 @@ This repository contains the code used to preprocess and analyse high frequency 
 across the central nervous system in electrophysiology data as presented in the above-mentioned manuscript.
 
 ## Main_Processing
-**EEG_Pipeline.py** and **ESG_Pipeline.py** are wrapper scripts which can be used to specify the stages of analysis to
+[ESG_Pipeline.py](ESG_Pipeline.py) and [EEG_Pipeline.py](EEG_Pipeline.py) are wrapper scripts which can be used to specify the stages of analysis to
 run. These steps include:
 * Data Import (incl. downsampling, r-peak event annotation, stimulus artefact removal, file concatenation)
 * Bad channel and bad trial checks
-* Cardiac artefact removal via signal space projection (SSP) with 6 projections (**ESG_Pipeline.py only**)
+* Cardiac artefact removal via signal space projection (SSP) with 6 projections ([ESG_Pipeline.py](ESG_Pipeline.py) **only**)
 * Spectral filtering to isolate high frequency oscillations between 400Hz and 800Hz
 * Signal enhancement via canonical correlation analysis (CCA)
-  * CCA for subcortical and cortical CNS levels is via **EEG_Pipeline.py**
-  * CCA for spinal CNS level is via **ESG_Pipeline.py**
+  * CCA for subcortical and cortical CNS levels is via [EEG_Pipeline.py](EEG_Pipeline.py)
+  * CCA for spinal CNS level is via [ESG_Pipeline.py](ESG_Pipeline.py)**ESG_Pipeline.py**
 
 ## Common_Functions
 Scripts contained in [Common_Functions](Common_Functions) contain function files which support the preprocessing and analysis of the 
