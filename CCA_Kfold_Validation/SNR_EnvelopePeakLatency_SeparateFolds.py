@@ -1,4 +1,4 @@
-# Calculate SNR of first 4 components in each fold, and check whether peak of envelope is in required zone
+# Calculate SNR and latency of peak of first 4 components in each fold
 
 
 import os
