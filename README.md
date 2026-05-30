@@ -26,7 +26,7 @@ run. These steps include:
 * Spectral filtering to isolate high frequency oscillations between 400Hz and 800Hz
 * Signal enhancement via canonical correlation analysis (CCA)
   * CCA for subcortical and cortical CNS levels is via [EEG_Pipeline.py](EEG_Pipeline.py)
-  * CCA for spinal CNS level is via [ESG_Pipeline.py](ESG_Pipeline.py)**ESG_Pipeline.py**
+  * CCA for spinal CNS level is via [ESG_Pipeline.py](ESG_Pipeline.py)
 
 ## Common_Functions
 Scripts contained in [Common_Functions](Common_Functions) contain function files which support the preprocessing and analysis of the 
