@@ -13,7 +13,7 @@ pd.set_option('display.width', 150)
 mpl.rcParams['pdf.fonttype'] = 42
 
 if __name__ == '__main__':
-    srmr_nr = 2
+    srmr_nr = 1
 
     if srmr_nr == 1:
         subjects = np.arange(1, 37)
@@ -46,24 +46,19 @@ if __name__ == '__main__':
 
             print('Friedman Test')
             print(pg.friedman(df_wavelet, method='f'))
-            # Perform the Friedman test
-            # stat, p = friedmanchisquare(df_wavelet['Spinal'], df_wavelet['Subcortical'], df_wavelet['Cortical'])
-            # print(f'Friedman test statistic={stat:.3f}, p-value={p:.3f}')
 
+            p_vals = []
             if pg.friedman(df_wavelet)['p-unc'][0] < 0.05:
                 print('Post-hoc wilcoxon')
-                result = pg.pairwise_tests(data=df_longform, dv='no_wavelets', subject='Subject', within='CNS_Level',
-                                           parametric=False, alternative='two-sided', padjust='bonf')
-                print(result)
+
                 # Get effect size
                 for combinations in [['Spinal', 'Subcortical'], ['Subcortical', 'Cortical']]:
-                    eff_size = pg.compute_effsize(df_wavelet[combinations[0]],
-                                                  df_wavelet[combinations[1]],
-                                                  paired=True, eftype='pointbiserialr')
+                    stats = pg.wilcoxon(x=df_wavelet[combinations[0]], y=df_wavelet[combinations[1]], alternative='two-sided')
                     print(combinations)
-                    print(eff_size)
-                # Nemenyi test nt specific to repeated measures design - used Wilcoxon
-                # nemenyi_results = sp.posthoc_nemenyi_friedman(df_wavelet)
-                # print(nemenyi_results)
-                # exit()
+                    print(stats)
+                    p_vals.append(stats['p-val'])
+
+                reject, pvals_corrected = pg.multicomp(p_vals, alpha=0.05, method='bonf')
+                print(f"{reject}, {pvals_corrected}")
+
             print('\n\n')
