@@ -10,6 +10,7 @@ import mne
 import os
 import numpy as np
 import pandas as pd
+import pingouin as pg
 import matplotlib.pyplot as plt
 from scipy.stats import sem, ttest_rel
 import matplotlib as mpl

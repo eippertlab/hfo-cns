@@ -50,6 +50,8 @@ Scripts contained in [Group_Level_Analyses](Group_Level_Analyses) contain script
   * Compute the correlation and partial correlation between average HFO and LF-SEPs across participants ([PartialCorrelation_LowFreq_HighFreq_CCA_Amp_SNR.py](Group_Level_Analyses/PartialCorrelation_LowFreq_HighFreq_CCA_Amp_SNR.py))
 * Compute the single trial signal-to-noise ratio for the HFOs and LF-SEPs for cortical and spinal data ([HighVsLowFreq_ComputeSingleTrial_SNR_CorticalSpinal_CCA_BaselineCorr.py](Group_Level_Analyses/HighVsLowFreq_ComputeSingleTrial_SNR_CorticalSpinal_CCA_BaselineCorr.py))
 to enable LF-SEP to HFO comparison in the strongest versus weakest trials
+* Compute the peak of the HFO envelope after mixed-nerve and sensory-nerve stimulation ([SensorSpace_Mixed_Sensory.py](Group_Level_Analyses/SensorSpace_Mixed_Sensory.py)),
+to investigate the relationship between HFO amplitude and stimulus intensity
 
 ## CCA_Resting_State_Validation
 In addition to the main analysis, validation of the results obtained via CCA was performed using resting state recordings
